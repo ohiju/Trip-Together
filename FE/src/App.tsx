@@ -7,7 +7,6 @@
 
 import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import {StyledView} from './AppStyle';
 import {Provider} from 'react-redux';
 import store from './store';
 import AppInner from './AppInner';
@@ -20,9 +19,7 @@ function App(): React.JSX.Element {
   }, []);
   return (
     <Provider store={store}>
-      <StyledView>
-        <AppInner />
-      </StyledView>
+      <AppInner />
     </Provider>
   );
 }
