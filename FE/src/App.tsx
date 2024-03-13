@@ -6,20 +6,22 @@
  */
 
 import React, {useEffect} from 'react';
-import {Text} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import {StyledView} from './AppStyle';
+import {AppWrapper} from './AppStyle';
+import SocialLogin from './pages/SocialLogin';
 
 function App(): React.JSX.Element {
+  // 스플래시 스크린
   useEffect(() => {
     setTimeout(() => {
       SplashScreen.hide();
-    }, 1000);
+    }, 500);
   }, []);
+
   return (
-    <StyledView>
-      <Text>hi</Text>
-    </StyledView>
+    <AppWrapper>
+      <SocialLogin />
+    </AppWrapper>
   );
 }
 
