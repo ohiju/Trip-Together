@@ -1,11 +1,19 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text} from 'react-native';
+import {Wrapper, RecommendView, IconView} from './TravelStyle';
+import Plans from '../components/Travel/Plans';
 
 function Travel() {
   return (
-    <View>
-      <Text>여행</Text>
-    </View>
+    <Wrapper>
+      <Plans />
+      <IconView>
+        <Text>1</Text>
+      </IconView>
+      <RecommendView>
+        <Text>1</Text>
+      </RecommendView>
+    </Wrapper>
   );
 }
 
