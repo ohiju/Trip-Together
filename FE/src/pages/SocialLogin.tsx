@@ -1,6 +1,14 @@
 import React from 'react';
+import {Text} from 'react-native';
 import ButtonMiddle from '../components/common/ButtonMiddle';
-import {Input, InputView, Logo, LogoView, Wrapper} from './SocialLoginStyle';
+import {
+  Input,
+  InputView,
+  Logo,
+  LogoText,
+  LogoView,
+  Wrapper,
+} from './SocialLoginStyle';
 
 const SocialLogin = () => {
   const handlePressLogin = () => {};
@@ -8,10 +16,15 @@ const SocialLogin = () => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo source={require('../assets/images/bank_logo.png')} />
+        <Logo
+          source={require('../assets/images/bank_logo.png')}
+          resizeMode="contain"
+        />
+        <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>
-        <Input />
+        <Text>😀</Text>
+        <Input placeholder="아이디" />
       </InputView>
       <InputView>
         <Input />
