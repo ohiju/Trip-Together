@@ -3,6 +3,8 @@ import {WithLocalSvg} from 'react-native-svg/css';
 import LockSvg from '../assets/icons/lock.svg';
 import UserSvg from '../assets/icons/user.svg';
 import ButtonMiddle from '../components/common/ButtonMiddle';
+import {useAppDispatch} from '../store/hooks';
+import {login} from '../store/slices/user';
 import {
   Input,
   InputView,
@@ -13,7 +15,10 @@ import {
 } from './SocialLoginStyle';
 
 const SocialLogin = () => {
-  const handlePressLogin = () => {};
+  const dispatch = useAppDispatch();
+  const handlePressLogin = () => {
+    dispatch(login(true));
+  };
 
   return (
     <Wrapper>

@@ -1,17 +1,19 @@
-import user from '../slices/user';
+import user, {userSlice} from '../slices/user';
+import dummy from './../slices/dummy';
 
 export interface AppState {
   user: ReturnType<typeof user>;
+  dummy: ReturnType<typeof dummy>;
 }
 
 export const reducers = {
-  user,
+  user: userSlice.reducer,
 };
 
 export const asyncReducers = {
-  user,
+  dummy,
 };
 
 export const encryptReducers = {
-  user,
+  dummy,
 };
