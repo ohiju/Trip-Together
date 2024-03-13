@@ -8,15 +8,17 @@
 import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {Provider} from 'react-redux';
-import store from './store';
 import AppInner from './AppInner';
+import store from './store';
 
 function App(): React.JSX.Element {
+  // 스플래시 스크린
   useEffect(() => {
     setTimeout(() => {
       SplashScreen.hide();
-    }, 1000);
+    }, 500);
   }, []);
+
   return (
     <Provider store={store}>
       <AppInner />
