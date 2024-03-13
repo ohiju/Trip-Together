@@ -5,10 +5,11 @@ interface ButtonMiddleProps {
   bg1: string;
   bg2: string;
   color: string;
+  text: string;
   onPress: () => void;
 }
 
-const ButtonMiddle = ({bg1, bg2, color, onPress}: ButtonMiddleProps) => {
+const ButtonMiddle = ({bg1, bg2, color, text, onPress}: ButtonMiddleProps) => {
   return (
     <BtnView>
       <Btn
@@ -16,7 +17,7 @@ const ButtonMiddle = ({bg1, bg2, color, onPress}: ButtonMiddleProps) => {
         style={({pressed}) => ({
           backgroundColor: pressed ? bg2 : bg1,
         })}>
-        <BtnText $color={color}>반짝 은행으로 계속하기</BtnText>
+        <BtnText $color={color}>{text}</BtnText>
       </Btn>
     </BtnView>
   );

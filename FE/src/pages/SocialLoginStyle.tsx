@@ -1,18 +1,44 @@
 import styled from 'styled-components/native';
 
 const Wrapper = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  background: tomato;
+  background-color: #d2d1fc;
 `;
 
-const LogoView = styled.View``;
+const LogoView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 50px;
+`;
 
-const Logo = styled.Image``;
+const Logo = styled.Image`
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+`;
+
+const LogoText = styled.Text`
+  font-style: italic;
+  font-weight: 600;
+  font-size: 40px;
+`;
 
 const InputView = styled.View`
-  background: blueviolet;
+  flex-direction: row;
+  align-items: center;
+  width: 90%;
+  background: transparent;
+  border-bottom-width: 1px;
+  margin-bottom: 20px;
+  padding-left: 5px;
 `;
 
-const Input = styled.TextInput``;
+const Input = styled.TextInput`
+  flex: 1;
+  margin-left: 5px;
+`;
 
-export {Input, InputView, Logo, LogoView, Wrapper};
+export {Input, InputView, Logo, LogoText, LogoView, Wrapper};

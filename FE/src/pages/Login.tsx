@@ -1,10 +1,13 @@
 import React from 'react';
 import ButtonMiddle from '../components/common/ButtonMiddle';
 import {font_light, primary, primary_light} from '../constants/colors';
+import {LoginProps} from '../interfaces/props/LoginProps';
 import {Logo, LogoView, Slogan, SloganView, Wrapper} from './LoginStyle';
 
-const Login = () => {
-  const handlePressSocialLogin = () => {};
+const Login = ({navigation}: LoginProps) => {
+  const handlePressSocialLogin = () => {
+    navigation.navigate('SocialLogin');
+  };
 
   return (
     <Wrapper>
@@ -22,6 +25,7 @@ const Login = () => {
         bg1={primary}
         bg2={primary_light}
         color={font_light}
+        text="반짝 은행으로 계속하기"
         onPress={handlePressSocialLogin}
       />
     </Wrapper>

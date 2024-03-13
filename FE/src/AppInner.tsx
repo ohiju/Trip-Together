@@ -1,22 +1,21 @@
-import * as React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from 'react';
 import {useState} from 'react';
-import Travel from './pages/Travel';
-import MyPage from './pages/Mypage';
-import Lightning from './pages/Lightning';
-import SignIn from './pages/SignIn';
-
-export type RootStackParamList = {
-  SignIn: undefined;
-};
+import {RootBeforeLoginStackParams} from './interfaces/router/RootBeforeLoginStackParams';
+import Login from './pages/Login';
+import SocialLogin from './pages/SocialLogin';
+import Lightning from './pages/lightning';
+import MyPage from './pages/mypage';
+import Travel from './pages/travel';
 
 function AppInner() {
-  const [isLoggedIn] = useState(true);
+  const [isLoggedIn] = useState(false);
 
   const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const BeforeLoginStack =
+    createNativeStackNavigator<RootBeforeLoginStackParams>();
 
   return (
     <NavigationContainer>
@@ -48,13 +47,18 @@ function AppInner() {
           />
         </Tab.Navigator>
       ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{title: '로그인'}}
+        <BeforeLoginStack.Navigator>
+          <BeforeLoginStack.Screen
+            name="Login"
+            component={Login}
+            options={{headerShown: false}}
           />
-        </Stack.Navigator>
+          <BeforeLoginStack.Screen
+            name="SocialLogin"
+            component={SocialLogin}
+            options={{headerShown: false}}
+          />
+        </BeforeLoginStack.Navigator>
       )}
     </NavigationContainer>
   );
