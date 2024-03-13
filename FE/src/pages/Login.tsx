@@ -25,6 +25,7 @@ const Login = ({navigation}: LoginProps) => {
         bg1={primary}
         bg2={primary_light}
         color={font_light}
+        text="반짝 은행으로 계속하기"
         onPress={handlePressSocialLogin}
       />
     </Wrapper>
