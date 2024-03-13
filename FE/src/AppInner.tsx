@@ -3,9 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useState} from 'react';
-import Travel from './pages/travel';
-import MyPage from './pages/mypage';
-import Lightning from './pages/lightning';
+import Travel from './pages/Travel';
+import MyPage from './pages/Mypage';
+import Lightning from './pages/Lightning';
 import SignIn from './pages/SignIn';
 
 export type RootStackParamList = {
