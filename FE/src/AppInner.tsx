@@ -1,19 +1,21 @@
-import * as React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from 'react';
 import {useState} from 'react';
-import Travel from './pages/travel';
-import MyPage from './pages/mypage';
+import Login from './pages/Login';
+import SocialLogin from './pages/SocialLogin';
 import Lightning from './pages/lightning';
-import SignIn from './pages/SignIn';
+import MyPage from './pages/mypage';
+import Travel from './pages/travel';
 
 export type RootStackParamList = {
-  SignIn: undefined;
+  Login: undefined;
+  SocialLogin: undefined;
 };
 
 function AppInner() {
-  const [isLoggedIn] = useState(true);
+  const [isLoggedIn] = useState(false);
 
   const Tab = createBottomTabNavigator();
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -50,9 +52,14 @@ function AppInner() {
       ) : (
         <Stack.Navigator>
           <Stack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{title: '로그인'}}
+            name="Login"
+            component={Login}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SocialLogin"
+            component={SocialLogin}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       )}

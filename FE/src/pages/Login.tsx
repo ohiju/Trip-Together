@@ -3,8 +3,10 @@ import ButtonMiddle from '../components/common/ButtonMiddle';
 import {font_light, primary, primary_light} from '../constants/colors';
 import {Logo, LogoView, Slogan, SloganView, Wrapper} from './LoginStyle';
 
-const Login = () => {
-  const handlePressSocialLogin = () => {};
+const Login = ({navigation}) => {
+  const handlePressSocialLogin = () => {
+    navigation.navigate('SocialLogin');
+  };
 
   return (
     <Wrapper>
