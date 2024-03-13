@@ -5,7 +5,7 @@ import * as React from 'react';
 import {RootStackParams} from './interfaces/router/RootStackParams';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
-import Lightning from './pages/Lightning';
+import FlashMob from './pages/FlashMob';
 import MyPage from './pages/Mypage';
 import Travel from './pages/Travel';
 import {RootState} from './store';
@@ -33,7 +33,7 @@ function AppInner() {
           />
           <Tab.Screen
             name="번개"
-            component={Lightning}
+            component={FlashMob}
             options={{
               title: '번개',
               // 아이콘 추가

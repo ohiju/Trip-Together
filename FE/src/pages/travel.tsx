@@ -1,8 +1,8 @@
 import React from 'react';
 import {Text, Dimensions} from 'react-native';
 import {Wrapper, IconView} from './TravelStyle';
-import Plans from '../components/Travel/Plans';
-import Package from '../components/Travel/Package';
+import Plans from '../components/travel/Plans';
+import Package from '../components/travel/Package';
 
 const Travel = () => {
   const screenWidth = Math.round(Dimensions.get('window').width);

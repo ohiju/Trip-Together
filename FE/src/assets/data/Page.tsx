@@ -16,10 +16,12 @@ const PageItem = styled.View<{color: string}>`
 
 const PageNum = styled.Text``;
 
-export default function Page({item, style}: IPage) {
+const Page = ({item, style}: IPage) => {
   return (
     <PageItem color={item.color} style={style}>
       <PageNum>{item.num}</PageNum>
     </PageItem>
   );
-}
+};
+
+export default Page;
