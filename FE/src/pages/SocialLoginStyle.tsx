@@ -33,8 +33,12 @@ const InputView = styled.View`
   background: transparent;
   border-bottom-width: 1px;
   margin-bottom: 20px;
+  padding-left: 5px;
 `;
 
-const Input = styled.TextInput``;
+const Input = styled.TextInput`
+  flex: 1;
+  margin-left: 5px;
+`;
 
 export {Input, InputView, Logo, LogoText, LogoView, Wrapper};

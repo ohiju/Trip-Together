@@ -1,5 +1,7 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {WithLocalSvg} from 'react-native-svg/css';
+import LockSvg from '../assets/icons/lock.svg';
+import UserSvg from '../assets/icons/user.svg';
 import ButtonMiddle from '../components/common/ButtonMiddle';
 import {
   Input,
@@ -23,11 +25,12 @@ const SocialLogin = () => {
         <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>
-        <Text>😀</Text>
-        <Input placeholder="아이디" />
+        <WithLocalSvg width={24} height={24} asset={UserSvg} />
+        <Input placeholder="아이디를 입력하세요" />
       </InputView>
       <InputView>
-        <Input />
+        <WithLocalSvg width={24} height={24} asset={LockSvg} />
+        <Input placeholder="비밀번호를 입력하세요" />
       </InputView>
       <ButtonMiddle
         bg1="red"
