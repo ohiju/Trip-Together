@@ -5,9 +5,9 @@ import * as React from 'react';
 import {RootStackParams} from './interfaces/router/RootStackParams';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
-import Lightning from './pages/lightning';
-import MyPage from './pages/mypage';
-import Travel from './pages/travel';
+import Lightning from './pages/Lightning';
+import MyPage from './pages/Mypage';
+import Travel from './pages/Travel';
 import {RootState} from './store';
 import {useAppSelector} from './store/hooks';
 
