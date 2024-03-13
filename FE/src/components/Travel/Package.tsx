@@ -19,12 +19,12 @@ const Container = styled.View`
   align-items: center;
 `;
 
-export default function Carousel({pages, pageWidth, gap, offset}: ICarousel) {
-  function renderItem({item}: any) {
+const Package = ({pages, pageWidth, gap, offset}: ICarousel) => {
+  const renderItem = ({item}: any) => {
     return (
       <Page item={item} style={{width: pageWidth, marginHorizontal: gap / 2}} />
     );
-  }
+  };
 
   return (
     <Container>
@@ -46,4 +46,6 @@ export default function Carousel({pages, pageWidth, gap, offset}: ICarousel) {
       />
     </Container>
   );
-}
+};
+
+export default Package;

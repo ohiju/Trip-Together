@@ -12,7 +12,7 @@ import {
   PlanImage,
 } from './PlansStyle';
 
-function Plans() {
+const Plans = () => {
   return (
     <PlanView>
       <PlanTitle>오희주님의 프랑스 여행 계획</PlanTitle>
@@ -39,6 +39,6 @@ function Plans() {
       </PlanMoney>
     </PlanView>
   );
-}
+};
 
 export default Plans;

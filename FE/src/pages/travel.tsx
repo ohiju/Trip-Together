@@ -4,7 +4,7 @@ import {Wrapper, IconView} from './TravelStyle';
 import Plans from '../components/Travel/Plans';
 import Package from '../components/Travel/Package';
 
-function Travel() {
+const Travel = () => {
   const screenWidth = Math.round(Dimensions.get('window').width);
 
   const PAGES = [
@@ -44,6 +44,6 @@ function Travel() {
       />
     </Wrapper>
   );
-}
+};
 
 export default Travel;

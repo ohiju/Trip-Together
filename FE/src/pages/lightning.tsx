@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-function Lightning() {
+const Lightning = () => {
   return (
     <View>
       <Text>번개</Text>
     </View>
   );
-}
+};
 
 export default Lightning;
