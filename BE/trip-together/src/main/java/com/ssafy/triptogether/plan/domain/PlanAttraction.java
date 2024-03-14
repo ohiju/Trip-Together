@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.plan.domain;
 
 import com.ssafy.triptogether.attraction.domain.Attraction;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "plan_attraction")
-public class PlanAttraction {
+public class PlanAttraction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plan_attraction_id")

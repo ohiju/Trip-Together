@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.attraction.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "category")
-public class Category {
+public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")

@@ -22,7 +22,12 @@ public class QPlanAttraction extends EntityPathBase<PlanAttraction> {
 
     public static final QPlanAttraction planAttraction = new QPlanAttraction("planAttraction");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final com.ssafy.triptogether.attraction.domain.QAttraction attraction;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final QPlan plan;
 

@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.review.domain;
 
 import com.ssafy.triptogether.attraction.domain.Attraction;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "review")
-public class Review {
+public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")

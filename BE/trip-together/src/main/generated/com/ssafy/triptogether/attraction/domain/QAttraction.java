@@ -22,6 +22,8 @@ public class QAttraction extends EntityPathBase<Attraction> {
 
     public static final QAttraction attraction = new QAttraction("attraction");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final StringPath address = createString("address");
 
     public final ListPath<AttractionCategory, QAttractionCategory> attractionCategories = this.<AttractionCategory, QAttractionCategory>createList("attractionCategories", AttractionCategory.class, QAttractionCategory.class, PathInits.DIRECT2);
@@ -33,6 +35,9 @@ public class QAttraction extends EntityPathBase<Attraction> {
     public final NumberPath<Double> avgRating = createNumber("avgRating", Double.class);
 
     public final StringPath businessNum = createString("businessNum");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath description = createString("description");
 

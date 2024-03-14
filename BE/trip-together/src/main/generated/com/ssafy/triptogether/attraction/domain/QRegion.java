@@ -20,9 +20,14 @@ public class QRegion extends EntityPathBase<Region> {
 
     public static final QRegion region = new QRegion("region");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final ListPath<Attraction, QAttraction> attractions = this.<Attraction, QAttraction>createList("attractions", Attraction.class, QAttraction.class, PathInits.DIRECT2);
 
     public final StringPath cityName = createString("cityName");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath flagImageUrl = createString("flagImageUrl");
 

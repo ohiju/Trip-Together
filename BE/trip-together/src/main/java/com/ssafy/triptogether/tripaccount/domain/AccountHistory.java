@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.tripaccount.domain;
 
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "account_history")
-public class AccountHistory {
+public class AccountHistory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_history_id")

@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.attraction.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.plan.domain.Plan;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "region")
-public class Region {
+public class Region extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "region_id")

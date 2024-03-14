@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.tripaccount.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -19,12 +20,12 @@ import java.util.List;
                 @UniqueConstraint(columnNames = {
                         "code",
                         "unit",
-                        "nation",
+                        "currency_nation",
                         "flag_image_url"
                 })
         }
 )
-public class Currency {
+public class Currency extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "currency_id")
@@ -36,11 +37,12 @@ public class Currency {
 
     @NotBlank
     @Column(name = "unit")
-    private String unit;
+    private Integer unit;
 
     @NotBlank
-    @Column(name = "nation")
-    private String nation;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency_nation")
+    private CurrencyNation currencyNation;
 
     @NotBlank
     @Column(name = "flag_image_url")
@@ -51,10 +53,10 @@ public class Currency {
     private List<TripAccount> tripAccounts = new ArrayList<>();
 
     @Builder
-    public Currency(String code, String unit, String nation, String flagImageUrl) {
+    public Currency(String code, Integer unit, CurrencyNation currencyNation, String flagImageUrl) {
         this.code = code;
         this.unit = unit;
-        this.nation = nation;
+        this.currencyNation = currencyNation;
         this.flagImageUrl = flagImageUrl;
     }
 }

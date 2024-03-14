@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.attraction.domain;
 
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "attraction_image")
-public class AttractionImage {
+public class AttractionImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attraction_image_id")

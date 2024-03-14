@@ -22,9 +22,14 @@ public class QAttractionCategory extends EntityPathBase<AttractionCategory> {
 
     public static final QAttractionCategory attractionCategory = new QAttractionCategory("attractionCategory");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final QAttraction attraction;
 
     public final QCategory category;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

@@ -3,6 +3,7 @@ package com.ssafy.triptogether.plan.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Region;
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +21,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "plan")
-public class Plan {
+public class Plan extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plan_id")

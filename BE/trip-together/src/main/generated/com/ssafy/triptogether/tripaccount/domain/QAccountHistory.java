@@ -22,11 +22,16 @@ public class QAccountHistory extends EntityPathBase<AccountHistory> {
 
     public static final QAccountHistory accountHistory = new QAccountHistory("accountHistory");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final StringPath address = createString("address");
 
     public final StringPath businessName = createString("businessName");
 
     public final StringPath businessNum = createString("businessNum");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath currency = createString("currency");
 

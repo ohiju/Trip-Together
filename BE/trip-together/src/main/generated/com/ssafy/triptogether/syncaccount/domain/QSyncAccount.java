@@ -22,6 +22,11 @@ public class QSyncAccount extends EntityPathBase<SyncAccount> {
 
     public static final QSyncAccount syncAccount = new QSyncAccount("syncAccount");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final BooleanPath isMain = createBoolean("isMain");

@@ -22,9 +22,14 @@ public class QTripAccount extends EntityPathBase<TripAccount> {
 
     public static final QTripAccount tripAccount = new QTripAccount("tripAccount");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final ListPath<AccountHistory, QAccountHistory> accountHistories = this.<AccountHistory, QAccountHistory>createList("accountHistories", AccountHistory.class, QAccountHistory.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> balance = createNumber("balance", Double.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final QCurrency currency;
 

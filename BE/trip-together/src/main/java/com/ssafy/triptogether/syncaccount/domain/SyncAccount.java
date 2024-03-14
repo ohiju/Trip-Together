@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.syncaccount.domain;
 
+import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "sync_account")
-public class SyncAccount {
+public class SyncAccount extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sync_account_id")

@@ -22,7 +22,12 @@ public class QAttractionImage extends EntityPathBase<AttractionImage> {
 
     public static final QAttractionImage attractionImage = new QAttractionImage("attractionImage");
 
+    public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
+
     public final QAttraction attraction;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
