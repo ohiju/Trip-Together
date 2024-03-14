@@ -1,40 +1,42 @@
 import styled from 'styled-components/native';
-import {bg_light, bg_main, font_dark} from '../../../constants/colors';
+import {
+  bg_light,
+  bg_lightgray,
+  bg_main,
+  font_dark,
+} from '../../../constants/colors';
 
 const Wrapper = styled.View`
-  position: relative;
   flex: 4;
   width: 100%;
   background: ${bg_main};
   justify-content: start;
-`;
-
-const Shadow = styled.View`
-  position: absolute;
-  top: 10px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  background: black;
-  opacity: 0.5;
-  filter: blur(100);
+  padding-top: 15px;
 `;
 
 const ProfileView = styled.View`
+  position: relative;
   flex: 1;
   width: 100%;
   flex-direction: row;
   background: ${bg_light};
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  margin-top: 15px;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
   align-items: center;
+  padding-top: 8px;
+`;
+
+const DragBar = styled.View`
+  position: absolute;
+  top: 8px;
+  left: 35%;
+  width: 30%;
+  border: 2px solid ${bg_lightgray};
+  border-radius: 5px;
 `;
 
 const ProfileImageView = styled.View`
-  height: 100%;
+  width: 25%;
   aspect-ratio: 1/1;
   align-items: center;
   justify-content: center;
@@ -67,11 +69,11 @@ const Description = styled.Text`
 
 export {
   Description,
+  DragBar,
   Nickname,
   ProfileImage,
   ProfileImageView,
   ProfileView,
-  Shadow,
   UserInfoView,
   Username,
   Wrapper,

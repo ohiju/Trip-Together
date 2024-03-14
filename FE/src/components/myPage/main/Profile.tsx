@@ -1,13 +1,14 @@
 import React from 'react';
+import {Shadow} from 'react-native-shadow-2';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
 import {
   Description,
+  DragBar,
   Nickname,
   ProfileImage,
   ProfileImageView,
   ProfileView,
-  Shadow,
   UserInfoView,
   Username,
   Wrapper,
@@ -18,22 +19,24 @@ const Profile = () => {
 
   return (
     <Wrapper>
-      <Shadow />
-      <ProfileView>
-        <ProfileImageView>
-          <ProfileImage
-            source={{uri: userInfo.image_url}}
-            resizeMode="contain"
-          />
-        </ProfileImageView>
-        <UserInfoView>
-          <Nickname>{userInfo.nickname}</Nickname>
-          <Username>{userInfo.username}</Username>
-          <Description numberOfLines={1} ellipsizeMode="tail">
-            {userInfo.description}
-          </Description>
-        </UserInfoView>
-      </ProfileView>
+      <Shadow distance={10} offset={[0, 1]}>
+        <ProfileView>
+          <DragBar />
+          <ProfileImageView>
+            <ProfileImage
+              source={{uri: userInfo.image_url}}
+              resizeMode="contain"
+            />
+          </ProfileImageView>
+          <UserInfoView>
+            <Nickname>{userInfo.nickname}</Nickname>
+            <Username>{userInfo.username}</Username>
+            <Description numberOfLines={1} ellipsizeMode="tail">
+              {userInfo.description}
+            </Description>
+          </UserInfoView>
+        </ProfileView>
+      </Shadow>
     </Wrapper>
   );
 };
