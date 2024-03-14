@@ -9,8 +9,8 @@ services:
     volumes:
       - ${DEV_MYSQL_DATA_PATH}:/var/lib/mysql
     environment:
-      MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME}
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: on-failure
 
@@ -33,9 +33,10 @@ services:
       - dev_mysql_container
       - dev_redis_container
     environment:
-      MYSQL_DATABASE_NAME: jdbc:mysql://dev_mysql_container:3306/${MYSQL_DATABASE_NAME}
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://dev_mysql_container:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_PROFILES_ACTIVE: default
     restart: always
 
 #  sonarqube_container:
