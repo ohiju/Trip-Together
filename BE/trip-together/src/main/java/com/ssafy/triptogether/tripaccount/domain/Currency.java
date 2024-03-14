@@ -14,15 +14,15 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "currency"
-//        uniqueConstraints = {
-//            @UniqueConstraint(columnNames = {
-//                    "code",
-//                    "unit",
-//                    "nation",
-//                    "flag_image_url"
-//            })
-//        }
+@Table(name = "currency",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {
+                        "code",
+                        "unit",
+                        "nation",
+                        "flag_image_url"
+                })
+        }
 )
 public class Currency {
     @Id

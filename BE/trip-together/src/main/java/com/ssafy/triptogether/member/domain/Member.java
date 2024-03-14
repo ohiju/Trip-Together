@@ -1,6 +1,9 @@
 package com.ssafy.triptogether.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.plan.domain.Plan;
+import com.ssafy.triptogether.review.domain.Review;
+import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -44,6 +47,18 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<TripAccount> tripAccounts = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<SyncAccount> syncAccounts = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Plan> plans = new ArrayList<>();
 
     @Builder
     public Member(String uuid, String nickname) {
