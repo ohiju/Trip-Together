@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-function Lightning() {
+function FlashMob() {
   return (
     <View>
       <Text>번개</Text>
@@ -9,4 +9,4 @@ function Lightning() {
   );
 }
 
-export default Lightning;
+export default FlashMob;

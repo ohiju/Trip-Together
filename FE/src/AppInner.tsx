@@ -2,12 +2,14 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
+import TabBarIcon from './components/myPage/TabBarIcon';
+import TabBarLabel from './components/myPage/TabBarLabel';
 import {RootStackParams} from './interfaces/router/RootStackParams';
+import FlashMob from './pages/FlashMob';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
-import Lightning from './pages/lightning';
-import MyPage from './pages/mypage';
-import Travel from './pages/travel';
+import Travel from './pages/Travel';
+import MyPageStack from './stacks/MyPageStack';
 import {RootState} from './store';
 import {useAppSelector} from './store/hooks';
 
@@ -33,18 +35,21 @@ function AppInner() {
           />
           <Tab.Screen
             name="번개"
-            component={Lightning}
+            component={FlashMob}
             options={{
               title: '번개',
               // 아이콘 추가
             }}
           />
           <Tab.Screen
-            name="마이"
-            component={MyPage}
+            key="myPage"
+            name="myPage"
+            component={MyPageStack}
             options={{
               title: '마이',
-              // 아이콘 추가
+              headerShown: false,
+              tabBarIcon: TabBarIcon,
+              tabBarLabel: TabBarLabel,
             }}
           />
         </Tab.Navigator>
