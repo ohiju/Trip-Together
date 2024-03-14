@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {bg_light} from '../../../constants/colors';
 
 const Wrapper = styled.View`
-  flex: 4;
+  flex: 11;
   width: 100%;
   background: ${bg_light};
 `;
@@ -22,7 +22,6 @@ const Ad = styled.Image`
 
 const MenuBox = styled.View`
   flex: 1;
-  background: red;
 `;
 
 export {Ad, AdView, MenuBox, Wrapper};

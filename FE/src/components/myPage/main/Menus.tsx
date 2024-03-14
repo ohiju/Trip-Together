@@ -1,5 +1,7 @@
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
+import {menus} from '../../../constants/MyPageMenus';
+import Menu from './Menu';
 import {Ad, AdView, MenuBox, Wrapper} from './MenusStyle';
 
 const Menus = () => {
@@ -8,7 +10,11 @@ const Menus = () => {
       <AdView>
         <Ad source={imagePath.adh01} resizeMode="contain" />
       </AdView>
-      <MenuBox></MenuBox>
+      <MenuBox>
+        {menus.map(menu => (
+          <Menu key={menu.id} menu={menu} />
+        ))}
+      </MenuBox>
     </Wrapper>
   );
 };
