@@ -4,7 +4,7 @@ import NoWallet from './NoWallet';
 import {WalletBox, Wrapper} from './WalletStyle';
 
 const Wallet = () => {
-  const isPin = false;
+  const isPin = true;
 
   return (
     <Wrapper>

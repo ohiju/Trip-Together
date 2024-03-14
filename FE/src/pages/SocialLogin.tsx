@@ -2,7 +2,8 @@ import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import LockSvg from '../assets/icons/lock.svg';
 import UserSvg from '../assets/icons/user.svg';
-import ButtonMiddle from '../components/common/ButtonMiddle';
+import AppButton from '../components/common/AppButton';
+import {socialLoginButton} from '../constants/AppButton';
 import {useAppDispatch} from '../store/hooks';
 import {login} from '../store/slices/user';
 import {
@@ -16,6 +17,7 @@ import {
 
 const SocialLogin = () => {
   const dispatch = useAppDispatch();
+
   const handlePressLogin = () => {
     dispatch(login(true));
   };
@@ -37,10 +39,8 @@ const SocialLogin = () => {
         <WithLocalSvg width={24} height={24} asset={LockSvg} />
         <Input placeholder="비밀번호를 입력하세요" />
       </InputView>
-      <ButtonMiddle
-        bg1="red"
-        bg2="black"
-        color="white"
+      <AppButton
+        style={socialLoginButton}
         text="로그인"
         onPress={handlePressLogin}
       />
