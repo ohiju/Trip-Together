@@ -5,10 +5,10 @@ const initialState: UserState = {
   isLoggedIn: false,
   userInfo: {
     user_id: 0,
-    image_url: 'https://source.unsplash.com/random/50x50',
-    nickname: 'KTaeGyu',
+    image_url: '',
+    nickname: '',
     username: '김태규',
-    description: '노는게 제일 좋은 뽀로로입니다. 같이 놀분 연락주세요~',
+    description: '',
     gender: 'M',
   },
   accounts: {
