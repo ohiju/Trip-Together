@@ -10,7 +10,7 @@ services:
       - ${DEV_MYSQL_DATA_PATH}:/var/lib/mysql
     environment:
       MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: on-failure
 
   dev_redis_container:
