@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.tripaccount.domain;
 
 import com.ssafy.triptogether.global.domain.BaseEntity;
+import com.ssafy.triptogether.settlement.domain.Settlement;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

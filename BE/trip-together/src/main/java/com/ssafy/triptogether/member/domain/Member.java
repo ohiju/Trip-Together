@@ -61,6 +61,14 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Plan> plans = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+    private List<MemberFlashMob> memberFlashMobs = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberSettlement> memberSettlements = new ArrayList<>();
+
     @Builder
     public Member(String uuid, String nickname) {
         this.uuid = uuid;

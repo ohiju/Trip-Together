@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.attraction.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.PlanAttraction;
@@ -93,6 +94,10 @@ public class Attraction extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
+    private List<FlashMob> flashMobs = new ArrayList<>();
 
     @Builder
     public Attraction(String businessNum, String thumbnailImageUrl, String address, Time startAt, Time endAt, String latitude, String longitude, String name, Region region) {
