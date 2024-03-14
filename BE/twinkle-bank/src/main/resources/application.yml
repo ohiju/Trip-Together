@@ -6,17 +6,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  profiles:
+    active: dev
 
 logging:
   level:
     org.hibernate.SQL: debug
 
----
-spring:
-  profiles:
-    active: prod
-
----
-spring:
-  profiles:
-    active: dev
+#---
+#spring:
+#  profiles:
+#    active: prod
