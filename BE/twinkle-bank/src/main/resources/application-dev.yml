@@ -1,0 +1,13 @@
+spring:
+  data:
+    redis:
+      host: j10a309a.p.ssafy.io
+      port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://j10a309a.p.ssafy.io:3306/${MYSQL_DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
