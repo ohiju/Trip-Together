@@ -22,4 +22,15 @@ const socialLoginButton: AppButtonStyle = {
   },
 };
 
-export {defaultStyle, socialLoginButton};
+const myWalletButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    padding: '10px 0',
+    borderR: '10px',
+  },
+  font: {
+    size: '20px',
+  },
+};
+
+export {defaultStyle, myWalletButton, socialLoginButton};

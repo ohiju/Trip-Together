@@ -3,6 +3,13 @@ import {UserState} from '../../interfaces/states/UserState';
 
 const initialState: UserState = {
   isLoggedIn: false,
+  accounts: {
+    trip_accounts: [
+      {id: 0, nation: 'UK', nation_kr: '영국', unit: 8356, balance: 28.88},
+      {id: 1, nation: 'EU', nation_kr: 'EU', unit: 8364, balance: 485.88},
+    ],
+    trip_accounts_length: 2,
+  },
 };
 
 export const userSlice = createSlice({

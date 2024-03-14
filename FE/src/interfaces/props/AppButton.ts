@@ -15,7 +15,7 @@ interface AppButtonStyle {
 interface AppButtonProps {
   style?: AppButtonStyle;
   text: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export type {AppButtonProps, AppButtonStyle};
