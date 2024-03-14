@@ -1,6 +1,5 @@
 import React from 'react';
-import ButtonMiddle from '../components/common/ButtonMiddle';
-import {font_light, primary, primary_light} from '../constants/colors';
+import AppButton from '../components/common/AppButton';
 import {LoginProps} from '../interfaces/props/LoginProps';
 import {Logo, LogoView, Slogan, SloganView, Wrapper} from './LoginStyle';
 
@@ -21,10 +20,7 @@ const Login = ({navigation}: LoginProps) => {
         <Slogan>하나의 은행 계정으로</Slogan>
         <Slogan>모든 서비스를 경험하세요</Slogan>
       </SloganView>
-      <ButtonMiddle
-        bg1={primary}
-        bg2={primary_light}
-        color={font_light}
+      <AppButton
         text="반짝 은행으로 계속하기"
         onPress={handlePressSocialLogin}
       />
