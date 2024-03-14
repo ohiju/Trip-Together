@@ -10,28 +10,32 @@ services:
       - ${DEV_MYSQL_DATA_PATH}:/var/lib/mysql
     environment:
       MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: on-failure
 
   dev_redis_container:
-      container_name: dev_redis_container
-      image: redis:6.2.6-alpine
-      ports:
-        - ${DEV_REDIS_BINDING_PORT}:6379
-      restart: on-failure
+    container_name: dev_redis_container
+    image: redis:6.2.6-alpine
+    ports:
+      - ${DEV_REDIS_BINDING_PORT}:6379
+    restart: on-failure
 
   dev_spring_container:
-      container_name: dev_spring_container
-      image: docker-dev
-      ports:
-        - ${DEV_SPRING_BINDING_PORT}:8080
-      build:
-        context: .
-        dockerfile: Dockerfile.dev
-      depends_on:
-        - dev_mysql_container
-        - dev_redis_container
-      restart: always
+    container_name: dev_spring_container
+    image: docker-dev
+    ports:
+      - ${DEV_SPRING_BINDING_PORT}:8080
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      MYSQL_DATABASE_URL: jdbc:mysql://dev_mysql_container/${MYSQL_DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+    depends_on:
+      - dev_mysql_container
+      - dev_redis_container
+    restart: always
 
 #  sonarqube_container:
 #    container_name: sonarqube_container
