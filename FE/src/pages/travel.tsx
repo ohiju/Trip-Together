@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 import {Wrapper, RecommendView, IconView} from './TravelStyle';
-import Plans from '../components/Travel/Plans';
+import Plans from '../components/travel/Plans';
 
 function Travel() {
   return (
