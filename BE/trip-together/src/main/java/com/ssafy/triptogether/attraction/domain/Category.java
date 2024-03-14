@@ -27,7 +27,7 @@ public class Category extends BaseEntity {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<AttractionCategory> attractionCategories = new ArrayList<>();
 
     @Builder

@@ -79,19 +79,19 @@ public class Attraction extends BaseEntity {
     private Region region;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "attraction")
+    @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<AttractionImage> attractionImages = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "attraction")
+    @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<AttractionCategory> attractionCategories = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "attraction")
+    @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "attraction")
+    @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
 
     @Builder

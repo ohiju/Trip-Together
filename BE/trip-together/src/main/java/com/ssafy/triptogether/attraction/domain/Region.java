@@ -45,11 +45,11 @@ public class Region extends BaseEntity {
     private String flagImageUrl;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "region")
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
     private List<Attraction> attractions = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "region")
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
     private List<Plan> plans = new ArrayList<>();
 
     @Builder

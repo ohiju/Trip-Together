@@ -36,7 +36,7 @@ public class TripAccount extends BaseEntity {
     private Double balance;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tripAccount")
+    @OneToMany(mappedBy = "tripAccount", cascade = CascadeType.ALL)
     private List<AccountHistory> accountHistories = new ArrayList<>();
 
     @Builder

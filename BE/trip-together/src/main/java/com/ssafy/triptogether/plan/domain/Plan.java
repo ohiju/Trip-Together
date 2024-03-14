@@ -50,8 +50,8 @@ public class Plan extends BaseEntity {
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @OneToMany(mappedBy = "plan")
     @JsonIgnore
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions =new ArrayList<>();
 
     @Builder

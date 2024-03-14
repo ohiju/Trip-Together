@@ -49,7 +49,7 @@ public class Currency extends BaseEntity {
     private String flagImageUrl;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "currency")
+    @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL)
     private List<TripAccount> tripAccounts = new ArrayList<>();
 
     @Builder
