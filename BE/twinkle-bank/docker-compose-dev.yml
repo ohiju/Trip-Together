@@ -29,12 +29,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      MYSQL_USERNAME: ${MYSQL_USERNAME}
     depends_on:
       - dev_mysql_container
       - dev_redis_container
+    environment:
+      MYSQL_DATABASE_NAME: jdbc:mysql://dev_mysql_container:3306/${MYSQL_DATABASE_NAME}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: always
 
 #  sonarqube_container:
