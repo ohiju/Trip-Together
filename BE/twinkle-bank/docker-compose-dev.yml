@@ -28,6 +28,8 @@ services:
       build:
         context: .
         dockerfile: Dockerfile.dev
+      environment:
+        MYSQL_DATABASE_URL: jdbc:mysql://dev_mysql_container/${MYSQL_DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       depends_on:
         - dev_mysql_container
         - dev_redis_container
