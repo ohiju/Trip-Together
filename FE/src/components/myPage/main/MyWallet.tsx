@@ -29,13 +29,13 @@ const MyWallet = () => {
       <Header>
         <TitleView>
           <Title>내 지갑</Title>
-          <WithLocalSvg width={28} height={28} asset={InfoSvg} />
+          <WithLocalSvg width={24} height={24} asset={InfoSvg} />
         </TitleView>
         <HistoryView>
           <History>이용 내역</History>
           <WithLocalSvg
-            width={24}
-            height={24}
+            width={22}
+            height={22}
             fill={font_lightgray}
             asset={CaretSvg}
           />

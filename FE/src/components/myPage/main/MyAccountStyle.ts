@@ -5,7 +5,7 @@ const Wrapper = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 0;
+  margin-bottom: 15px;
 `;
 
 const CountryView = styled.View`
@@ -14,20 +14,20 @@ const CountryView = styled.View`
 `;
 
 const Flag = styled.Image`
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
 `;
 
 const Country = styled.Text`
   color: ${font_dark};
-  font-size: 24px;
+  font-size: 20px;
   margin-left: 10px;
 `;
 
 const BalanceView = styled.View``;
 
 const Balance = styled.Text`
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 export {Balance, BalanceView, Country, CountryView, Flag, Wrapper};

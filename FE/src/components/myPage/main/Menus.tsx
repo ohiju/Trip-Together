@@ -1,17 +1,14 @@
 import React from 'react';
-import {Text} from 'react-native';
-import styled from 'styled-components/native';
-
-const Wrapper = styled.View`
-  flex: 2;
-  width: 100%;
-  background: blue;
-`;
+import {imagePath} from '../../../assets/images/imagePath';
+import {Ad, AdView, MenuBox, Wrapper} from './MenusStyle';
 
 const Menus = () => {
   return (
     <Wrapper>
-      <Text>Menus</Text>
+      <AdView>
+        <Ad source={imagePath.adh01} resizeMode="contain" />
+      </AdView>
+      <MenuBox></MenuBox>
     </Wrapper>
   );
 };

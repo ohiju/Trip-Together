@@ -1,10 +1,13 @@
 import {ImageSourcePropType} from 'react-native';
 
 interface ImagePath {
-  [key: string]: ImageSourcePropType | undefined;
+  [key: string | number]: ImageSourcePropType | undefined;
 }
 
-export const roundNationImagePath: ImagePath = {
+export const imagePath: ImagePath = {
+  // 둥근 국기
   UK: require('./UK_round.png'),
   EU: require('./EU_round.png'),
+  // 광고 배너
+  adh01: require('./adh01.png'),
 };

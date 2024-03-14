@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {bg_light} from '../../../constants/colors';
 
 const Wrapper = styled.View`
-  flex: 2;
+  flex: 3;
   width: 100%;
   align-items: center;
   justify-content: center;

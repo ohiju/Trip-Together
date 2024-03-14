@@ -25,7 +25,7 @@ const socialLoginButton: AppButtonStyle = {
 const myWalletButton: AppButtonStyle = {
   button: {
     width: '100%',
-    padding: '10px 0',
+    padding: '8px 0',
     borderR: '10px',
   },
   font: {

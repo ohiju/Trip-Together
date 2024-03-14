@@ -1,5 +1,5 @@
 import React from 'react';
-import {roundNationImagePath} from '../../../assets/images/imagePath';
+import {imagePath} from '../../../assets/images/imagePath';
 import {account} from '../../../interfaces/states/UserState';
 import {
   Balance,
@@ -21,7 +21,7 @@ const MyAccount = ({myAccount}: MyAccountProps) => {
   return (
     <Wrapper>
       <CountryView>
-        <Flag source={roundNationImagePath[nation]} resizeMode="contain" />
+        <Flag source={imagePath[nation]} resizeMode="contain" />
         <Country>{nation_kr}</Country>
       </CountryView>
       <BalanceView>
