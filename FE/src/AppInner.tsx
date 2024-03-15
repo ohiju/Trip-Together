@@ -1,15 +1,10 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
-import TabBarIcon from './components/myPage/TabBarIcon';
-import TabBarLabel from './components/myPage/TabBarLabel';
-import {BeforeLoginStackParams} from './interfaces/router/BeforeLoginStackParams';
-import FlashMob from './pages/FlashMob';
+import {MainStackParams} from './interfaces/router/MainStackParams';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
-import Travel from './pages/Travel';
-import MyPageStack from './stacks/MyPageStack';
+import TabNavigator from './stacks/TabNavigator';
 import {RootState} from './store';
 import {useAppSelector} from './store/hooks';
 
@@ -18,55 +13,22 @@ function AppInner() {
     (state: RootState) => state.user.isLoggedIn,
   );
 
-  const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator<BeforeLoginStackParams>();
+  const Stack = createNativeStackNavigator<MainStackParams>();
 
   return (
-    <NavigationContainer>
-      {isLoggedIn ? ( // 추가 조건을 달아서 경우에 따라 탭 바가 안나오도록 설정할 것
-        <Tab.Navigator>
-          <Tab.Screen
-            name="여행"
-            component={Travel}
-            options={{
-              title: '여행',
-              // 아이콘 추가
-            }}
-          />
-          <Tab.Screen
-            name="번개"
-            component={FlashMob}
-            options={{
-              title: '번개',
-              // 아이콘 추가
-            }}
-          />
-          <Tab.Screen
-            key="myPage"
-            name="myPage"
-            component={MyPageStack}
-            options={{
-              title: '마이',
-              headerShown: false,
-              tabBarIcon: TabBarIcon,
-              tabBarLabel: TabBarLabel,
-            }}
-          />
-        </Tab.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SocialLogin"
-            component={SocialLogin}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      )}
+    <NavigationContainer independent={true}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        {isLoggedIn ? (
+          <>
+            <Stack.Screen name="tabNavigator" component={TabNavigator} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SocialLogin" component={SocialLogin} />
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

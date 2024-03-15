@@ -1,3 +1,4 @@
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {MyPageStackParams} from '../interfaces/router/MyPageStackParams';
@@ -9,29 +10,33 @@ const MyPageStack = () => {
   const Stack = createNativeStackNavigator<MyPageStackParams>();
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="my_main"
-        component={MyPageMain}
-        options={{
-          title: '마이',
-        }}
-      />
-      <Stack.Screen
-        name="pin"
-        component={PinStack}
-        options={{
-          title: '핀 등록',
-        }}
-      />
-      <Stack.Screen
-        name="exchange"
-        component={ExchangeStack}
-        options={{
-          title: '환전하기',
-        }}
-      />
-    </Stack.Navigator>
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="my_main"
+          component={MyPageMain}
+          options={{
+            title: '마이',
+          }}
+        />
+        <Stack.Screen
+          name="pin"
+          component={PinStack}
+          options={{
+            title: '핀 등록',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name="exchange"
+          component={ExchangeStack}
+          options={{
+            title: '환전하기',
+            headerTitleAlign: 'center',
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

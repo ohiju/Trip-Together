@@ -1,4 +1,4 @@
-import {BeforeLoginStackParams} from './BeforeLoginStackParams';
+import {BeforeLoginStackParams} from './MainStackParams';
 import {MyPageStackParams} from './MyPageStackParams';
 import {PinStackParams} from './PinStackParams';
 

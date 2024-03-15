@@ -1,6 +1,8 @@
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import PlusRoundSvg from '../../../assets/icons/plus_round.svg';
+import {BasicRouteProps} from '../../../interfaces/props/BasicRouteProps';
+import {MyPageStackParams} from '../../../interfaces/router/MyPageStackParams';
 import {
   AddWallet,
   AddWalletView,
@@ -9,8 +11,10 @@ import {
   Wrapper,
 } from './NoWalletStyle';
 
-const NoWallet = ({navigation}) => {
-  const onPress = () => {};
+const NoWallet = ({navigation}: BasicRouteProps<MyPageStackParams>) => {
+  const onPress = () => {
+    navigation.navigate('pin');
+  };
 
   return (
     <Wrapper onPress={onPress}>
