@@ -43,6 +43,8 @@ public class QAttraction extends EntityPathBase<Attraction> {
 
     public final TimePath<java.sql.Time> endAt = createTime("endAt", java.sql.Time.class);
 
+    public final ListPath<com.ssafy.triptogether.flashmob.domain.FlashMob, com.ssafy.triptogether.flashmob.domain.QFlashMob> flashMobs = this.<com.ssafy.triptogether.flashmob.domain.FlashMob, com.ssafy.triptogether.flashmob.domain.QFlashMob>createList("flashMobs", com.ssafy.triptogether.flashmob.domain.FlashMob.class, com.ssafy.triptogether.flashmob.domain.QFlashMob.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> hit = createNumber("hit", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

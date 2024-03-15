@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,6 +36,15 @@ public class Member extends BaseEntity {
     @NotBlank
     @Column(name = "nickname")
     private String nickname;
+
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
+
+    @NotBlank
+    @Column(name = "birth")
+    private Date birth;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -70,8 +80,10 @@ public class Member extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Member(String uuid, String nickname) {
+    public Member(String uuid, String nickname, Gender gender, Date birth) {
         this.uuid = uuid;
         this.nickname = nickname;
+        this.gender = gender;
+        this.birth = birth;
     }
 }

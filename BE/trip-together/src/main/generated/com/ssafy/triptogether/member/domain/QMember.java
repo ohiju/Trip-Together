@@ -22,14 +22,22 @@ public class QMember extends EntityPathBase<Member> {
 
     public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
 
+    public final DateTimePath<java.util.Date> birth = createDateTime("birth", java.util.Date.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath description = createString("description");
 
+    public final EnumPath<Gender> gender = createEnum("gender", Gender.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath imageUrl = createString("imageUrl");
+
+    public final ListPath<MemberFlashMob, QMemberFlashMob> memberFlashMobs = this.<MemberFlashMob, QMemberFlashMob>createList("memberFlashMobs", MemberFlashMob.class, QMemberFlashMob.class, PathInits.DIRECT2);
+
+    public final ListPath<MemberSettlement, QMemberSettlement> memberSettlements = this.<MemberSettlement, QMemberSettlement>createList("memberSettlements", MemberSettlement.class, QMemberSettlement.class, PathInits.DIRECT2);
 
     public final StringPath nickname = createString("nickname");
 
