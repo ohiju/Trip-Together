@@ -41,11 +41,11 @@ services:
   sonarqube_container:
     container_name: sonarqube_container
     image: sonarqube:lts-community
-#    user: root
+    user: sonar
     ports:
       - ${SONARQUBE_BINDING_PORT}:9000
-#    volumes:
-#      - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
-#      - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
-#      - ${SONARQUBE_LOGS_PATH}:/opt/sonarqube/logs
+    volumes:
+      - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
+      - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
+      - ${SONARQUBE_LOGS_PATH}:/opt/sonarqube/logs
     restart: on-failure
