@@ -36,7 +36,7 @@ public class AccountHistory extends BaseEntity {
 	@JoinColumn(name = "account_id")
 	private Account account;
 
-	@NotNull
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type")
 	private Type type;
@@ -49,7 +49,7 @@ public class AccountHistory extends BaseEntity {
 	@Column(name = "address")
 	private String address;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "price")
 	private Double price;
 
@@ -61,7 +61,8 @@ public class AccountHistory extends BaseEntity {
 		this.address = address;
 		this.price = price;
 	}
-	public void setAccount(Account account){
+
+	public void setAccount(Account account) {
 		this.account = account;
 		account.getAccountHistories().add(this);
 	}

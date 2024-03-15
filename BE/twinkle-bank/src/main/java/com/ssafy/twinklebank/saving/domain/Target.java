@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,8 +25,8 @@ public class Target extends BaseEntity {
 	@Column(name = "target_id")
 	private Long id;
 
-	@NotNull
-	@Column(name="type")
+	@NotBlank
+	@Column(name = "type")
 	private String type;
 
 	@Builder

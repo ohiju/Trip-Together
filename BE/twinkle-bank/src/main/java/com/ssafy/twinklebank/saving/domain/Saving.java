@@ -29,15 +29,15 @@ public class Saving extends BaseEntity {
 	@Column(name = "name")
 	private String name;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "base_interest_rate")
 	private Double baseInterestRate;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "highest_interest_rate")
 	private Double highestInterestRate;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "duration")
 	private Integer duration;
 
@@ -45,15 +45,15 @@ public class Saving extends BaseEntity {
 	private String description;
 
 	// TODO : ENUM 상의 후 결정 하기
-	@NotNull
+	@NotBlank
 	@Column(name = "interest_payment_type")
 	private InterestPaymentMethodType interestPaymentMethod;
 
-	@NotNull
-	@Column(name ="type")
+	@NotBlank
+	@Column(name = "type")
 	private SavingType type;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "subscription_method")
 	private SubscriptionMethodType subscriptionMethod;
 

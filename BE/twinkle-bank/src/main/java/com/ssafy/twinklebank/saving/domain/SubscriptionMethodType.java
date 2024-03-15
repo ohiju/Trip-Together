@@ -5,6 +5,7 @@ public enum SubscriptionMethodType {
 	OFFLINE("오프라인"),
 	MOBILE_APP("모바일앱");
 	private final String message;
+
 	SubscriptionMethodType(String message) {
 		this.message = message;
 	}

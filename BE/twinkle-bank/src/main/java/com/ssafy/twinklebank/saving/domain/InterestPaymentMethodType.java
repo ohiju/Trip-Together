@@ -6,6 +6,7 @@ public enum InterestPaymentMethodType {
 	QUARTERLY("분기별 지급"),
 	ANNUALLY("연간 지급");
 	private final String message;
+
 	InterestPaymentMethodType(String message) {
 		this.message = message;
 	}

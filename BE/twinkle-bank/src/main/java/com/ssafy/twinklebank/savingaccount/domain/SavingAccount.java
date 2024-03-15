@@ -45,6 +45,7 @@ public class SavingAccount extends BaseEntity {
 		this.saving = saving;
 		this.interestRate = interestRate;
 	}
+
 	public void setMember(Member member) {
 		this.member = member;
 		member.getSavingAccounts().add(this);

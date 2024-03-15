@@ -37,14 +37,13 @@ public class Account extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name= "member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
 
 	@NotBlank
 	@Column(name = "uuid")
 	private String uuid;
 
-	@NotNull
 	@Column(name = "balance")
 	private Double balance;
 
@@ -68,7 +67,8 @@ public class Account extends BaseEntity {
 		this.name = name;
 		this.accountNum = accountNum;
 	}
-	public void setMember(Member member){
+
+	public void setMember(Member member) {
 		this.member = member;
 		member.getAccounts().add(this);
 	}
