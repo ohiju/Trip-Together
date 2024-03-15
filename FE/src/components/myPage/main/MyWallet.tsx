@@ -21,7 +21,7 @@ import NoAccount from './NoAccount';
 
 const MyWallet = () => {
   const tripAccountsLength = useAppSelector(
-    (state: RootState) => state.user.accounts.trip_accounts_length,
+    (state: RootState) => state.user.userInfo.trip_accounts_length,
   );
 
   return (

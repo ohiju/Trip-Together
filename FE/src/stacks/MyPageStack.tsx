@@ -1,7 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Exchange from '../pages/myPage/Exchange';
 import MyPageMain from '../pages/myPage/Main';
+import ExchangeStack from './myPage/ExchangeStack';
+import PinStack from './myPage/PinStack';
 
 const MyPageStack = () => {
   const Stack = createNativeStackNavigator();
@@ -16,10 +17,17 @@ const MyPageStack = () => {
         }}
       />
       <Stack.Screen
-        name="exchange"
-        component={Exchange}
+        name="pin"
+        component={PinStack}
         options={{
-          title: '환전',
+          title: '핀 등록',
+        }}
+      />
+      <Stack.Screen
+        name="exchange"
+        component={ExchangeStack}
+        options={{
+          title: '환전하기',
         }}
       />
     </Stack.Navigator>
