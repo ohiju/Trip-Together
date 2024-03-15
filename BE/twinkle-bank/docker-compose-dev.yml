@@ -41,6 +41,7 @@ services:
   sonarqube_container:
     container_name: sonarqube_container
     image: sonarqube:lts-community
+    user: ubuntu
     ports:
       - ${SONARQUBE_BINDING_PORT}:9000
     volumes:
