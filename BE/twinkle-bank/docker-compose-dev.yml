@@ -11,14 +11,14 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    restart: on-failure
+    restart: unless-stopped
 
   dev_redis_container:
     container_name: dev_redis_container
     image: redis:6.2.6-alpine
     ports:
       - ${DEV_REDIS_BINDING_PORT}:6379
-    restart: on-failure
+    restart: unless-stopped
 
   dev_spring_container:
     container_name: dev_spring_container
@@ -38,13 +38,13 @@ services:
       SPRING_PROFILES_ACTIVE: default
     restart: always
 
-#  sonarqube_container:
-#    container_name: sonarqube_container
-#    image: sonarqube
-#    ports:
-#      - ${SONARQUBE_BINDING_PORT}:9000
-#    volumes:
-#      - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
-#      - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
-#      - ${SONARQUBE_LOGS_PATH}:/opt/sonarqube/logs
-#    restart: on-failure
+  sonarqube_container:
+    container_name: sonarqube_container
+    image: sonarqube
+    ports:
+      - ${SONARQUBE_BINDING_PORT}:8091
+    volumes:
+      - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
+      - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
+      - ${SONARQUBE_LOGS_PATH}:/opt/sonarqube/logs
+    restart: on-failure
