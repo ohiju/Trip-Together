@@ -33,7 +33,7 @@ public class Attraction extends BaseEntity {
     @Column(name = "business_num")
     private String businessNum;
 
-    @Column(name = "thumbnail_image_url")
+    @Column(name = "thumbnail_image_url", length = 3000)
     private String thumbnailImageUrl;
 
     @NotBlank

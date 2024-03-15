@@ -19,7 +19,7 @@ public class AttractionImage extends BaseEntity {
     private Long id;
 
     @NotBlank
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 3000)
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

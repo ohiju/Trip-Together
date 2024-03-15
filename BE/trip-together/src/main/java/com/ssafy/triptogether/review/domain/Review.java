@@ -26,7 +26,7 @@ public class Review extends BaseEntity {
     private Integer rating;
 
     @NotBlank
-    @Column(name = "content")
+    @Column(name = "content", length = 3000)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

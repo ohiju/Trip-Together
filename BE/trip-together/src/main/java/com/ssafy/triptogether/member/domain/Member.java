@@ -46,7 +46,7 @@ public class Member extends BaseEntity {
     @Column(name = "birth")
     private Date birth;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 3000)
     private String imageUrl;
 
     @Column(name = "description")

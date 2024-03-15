@@ -40,10 +40,6 @@ public class Region extends BaseEntity {
     @Column(name = "longitude")
     private String longitude;
 
-    @NotBlank
-    @Column(name = "flag_image_url")
-    private String flagImageUrl;
-
     @JsonIgnore
     @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
     private List<Attraction> attractions = new ArrayList<>();
@@ -53,11 +49,10 @@ public class Region extends BaseEntity {
     private List<Plan> plans = new ArrayList<>();
 
     @Builder
-    public Region(Nation nation, String cityName, String latitude, String longitude, String flagImageUrl) {
+    public Region(Nation nation, String cityName, String latitude, String longitude) {
         this.nation = nation;
         this.cityName = cityName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.flagImageUrl = flagImageUrl;
     }
 }
