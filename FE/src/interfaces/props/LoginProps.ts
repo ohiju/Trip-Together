@@ -1,13 +1,6 @@
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootBeforeLoginStackParams} from '../router/RootStackParams';
+import {BeforeLoginStackParams} from '../router/BeforeLoginStackParams';
+import {BasicRouteProps} from './BasicRouteProps';
 
-interface LoginProps {
-  navigation: NativeStackNavigationProp<RootBeforeLoginStackParams>;
-  route: RouteProp<
-    RootBeforeLoginStackParams,
-    keyof RootBeforeLoginStackParams
-  >;
-}
+interface LoginProps extends BasicRouteProps<BeforeLoginStackParams> {}
 
 export type {LoginProps};

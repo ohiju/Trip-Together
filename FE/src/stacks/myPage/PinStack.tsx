@@ -1,9 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import {PinStackParams} from '../../interfaces/router/PinStackParams';
 import Pin from '../../pages/myPage/Pin';
 
 const PinStack = () => {
-  const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator<PinStackParams>();
 
   return (
     <Stack.Navigator>

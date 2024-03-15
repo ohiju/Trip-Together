@@ -1,16 +1,17 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import {MyPageStackParams} from '../interfaces/router/MyPageStackParams';
 import MyPageMain from '../pages/myPage/Main';
 import ExchangeStack from './myPage/ExchangeStack';
 import PinStack from './myPage/PinStack';
 
 const MyPageStack = () => {
-  const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator<MyPageStackParams>();
 
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="main"
+        name="my_main"
         component={MyPageMain}
         options={{
           title: '마이',

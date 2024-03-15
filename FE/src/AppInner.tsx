@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import TabBarIcon from './components/myPage/TabBarIcon';
 import TabBarLabel from './components/myPage/TabBarLabel';
-import {RootStackParams} from './interfaces/router/RootStackParams';
+import {BeforeLoginStackParams} from './interfaces/router/BeforeLoginStackParams';
 import FlashMob from './pages/FlashMob';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
@@ -19,7 +19,7 @@ function AppInner() {
   );
 
   const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator<RootStackParams>();
+  const Stack = createNativeStackNavigator<BeforeLoginStackParams>();
 
   return (
     <NavigationContainer>
