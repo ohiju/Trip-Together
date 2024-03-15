@@ -40,9 +40,9 @@ services:
 
   sonarqube_container:
     container_name: sonarqube_container
-    image: sonarqube
+    image: sonarqube:lts-community
     ports:
-      - ${SONARQUBE_BINDING_PORT}:8091
+      - ${SONARQUBE_BINDING_PORT}:9000
     volumes:
       - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
       - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
