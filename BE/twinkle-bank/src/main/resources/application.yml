@@ -6,8 +6,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-  profiles:
-    active: dev
 logging:
   level:
     org.hibernate.SQL: debug
