@@ -9,9 +9,11 @@ import {
   Wrapper,
 } from './NoWalletStyle';
 
-const NoWallet = () => {
+const NoWallet = ({navigation}) => {
+  const onPress = () => {};
+
   return (
-    <Wrapper>
+    <Wrapper onPress={onPress}>
       <AddWalletView>
         <WithLocalSvg width={20} height={20} asset={PlusRoundSvg} />
         <AddWallet>지갑 생성하기</AddWallet>

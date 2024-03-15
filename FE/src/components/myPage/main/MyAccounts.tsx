@@ -6,7 +6,7 @@ import {Accounts, Wrapper} from './MyAccountsStyle';
 
 const MyAccounts = () => {
   const tripAccounts = useAppSelector(
-    (state: RootState) => state.user.accounts.trip_accounts,
+    (state: RootState) => state.user.userInfo.trip_accounts,
   );
 
   return (

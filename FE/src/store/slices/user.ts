@@ -5,13 +5,11 @@ const initialState: UserState = {
   isLoggedIn: false,
   userInfo: {
     user_id: 0,
-    image_url: '',
-    nickname: '',
     username: '김태규',
+    nickname: '',
+    image_url: '',
     description: '',
-    gender: 'M',
-  },
-  accounts: {
+    is_pin: false,
     trip_accounts: [
       {id: 0, nation: 'UK', nation_kr: '영국', unit: 8356, balance: 28.88},
       {id: 1, nation: 'EU', nation_kr: 'EU', unit: 8364, balance: 485.88},
