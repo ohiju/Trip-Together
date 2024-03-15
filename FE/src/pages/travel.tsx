@@ -1,8 +1,9 @@
 import React from 'react';
-import {Text, Dimensions} from 'react-native';
-import {Wrapper, IconView} from './TravelStyle';
+import {Dimensions} from 'react-native';
+import {Wrapper} from './TravelStyle';
 import Plans from '../components/travel/Plans';
 import Package from '../components/travel/Package';
+import Icons from '../components/travel/Icons';
 
 function Travel() {
   const screenWidth = Math.round(Dimensions.get('window').width);
@@ -33,9 +34,7 @@ function Travel() {
   return (
     <Wrapper>
       <Plans />
-      <IconView>
-        <Text>1</Text>
-      </IconView>
+      <Icons pages={PAGES} gap={15} offset={35} pageWidth={screenWidth - 51} />
       <Package
         pages={PAGES}
         gap={15}
