@@ -1,13 +1,11 @@
 package com.ssafy.triptogether.plan.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,11 +32,11 @@ public class Plan extends BaseEntity {
     @Column(name = "real_budget")
     private Double realBudget;
 
-    @NotNull
+    @NotBlank
     @Column(name = "start_at")
     private LocalDateTime startAt;
 
-    @NotNull
+    @NotBlank
     @Column(name = "end_at")
     private LocalDateTime endAt;
 
@@ -52,7 +50,7 @@ public class Plan extends BaseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
-    private List<PlanAttraction> planAttractions =new ArrayList<>();
+    private List<PlanAttraction> planAttractions = new ArrayList<>();
 
     @Builder
     public Plan(String title, LocalDateTime startAt, LocalDateTime endAt, Member member, Region region) {

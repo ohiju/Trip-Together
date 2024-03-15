@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class TripAccount extends BaseEntity {
     @JoinColumn(name = "currency_id")
     private Currency currency;
 
-    @NotNull
+    @NotBlank
     @Column(name = "balance")
     private Double balance;
 

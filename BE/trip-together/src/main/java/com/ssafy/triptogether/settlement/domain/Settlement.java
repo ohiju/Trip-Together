@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberSettlement;
-import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +24,11 @@ public class Settlement extends BaseEntity {
     @Column(name = "settlement_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "total_price")
     private Double totalPrice;
 
-    @NotNull
+    @NotBlank
     @Column(name = "attendance_count")
     private Integer attendanceCount;
 

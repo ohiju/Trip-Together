@@ -4,7 +4,6 @@ import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class MemberFlashMob extends BaseEntity {
     @Column(name = "member_flash_mob_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "is_master")
     private Boolean isMaster;
 

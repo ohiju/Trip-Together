@@ -3,12 +3,10 @@ package com.ssafy.triptogether.attraction.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.PlanAttraction;
 import com.ssafy.triptogether.review.domain.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,11 +38,11 @@ public class Attraction extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @NotNull
+    @NotBlank
     @Column(name = "start_at")
     private Time startAt;
 
-    @NotNull
+    @NotBlank
     @Column(name = "end_at")
     private Time endAt;
 

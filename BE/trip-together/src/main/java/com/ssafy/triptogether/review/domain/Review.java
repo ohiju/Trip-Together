@@ -5,7 +5,6 @@ import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ public class Review extends BaseEntity {
     @Column(name = "review_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "rating")
     private Integer rating;
 

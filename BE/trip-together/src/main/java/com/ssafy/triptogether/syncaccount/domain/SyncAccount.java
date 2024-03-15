@@ -4,7 +4,6 @@ import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class SyncAccount extends BaseEntity {
     @Column(name = "sync_account_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "is_main")
     private Boolean isMain;
 

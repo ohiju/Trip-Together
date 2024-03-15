@@ -3,7 +3,7 @@ package com.ssafy.triptogether.plan.domain;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,11 +21,11 @@ public class PlanAttraction extends BaseEntity {
     @Column(name = "plan_attraction_id")
     private Long planAttractionId;
 
-    @NotNull
+    @NotBlank
     @Column(name = "trip_at")
     private LocalDateTime tripAt;
 
-    @NotNull
+    @NotBlank
     @Column(name = "sequence")
     private Integer sequence;
 
