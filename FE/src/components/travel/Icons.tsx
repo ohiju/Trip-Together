@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import Page from '../../assets/data/MainIcons.tsx';
+import {primary, bg_lightgray} from '../../constants/colors.ts';
 
 interface ICarousel {
   gap: number;
@@ -21,7 +22,7 @@ const Container = styled.View`
 
 const Indicator = styled.View<{focused: boolean}>`
   margin: 0px 4px;
-  background-color: ${props => (props.focused ? '#262626' : '#dfdfdf')};
+  background-color: ${props => (props.focused ? primary : bg_lightgray)};
   width: 6px;
   height: 6px;
   border-radius: 3px;

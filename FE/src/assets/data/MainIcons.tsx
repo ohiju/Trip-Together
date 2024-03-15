@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {ViewStyle, Text} from 'react-native';
+import {primary} from '../../constants/colors';
 
 interface IPage {
   item: {num: number; color: string};
@@ -17,7 +18,7 @@ const PageItem = styled.View<{color: string}>`
 const Icon = styled.View`
   width: 60px;
   height: 60px;
-  background-color: lightgreen;
+  background-color: ${primary};
   justify-content: center;
   margin: 10px 10px;
   align-items: center;
