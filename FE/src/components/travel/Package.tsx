@@ -11,7 +11,7 @@ interface ICarousel {
 }
 
 const Container = styled.View`
-  height: 40%;
+  height: 35%;
   width: 90%;
   padding: 40px 0px;
   background-color: white;
