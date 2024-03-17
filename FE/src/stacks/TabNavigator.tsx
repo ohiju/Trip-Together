@@ -1,47 +1,34 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import MyPageTabBarIcon from '../components/myPage/TabBarIcon';
 import MypageTabBarLabel from '../components/myPage/TabBarLabel';
 import {TabParams} from '../interfaces/router/TabParams';
 import FlashMob from '../pages/FlashMob';
 import Travel from '../pages/Travel';
-import MyPageStack from './MyPageStack';
+import {RootState} from '../store';
+import {useAppSelector} from '../store/hooks';
+import MyPageNavigator from './MyPageStack';
+
+const Tab = createBottomTabNavigator<TabParams>();
 
 const TabNavigator = () => {
-  const Tab = createBottomTabNavigator<TabParams>();
+  const isShown = useAppSelector((state: RootState) => state.tabState.isShown);
 
   return (
-    <NavigationContainer independent={true}>
-      <Tab.Navigator screenOptions={{headerShown: false}}>
-        <Tab.Screen
-          name="trip"
-          component={Travel}
-          options={{
-            title: '여행',
-            // 아이콘 추가
-          }}
-        />
-        <Tab.Screen
-          name="flashMob"
-          component={FlashMob}
-          options={{
-            title: '번개',
-            // 아이콘 추가
-          }}
-        />
-        <Tab.Screen
-          key="myPage"
-          name="myPage"
-          component={MyPageStack}
-          options={{
-            title: '마이',
-            tabBarIcon: MyPageTabBarIcon,
-            tabBarLabel: MypageTabBarLabel,
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator
+      tabBar={isShown ? undefined : () => null}
+      screenOptions={{headerShown: false}}>
+      <Tab.Screen name="trip" component={Travel} options={{}} />
+      <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
+      <Tab.Screen
+        name="myPage"
+        component={MyPageNavigator}
+        options={{
+          tabBarIcon: MyPageTabBarIcon,
+          tabBarLabel: MypageTabBarLabel,
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 
