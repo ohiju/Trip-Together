@@ -1,28 +1,46 @@
 version: "3"
 services:
 
-  mysql:
-    build: ./mysql
-    restart: unless-stopped
-    container_name: test_mysql
+  dev_mysql_container:
+    container_name: dev_mysql_container
+    image: mysql:8.0
     ports:
-      - "3306:3306"
+      - ${DEV_MYSQL_BINDING_PORT}:3306
     volumes:
-      - ./mysql/mysql_data:/var/lib/mysql
+      - ${DEV_MYSQL_DATA_PATH}:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: <db이름>
-      MYSQL_ROOT_PASSWORD: <db패스워드 지정>
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: unless-stopped
 
-  spring:
+  dev_redis_container:
+    container_name: dev_redis_container
+    image: redis:6.2.6-alpine
+    ports:
+      - ${DEV_REDIS_BINDING_PORT}:6379
+    restart: unless-stopped
+
+  dev_spring_container:
+    container_name: dev_spring_container
+    image: docker-dev
+    ports:
+      - ${DEV_SPRING_BINDING_PORT}:8080
     build:
       context: .
       dockerfile: Dockerfile.dev
-    image: docker-actions-spring-dev
-    ports:
-      - "8080:8080"
     depends_on:
-      - mysql
+      - dev_mysql_container
+      - dev_redis_container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/<db이름>
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: <db 패스워드>
+      SPRING_DATASOURCE_URL: jdbc:mysql://j10a309.p.ssafy.io:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_PROFILES_ACTIVE: dev
+    restart: always
+
+  sonarqube_container:
+    container_name: sonarqube_container
+    image: sonarqube:lts-community
+    ports:
+      - ${SONARQUBE_BINDING_PORT}:9000
+    restart: on-failure
