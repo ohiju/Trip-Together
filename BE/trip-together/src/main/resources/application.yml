@@ -2,22 +2,12 @@ spring:
   output:
     ansi:
       enabled: always
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${SCHEMA}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${USERNAME}
-    password: ${PASSWORD}
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
-        format_sql: true
-
+        dialect: org.hibernate.dialect.MySQLDialect
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
 logging:
   level:
     org.hibernate.SQL: debug
