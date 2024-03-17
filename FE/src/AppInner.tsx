@@ -8,7 +8,11 @@ import {BeforeLoginStackParams} from './interfaces/router/BeforeLoginStackParams
 import FlashMob from './pages/FlashMob';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
+<<<<<<< HEAD
 import TravelStack from './stacks/TravelStack';
+=======
+import Travel from './pages/travel/Travel';
+>>>>>>> 579d7758286a5ac16cf9c3021befb32b4c0885c4
 import MyPageStack from './stacks/MyPageStack';
 import {RootState} from './store';
 import {useAppSelector} from './store/hooks';
