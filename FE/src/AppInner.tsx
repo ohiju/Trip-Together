@@ -8,7 +8,7 @@ import {BeforeLoginStackParams} from './interfaces/router/BeforeLoginStackParams
 import FlashMob from './pages/FlashMob';
 import Login from './pages/Login';
 import SocialLogin from './pages/SocialLogin';
-import Travel from './pages/travel/Travel';
+import TravelStack from './stacks/TravelStack';
 import MyPageStack from './stacks/MyPageStack';
 import {RootState} from './store';
 import {useAppSelector} from './store/hooks';
@@ -27,9 +27,10 @@ function AppInner() {
         <Tab.Navigator>
           <Tab.Screen
             name="여행"
-            component={Travel}
+            component={TravelStack}
             options={{
               title: '여행',
+              headerShown: false,
               // 아이콘 추가
             }}
           />

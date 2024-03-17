@@ -1,10 +1,12 @@
 import {BeforeLoginStackParams} from './BeforeLoginStackParams';
 import {MyPageStackParams} from './MyPageStackParams';
 import {PinStackParams} from './PinStackParams';
+import {TravelStackParams} from './TravelStackParams';
 
 interface RootStackParams
   extends BeforeLoginStackParams,
     MyPageStackParams,
-    PinStackParams {}
+    PinStackParams,
+    TravelStackParams {}
 
 export type {RootStackParams};

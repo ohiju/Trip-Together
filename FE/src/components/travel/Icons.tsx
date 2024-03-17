@@ -25,7 +25,6 @@ const Indicator = styled.View<{focused: boolean}>`
   background-color: ${props => (props.focused ? primary : bg_lightgray)};
   width: 6px;
   height: 6px;
-  border-radius: 3px;
 `;
 
 const IndicatorWrapper = styled.View`
