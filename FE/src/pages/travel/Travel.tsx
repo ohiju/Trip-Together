@@ -1,10 +1,6 @@
 import React from 'react';
 import {Dimensions} from 'react-native';
-<<<<<<<< HEAD:FE/src/pages/travel/Main.tsx
-import {Wrapper} from './MainStyle';
-========
 import {Wrapper} from './TravelStyle';
->>>>>>>> 579d7758286a5ac16cf9c3021befb32b4c0885c4:FE/src/pages/travel/Travel.tsx
 import Plans from '../../components/travel/Plans';
 import Package from '../../components/travel/Package';
 import Icons from '../../components/travel/Icons';
