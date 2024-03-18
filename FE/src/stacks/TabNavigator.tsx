@@ -18,10 +18,10 @@ const TabNavigator = () => {
     <Tab.Navigator
       tabBar={isShown ? undefined : () => null}
       screenOptions={{headerShown: false}}>
-      <Tab.Screen name="trip" component={Travel} options={{}} />
-      <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
+      <Tab.Screen name="Trip" component={Travel} options={{}} />
+      <Tab.Screen name="FlashMob" component={FlashMob} options={{}} />
       <Tab.Screen
-        name="myPage"
+        name="MyPage"
         component={MyPageNavigator}
         options={{
           tabBarIcon: MyPageTabBarIcon,

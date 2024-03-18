@@ -1,7 +1,13 @@
 import {ParamListBase} from '@react-navigation/native';
 
-interface PinStackParams extends ParamListBase {
-  pin_main: undefined;
+interface PinConfirmParams {
+  pin: string;
 }
 
-export type {PinStackParams};
+interface PinStackParams extends ParamListBase {
+  PinMain: undefined;
+  PinRegist: undefined;
+  PinConfirm: PinConfirmParams;
+}
+
+export type {PinConfirmParams, PinStackParams};
