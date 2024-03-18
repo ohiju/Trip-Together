@@ -1,4 +1,9 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   Alert,
@@ -14,32 +19,49 @@ import {
   Title,
   TitleView,
 } from '../../../components/common/InfoPageStyle';
+import ShakeMessage from '../../../components/common/ShakeMessage';
 import {BottomButton} from '../../../constants/AppButton';
+import usePinConfirmation from '../../../hooks/usePinConfirm';
 import {MyPageStackParams} from '../../../interfaces/router/MyPageStackParams';
-import {PinConfirmParams} from '../../../interfaces/router/PinStackParams';
-import {Input, InputView, Wrapper} from './PinRegistStyle';
+import {useAppDispatch} from '../../../store/hooks';
+import {setPin} from '../../../store/slices/user';
+import {Input, InputView, MessageView, Wrapper} from './PinRegistStyle';
 
-const PinConfirm = ({pin}: PinConfirmParams) => {
+const PinConfirm = () => {
+  const dispatch = useAppDispatch();
+
+  // 유효성 검사
   const [confirm, setConfirm] = useState('');
   const [isOk, setIsOk] = useState<boolean>(false);
-  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
-
+  const [message, setMessage] = useState('');
+  const {pin} = useRoute<RouteProp<MyPageStackParams, 'PinConfirm'>>().params;
+  const pinConfirmation = usePinConfirmation();
   const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     const value = e.nativeEvent.text;
-    if (isNaN(parseInt(value, 10)) && value.length) {
-      setConfirm('');
-      Alert.alert('입력이 잘못되었습니다.');
-      return;
+    if (value.length === 6) {
+      const result = pinConfirmation(pin, value);
+      setConfirm(result.validation);
+      setIsOk(result.isOk);
+      setMessage(result.message);
+    } else {
+      setConfirm(value);
+      setIsOk(false);
+      setMessage('');
     }
-    value.length === 6 ? setIsOk(true) : setIsOk(false);
-    setConfirm(value);
   };
 
-  const handleToNext = () => {
+  // 다음 페이지 이동
+  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
+  const registPin = () => {
+    // API 로직으로 변경할 예정
+    navigation.navigate('MyMain');
+    dispatch(setPin(true));
+  };
+  const handleRegist = () => {
     Alert.alert('핀을 등록하시겠습니까?', '', [
       {
         text: '등록',
-        onPress: () => navigation.navigate('MyMain'),
+        onPress: registPin,
       },
       {
         text: '취소',
@@ -68,12 +90,17 @@ const PinConfirm = ({pin}: PinConfirmParams) => {
             secureTextEntry={true}
           />
         </InputView>
+        {message && (
+          <MessageView>
+            <ShakeMessage>{message}</ShakeMessage>
+          </MessageView>
+        )}
       </Body>
       <AppButton
         style={BottomButton}
-        text="다음"
+        text="등록"
         disabled={!isOk}
-        onPress={handleToNext}
+        onPress={handleRegist}
       />
     </Wrapper>
   );
