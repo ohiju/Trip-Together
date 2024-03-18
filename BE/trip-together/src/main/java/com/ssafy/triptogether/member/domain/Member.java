@@ -14,8 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -45,7 +45,7 @@ public class Member extends BaseEntity {
 
     @NotBlank
     @Column(name = "birth")
-    private Date birth;
+    private LocalDate birth;
 
     @Column(name = "image_url", length = 3000)
     private String imageUrl;
@@ -81,7 +81,7 @@ public class Member extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Member(String uuid, String nickname, Gender gender, Date birth) {
+    public Member(String uuid, String nickname, Gender gender, LocalDate birth) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.gender = gender;
