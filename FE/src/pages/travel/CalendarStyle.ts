@@ -1,25 +1,13 @@
 import styled from 'styled-components/native';
-import {bg_light, primary, font_light} from '../../constants/colors';
-import {TouchableOpacity} from 'react-native';
+import {bg_light} from '../../constants/colors';
 
 const Wrapper = styled.View`
+  flex: 1;
   background-color: ${bg_light};
   width: 100%;
   height: 100%;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
-const NextButton = styled(TouchableOpacity)`
-  width: 100%;
-  height: 40px;
-  background-color: ${primary};
-  justify-content: center;
-  align-items: center;
-`;
-
-const NextButtonText = styled.Text`
-  color: ${font_light};
-`;
-
-export {Wrapper, NextButton, NextButtonText};
+export {Wrapper};

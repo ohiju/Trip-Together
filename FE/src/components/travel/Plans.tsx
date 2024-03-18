@@ -1,5 +1,4 @@
 import React from 'react';
-import {Text} from 'react-native';
 import {
   PlanView,
   PlanTitle,
@@ -8,8 +7,14 @@ import {
   PlanDescription,
   ButtonText,
   PlanMoney,
+  StartCityText,
+  DdayText,
+  DurationText,
   PlanDescriptionBox,
   PlanImage,
+  MoneyImage,
+  MoneyUnit,
+  MoneyText,
 } from './PlansStyle';
 
 const Plans = () => {
@@ -23,11 +28,11 @@ const Plans = () => {
         <PlanDescription>
           <PlanDescriptionBox>
             <PlanImage source={require('../../assets/images/France.png')} />
-            <Text>몽펠리에</Text>
+            <StartCityText>몽펠리에</StartCityText>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
-            <Text>D-52</Text>
-            <Text>총 12일</Text>
+            <DdayText>D-52</DdayText>
+            <DurationText>총 12일</DurationText>
           </PlanDescriptionBox>
         </PlanDescription>
         <PlanSlideButton>
@@ -35,7 +40,9 @@ const Plans = () => {
         </PlanSlideButton>
       </PlanCenter>
       <PlanMoney>
-        <Text>3,200,000</Text>
+        <MoneyImage source={require('../../assets/images/money.png')} />
+        <MoneyUnit>₩</MoneyUnit>
+        <MoneyText>3,200,000</MoneyText>
       </PlanMoney>
     </PlanView>
   );
