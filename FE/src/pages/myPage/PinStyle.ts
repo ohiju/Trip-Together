@@ -36,11 +36,13 @@ const IconView = styled.View`
 const TermView = styled.View`
   flex-direction: row;
   margin: 20px 10px;
+  align-items: center;
 `;
 
 const Term = styled.Text`
   flex: 1;
   font-size: 16px;
+  margin-left: 5px;
 `;
 
 export {

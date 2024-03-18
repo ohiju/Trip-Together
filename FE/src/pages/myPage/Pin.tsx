@@ -1,5 +1,5 @@
 import {useFocusEffect} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import CaretSvg from '../../assets/icons/caret.svg';
 import ShieldSvg from '../../assets/icons/shield.svg';
@@ -20,7 +20,12 @@ import {
 } from './PinStyle';
 
 const Pin = () => {
+  const [isChecked, setIsChecked] = useState(false);
   const dispatch = useAppDispatch();
+
+  const onPress = () => {
+    setIsChecked(!isChecked);
+  };
 
   useFocusEffect(() => {
     dispatch(setDisplay(false));
@@ -39,7 +44,7 @@ const Pin = () => {
         <WithLocalSvg width={180} height={180} asset={ShieldSvg} />
       </IconView>
       <TermView>
-        <AppCheckbox />
+        <AppCheckbox isChecked={isChecked} onPress={onPress} />
         <Term>핀을 통한 은행 접근 권한 동의</Term>
         <WithLocalSvg width={20} height={20} asset={CaretSvg} />
       </TermView>
