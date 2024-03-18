@@ -16,7 +16,7 @@ const IconView = styled.View`
 
 const TermView = styled.View`
   flex-direction: row;
-  margin: 20px 10px;
+  margin: 20px 15px;
   align-items: center;
 `;
 

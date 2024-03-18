@@ -18,24 +18,26 @@ import {
   TitleView,
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
-import {PinStackParams} from '../../../interfaces/router/PinStackParams';
+import {PinStackParams} from '../../../interfaces/router/myPage/PinStackParams';
 import {useAppDispatch} from '../../../store/hooks';
 import {setDisplay} from '../../../store/slices/tabState';
-import {IconView, Term, TermView, Wrapper} from './PinStyle';
+import {IconView, Term, TermView, Wrapper} from './PinMainStyle';
 
-const Pin = () => {
+const PinMain = () => {
+  // 이용 약관 체크
   const [isChecked, setIsChecked] = useState(false);
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<PinStackParams>>();
-
   const handleTermCheck = () => {
     setIsChecked(!isChecked);
   };
 
+  // 라우팅
+  const navigation = useNavigation<NavigationProp<PinStackParams>>();
   const handleToNext = () => {
     navigation.navigate('PinRegist');
   };
 
+  // 탭바 숨기기
+  const dispatch = useAppDispatch();
   useFocusEffect(() => {
     dispatch(setDisplay(false));
   });
@@ -57,7 +59,7 @@ const Pin = () => {
         </IconView>
         <TermView>
           <AppCheckbox isChecked={isChecked} onPress={handleTermCheck} />
-          <Term>핀을 통한 은행 접근 권한 동의</Term>
+          <Term>핀 등록 및 사용에 관한 약관</Term>
           <WithLocalSvg width={25} height={25} asset={CaretSvg} />
         </TermView>
       </Body>
@@ -71,4 +73,4 @@ const Pin = () => {
   );
 };
 
-export default Pin;
+export default PinMain;

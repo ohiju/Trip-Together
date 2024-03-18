@@ -13,7 +13,7 @@ import {
 import ShakeMessage from '../../../components/common/ShakeMessage';
 import {BottomButton} from '../../../constants/AppButton';
 import usePinValidation from '../../../hooks/usePinValidation';
-import {PinStackParams} from '../../../interfaces/router/PinStackParams';
+import {PinStackParams} from '../../../interfaces/router/myPage/PinStackParams';
 import {Input, InputView, MessageView, Wrapper} from './PinRegistStyle';
 
 const PinRegist = () => {

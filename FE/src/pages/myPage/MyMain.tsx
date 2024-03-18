@@ -5,11 +5,11 @@ import Profile from '../../components/myPage/main/Profile';
 import Wallet from '../../components/myPage/main/Wallet';
 import {useAppDispatch} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
-import {Wrapper} from './MainStyle';
+import {Wrapper} from './MyMainStyle';
 
-const MyPageMain = () => {
+const MyMain = () => {
+  // 탭바 숨기기
   const dispatch = useAppDispatch();
-
   useFocusEffect(() => {
     dispatch(setDisplay(true));
   });
@@ -23,4 +23,4 @@ const MyPageMain = () => {
   );
 };
 
-export default MyPageMain;
+export default MyMain;
