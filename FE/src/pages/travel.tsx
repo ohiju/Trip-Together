@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, Dimensions} from 'react-native';
-import {Wrapper, IconView} from './TravelStyle';
-import Plans from '../components/travel/Plans';
+import {Dimensions, Text} from 'react-native';
 import Package from '../components/travel/Package';
+import Plans from '../components/travel/Plans';
+import {IconView, Wrapper} from './TravelStyle';
 
-function Travel() {
+const Travel = () => {
   const screenWidth = Math.round(Dimensions.get('window').width);
 
   const PAGES = [
@@ -44,6 +44,6 @@ function Travel() {
       />
     </Wrapper>
   );
-}
+};
 
 export default Travel;
