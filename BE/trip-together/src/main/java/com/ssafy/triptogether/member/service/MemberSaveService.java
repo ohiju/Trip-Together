@@ -1,7 +1,7 @@
 package com.ssafy.triptogether.member.service;
 
-import com.ssafy.triptogether.member.data.ProfileUpdateRecord;
+import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 
 public interface MemberSaveService {
-    void updateProfile(long memberId, ProfileUpdateRecord profileUpdateRecord);
+    void updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest);
 }

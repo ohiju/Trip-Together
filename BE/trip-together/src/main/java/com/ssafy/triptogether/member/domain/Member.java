@@ -2,7 +2,7 @@ package com.ssafy.triptogether.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.member.data.ProfileUpdateRecord;
+import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.review.domain.Review;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
@@ -88,9 +88,9 @@ public class Member extends BaseEntity {
         this.birth = birth;
     }
 
-    public void update(ProfileUpdateRecord profileUpdateRecord) {
-        this.imageUrl = profileUpdateRecord.imageUrl();
-        this.nickname = profileUpdateRecord.nickname();
-        this.description = profileUpdateRecord.description();
+    public void update(ProfileUpdateRequest profileUpdateRequest) {
+        this.imageUrl = profileUpdateRequest.imageUrl();
+        this.nickname = profileUpdateRequest.nickname();
+        this.description = profileUpdateRequest.description();
     }
 }
