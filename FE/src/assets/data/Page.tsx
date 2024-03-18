@@ -11,7 +11,7 @@ const PageItem = styled.View<{color: string}>`
   background-color: ${props => props.color};
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 10px;
 `;
 
 const PageNum = styled.Text``;

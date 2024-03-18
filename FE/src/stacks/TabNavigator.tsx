@@ -4,10 +4,10 @@ import MyPageTabBarIcon from '../components/myPage/TabBarIcon';
 import MypageTabBarLabel from '../components/myPage/TabBarLabel';
 import {TabParams} from '../interfaces/router/TabParams';
 import FlashMob from '../pages/FlashMob';
-import Travel from '../pages/travel/Travel';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 import MyPageNavigator from './MyPageStack';
+import TravelStack from './TravelStack';
 
 const Tab = createBottomTabNavigator<TabParams>();
 
@@ -18,7 +18,7 @@ const TabNavigator = () => {
     <Tab.Navigator
       tabBar={isShown ? undefined : () => null}
       screenOptions={{headerShown: false}}>
-      <Tab.Screen name="trip" component={Travel} options={{}} />
+      <Tab.Screen name="trip" component={TravelStack} options={{}} />
       <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
       <Tab.Screen
         name="myPage"

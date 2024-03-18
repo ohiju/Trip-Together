@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions} from 'react-native';
-import {Wrapper} from './TravelStyle';
+import {Wrapper} from './MainStyle';
 import Plans from '../../components/travel/Plans';
 import Package from '../../components/travel/Package';
 import Icons from '../../components/travel/Icons';
