@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Text} from 'react-native';
-import Package from '../components/travel/Package';
-import Plans from '../components/travel/Plans';
+import Package from '../../components/travel/Package';
+import Plans from '../../components/travel/Plans';
 import {IconView, Wrapper} from './TravelStyle';
 
 function Travel() {

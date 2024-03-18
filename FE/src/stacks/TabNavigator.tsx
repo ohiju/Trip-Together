@@ -4,7 +4,7 @@ import MyPageTabBarIcon from '../components/myPage/TabBarIcon';
 import MypageTabBarLabel from '../components/myPage/TabBarLabel';
 import {TabParams} from '../interfaces/router/TabParams';
 import FlashMob from '../pages/FlashMob';
-import Travel from '../pages/Travel';
+import Travel from '../pages/travel/Travel';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 import MyPageNavigator from './MyPageStack';
