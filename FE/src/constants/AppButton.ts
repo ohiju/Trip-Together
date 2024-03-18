@@ -33,4 +33,18 @@ const myWalletButton: AppButtonStyle = {
   },
 };
 
-export {defaultStyle, myWalletButton, socialLoginButton};
+const BottomButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    bg1: primary,
+    bg2: primary_light,
+    borderR: '0px',
+    padding: '20px 0',
+  },
+  font: {
+    color: font_light,
+    size: '20px',
+  },
+};
+
+export {BottomButton, defaultStyle, myWalletButton, socialLoginButton};
