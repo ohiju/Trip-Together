@@ -35,16 +35,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://j10a309a.p.ssafy.io:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: dev
     restart: always
 
   sonarqube_container:
     container_name: sonarqube_container
-    image: sonarqube
+    image: sonarqube:lts-community
     ports:
-      - ${SONARQUBE_BINDING_PORT}:8091
-    volumes:
-      - ${SONARQUBE_DATA_PATH}:/opt/sonarqube/data
-      - ${SONARQUBE_EXTENSIONS_PATH}:/opt/sonarqube/extensions
-      - ${SONARQUBE_LOGS_PATH}:/opt/sonarqube/logs
+      - ${SONARQUBE_BINDING_PORT}:9000
     restart: on-failure
