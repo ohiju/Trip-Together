@@ -29,8 +29,6 @@ public class QCurrency extends EntityPathBase<Currency> {
 
     public final EnumPath<CurrencyNation> currencyNation = createEnum("currencyNation", CurrencyNation.class);
 
-    public final StringPath flagImageUrl = createString("flagImageUrl");
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ListPath<TripAccount, QTripAccount> tripAccounts = this.<TripAccount, QTripAccount>createList("tripAccounts", TripAccount.class, QTripAccount.class, PathInits.DIRECT2);

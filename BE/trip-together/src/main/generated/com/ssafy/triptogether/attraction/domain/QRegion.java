@@ -29,8 +29,6 @@ public class QRegion extends EntityPathBase<Region> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final StringPath flagImageUrl = createString("flagImageUrl");
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath latitude = createString("latitude");
