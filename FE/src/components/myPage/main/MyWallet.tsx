@@ -1,9 +1,11 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import CaretSvg from '../../../assets/icons/caret.svg';
 import InfoSvg from '../../../assets/icons/info.svg';
 import {myWalletButton} from '../../../constants/AppButton';
 import {font_lightgray} from '../../../constants/colors';
+import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
 import ButtonMiddle from '../../common/AppButton';
@@ -23,6 +25,30 @@ const MyWallet = () => {
   const tripAccountsLength = useAppSelector(
     (state: RootState) => state.user.userInfo.trip_accounts_length,
   );
+  const syncAccountsLength = useAppSelector(
+    (state: RootState) => state.user.userInfo.sync_accounts_length,
+  );
+
+  // 라우팅
+  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
+  const checkBankAccount = () => {
+    if (syncAccountsLength) {
+      return true;
+    } else return false;
+  };
+  const handleToExchange = () => {
+    if (checkBankAccount()) {
+      navigation.navigate('ExchangeMain');
+    } else {
+      navigation.navigate('SyncMain');
+    }
+  };
+  const handleToHistory = () => {
+    if (checkBankAccount()) {
+    } else {
+      navigation.navigate('SyncMain');
+    }
+  };
 
   return (
     <Wrapper>
@@ -31,7 +57,7 @@ const MyWallet = () => {
           <Title>내 지갑</Title>
           <WithLocalSvg width={24} height={24} asset={InfoSvg} />
         </TitleView>
-        <HistoryView>
+        <HistoryView onPress={handleToHistory}>
           <History>이용 내역</History>
           <WithLocalSvg
             width={22}
@@ -42,7 +68,11 @@ const MyWallet = () => {
         </HistoryView>
       </Header>
       <Body>{tripAccountsLength > 0 ? <MyAccounts /> : <NoAccount />}</Body>
-      <ButtonMiddle style={myWalletButton} text="환전하기" />
+      <ButtonMiddle
+        style={myWalletButton}
+        text="환전하기"
+        onPress={handleToExchange}
+      />
     </Wrapper>
   );
 };

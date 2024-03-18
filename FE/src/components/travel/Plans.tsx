@@ -1,15 +1,16 @@
 import React from 'react';
 import {Text} from 'react-native';
+import {imagePath} from '../../assets/images/imagePath';
 import {
-  PlanView,
-  PlanTitle,
-  PlanCenter,
-  PlanSlideButton,
-  PlanDescription,
   ButtonText,
-  PlanMoney,
+  PlanCenter,
+  PlanDescription,
   PlanDescriptionBox,
   PlanImage,
+  PlanMoney,
+  PlanSlideButton,
+  PlanTitle,
+  PlanView,
 } from './PlansStyle';
 
 const Plans = () => {
@@ -22,7 +23,7 @@ const Plans = () => {
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
-            <PlanImage source={require('../../assets/images/France.png')} />
+            <PlanImage source={imagePath.France} />
             <Text>몽펠리에</Text>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
