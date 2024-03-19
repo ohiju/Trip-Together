@@ -12,6 +12,8 @@ public enum ErrorCode {
 
 	WRONG_PASSWORD(401, "사용자 정보를 찾을 수 없습니다."),
 
+	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
+
 	USER_NOT_KAKAO_JOINED(421, "카카오 가입 회원이 아닙니다."), // 커스텀 에러 사용 예시
 
 	FORBIDDEN(403, "접근할 수 없습니다."),
