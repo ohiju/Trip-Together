@@ -23,11 +23,10 @@ const PlanSlideButton = styled(TouchableOpacity)`
   padding: 0px 20px;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
 `;
 
 const ButtonText = styled.Text`
-  font-size: 40px;
+  font-size: 50px;
   margin-bottom: 0px;
 `;
 
@@ -46,12 +45,49 @@ const PlanDescriptionBox = styled.View`
 `;
 
 const PlanImage = styled.Image`
-  width: 40px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
+  resize-mode: contain;
+  margin-bottom: 15px;
+`;
+
+const StartCityText = styled.Text`
+  font-size: 19px;
+  font-weight: bold;
+`;
+
+const DdayText = styled.Text`
+  font-size: 28px;
+  font-weight: bold;
+`;
+
+const DurationText = styled.Text`
+  font-size: 15px;
+  margin-top: 10px;
+`;
+
+const PlanMoney = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MoneyImage = styled.Image`
+  width: 50px;
+  height: 40px;
   resize-mode: contain;
 `;
 
-const PlanMoney = styled.View``;
+const MoneyUnit = styled.Text`
+  font-size: 27px;
+  margin-left: 5px;
+  margin-right: 3px;
+`;
+
+const MoneyText = styled.Text`
+  font-size: 25px;
+`;
 
 export {
   PlanView,
@@ -59,8 +95,14 @@ export {
   PlanCenter,
   PlanSlideButton,
   ButtonText,
+  StartCityText,
+  DdayText,
+  DurationText,
   PlanDescription,
   PlanDescriptionBox,
   PlanImage,
   PlanMoney,
+  MoneyImage,
+  MoneyUnit,
+  MoneyText,
 };

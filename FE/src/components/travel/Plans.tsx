@@ -1,15 +1,21 @@
 import React from 'react';
 import {Text} from 'react-native';
+import {imagePath} from '../../assets/images/imagePath';
 import {
-  PlanView,
-  PlanTitle,
-  PlanCenter,
-  PlanSlideButton,
-  PlanDescription,
   ButtonText,
-  PlanMoney,
+  DdayText,
+  DurationText,
+  MoneyImage,
+  MoneyText,
+  MoneyUnit,
+  PlanCenter,
+  PlanDescription,
   PlanDescriptionBox,
   PlanImage,
+  PlanMoney,
+  PlanSlideButton,
+  PlanTitle,
+  PlanView,
 } from './PlansStyle';
 
 const Plans = () => {
@@ -22,12 +28,12 @@ const Plans = () => {
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
-            <PlanImage source={require('../../assets/images/France.png')} />
+            <PlanImage source={imagePath.France} />
             <Text>몽펠리에</Text>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
-            <Text>D-52</Text>
-            <Text>총 12일</Text>
+            <DdayText>D-52</DdayText>
+            <DurationText>총 12일</DurationText>
           </PlanDescriptionBox>
         </PlanDescription>
         <PlanSlideButton>
@@ -35,7 +41,9 @@ const Plans = () => {
         </PlanSlideButton>
       </PlanCenter>
       <PlanMoney>
-        <Text>3,200,000</Text>
+        <MoneyImage source={require('../../assets/images/money.png')} />
+        <MoneyUnit>₩</MoneyUnit>
+        <MoneyText>3,200,000</MoneyText>
       </PlanMoney>
     </PlanView>
   );

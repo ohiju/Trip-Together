@@ -1,4 +1,5 @@
 import React from 'react';
+import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
 import {LoginProps} from '../interfaces/props/LoginProps';
 import {Logo, LogoView, Slogan, SloganView, Wrapper} from './LoginStyle';
@@ -11,10 +12,7 @@ const Login = ({navigation}: LoginProps) => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo
-          source={require('../assets/images/logo.png')}
-          resizeMode="contain"
-        />
+        <Logo source={imagePath.logo} resizeMode="contain" />
       </LogoView>
       <SloganView>
         <Slogan>하나의 은행 계정으로</Slogan>

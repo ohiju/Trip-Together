@@ -1,9 +1,15 @@
 import React from 'react';
 import {defaultStyle} from '../../constants/AppButton';
+import {bg_lightgray} from '../../constants/colors';
 import {AppButtonProps} from '../../interfaces/props/AppButton';
 import {Btn, BtnText, BtnView} from './AppButtonStyle';
 
-const AppButton = ({style = defaultStyle, text, onPress}: AppButtonProps) => {
+const AppButton = ({
+  style = defaultStyle,
+  disabled = false,
+  text,
+  onPress,
+}: AppButtonProps) => {
   const bg1 = style.button?.bg1 ? style.button.bg1 : defaultStyle.button.bg1;
   const bg2 = style.button?.bg2 ? style.button.bg2 : defaultStyle.button.bg2;
 
@@ -25,8 +31,9 @@ const AppButton = ({style = defaultStyle, text, onPress}: AppButtonProps) => {
         }
         onPress={onPress}
         style={({pressed}) => ({
-          backgroundColor: pressed ? bg2 : bg1,
-        })}>
+          backgroundColor: disabled ? bg_lightgray : pressed ? bg2 : bg1,
+        })}
+        disabled={disabled}>
         <BtnText
           $color={
             style.font?.color ? style.font.color : defaultStyle.font.color

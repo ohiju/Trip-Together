@@ -2,10 +2,6 @@ spring:
   output:
     ansi:
       enabled: always
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
   profiles:
     active: ${SPRING_PROFILES_ACTIVE}
 logging:
