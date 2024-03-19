@@ -1,10 +1,10 @@
-import {BeforeLoginStackParams} from './BeforeLoginStackParams';
-import {MyPageStackParams} from './MyPageStackParams';
-import {PinStackParams} from './PinStackParams';
+import {ParamListBase} from '@react-navigation/native';
+import {TabParams} from './TabParams';
 
-interface RootStackParams
-  extends BeforeLoginStackParams,
-    MyPageStackParams,
-    PinStackParams {}
+interface RootStackParams extends ParamListBase, TabParams {
+  Main: undefined;
+  Login: undefined;
+  SocialLogin: undefined;
+}
 
 export type {RootStackParams};

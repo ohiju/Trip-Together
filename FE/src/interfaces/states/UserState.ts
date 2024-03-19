@@ -1,10 +1,18 @@
-interface account {
+interface syncAccount {
+  uuid: string;
+  account_num: string;
+  name: string;
+  is_main: 0 | 1;
+}
+
+interface tripAccount {
   id: number;
   nation: string;
   nation_kr: string;
   unit: number;
   balance: number;
 }
+
 interface userInfo {
   user_id: number;
   image_url: string;
@@ -12,7 +20,9 @@ interface userInfo {
   username: string;
   description: string;
   is_pin: boolean;
-  trip_accounts: account[];
+  sync_accounts: syncAccount[];
+  sync_accounts_length: number;
+  trip_accounts: tripAccount[];
   trip_accounts_length: number;
 }
 
@@ -21,4 +31,4 @@ interface UserState {
   userInfo: userInfo;
 }
 
-export type {UserState, account, userInfo};
+export type {UserState, syncAccount, tripAccount, userInfo};

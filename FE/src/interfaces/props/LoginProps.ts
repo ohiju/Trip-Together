@@ -1,6 +1,6 @@
-import {BeforeLoginStackParams} from '../router/BeforeLoginStackParams';
+import {MainStackParams} from '../router/MainStackParams';
 import {BasicRouteProps} from './BasicRouteProps';
 
-interface LoginProps extends BasicRouteProps<BeforeLoginStackParams> {}
+interface LoginProps extends BasicRouteProps<MainStackParams> {}
 
 export type {LoginProps};

@@ -1,9 +1,12 @@
-import {ParamListBase, RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+} from '@react-navigation/native';
 
 interface BasicRouteProps<T extends ParamListBase> {
-  navigation: NativeStackNavigationProp<T>;
-  route: RouteProp<T, keyof T>;
+  navigation?: NavigationProp<T>;
+  route?: RouteProp<T, keyof T>;
 }
 
 export type {BasicRouteProps};

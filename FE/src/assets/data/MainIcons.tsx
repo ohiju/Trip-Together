@@ -1,7 +1,15 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {ViewStyle, Text} from 'react-native';
-import {primary} from '../../constants/colors';
+import {
+  ViewStyle,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {bg_lightgray} from '../../constants/colors';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {TravelStackParams} from '../../interfaces/router/TravelStackParams';
 
 interface IPage {
   item: {num: number; color: string};
@@ -11,35 +19,68 @@ interface IPage {
 const PageItem = styled.View<{color: string}>`
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 10px;
   flex-direction: row;
 `;
 
-const Icon = styled.View`
-  width: 60px;
-  height: 60px;
-  background-color: ${primary};
-  justify-content: center;
-  margin: 10px 10px;
-  align-items: center;
-  border-radius: 20px;
-`;
+const styles = StyleSheet.create({
+  iconContainer: {
+    width: 60,
+    height: 60,
+    backgroundColor: bg_lightgray,
+    justifyContent: 'center',
+    margin: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+});
 
 const Page = ({item, style}: IPage) => {
+  const navigation = useNavigation<NavigationProp<TravelStackParams>>();
+
   return (
     <PageItem color={item.color} style={style}>
-      <Icon>
+      {item.num === 1 ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('planning');
+          }}
+          style={styles.iconContainer}>
+          <Image
+            source={require('../images/trip.png')}
+            style={{width: 40, height: 40}}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            // Handle onPress
+          }}
+          style={styles.iconContainer}>
+          <Text>1</Text>
+        </TouchableOpacity>
+      )}
+      <TouchableOpacity
+        onPress={() => {
+          // Handle onPress
+        }}
+        style={styles.iconContainer}>
         <Text>1</Text>
-      </Icon>
-      <Icon>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          // Handle onPress
+        }}
+        style={styles.iconContainer}>
         <Text>1</Text>
-      </Icon>
-      <Icon>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          // Handle onPress
+        }}
+        style={styles.iconContainer}>
         <Text>1</Text>
-      </Icon>
-      <Icon>
-        <Text>1</Text>
-      </Icon>
+      </TouchableOpacity>
     </PageItem>
   );
 };

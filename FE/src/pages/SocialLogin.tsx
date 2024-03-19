@@ -1,7 +1,7 @@
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import LockSvg from '../assets/icons/lock.svg';
-import UserSvg from '../assets/icons/user.svg';
+import {iconPath} from '../assets/icons/iconPath';
+import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
 import {socialLoginButton} from '../constants/AppButton';
 import {useAppDispatch} from '../store/hooks';
@@ -25,18 +25,15 @@ const SocialLogin = () => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo
-          source={require('../assets/images/bank_logo.png')}
-          resizeMode="contain"
-        />
+        <Logo source={imagePath.bankLogo} resizeMode="contain" />
         <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>
-        <WithLocalSvg width={24} height={24} asset={UserSvg} />
+        <WithLocalSvg width={24} height={24} asset={iconPath.user} />
         <Input placeholder="아이디를 입력하세요" />
       </InputView>
       <InputView>
-        <WithLocalSvg width={24} height={24} asset={LockSvg} />
+        <WithLocalSvg width={24} height={24} asset={iconPath.lock} />
         <Input placeholder="비밀번호를 입력하세요" />
       </InputView>
       <AppButton
