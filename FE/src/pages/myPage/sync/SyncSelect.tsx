@@ -1,3 +1,4 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import bankAccounts, {bankAccount} from '../../../assets/data/bankAccount';
@@ -13,6 +14,7 @@ import {
   TitleView,
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
+import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
 import {
   Balance,
   BalanceView,
@@ -28,11 +30,31 @@ import {
 } from './SyncSelectStyle';
 
 const SyncSelect = () => {
-  const [opened, setOpened] = useState<boolean>(false);
-  const [selected, setSelected] = useState<bankAccount | null>(null);
-
+  // 잔액 파싱
   const localing = (num: number) => {
     return num.toLocaleString('ko-KR');
+  };
+
+  // 드롭다운
+  const [opened, setOpened] = useState<boolean>(false);
+  const openOptions = () => {
+    setOpened(true);
+  };
+  const closeOptions = () => {
+    setOpened(false);
+  };
+
+  // 선택
+  const [selected, setSelected] = useState<bankAccount | null>(null);
+  const select = (target: bankAccount) => {
+    setSelected(target);
+    setOpened(false);
+  };
+
+  // 라우팅
+  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
+  const handleToNext = () => {
+    navigation.navigate('SyncConfirm');
   };
 
   return (
@@ -48,7 +70,7 @@ const SyncSelect = () => {
       </SloganView>
       <Body>
         <SelectBox>
-          <SelectView>
+          <SelectView onPress={opened ? closeOptions : openOptions}>
             {selected ? (
               <OptionView>
                 <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
@@ -64,25 +86,33 @@ const SyncSelect = () => {
               asset={CaretSvg}
             />
           </SelectView>
-          <Options>
-            {bankAccounts.map(account => (
-              <OptionBox key={account.account_uuid}>
-                <OptionView>
-                  <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
-                  <Option>{account.account_num}</Option>
-                </OptionView>
-                <BalanceView>
-                  <Balance>잔액 {localing(account.balance)} 원</Balance>
-                </BalanceView>
-              </OptionBox>
-            ))}
-          </Options>
+          {opened ? (
+            <Options>
+              {bankAccounts.map(account => (
+                <OptionBox
+                  key={account.account_uuid}
+                  onPress={() => select(account)}>
+                  <OptionView>
+                    <BankLogo
+                      source={imagePath.bankLogo}
+                      resizeMode="contain"
+                    />
+                    <Option>{account.account_num}</Option>
+                  </OptionView>
+                  <BalanceView>
+                    <Balance>잔액 {localing(account.balance)} 원</Balance>
+                  </BalanceView>
+                </OptionBox>
+              ))}
+            </Options>
+          ) : null}
         </SelectBox>
       </Body>
       <AppButton
         style={BottomButton}
         text="다음"
         disabled={selected === null}
+        onPress={handleToNext}
       />
     </Wrapper>
   );

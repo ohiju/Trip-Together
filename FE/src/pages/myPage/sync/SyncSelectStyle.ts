@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {bg_light} from '../../../constants/colors';
+import {bg_light, font_dark} from '../../../constants/colors';
 
 const Wrapper = styled.View`
   flex: 1;
@@ -11,10 +11,12 @@ const SelectBox = styled.View`
   padding: 15px;
 `;
 
-const SelectView = styled.View`
+const SelectView = styled.Pressable`
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   border-bottom-width: 1px;
+  min-height: 50px;
   padding: 10px;
 `;
 
@@ -26,10 +28,11 @@ const Options = styled.ScrollView`
   margin: 10px 0;
 `;
 
-const OptionBox = styled.View`
+const OptionBox = styled.Pressable`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin: 10px 0;
 `;
 
 const OptionView = styled.View`
@@ -38,15 +41,21 @@ const OptionView = styled.View`
 `;
 
 const BankLogo = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 
-const Option = styled.Text``;
+const Option = styled.Text`
+  color: ${font_dark};
+  font-size: 18px;
+  margin-left: 3px;
+`;
 
 const BalanceView = styled.View``;
 
-const Balance = styled.Text``;
+const Balance = styled.Text`
+  font-size: 12px;
+`;
 
 export {
   Balance,
