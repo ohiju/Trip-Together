@@ -34,6 +34,6 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     public ProfileFindResponse findProfile(long memberId) {
         // find member & return
         return memberRepository.findProfileByMemberId(memberId)
-                .orElseThrow(() -> new NotFoundException("ProfileFind", ErrorCode.CERT_CODE_NOT_MATCH, ""));
+                .orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
     }
 }

@@ -37,6 +37,6 @@ public class MemberController {
             @PathVariable("member_id") long memberId
     ) {
         ProfileFindResponse response = memberLoadService.findProfile(memberId);
-        return ApiResponse.toResponseEntity(OK, SUCCESS_PROFILE_UPDATE, response);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_PROFILE_FIND, response);
     }
 }
