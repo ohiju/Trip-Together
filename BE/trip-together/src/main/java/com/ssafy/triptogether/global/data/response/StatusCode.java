@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum StatusCode {
     // SUCCESS CODE
     SUCCESS_PIN_VERIFY(200, "PIN 인증 완료"),
-    SUCCESS_PROFILE_UPDATE(200, "프로필 수정 완료");
+    SUCCESS_PROFILE_UPDATE(200, "프로필 수정 성공");
 
     private final int status;
     private final String message;
