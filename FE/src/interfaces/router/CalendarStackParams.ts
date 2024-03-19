@@ -1,7 +1,7 @@
 import {ParamListBase} from '@react-navigation/native';
 
 interface CalendarStackParams extends ParamListBase {
-  calendar: undefined;
+  TripTitle: undefined;
 }
 
 export type {CalendarStackParams};
