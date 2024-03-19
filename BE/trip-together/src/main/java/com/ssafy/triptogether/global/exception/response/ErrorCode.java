@@ -6,13 +6,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// MEMBER
+	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),
 
 	WRONG_PASSWORD(401, "사용자 정보를 찾을 수 없습니다."),
-
-	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
 
 	USER_NOT_KAKAO_JOINED(421, "카카오 가입 회원이 아닙니다."), // 커스텀 에러 사용 예시
 
