@@ -1,6 +1,6 @@
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
-import {account} from '../../../interfaces/states/UserState';
+import {tripAccount} from '../../../interfaces/states/UserState';
 import {
   Balance,
   BalanceView,
@@ -11,7 +11,7 @@ import {
 } from './MyAccountStyle';
 
 interface MyAccountProps {
-  myAccount: account;
+  myAccount: tripAccount;
 }
 
 const MyAccount = ({myAccount}: MyAccountProps) => {

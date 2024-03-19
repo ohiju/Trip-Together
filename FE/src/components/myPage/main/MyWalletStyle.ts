@@ -25,7 +25,7 @@ const Title = styled.Text`
   padding-bottom: 2px;
 `;
 
-const HistoryView = styled.View`
+const HistoryView = styled.Pressable`
   flex-direction: row;
   align-items: center;
 `;

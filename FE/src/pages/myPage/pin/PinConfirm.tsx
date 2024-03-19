@@ -9,6 +9,7 @@ import {
   Alert,
   NativeSyntheticEvent,
   TextInputChangeEventData,
+  ToastAndroid,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
 import LockSvg from '../../../assets/icons/lock.svg';
@@ -22,7 +23,7 @@ import {
 import ShakeMessage from '../../../components/common/ShakeMessage';
 import {BottomButton} from '../../../constants/AppButton';
 import usePinConfirmation from '../../../hooks/usePinConfirm';
-import {MyPageStackParams} from '../../../interfaces/router/MyPageStackParams';
+import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {useAppDispatch} from '../../../store/hooks';
 import {setPin} from '../../../store/slices/user';
 import {Input, InputView, MessageView, Wrapper} from './PinRegistStyle';
@@ -56,9 +57,10 @@ const PinConfirm = () => {
     // API 로직으로 변경할 예정
     navigation.navigate('MyMain');
     dispatch(setPin(true));
+    ToastAndroid.show('핀 번호가 등록되었습니다.', ToastAndroid.SHORT);
   };
   const handleRegist = () => {
-    Alert.alert('핀을 등록하시겠습니까?', '', [
+    Alert.alert('핀 번호를 등록하시겠습니까?', '', [
       {
         text: '등록',
         onPress: registPin,

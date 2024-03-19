@@ -2,7 +2,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import PlusRoundSvg from '../../../assets/icons/plus_round.svg';
-import {MyPageStackParams} from '../../../interfaces/router/MyPageStackParams';
+import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {
   AddWallet,
   AddWalletView,
@@ -12,6 +12,7 @@ import {
 } from './NoWalletStyle';
 
 const NoWallet = () => {
+  // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const onPress = () => {
     navigation.navigate('PinMain');

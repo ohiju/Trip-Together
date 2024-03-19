@@ -3,7 +3,7 @@ import {font_dark, font_lightgray, primary} from '../../constants/colors';
 
 const TitleView = styled.View`
   width: 100%;
-  margin: 30px 0 10px 10px;
+  margin: 30px 0 10px 15px;
 `;
 
 const Title = styled.Text`
@@ -18,7 +18,7 @@ const Hightlight = styled.Text`
 
 const SloganView = styled.View`
   width: 100%;
-  margin: 0 0 10px 10px;
+  margin: 0 0 10px 15px;
 `;
 
 const Slogan = styled.Text`
