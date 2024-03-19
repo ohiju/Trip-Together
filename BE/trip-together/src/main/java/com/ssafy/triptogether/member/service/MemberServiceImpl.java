@@ -1,11 +1,14 @@
 package com.ssafy.triptogether.member.service;
 
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.UNDEFINED_MEMBER;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     public void updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
         // find member
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다.")); //TODO: 글로벌 예외처리 필요
+                .orElseThrow(() -> new NotFoundException("ProfileUpdate", UNDEFINED_MEMBER, memberId));
 
         // update member
         member.update(profileUpdateRequest);
