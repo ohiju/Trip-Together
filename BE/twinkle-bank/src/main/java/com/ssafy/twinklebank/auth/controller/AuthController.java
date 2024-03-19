@@ -47,8 +47,8 @@ public class AuthController {
 
 		// ApiResponse 객체 생성
 		ApiResponse<TokenResponse> apiResponse = ApiResponse.<TokenResponse>builder()
-			.status(StatusCode.SUCCESS_LOGIN.getStatus())
-			.message(StatusCode.SUCCESS_LOGIN.getMessage())
+			.status(StatusCode.SUCCESS_GENERATE_TOKEN.getStatus())
+			.message(StatusCode.SUCCESS_GENERATE_TOKEN.getMessage())
 			.data(new TokenResponse(accessToken))
 			.build();
 

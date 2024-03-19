@@ -25,6 +25,6 @@ public class MemberController {
 	@PostMapping("/join")
 	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody MemberJoinRequest request) {
 		Map<String, String> memberResponse = memberSaveService.join(request);
-		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_LOGIN, memberResponse);
+		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_JOIN, memberResponse);
 	}
 }

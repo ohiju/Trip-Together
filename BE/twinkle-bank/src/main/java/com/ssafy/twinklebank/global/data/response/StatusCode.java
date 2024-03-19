@@ -6,7 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StatusCode {
-	SUCCESS_LOGIN(200, "토큰 발급 성공");
+	SUCCESS_JOIN(200, "회원가입 성공"),
+	SUCCESS_GENERATE_TOKEN(200, "토큰 발급 성공");
 	//
 	// SUCCESS_REISSUE(200, "재발급 성공"),
 	//

@@ -29,7 +29,6 @@ public class MemberUtils {
 
 		Member member = memberRepository.findMemberByUsername(username)
 			.orElseThrow(() -> new WrongUserNameOrPassWordException("MemberUtils"));
-
 		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new WrongPasswordException("MemberUtils");
 		}
