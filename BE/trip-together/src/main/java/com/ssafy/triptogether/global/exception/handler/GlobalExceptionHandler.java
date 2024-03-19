@@ -1,23 +1,13 @@
 package com.ssafy.triptogether.global.exception.handler;
 
+import com.ssafy.triptogether.global.exception.exceptions.category.*;
+import com.ssafy.triptogether.global.exception.response.ErrorResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
-import com.ssafy.triptogether.global.exception.exceptions.category.ConflictException;
-import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
-import com.ssafy.triptogether.global.exception.exceptions.category.IAmATeapotException;
-import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.triptogether.global.exception.exceptions.category.TripRuntimeException;
-import com.ssafy.triptogether.global.exception.exceptions.category.TimeOutException;
-import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
-import com.ssafy.triptogether.global.exception.exceptions.category.UnsupportedMediaTypeException;
-import com.ssafy.triptogether.global.exception.response.ErrorResponse;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -78,4 +68,11 @@ public class GlobalExceptionHandler {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(exception.getErrorCode());
 	} // 418
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ValidationException.class)
+	public ErrorResponse validationHandler(TripRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 400
 }
