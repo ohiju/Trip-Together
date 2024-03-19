@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
+import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TripAccountServiceImpl implements TripAccountLoadService {
 	private final CurrencyRepository currencyRepository;
+	private final CurrencyRateClient currencyRateClient;
 
 	/**
 	 * 환전 가능 통화 목록을 조회하는 메서드
@@ -47,6 +49,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 	 */
 	@Override
 	public RateLoadResponse rateLoad(String currencyCode) {
+		currencyRateClient.currencyRatesLoad();
 		Currency currency = currencyRepository.findByCode(currencyCode)
 			.orElseThrow(
 				() -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)

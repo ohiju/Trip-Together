@@ -1,7 +1,7 @@
 package com.ssafy.triptogether.infra.currencyrate;
 
-import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
+import java.util.List;
 
 public interface CurrencyRateClient {
-	CurrencyRateResponse currencyRatesLoad();
+	List currencyRatesLoad();
 }
