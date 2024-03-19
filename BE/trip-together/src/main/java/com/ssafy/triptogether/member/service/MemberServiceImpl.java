@@ -1,6 +1,8 @@
 package com.ssafy.triptogether.member.service;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
+import com.ssafy.triptogether.member.data.ProfileFindResponse;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -26,5 +28,12 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
         // update member
         member.update(profileUpdateRequest);
+    }
+
+    @Override
+    public ProfileFindResponse findProfile(long memberId) {
+        // find member & return
+        return memberRepository.findProfileByMemberId(memberId)
+                .orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
     }
 }

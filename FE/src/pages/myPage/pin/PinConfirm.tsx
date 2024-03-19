@@ -12,7 +12,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
-import LockSvg from '../../../assets/icons/lock.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
   Body,
@@ -80,7 +80,7 @@ const PinConfirm = () => {
       </TitleView>
       <Body>
         <InputView>
-          <WithLocalSvg width={24} height={24} asset={LockSvg} />
+          <WithLocalSvg width={24} height={24} asset={iconPath.lock} />
           <Input
             id="pin"
             value={confirm}
