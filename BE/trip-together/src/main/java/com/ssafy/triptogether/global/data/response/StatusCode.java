@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public enum StatusCode {
     // AUTH
-    SUCCESS_PIN_VERIFY(200, "PIN 인증 완료"),
+    SUCCESS_PIN_VERIFY(200, "PIN 인증 성공"),
     // TRIP_ACCOUNT
-    SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 완료"),
+    SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
+    SUCCESS_RATE_LOAD(200, "환율 정보 조회 성공"),
     // MEMBER
     SUCCESS_PROFILE_UPDATE(200, "프로필 수정 성공"),
     SUCCESS_PROFILE_FIND(200, "프로필 조회 성공");

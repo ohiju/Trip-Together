@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 
@@ -34,6 +37,22 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 			).toList();
 		return CurrenciesLoadResponse.builder()
 			.currenciesLoadDetailResponse(collectCurrencies)
+			.build();
+	}
+
+	/**
+	 * 해당 통화 코드의 환율 정보 반환
+	 * @param currencyCode 요청 통화 코드
+	 * @return 환율 정보
+	 */
+	@Override
+	public RateLoadResponse rateLoad(String currencyCode) {
+		Currency currency = currencyRepository.findByCode(currencyCode)
+			.orElseThrow(
+				() -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
+			);
+		return RateLoadResponse.builder()
+			.rate(currency.getRate())
 			.build();
 	}
 }

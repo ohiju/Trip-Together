@@ -24,6 +24,7 @@ public enum ErrorCode {
 	CERT_CODE_EXPIRED(408, "코드가 만료되었습니다."),
 
 	ALREADY_KAKAO_JOINED(409, "이미 카카오가입을 한 사용자입니다."),
+	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
 	;
 
 	private final int status;
