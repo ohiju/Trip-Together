@@ -2,9 +2,10 @@ import React from 'react';
 import {Wrapper} from './CalendarStyle';
 import CalendarView from '../../components/travel/Calendar';
 import {useNavigation} from '@react-navigation/native';
-import {NextButton, NextButtonText} from './CalendarStyle';
 import {NavigationProp} from '@react-navigation/native';
-import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import {CalendarStackParams} from '../../interfaces/router/CalendarStackParams';
+import AppButton from '../../components/common/AppButton';
+import {BottomButton} from '../../constants/AppButton';
 
 // const cvtParamDate = (date: Date): string => {
 //   const year = date.getFullYear();
@@ -14,18 +15,20 @@ import {MapStackParams} from '../../interfaces/router/MapStackParams';
 // };
 
 const Calendar = () => {
-  const navigation = useNavigation<NavigationProp<MapStackParams>>();
+  const navigation = useNavigation<NavigationProp<CalendarStackParams>>();
 
   const handleSearchSubmit = () => {
-    navigation.navigate('map');
+    navigation.navigate('TripTitle');
   };
 
   return (
     <Wrapper>
       <CalendarView />
-      <NextButton onPress={handleSearchSubmit}>
-        <NextButtonText>다음</NextButtonText>
-      </NextButton>
+      <AppButton
+        style={BottomButton}
+        text="다음"
+        onPress={handleSearchSubmit}
+      />
     </Wrapper>
   );
 };

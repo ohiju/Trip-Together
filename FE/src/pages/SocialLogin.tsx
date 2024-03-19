@@ -2,6 +2,7 @@ import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
 import LockSvg from '../assets/icons/lock.svg';
 import UserSvg from '../assets/icons/user.svg';
+import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
 import {socialLoginButton} from '../constants/AppButton';
 import {useAppDispatch} from '../store/hooks';
@@ -25,10 +26,7 @@ const SocialLogin = () => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo
-          source={require('../assets/images/bank_logo.png')}
-          resizeMode="contain"
-        />
+        <Logo source={imagePath.bankLogo} resizeMode="contain" />
         <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>
