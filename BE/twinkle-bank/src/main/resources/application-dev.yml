@@ -11,3 +11,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+  mvc:
+    servlet:
+      path: /api
