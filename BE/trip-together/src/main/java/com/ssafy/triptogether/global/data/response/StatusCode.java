@@ -10,7 +10,8 @@ public enum StatusCode {
     SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 완료"),
     // MEMBER
     SUCCESS_PROFILE_UPDATE(200, "프로필 수정 성공"),
-    SUCCESS_PROFILE_FIND(200, "프로필 조회 성공");
+    SUCCESS_PROFILE_FIND(200, "프로필 조회 성공"),
+    SUCCESS_PIN_SAVE(200, "pin 번호 등록 성공");
 
     private final int status;
     private final String message;
