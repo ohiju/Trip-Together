@@ -1,12 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import {RootStackParams} from '../interfaces/router/RootStackParams';
 import Login from '../pages/Login';
 import SocialLogin from '../pages/SocialLogin';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 import TabNavigator from './TabNavigator';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
   const isLoggedIn = useAppSelector(

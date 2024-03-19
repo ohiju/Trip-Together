@@ -21,7 +21,7 @@ const TabNavigator = () => {
       <Tab.Screen name="trip" component={TravelStack} options={{}} />
       <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
       <Tab.Screen
-        name="myPage"
+        name="MyPage"
         component={MyPageNavigator}
         options={{
           tabBarIcon: MyPageTabBarIcon,

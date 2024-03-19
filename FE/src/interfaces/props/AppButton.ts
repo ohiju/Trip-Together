@@ -14,6 +14,7 @@ interface AppButtonStyle {
 
 interface AppButtonProps {
   style?: AppButtonStyle;
+  disabled?: boolean;
   text: string;
   onPress?: () => void;
 }
