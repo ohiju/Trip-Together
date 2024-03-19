@@ -1,8 +1,7 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import CaretSvg from '../../../assets/icons/caret.svg';
-import InfoSvg from '../../../assets/icons/info.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import {myWalletButton} from '../../../constants/AppButton';
 import {font_lightgray} from '../../../constants/colors';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
@@ -55,7 +54,7 @@ const MyWallet = () => {
       <Header>
         <TitleView>
           <Title>내 지갑</Title>
-          <WithLocalSvg width={24} height={24} asset={InfoSvg} />
+          <WithLocalSvg width={24} height={24} asset={iconPath.info} />
         </TitleView>
         <HistoryView onPress={handleToHistory}>
           <History>이용 내역</History>
@@ -63,7 +62,7 @@ const MyWallet = () => {
             width={22}
             height={22}
             fill={font_lightgray}
-            asset={CaretSvg}
+            asset={iconPath.caret}
           />
         </HistoryView>
       </Header>

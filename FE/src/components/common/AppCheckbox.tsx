@@ -1,6 +1,6 @@
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import CheckSvg from '../../assets/icons/check.svg';
+import {iconPath} from '../../assets/icons/iconPath';
 import {defaultStyle} from '../../constants/AppCheckbox';
 import {AppCheckboxProps} from '../../interfaces/props/AppCheckbox';
 import {Wrapper} from './AppCheckboxStyle';
@@ -23,7 +23,7 @@ const AppCheckbox = ({
         height={size}
         strokeWidth={thickness}
         stroke={isChecked ? bg2 : bg1}
-        asset={CheckSvg}
+        asset={iconPath.check}
       />
     </Wrapper>
   );

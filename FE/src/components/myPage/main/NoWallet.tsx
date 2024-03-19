@@ -1,7 +1,7 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import PlusRoundSvg from '../../../assets/icons/plus_round.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {
   AddWallet,
@@ -21,7 +21,7 @@ const NoWallet = () => {
   return (
     <Wrapper onPress={onPress}>
       <AddWalletView>
-        <WithLocalSvg width={20} height={20} asset={PlusRoundSvg} />
+        <WithLocalSvg width={20} height={20} asset={iconPath.plus} />
         <AddWallet>지갑 생성하기</AddWallet>
       </AddWalletView>
       <PlaceholderView>
