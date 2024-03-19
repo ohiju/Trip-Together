@@ -9,6 +9,7 @@ import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,12 +39,12 @@ public class Member extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
 
-    @NotBlank
+    @NotNull
     @Column(name = "birth")
     private LocalDate birth;
 
