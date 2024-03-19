@@ -20,8 +20,7 @@ import java.util.List;
                 @UniqueConstraint(columnNames = {
                         "code",
                         "unit",
-                        "currency_nation",
-                        "flag_image_url"
+                        "currency_nation"
                 })
         }
 )
