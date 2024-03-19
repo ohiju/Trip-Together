@@ -1,5 +1,5 @@
 import {ParamListBase} from '@react-navigation/native';
-import {MyPageStackParams} from './MyPageStackParams';
+import {MyPageStackParams} from './myPage/MyPageStackParams';
 
 interface TabParams extends ParamListBase, MyPageStackParams {
   Trip: undefined;
