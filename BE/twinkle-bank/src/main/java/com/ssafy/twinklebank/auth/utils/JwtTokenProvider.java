@@ -66,8 +66,6 @@ public class JwtTokenProvider {
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
 
-		log.info("access token : " + accessToken);
-
 		// refresh token 발급
 		Date refreshTokenExpireIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 		String refreshToken = Jwts.builder()
@@ -77,7 +75,7 @@ public class JwtTokenProvider {
 
 		HashMap<String, String> map = new HashMap<>();
 		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
-		map.put("refresh", SecurityUtil.getTokenPrefix() + " " + refreshToken);
+		map.put("refresh", refreshToken); // cookie에 담으므로 Bearer을 붙이지 않음
 		return map;
 	}
 
