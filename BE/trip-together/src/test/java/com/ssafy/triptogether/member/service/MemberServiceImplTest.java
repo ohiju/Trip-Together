@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.member.service;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.member.data.ProfileFindResponse;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,22 @@ class MemberServiceImplTest {
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.ProfileUpdate");
+        assertThat(exception.getErrorCode()).isEqualTo(UNDEFINED_MEMBER);
+        assertThat(exception.getParams()).contains(undefinedId);
+    }
+
+    @Test
+    @DisplayName("[FindProfile][Error] undefined member")
+    void profileFindNotFoundException() {
+        // given
+        long undefinedId = 1L;
+
+        // when
+        NotFoundException exception
+                = assertThrows(NotFoundException.class, () -> memberService.findProfile(undefinedId));
+
+        // then
+        assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.ProfileFind");
         assertThat(exception.getErrorCode()).isEqualTo(UNDEFINED_MEMBER);
         assertThat(exception.getParams()).contains(undefinedId);
     }
