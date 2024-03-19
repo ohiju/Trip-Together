@@ -2,10 +2,10 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6379
+      port: ${TEST_TRIP_REDIS_BINDING_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${TEST_TRIP_MYSQL_DATABASE}
+    url: jdbc:mysql://localhost:${TEST_TRIP_MYSQL_BINDING_PORT}/${TEST_TRIP_MYSQL_DATABASE}
     username: ${MYSQL_ROOT_USERNAME}
     password: ${MYSQL_ROOT_PASSWORD}
   jpa:
