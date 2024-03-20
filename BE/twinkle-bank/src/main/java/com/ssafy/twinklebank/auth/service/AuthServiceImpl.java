@@ -2,7 +2,9 @@ package com.ssafy.twinklebank.auth.service;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private final MemberUtils memberUtils;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final StringRedisTemplate redisTemplate;
 
 	public Map<String, String> getToken(TokenRequest request) {
 
@@ -28,6 +31,12 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 			new UsernamePasswordAuthenticationToken(request.username(), request.password(),
 				Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
-		return jwtTokenProvider.generateToken(member.getId(), authentication);
+		Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), authentication);
+
+		// refresh token redis에 저장
+		redisTemplate.opsForValue()
+			.set("refresh:" + member.getId(), tokenMap.get("refresh"),
+				jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MICROSECONDS);
+		return tokenMap;
 	}
 }
