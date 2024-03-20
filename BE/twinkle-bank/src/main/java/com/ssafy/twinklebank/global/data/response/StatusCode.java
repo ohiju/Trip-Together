@@ -6,9 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StatusCode {
-	SUCCESS_LOGIN(200, "토큰 발급 성공"),
-
+	SUCCESS_JOIN(200, "회원가입 성공"),
+	SUCCESS_GENERATE_TOKEN(200, "토큰 발급 성공"),
 	SUCCESS_GET_ACCOUNT_LIST(200, "계좌 목록 조회 성공")
+	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),
 	//
@@ -29,7 +30,6 @@ public enum StatusCode {
 	// SUCCESS_PASSWORD_SET(200, "비밀번호 수정 완료"),
 	//
 	// KAKAO_JOIN_NEEDED(203, "kakao 회원이 아닙니다. 회원가입 진행 필요")
-	;
 
 
 	private final int status;
