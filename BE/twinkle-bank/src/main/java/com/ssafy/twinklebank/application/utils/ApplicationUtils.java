@@ -1,5 +1,7 @@
 package com.ssafy.twinklebank.application.utils;
 
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 
 import com.ssafy.twinklebank.application.domain.Application;
@@ -18,6 +20,6 @@ public class ApplicationUtils {
 
 	public Application getApplication(String clientId) {
 		return applicationRepository.findByClientId(clientId)
-			.orElseThrow(() -> new NotFoundException("ApplicationUtils : ",ErrorCode.APPLICATION_NOT_FOUND));
+			.orElseThrow(() -> new NotFoundException("ApplicationUtils : ", APPLICATION_NOT_FOUND));
 	}
 }
