@@ -1,8 +1,8 @@
 interface syncAccount {
-  account_uuid: string;
+  uuid: string;
   account_num: string;
-  balance: number;
   name: string;
+  is_main: 0 | 1;
 }
 
 interface tripAccount {

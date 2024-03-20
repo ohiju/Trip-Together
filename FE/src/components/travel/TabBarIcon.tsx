@@ -1,6 +1,6 @@
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import PlaneSvg from '../../assets/icons/plane.svg';
+import {iconPath} from '../../assets/icons/iconPath';
 import {dark, primary} from '../../constants/colors';
 
 interface TabBarIconProps {
@@ -13,7 +13,7 @@ const TravelIcon = ({focused}: TabBarIconProps) => {
       width={20}
       height={20}
       stroke={focused ? primary : dark}
-      asset={PlaneSvg}
+      asset={iconPath.plane}
     />
   );
 };

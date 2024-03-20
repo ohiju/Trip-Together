@@ -6,6 +6,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// MEMBER
+	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
+	PIN_CHECK_MISS_MATCH(400, "핀번호와 핀번호 확인이 서로 일치하지 않습니다."),
+    PIN_ALREADY_EXISTS(400, "지갑이 이미 존재합니다."),
+    PIN_NOT_AUTHENTICATED(401, "기존의 핀번호와 일치하지 않습니다."),
+    PIN_NOT_EXISTS(404, "지갑 정보를 찾을 수 없습니다."),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),

@@ -22,7 +22,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
 
-    public final DateTimePath<java.util.Date> birth = createDateTime("birth", java.util.Date.class);
+    public final DatePath<java.time.LocalDate> birth = createDate("birth", java.time.LocalDate.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -52,6 +52,8 @@ public class QMember extends EntityPathBase<Member> {
     public final ListPath<com.ssafy.triptogether.syncaccount.domain.SyncAccount, com.ssafy.triptogether.syncaccount.domain.QSyncAccount> syncAccounts = this.<com.ssafy.triptogether.syncaccount.domain.SyncAccount, com.ssafy.triptogether.syncaccount.domain.QSyncAccount>createList("syncAccounts", com.ssafy.triptogether.syncaccount.domain.SyncAccount.class, com.ssafy.triptogether.syncaccount.domain.QSyncAccount.class, PathInits.DIRECT2);
 
     public final ListPath<com.ssafy.triptogether.tripaccount.domain.TripAccount, com.ssafy.triptogether.tripaccount.domain.QTripAccount> tripAccounts = this.<com.ssafy.triptogether.tripaccount.domain.TripAccount, com.ssafy.triptogether.tripaccount.domain.QTripAccount>createList("tripAccounts", com.ssafy.triptogether.tripaccount.domain.TripAccount.class, com.ssafy.triptogether.tripaccount.domain.QTripAccount.class, PathInits.DIRECT2);
+
+    public final StringPath username = createString("username");
 
     public final StringPath uuid = createString("uuid");
 

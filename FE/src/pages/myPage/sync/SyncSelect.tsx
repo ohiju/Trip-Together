@@ -1,8 +1,9 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
+import {Alert, ToastAndroid} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
 import bankAccounts, {bankAccount} from '../../../assets/data/bankAccount';
-import CaretSvg from '../../../assets/icons/caret.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import {imagePath} from '../../../assets/images/imagePath';
 import AppButton from '../../../components/common/AppButton';
 import {
@@ -15,6 +16,8 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
+import {RootState} from '../../../store';
+import {useAppSelector} from '../../../store/hooks';
 import {
   Balance,
   BalanceView,
@@ -44,9 +47,18 @@ const SyncSelect = () => {
     setOpened(false);
   };
 
-  // 선택
+  // 선택, 중복 체크
+  const synced = useAppSelector(
+    (state: RootState) => state.user.userInfo.sync_accounts,
+  );
   const [selected, setSelected] = useState<bankAccount | null>(null);
   const select = (target: bankAccount) => {
+    for (const account of synced) {
+      if (account.uuid === target.account_uuid) {
+        Alert.alert('이미 등록된 계좌입니다.');
+        return;
+      }
+    }
     setSelected(target);
     setOpened(false);
   };
@@ -54,7 +66,23 @@ const SyncSelect = () => {
   // 라우팅
   const navigation = useNavigation<NavigationProp<SyncStackParams>>();
   const handleToNext = () => {
-    navigation.navigate('SyncConfirm');
+    if (!selected) {
+      Alert.alert('계좌를 선택해주세요.');
+      return;
+    }
+    Alert.alert('해당 계좌로 1원이 송금됩니다', '계속 하시겠습니까?', [
+      {
+        text: '계속',
+        onPress: () => {
+          // 1원 인증 전송 API
+          navigation.navigate('SyncConfirm', {selected});
+          ToastAndroid.show('1원이 송금되었습니다.', ToastAndroid.SHORT);
+        },
+      },
+      {
+        text: '취소',
+      },
+    ]);
   };
 
   return (
@@ -83,7 +111,7 @@ const SyncSelect = () => {
               width={25}
               height={25}
               rotation={opened ? 270 : 90}
-              asset={CaretSvg}
+              asset={iconPath.caret}
             />
           </SelectView>
           {opened ? (

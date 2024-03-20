@@ -1,6 +1,6 @@
 import React from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import CaretSvg from '../../../assets/icons/caret.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import {menu as menuType} from '../../../constants/MyPageMenus';
 import {dark} from '../../../constants/colors';
 import {CaretView, Title, TitleView, Wrapper} from './MenuStyle';
@@ -17,7 +17,12 @@ const Menu = ({menu}: MenuProps) => {
         <Title>{menu.text}</Title>
       </TitleView>
       <CaretView>
-        <WithLocalSvg width={20} height={20} fill={dark} asset={CaretSvg} />
+        <WithLocalSvg
+          width={20}
+          height={20}
+          fill={dark}
+          asset={iconPath.card}
+        />
       </CaretView>
     </Wrapper>
   );

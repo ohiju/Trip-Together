@@ -2,19 +2,21 @@ package com.ssafy.triptogether.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
+import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.review.domain.Review;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -38,13 +40,17 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @NotBlank
+    @Column(name = "username")
+    private String username;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
 
-    @NotBlank
+    @NotNull
     @Column(name = "birth")
-    private Date birth;
+    private LocalDate birth;
 
     @Column(name = "image_url", length = 3000)
     private String imageUrl;
@@ -80,10 +86,20 @@ public class Member extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Member(String uuid, String nickname, Gender gender, Date birth) {
+    public Member(String uuid, String nickname, Gender gender, LocalDate birth) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.gender = gender;
         this.birth = birth;
+    }
+
+    public void update(ProfileUpdateRequest profileUpdateRequest) {
+        this.imageUrl = profileUpdateRequest.imageUrl();
+        this.nickname = profileUpdateRequest.nickname();
+        this.description = profileUpdateRequest.description();
+    }
+
+    public void savePin(String pinNum) {
+        this.pinNum = pinNum;
     }
 }
