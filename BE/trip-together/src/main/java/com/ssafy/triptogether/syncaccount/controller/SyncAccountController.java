@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountSaveService;
@@ -43,6 +44,15 @@ public class SyncAccountController {
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE
+		);
+	}
+
+	@GetMapping("/bank-accounts")
+	public ResponseEntity<ApiResponse<BankAccountsLoadResponse>> bankAccountsLoad() {
+		BankAccountsLoadResponse bankAccountsLoadResponse = syncAccountLoadService.bankAccountsLoad(1L);
+
+		return ApiResponse.toResponseEntity(
+			HttpStatus.OK, StatusCode.SUCCESS_BANK_ACCOUNTS_LOAD, bankAccountsLoadResponse
 		);
 	}
 }
