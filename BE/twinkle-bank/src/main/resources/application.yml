@@ -4,3 +4,8 @@ spring:
       enabled: always
   profiles:
     active: ${SPRING_PROFILES_ACTIVE}
+logging:
+  level:
+    org.hibernate.SQL: debug
+jwt:
+  secret: ${JWT_SECRET_KEY}
