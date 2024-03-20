@@ -1,6 +1,9 @@
 package com.ssafy.triptogether.tripaccount.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +12,7 @@ import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundExcep
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
 import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
+import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
@@ -31,9 +34,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@Override
 	public CurrenciesLoadResponse currenciesLoad() {
 		List<Currency> currencies = currencyRepository.findAll();
-		List<CurrenciesLoadDetailResponse> collectCurrencies = currencies.stream()
+		List<CurrenciesLoadDetail> collectCurrencies = currencies.stream()
 			.map(
-				currency -> CurrenciesLoadDetailResponse.builder()
+				currency -> CurrenciesLoadDetail.builder()
 					.code(currency.getCode())
 					.nation(currency.getCurrencyNation().name())
 					.nationKr(currency.getCurrencyNation().getMessage())
@@ -41,7 +44,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 					.build()
 			).toList();
 		return CurrenciesLoadResponse.builder()
-			.currenciesLoadDetailResponse(collectCurrencies)
+			.currenciesLoadDetail(collectCurrencies)
 			.build();
 	}
 
@@ -68,11 +71,14 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@Override
 	public void currencyRateUpdate() {
 		List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
+		Map<String, Currency> currencyMap = currencyRepository.findAll()
+			.stream()
+			.collect(Collectors.toMap(Currency::getCode, Function.identity()));
 		currencyRateResponses.forEach(currencyRateResponse -> {
-			currencyRepository.findByCode(currencyRateResponse.cur_unit())
-				.ifPresent(currency -> {
-					currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
-				});
+			Currency currency = currencyMap.get(currencyRateResponse.cur_unit());
+			if (currency != null) {
+				currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
+			}
 		});
 	}
 }
