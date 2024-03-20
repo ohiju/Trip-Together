@@ -31,9 +31,9 @@ class AuthUtilsTest {
 	@Nested
 	@DisplayName("PIN 번호 인증")
 	class PinVerifyTest {
-		private Long validMemberId;
-		private PinVerifyRequest pinVerifyRequest;
-		private Member member;
+		Long validMemberId;
+		PinVerifyRequest pinVerifyRequest;
+		Member member;
 
 		@BeforeEach
 		void setUp() {
