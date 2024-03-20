@@ -15,7 +15,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<AuthInfoFindResponse> findAuthInfoById(long memberId) {
+    public Optional<AuthInfoFindResponse> findAuthInfoById(String memberUuid) {
         return Optional.ofNullable(
                 queryFactory.select(Projections.constructor(AuthInfoFindResponse.class,
                                 member.uuid,
@@ -24,7 +24,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                                 member.birth
                         ))
                         .from(member)
-                        .where(member.id.eq(memberId))
+                        .where(member.uuid.eq(memberUuid))
                         .fetchOne()
         );
     }

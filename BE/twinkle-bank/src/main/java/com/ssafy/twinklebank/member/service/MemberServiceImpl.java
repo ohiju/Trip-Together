@@ -15,12 +15,9 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     private final MemberRepository memberRepository;
 
     @Override
-    public AuthInfoFindResponse findAuthInfo(long memberId, String appId) {
-        // validate application
-        // TODO: application validation
-
+    public AuthInfoFindResponse findAuthInfo(String memberUuid) {
         // find auth info & return
-        return memberRepository.findAuthInfoById(memberId)
-                .orElseThrow(() -> new NotFoundException("AuthInfoFind", UNDEFINED_MEMBER, memberId));
+        return memberRepository.findAuthInfoById(memberUuid)
+                .orElseThrow(() -> new NotFoundException("AuthInfoFind", UNDEFINED_MEMBER, memberUuid));
     }
 }

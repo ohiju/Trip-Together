@@ -5,5 +5,5 @@ import com.ssafy.twinklebank.member.data.AuthInfoFindResponse;
 import java.util.Optional;
 
 public interface MemberRepositoryCustom {
-    Optional<AuthInfoFindResponse> findAuthInfoById(long memberId);
+    Optional<AuthInfoFindResponse> findAuthInfoById(String memberUuid);
 }
