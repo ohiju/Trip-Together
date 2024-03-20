@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record SyncAccountsDetailResponse(
+public record SyncAccountsDetail(
 	@JsonProperty("account_uuid")
 	String uuid,
 	@JsonProperty("account_num")

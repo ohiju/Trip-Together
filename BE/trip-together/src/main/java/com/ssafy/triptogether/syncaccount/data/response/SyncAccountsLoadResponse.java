@@ -9,6 +9,6 @@ import lombok.Builder;
 @Builder
 public record SyncAccountsLoadResponse(
 	@JsonProperty("sync_accounts")
-	List<SyncAccountsDetailResponse> syncAccountsDetailResponses
+	List<SyncAccountsDetail> syncAccountsDetail
 ) {
 }

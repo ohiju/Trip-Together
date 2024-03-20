@@ -67,8 +67,8 @@ class SyncAccountServiceImplTest {
 			SyncAccountsLoadResponse response = syncAccountService.syncAccountsLoad(1L);
 			//then
 			assertAll(
-				() -> assertEquals(2, response.syncAccountsDetailResponses().size(), "연동 계좌 목록의 크기가 예상과 다릅니다."),
-				() -> assertEquals("test1", response.syncAccountsDetailResponses().get(0).uuid(), "첫 번쨰 연동 계좌가 예상과 다릅니다.")
+				() -> assertEquals(2, response.syncAccountsDetail().size(), "연동 계좌 목록의 크기가 예상과 다릅니다."),
+				() -> assertEquals("test1", response.syncAccountsDetail().get(0).uuid(), "첫 번쨰 연동 계좌가 예상과 다릅니다.")
 			);
 			verify(syncAccountRepository, times(1)).findByMemberId(1L);
 		}

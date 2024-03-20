@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetailResponse;
+import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
@@ -25,9 +25,9 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService {
 	@Override
 	public SyncAccountsLoadResponse syncAccountsLoad(Long memberId) {
 		List<SyncAccount> syncAccounts = syncAccountRepository.findByMemberId(memberId);
-		List<SyncAccountsDetailResponse> collectSyncAccounts = syncAccounts.stream()
+		List<SyncAccountsDetail> collectSyncAccounts = syncAccounts.stream()
 			.map(
-				syncAccount -> SyncAccountsDetailResponse.builder()
+				syncAccount -> SyncAccountsDetail.builder()
 					.uuid(syncAccount.getUuid())
 					.accountNum(syncAccount.getNum())
 					.name(syncAccount.getName())
@@ -35,7 +35,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService {
 					.build()
 			).toList();
 		return SyncAccountsLoadResponse.builder()
-			.syncAccountsDetailResponses(collectSyncAccounts)
+			.syncAccountsDetail(collectSyncAccounts)
 			.build();
 	}
 }
