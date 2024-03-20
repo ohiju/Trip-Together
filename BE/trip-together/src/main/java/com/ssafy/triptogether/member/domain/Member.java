@@ -98,4 +98,8 @@ public class Member extends BaseEntity {
         this.nickname = profileUpdateRequest.nickname();
         this.description = profileUpdateRequest.description();
     }
+
+    public void savePin(String pinNum) {
+        this.pinNum = pinNum;
+    }
 }
