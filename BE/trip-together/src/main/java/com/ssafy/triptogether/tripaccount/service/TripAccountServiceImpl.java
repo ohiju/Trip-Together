@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
+import com.ssafy.triptogether.tripaccount.data.response.CurrenciesDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
@@ -23,9 +23,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 	@Override
 	public CurrenciesLoadResponse currenciesLoad() {
 		List<Currency> currencies = currencyRepository.findAll();
-		List<CurrenciesLoadDetailResponse> collectCurrencies = currencies.stream()
+		List<CurrenciesDetailResponse> collectCurrencies = currencies.stream()
 			.map(
-				currency -> CurrenciesLoadDetailResponse.builder()
+				currency -> CurrenciesDetailResponse.builder()
 					.code(currency.getCode())
 					.nation(currency.getCurrencyNation().name())
 					.nationKr(currency.getCurrencyNation().getMessage())
@@ -33,7 +33,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 					.build()
 			).toList();
 		return CurrenciesLoadResponse.builder()
-			.currenciesLoadDetailResponse(collectCurrencies)
+			.currenciesDetailResponse(collectCurrencies)
 			.build();
 	}
 }
