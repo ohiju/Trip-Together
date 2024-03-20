@@ -1,10 +1,9 @@
-package com.ssafy.triptogether.auth.service;
+package com.ssafy.triptogether.auth.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +22,9 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceImplTest {
+class AuthUtilsTest {
 	@InjectMocks
-	AuthServiceImpl authService;
+	AuthUtils authUtils;
 	@Mock
 	MemberRepository memberRepository;
 
@@ -35,10 +34,9 @@ class AuthServiceImplTest {
 		private Long validMemberId;
 		private PinVerifyRequest pinVerifyRequest;
 		private Member member;
-		private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		@BeforeEach
-		void setUp() throws ParseException {
+		void setUp() {
 			validMemberId = 1L;
 			pinVerifyRequest = PinVerifyRequest.builder()
 				.pinNum("1234")
@@ -46,7 +44,7 @@ class AuthServiceImplTest {
 			member = Member.builder()
 				.nickname("테스트")
 				.uuid("test")
-				.birth(sdf.parse("2024-03-19"))
+				.birth(LocalDate.now())
 				.gender(Gender.MALE)
 				.build();
 		}
@@ -59,7 +57,7 @@ class AuthServiceImplTest {
 
 			// when & then
 			assertThrows(NotFoundException.class, () -> {
-				authService.pinVerify(validMemberId, pinVerifyRequest);
+				authUtils.pinVerify(validMemberId, pinVerifyRequest);
 			});
 		}
 
