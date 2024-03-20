@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
+import com.ssafy.triptogether.auth.utils.AuthUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
@@ -20,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccountSaveService {
+	// Utils
+	private final AuthUtils authUtils;
 	// Repository
 	private final SyncAccountRepository syncAccountRepository;
 
@@ -44,8 +48,24 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	@Transactional
 	@Override
 	public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		pinVerifyCheck(memberId, mainSyncAccountUpdateRequest);
 		deactivateCurrentMainSyncAccount(memberId);
 		activateNewMainSyncAccount(mainSyncAccountUpdateRequest);
+	}
+
+	private void pinVerifyCheck(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
+			.pinNum(mainSyncAccountUpdateRequest.pinNum())
+			.build();
+		authUtils.pinVerify(memberId, pinVerifyRequest);
+	}
+
+	private void deactivateCurrentMainSyncAccount(Long memberId) {
+		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+			.orElseThrow(
+				() -> new NotFoundException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNTS_NOT_FOUND, memberId)
+			);
+		syncAccount.updateIsMain(false);
 	}
 
 	private void activateNewMainSyncAccount(MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
@@ -55,13 +75,5 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 					mainSyncAccountUpdateRequest.uuid())
 			);
 		requestSyncAccount.updateIsMain(true);
-	}
-
-	private void deactivateCurrentMainSyncAccount(Long memberId) {
-		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-			.orElseThrow(
-				() -> new NotFoundException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNTS_NOT_FOUND, memberId)
-			);
-		syncAccount.updateIsMain(false);
 	}
 }
