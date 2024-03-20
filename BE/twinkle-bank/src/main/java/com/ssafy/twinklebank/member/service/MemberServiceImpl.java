@@ -1,4 +1,26 @@
 package com.ssafy.twinklebank.member.service;
 
-public class MemberServiceImpl {
+import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.twinklebank.member.data.AuthInfoFindResponse;
+import com.ssafy.twinklebank.member.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.UNDEFINED_MEMBER;
+
+@RequiredArgsConstructor
+@Service
+public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
+
+    private final MemberRepository memberRepository;
+
+    @Override
+    public AuthInfoFindResponse findAuthInfo(long memberId, String appId) {
+        // validate application
+        // TODO: application validation
+
+        // find auth info & return
+        return memberRepository.findAuthInfoById(memberId)
+                .orElseThrow(() -> new NotFoundException("AuthInfoFind", UNDEFINED_MEMBER, memberId));
+    }
 }
