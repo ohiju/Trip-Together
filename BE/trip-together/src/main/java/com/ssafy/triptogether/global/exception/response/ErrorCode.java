@@ -9,6 +9,10 @@ public enum ErrorCode {
 	// MEMBER
 	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
 
+	// TRIP_ACCOUNT
+	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
+	// EXTERNAL_SERVER
+	CURRENCY_RATE_LOAD_SERVER_ERROR(500, "환율 조회 API 요청에 실패했습니다"),
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),
@@ -24,7 +28,6 @@ public enum ErrorCode {
 	CERT_CODE_EXPIRED(408, "코드가 만료되었습니다."),
 
 	ALREADY_KAKAO_JOINED(409, "이미 카카오가입을 한 사용자입니다."),
-	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
 	;
 
 	private final int status;

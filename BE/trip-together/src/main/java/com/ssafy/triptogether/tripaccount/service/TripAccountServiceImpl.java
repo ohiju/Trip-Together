@@ -72,7 +72,6 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			currencyRepository.findByCode(currencyRateResponse.cur_unit())
 				.ifPresent(currency -> {
 					currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
-					currencyRepository.save(currency);
 				});
 		});
 	}

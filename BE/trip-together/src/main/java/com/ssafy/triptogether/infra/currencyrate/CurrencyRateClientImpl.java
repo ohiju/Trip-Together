@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +46,10 @@ public class CurrencyRateClientImpl implements CurrencyRateClient{
 			}
 		);
 
-		return response.getBody();
+		if (response.getStatusCode() == HttpStatus.OK) {
+			return response.getBody();
+		}
+
+		throw new ExternalServerException("CurrencyRatesLoad", ErrorCode.CURRENCY_RATE_LOAD_SERVER_ERROR);
 	}
 }
