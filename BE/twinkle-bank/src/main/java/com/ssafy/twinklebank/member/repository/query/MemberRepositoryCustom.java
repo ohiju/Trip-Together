@@ -1,6 +1,6 @@
 package com.ssafy.twinklebank.member.repository.query;
 
-import com.ssafy.twinklebank.member.data.AuthInfoFindResponse;
+import com.ssafy.twinklebank.member.data.response.AuthInfoFindResponse;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.ssafy.twinklebank.member.data;
+package com.ssafy.twinklebank.member.data.response;
 
 import com.ssafy.twinklebank.member.domain.GenderType;
 

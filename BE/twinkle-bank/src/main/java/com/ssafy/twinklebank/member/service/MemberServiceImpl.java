@@ -1,26 +1,25 @@
 package com.ssafy.twinklebank.member.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.twinklebank.member.data.AuthInfoFindResponse;
+import com.ssafy.twinklebank.member.data.request.MemberJoinRequest;
+import com.ssafy.twinklebank.member.data.response.AuthInfoFindResponse;
+import com.ssafy.twinklebank.member.domain.Member;
+import com.ssafy.twinklebank.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.twinklebank.member.data.request.MemberJoinRequest;
-import com.ssafy.twinklebank.member.domain.Member;
-import com.ssafy.twinklebank.member.repository.MemberRepository;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.ssafy.twinklebank.global.exception.response.ErrorCode.UNDEFINED_MEMBER;
 
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
+
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
