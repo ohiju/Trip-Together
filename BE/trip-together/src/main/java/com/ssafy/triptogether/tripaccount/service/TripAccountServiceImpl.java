@@ -3,10 +3,12 @@ package com.ssafy.triptogether.tripaccount.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
+import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
@@ -16,8 +18,9 @@ import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class TripAccountServiceImpl implements TripAccountLoadService {
+public class TripAccountServiceImpl implements TripAccountLoadService, TripAccountSaveService {
 	private final CurrencyRepository currencyRepository;
 	private final CurrencyRateClient currencyRateClient;
 
@@ -49,7 +52,6 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 	 */
 	@Override
 	public RateLoadResponse rateLoad(String currencyCode) {
-		currencyRateClient.currencyRatesLoad();
 		Currency currency = currencyRepository.findByCode(currencyCode)
 			.orElseThrow(
 				() -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
@@ -57,5 +59,21 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 		return RateLoadResponse.builder()
 			.rate(currency.getRate())
 			.build();
+	}
+
+	/**
+	 * 전체 통화 코드의 환율 정보 업데이트
+	 */
+	@Transactional
+	@Override
+	public void currencyRateUpdate() {
+		List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
+		currencyRateResponses.forEach(currencyRateResponse -> {
+			currencyRepository.findByCode(currencyRateResponse.cur_unit())
+				.ifPresent(currency -> {
+					currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
+					currencyRepository.save(currency);
+				});
+		});
 	}
 }

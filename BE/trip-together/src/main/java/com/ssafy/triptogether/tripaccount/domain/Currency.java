@@ -54,4 +54,8 @@ public class Currency extends BaseEntity {
         this.currencyNation = currencyNation;
         this.rate = rate;
     }
+
+    public void updateRate(Double newRate) {
+        this.rate = newRate;
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
@@ -17,7 +16,7 @@ import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/account/v1/trip-account")
+@RequestMapping("/account/v1/trip-account")
 @RequiredArgsConstructor
 public class TripAccountController {
 	// Service

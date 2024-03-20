@@ -3,9 +3,14 @@ package com.ssafy.triptogether.infra.currencyrate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,11 +29,20 @@ public class CurrencyRateClientImpl implements CurrencyRateClient{
 	 * @return 환율 전체 정보
 	 */
 	@Override
-	public List currencyRatesLoad() {
+	public List<CurrencyRateResponse> currencyRatesLoad() {
 		String url = UriComponentsBuilder.fromHttpUrl(CURRENCY_RATE_API_URL)
 			.queryParam("authkey", authKey)
 			.queryParam("data", data)
 			.toUriString();
-		return restTemplate.getForObject(url, List.class);
+
+		ResponseEntity<List<CurrencyRateResponse>> response = restTemplate.exchange(
+			url,
+			HttpMethod.GET,
+			null,
+			new ParameterizedTypeReference<>() {
+			}
+		);
+
+		return response.getBody();
 	}
 }
