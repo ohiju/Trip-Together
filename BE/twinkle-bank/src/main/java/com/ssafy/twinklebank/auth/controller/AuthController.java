@@ -1,5 +1,7 @@
 package com.ssafy.twinklebank.auth.controller;
 
+import static com.ssafy.twinklebank.global.data.response.StatusCode.*;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -13,7 +15,6 @@ import com.ssafy.twinklebank.auth.data.request.TokenRequest;
 import com.ssafy.twinklebank.auth.data.response.TokenResponse;
 import com.ssafy.twinklebank.auth.service.AuthServiceImpl;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
-import com.ssafy.twinklebank.global.data.response.StatusCode;
 
 import java.util.Map;
 
@@ -35,10 +36,10 @@ public class AuthController {
 		// refresh token은 헤더에 쿠키에 넣어준다
 		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 			.maxAge(7 * 24 * 60 * 60)
-			.path("/")
+			.path("/") // 쿠키 헤더를 전송하기 위해 요청되는 url내에서 반드시 존재해야하는 url 경로
 			.secure(true) // https를 통해서만 쿠키를 전송
-			.sameSite("None") //
-			.httpOnly(true)
+			.sameSite("None") // 서로 다른 도메인간(cross-site)의 모든 쿠키 전송 가능하도록 설정
+			.httpOnly(true) // cross-site 스크립팅 공격을 방지하기위한 옵션 (클라이언트에서 js로 접근불가)
 			.build();
 
 		// 쿠키를 담을 헤더 생성
@@ -47,8 +48,8 @@ public class AuthController {
 
 		// ApiResponse 객체 생성
 		ApiResponse<TokenResponse> apiResponse = ApiResponse.<TokenResponse>builder()
-			.status(StatusCode.SUCCESS_GENERATE_TOKEN.getStatus())
-			.message(StatusCode.SUCCESS_GENERATE_TOKEN.getMessage())
+			.status(SUCCESS_GENERATE_TOKEN.getStatus())
+			.message(SUCCESS_GENERATE_TOKEN.getMessage())
 			.data(new TokenResponse(accessToken))
 			.build();
 
