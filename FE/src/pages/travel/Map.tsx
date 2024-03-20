@@ -1,8 +1,10 @@
 import React from 'react';
 import {SafeAreaView, Text} from 'react-native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import GoogleMap from '../../components/travel/GoogleMap';
 import SearchPlace from '../../components/travel/SearchPlace';
 import SlidingUpPanel from 'rn-sliding-up-panel';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
 import {
   Container,
   SliderContainer,
@@ -14,12 +16,18 @@ import {
 } from './MapStyle';
 
 const Map = () => {
+  const navigation = useNavigation<NavigationProp<MapStackParams>>();
+
+  const handlePlanPress = () => {
+    navigation.navigate('plandetail');
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <Container>
         <GoogleMap />
         <SearchPlace />
-        <PlanIcon>
+        <PlanIcon onPress={handlePlanPress}>
           <PlanImage source={require('../../assets/images/planning.png')} />
         </PlanIcon>
         {/* <PlaceInfo /> */}

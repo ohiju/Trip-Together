@@ -6,6 +6,7 @@ import Search from '../pages/travel/Search';
 import Calendar from '../pages/travel/Calendar';
 import TripTitle from '../pages/travel/TripTitle';
 import GoogleMap from '../pages/travel/Map';
+import PlanDetail from '../pages/travel/PlanDetail';
 
 const TravelStack = () => {
   const Stack = createNativeStackNavigator<TravelStackParams>();
@@ -47,6 +48,13 @@ const TravelStack = () => {
         <Stack.Screen
           name="map"
           component={GoogleMap}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="plandetail"
+          component={PlanDetail}
           options={{
             title: '',
           }}

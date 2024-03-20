@@ -26,6 +26,7 @@
     "react-native-shadow-2": "^7.0.8",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^15.1.0",
+    "react-native-swiper": "^1.6.0",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
