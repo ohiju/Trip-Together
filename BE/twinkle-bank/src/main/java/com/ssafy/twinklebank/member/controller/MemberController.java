@@ -34,9 +34,9 @@ public class MemberController {
     public ResponseEntity<ApiResponse<AuthInfoFindResponse>> findAuthInfo(
             // @AuthenticationPrincipal 인증객체 주입받기
     ) {
-        // String memberUuid = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
-        String memberUuid = "temp";
-        AuthInfoFindResponse response = memberLoadService.findAuthInfo(memberUuid);
+        // String memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
+        long memberId = 1L;
+        AuthInfoFindResponse response = memberLoadService.findAuthInfo(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_AUTH_INFO_FIND, response);
     }
 }

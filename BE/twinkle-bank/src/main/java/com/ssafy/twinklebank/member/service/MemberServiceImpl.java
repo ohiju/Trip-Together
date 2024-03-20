@@ -50,9 +50,9 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 	}
 
     @Override
-    public AuthInfoFindResponse findAuthInfo(String memberUuid) {
+	public AuthInfoFindResponse findAuthInfo(long memberId) {
         // find auth info & return
-        return memberRepository.findAuthInfoById(memberUuid)
-                .orElseThrow(() -> new NotFoundException("AuthInfoFind", UNDEFINED_MEMBER, memberUuid));
+		return memberRepository.findAuthInfoById(memberId)
+				.orElseThrow(() -> new NotFoundException("AuthInfoFind", UNDEFINED_MEMBER, memberId));
     }
 }

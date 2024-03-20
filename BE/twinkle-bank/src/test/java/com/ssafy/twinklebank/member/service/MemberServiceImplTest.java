@@ -25,15 +25,15 @@ class MemberServiceImplTest {
     @DisplayName("[FindAuthInfo][Error] undefined member")
     void authInfoNotFoundException() {
         // given
-        String undefinedUuid = "undefined";
+        long undefinedId = 1L;
 
         // when
         NotFoundException exception
-                = assertThrows(NotFoundException.class, () -> memberService.findAuthInfo(undefinedUuid));
+                = assertThrows(NotFoundException.class, () -> memberService.findAuthInfo(undefinedId));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.AuthInfoFind");
         assertThat(exception.getErrorCode()).isEqualTo(UNDEFINED_MEMBER);
-        assertThat(exception.getParams()).contains(undefinedUuid);
+        assertThat(exception.getParams()).contains(undefinedId);
     }
 }
