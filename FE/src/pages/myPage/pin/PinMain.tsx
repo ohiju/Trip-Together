@@ -5,8 +5,7 @@ import {
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {WithLocalSvg} from 'react-native-svg/css';
-import CaretSvg from '../../../assets/icons/caret.svg';
-import ShieldSvg from '../../../assets/icons/shield.svg';
+import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import AppCheckbox from '../../../components/common/AppCheckbox';
 import {
@@ -55,12 +54,12 @@ const PinMain = () => {
       </SloganView>
       <Body>
         <IconView>
-          <WithLocalSvg width={180} height={180} asset={ShieldSvg} />
+          <WithLocalSvg width={180} height={180} asset={iconPath.shield} />
         </IconView>
         <TermView>
           <AppCheckbox isChecked={isChecked} onPress={handleTermCheck} />
           <Term>핀 등록 및 사용에 관한 약관</Term>
-          <WithLocalSvg width={25} height={25} asset={CaretSvg} />
+          <WithLocalSvg width={25} height={25} asset={iconPath.caret} />
         </TermView>
       </Body>
       <AppButton

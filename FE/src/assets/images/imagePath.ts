@@ -2,6 +2,18 @@ import {ImageSourcePropType} from 'react-native';
 
 interface ImagePath {
   [key: string | number]: ImageSourcePropType | undefined;
+  France: ImageSourcePropType;
+  UK: ImageSourcePropType;
+  EU: ImageSourcePropType;
+  adh01: ImageSourcePropType;
+  exchange: ImageSourcePropType;
+  pay: ImageSourcePropType;
+  remit: ImageSourcePropType;
+  logo: ImageSourcePropType;
+  bankLogo: ImageSourcePropType;
+  basicProfile: ImageSourcePropType;
+  myPage: ImageSourcePropType;
+  sync: ImageSourcePropType;
 }
 
 export const imagePath: ImagePath = {
@@ -21,4 +33,5 @@ export const imagePath: ImagePath = {
   // 나머지
   basicProfile: require('./basicProfile.png'),
   myPage: require('./myPage.png'),
+  sync: require('./sync.png'),
 };

@@ -1,4 +1,3 @@
-import {Animated} from 'react-native';
 import styled from 'styled-components/native';
 import {bg_light} from '../../../constants/colors';
 
@@ -27,10 +26,4 @@ const MessageView = styled.View`
   margin-left: 15px;
 `;
 
-const Message = styled.Text`
-  color: tomato;
-`;
-
-const AnimatedMessage = Animated.createAnimatedComponent(Message);
-
-export {AnimatedMessage, Input, InputView, MessageView, Wrapper};
+export {Input, InputView, MessageView, Wrapper};

@@ -1,16 +1,15 @@
 package com.ssafy.triptogether.member.controller;
 
 import com.ssafy.triptogether.global.data.response.ApiResponse;
+import com.ssafy.triptogether.member.data.ProfileFindResponse;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.service.MemberLoadService;
 import com.ssafy.triptogether.member.service.MemberSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PROFILE_FIND;
 import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PROFILE_UPDATE;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -31,5 +30,13 @@ public class MemberController {
         long memberId = 1L;
         memberSaveService.updateProfile(memberId, profileUpdateRequest);
         return ApiResponse.emptyResponse(OK, SUCCESS_PROFILE_UPDATE);
+    }
+
+    @GetMapping("/members/{member_id}")
+    public ResponseEntity<ApiResponse<ProfileFindResponse>> findProfile(
+            @PathVariable("member_id") long memberId
+    ) {
+        ProfileFindResponse response = memberLoadService.findProfile(memberId);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_PROFILE_FIND, response);
     }
 }
