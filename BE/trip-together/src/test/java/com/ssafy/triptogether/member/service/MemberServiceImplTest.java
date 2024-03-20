@@ -3,6 +3,7 @@ package com.ssafy.triptogether.member.service;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ValidationException;
 import com.ssafy.triptogether.member.data.PinSaveRequest;
+import com.ssafy.triptogether.member.data.PinUpdateRequest;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +62,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("[SavePin][Error] pin check miss match")
-    void PinCheckValidationException() {
+    void savePinCheckValidationException() {
         // given
         long memberId = 1L;
         PinSaveRequest request = new PinSaveRequest("123-456", "123-457");
@@ -89,6 +90,40 @@ class MemberServiceImplTest {
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.PinSave");
+        assertThat(exception.getErrorCode()).isEqualTo(UNDEFINED_MEMBER);
+        assertThat(exception.getParams()).contains(undefinedId);
+    }
+
+    @Test
+    @DisplayName("[UpdatePin][Error] pin check miss match")
+    void updatePinCheckValidationException() {
+        // given
+        long memberId = 1L;
+        PinUpdateRequest request = new PinUpdateRequest("123-456", "123-455", "123-454");
+
+        // when
+        ValidationException exception
+                = assertThrows(ValidationException.class, () -> memberService.updatePin(memberId, request));
+
+        // then
+        assertThat(exception.getMessageKey()).isEqualTo("error.InValid.PinUpdate");
+        assertThat(exception.getErrorCode()).isEqualTo(PIN_CHECK_MISS_MATCH);
+        assertThat(exception.getParams()).contains(request.newPinNum(), request.newPinNumCheck());
+    }
+
+    @Test
+    @DisplayName("[UpdatePin][Error] undefined member")
+    void pinUpdateMemberNotFoundException() {
+        // given
+        long undefinedId = 1L;
+        PinUpdateRequest request = new PinUpdateRequest("123-456", "123-455", "123-455");
+
+        // when
+        NotFoundException exception
+                = assertThrows(NotFoundException.class, () -> memberService.updatePin(undefinedId, request));
+
+        // then
+        assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.PinUpdate");
         assertThat(exception.getErrorCode()).isEqualTo(UNDEFINED_MEMBER);
         assertThat(exception.getParams()).contains(undefinedId);
     }
