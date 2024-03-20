@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetailResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
 

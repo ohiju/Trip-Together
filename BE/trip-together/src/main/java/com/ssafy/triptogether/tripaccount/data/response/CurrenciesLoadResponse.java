@@ -9,6 +9,6 @@ import lombok.Builder;
 @Builder
 public record CurrenciesLoadResponse(
 	@JsonProperty("currencies")
-	List<CurrenciesLoadDetailResponse> currenciesLoadDetailResponse
+	List<CurrenciesDetailResponse> currenciesDetailResponse
 ) {
 }
