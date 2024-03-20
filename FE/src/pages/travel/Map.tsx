@@ -1,31 +1,43 @@
-// Import React
 import React from 'react';
-// Import required components
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-// Import Map and Marker
+import {SafeAreaView, Text} from 'react-native';
 import GoogleMap from '../../components/travel/GoogleMap';
 import SearchPlace from '../../components/travel/SearchPlace';
+import SlidingUpPanel from 'rn-sliding-up-panel';
+import {
+  Container,
+  SliderContainer,
+  DragBar,
+  SliderFullContent,
+  ButtonImage,
+  PlanImage,
+  PlanIcon,
+} from './MapStyle';
 
 const Map = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
+      <Container>
         <GoogleMap />
         <SearchPlace />
-      </View>
+        <PlanIcon>
+          <PlanImage source={require('../../assets/images/planning.png')} />
+        </PlanIcon>
+        {/* <PlaceInfo /> */}
+        <SliderContainer>
+          <DragBar onPress={() => this._panel.show()}>
+            <ButtonImage source={require('../../assets/images/up.png')} />
+          </DragBar>
+          <SlidingUpPanel ref={c => (this._panel = c)}>
+            <SliderFullContent>
+              <Text>Here is the content inside panel</Text>
+              <DragBar onPress={() => this._panel.hide()}>
+                <ButtonImage source={require('../../assets/images/down.png')} />
+              </DragBar>
+            </SliderFullContent>
+          </SlidingUpPanel>
+        </SliderContainer>
+      </Container>
     </SafeAreaView>
   );
 };
 export default Map;
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-});

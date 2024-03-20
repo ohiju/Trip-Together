@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {bg_lightgray, bg_light, font_light} from '../../constants/colors';
+import {bg_main, bg_light} from '../../constants/colors';
 
 const Wrapper = styled.View`
   background-color: ${bg_light};
@@ -10,12 +10,12 @@ const Wrapper = styled.View`
 `;
 
 const SearchInput = styled.TextInput`
-  background-color: ${bg_lightgray};
+  background-color: ${bg_main};
   width: 80%;
   padding: 1px 15px;
   height: 40px;
   border-radius: 20px;
-  color: ${font_light};
+  margin-bottom: 300px;
 `;
 
 export {Wrapper, SearchInput};

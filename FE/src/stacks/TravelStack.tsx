@@ -38,9 +38,12 @@ const TravelStack = () => {
           name="TripTitle"
           component={TripTitle}
           options={{
-            title: '',
+            title: '여행 제목',
+            headerTitleAlign: 'center',
           }}
         />
+      </Stack.Group>
+      <Stack.Group>
         <Stack.Screen
           name="map"
           component={GoogleMap}

@@ -3,10 +3,11 @@ import {TouchableOpacity} from 'react-native';
 
 const PlanView = styled.View`
   background-color: white;
-  width: 95%;
-  height: 35%;
+  width: 90%;
+  height: 33%;
   align-items: center;
   justify-content: space-around;
+  border-radius: 10px;
 `;
 
 const PlanTitle = styled.Text`
@@ -48,7 +49,7 @@ const PlanImage = styled.Image`
   width: 60px;
   height: 60px;
   resize-mode: contain;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 `;
 
 const StartCityText = styled.Text`
@@ -81,12 +82,14 @@ const MoneyImage = styled.Image`
 
 const MoneyUnit = styled.Text`
   font-size: 27px;
+  font-weight: bold;
   margin-left: 5px;
   margin-right: 3px;
 `;
 
 const MoneyText = styled.Text`
   font-size: 25px;
+  font-weight: bold;
 `;
 
 export {
