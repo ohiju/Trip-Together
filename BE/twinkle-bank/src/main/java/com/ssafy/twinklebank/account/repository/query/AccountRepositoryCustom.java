@@ -5,5 +5,5 @@ import com.ssafy.twinklebank.account.data.AccountResponse;
 import java.util.List;
 
 public interface AccountRepositoryCustom {
-    List<AccountResponse> getAccountList(String appId, long memberId);
+    List<AccountResponse> getAccountList(long clientId, long memberId);
 }

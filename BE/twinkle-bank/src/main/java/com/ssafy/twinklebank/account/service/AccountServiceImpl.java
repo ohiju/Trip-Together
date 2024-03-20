@@ -1,7 +1,6 @@
 package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.account.data.GetAccountListRequest;
 import com.ssafy.twinklebank.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     private final AccountRepository accountRepository;
     @Override
-    public List<AccountResponse> getAccounts(GetAccountListRequest getAccountListRequest, long memberId) {
-        return accountRepository.getAccountList(getAccountListRequest.appId(), memberId);
+    public List<AccountResponse> getAccounts(long clientId, long memberId) {
+        return accountRepository.getAccountList(clientId, memberId);
     }
 }
