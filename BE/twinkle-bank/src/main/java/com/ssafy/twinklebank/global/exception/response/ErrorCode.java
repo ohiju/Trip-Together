@@ -6,6 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// MEMBER
+	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	WRONG_PASSWORD(401, "잘못된 PASSWORD 입니다."),
