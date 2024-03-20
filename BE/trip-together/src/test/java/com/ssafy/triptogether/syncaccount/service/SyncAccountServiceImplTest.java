@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
@@ -32,37 +33,29 @@ class SyncAccountServiceImplTest {
 	@Nested
 	@DisplayName("연동 계좌 목록 조회")
 	class SyncAccountsLoadTest {
-		List<SyncAccount> syncAccounts;
+		List<SyncAccountsDetail> syncAccounts;
 
 		@BeforeEach
 		void setUp() {
-			Member member = Member.builder()
-				.uuid("")
-				.gender(Gender.MALE)
-				.nickname("")
-				.birth(LocalDate.now())
-				.build();
-			SyncAccount syncAccount1 = SyncAccount.builder()
+			SyncAccountsDetail syncAccount1 = SyncAccountsDetail.builder()
 				.uuid("test1")
 				.name("테스트 계좌")
-				.num("123-123")
+				.accountNum("123-123")
 				.isMain(true)
-				.member(member)
 				.build();
-			SyncAccount syncAccount2 = SyncAccount.builder()
-				.uuid("test2")
+			SyncAccountsDetail syncAccount2 = SyncAccountsDetail.builder()
+				.uuid("test1")
 				.name("테스트 계좌")
-				.num("456-456")
-				.isMain(false)
-				.member(member)
+				.accountNum("123-123")
+				.isMain(true)
 				.build();
 			syncAccounts = Arrays.asList(syncAccount1, syncAccount2);
-			// given
-			given(syncAccountRepository.findByMemberId(anyLong())).willReturn(syncAccounts);
 		}
 
 		@Test
 		void syncAccountsLoad() {
+			// given
+			given(syncAccountRepository.memberSyncAccountsLoad(anyLong())).willReturn(syncAccounts);
 			// when
 			SyncAccountsLoadResponse response = syncAccountService.syncAccountsLoad(1L);
 			//then
@@ -70,7 +63,7 @@ class SyncAccountServiceImplTest {
 				() -> assertEquals(2, response.syncAccountsDetail().size(), "연동 계좌 목록의 크기가 예상과 다릅니다."),
 				() -> assertEquals("test1", response.syncAccountsDetail().get(0).uuid(), "첫 번쨰 연동 계좌가 예상과 다릅니다.")
 			);
-			verify(syncAccountRepository, times(1)).findByMemberId(1L);
+			verify(syncAccountRepository, times(1)).memberSyncAccountsLoad(1L);
 		}
 	}
 }

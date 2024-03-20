@@ -53,6 +53,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.ssafy.triptogether.tripaccount.domain.TripAccount, com.ssafy.triptogether.tripaccount.domain.QTripAccount> tripAccounts = this.<com.ssafy.triptogether.tripaccount.domain.TripAccount, com.ssafy.triptogether.tripaccount.domain.QTripAccount>createList("tripAccounts", com.ssafy.triptogether.tripaccount.domain.TripAccount.class, com.ssafy.triptogether.tripaccount.domain.QTripAccount.class, PathInits.DIRECT2);
 
+    public final StringPath username = createString("username");
+
     public final StringPath uuid = createString("uuid");
 
     public QMember(String variable) {

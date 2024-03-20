@@ -24,18 +24,9 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService {
 	 */
 	@Override
 	public SyncAccountsLoadResponse syncAccountsLoad(Long memberId) {
-		List<SyncAccount> syncAccounts = syncAccountRepository.findByMemberId(memberId);
-		List<SyncAccountsDetail> collectSyncAccounts = syncAccounts.stream()
-			.map(
-				syncAccount -> SyncAccountsDetail.builder()
-					.uuid(syncAccount.getUuid())
-					.accountNum(syncAccount.getNum())
-					.name(syncAccount.getName())
-					.isMain(syncAccount.getIsMain())
-					.build()
-			).toList();
+		List<SyncAccountsDetail> syncAccounts = syncAccountRepository.memberSyncAccountsLoad(memberId);
 		return SyncAccountsLoadResponse.builder()
-			.syncAccountsDetail(collectSyncAccounts)
+			.syncAccountsDetail(syncAccounts)
 			.build();
 	}
 }
