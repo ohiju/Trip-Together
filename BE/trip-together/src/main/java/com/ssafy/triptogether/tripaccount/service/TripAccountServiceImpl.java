@@ -31,9 +31,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@Override
 	public CurrenciesLoadResponse currenciesLoad() {
 		List<Currency> currencies = currencyRepository.findAll();
-		List<CurrenciesLoadDetailResponse> collectCurrencies = currencies.stream()
+		List<CurrenciesDetailResponse> collectCurrencies = currencies.stream()
 			.map(
-				currency -> CurrenciesLoadDetailResponse.builder()
+				currency -> CurrenciesDetailResponse.builder()
 					.code(currency.getCode())
 					.nation(currency.getCurrencyNation().name())
 					.nationKr(currency.getCurrencyNation().getMessage())
@@ -41,7 +41,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 					.build()
 			).toList();
 		return CurrenciesLoadResponse.builder()
-			.currenciesLoadDetailResponse(collectCurrencies)
+			.currenciesDetailResponse(collectCurrencies)
 			.build();
 	}
 

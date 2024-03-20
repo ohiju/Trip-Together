@@ -66,9 +66,9 @@ class TripAccountServiceImplTest {
 			// then
 			assertAll(
 				() -> assertNotNull(response, "응답은 null 이 아니어야 합니다."),
-				() -> assertEquals(2, response.currenciesLoadDetailResponse().size(), "통화 목록의 크기가 예상과 다릅니다."),
-				() -> assertEquals("EUR", response.currenciesLoadDetailResponse().get(0).code(), "첫 번째 통화 코드가 예상과 다릅니다."),
-				() -> assertEquals("유럽", response.currenciesLoadDetailResponse().get(0).nationKr(), "첫 번째 통화의 한국어 국가명이 예상과 다릅니다.")
+				() -> assertEquals(2, response.currenciesDetailResponse().size(), "통화 목록의 크기가 예상과 다릅니다."),
+				() -> assertEquals("EUR", response.currenciesDetailResponse().get(0).code(), "첫 번째 통화 코드가 예상과 다릅니다."),
+				() -> assertEquals("유럽", response.currenciesDetailResponse().get(0).nationKr(), "첫 번째 통화의 한국어 국가명이 예상과 다릅니다.")
 			);
 		}
 

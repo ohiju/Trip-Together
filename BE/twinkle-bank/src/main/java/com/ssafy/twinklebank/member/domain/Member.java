@@ -20,7 +20,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,8 +65,11 @@ public class Member extends BaseEntity {
 	private List<SavingAccount> savingAccounts = new ArrayList<>();
 
 	@Builder
-	public Member(String name, String username, String password) {
+	public Member(String uuid, String name, GenderType gender, LocalDate birth, String username, String password) {
+		this.uuid = uuid;
 		this.name = name;
+		this.gender = gender;
+		this.birth = birth;
 		this.username = username;
 		this.password = password;
 	}
