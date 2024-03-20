@@ -1,0 +1,20 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: ${TEST_BANK_REDIS_BINDING_PORT}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:${TEST_BANK_MYSQL_BINDING_PORT}/${TEST_BANK_MYSQL_DATABASE}
+    username: ${MYSQL_ROOT_USERNAME}
+    password: ${MYSQL_ROOT_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  mvc:
+    servlet:
+      path: /api

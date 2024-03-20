@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  dev_mysql_container:
+    container_name: dev_mysql_container
+    image: mysql:8.0
+    ports:
+      - ${DEV_MYSQL_BINDING_PORT}:3306
+    volumes:
+      - ${DEV_MYSQL_DATA_PATH}:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: unless-stopped
+
+  dev_redis_container:
+    container_name: dev_redis_container
+    image: redis:6.2.6-alpine
+    ports:
+      - ${DEV_REDIS_BINDING_PORT}:6379
+    restart: unless-stopped
+
+  dev_spring_container:
+    container_name: dev_spring_container
+    image: docker-dev
+    ports:
+      - ${DEV_SPRING_BINDING_PORT}:8080
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - dev_mysql_container
+      - dev_redis_container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://j10a309.p.ssafy.io:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_PROFILES_ACTIVE: dev
+    restart: always
+
+  sonarqube_container:
+    container_name: sonarqube_container
+    image: sonarqube:lts-community
+    ports:
+      - ${SONARQUBE_BINDING_PORT}:9000
+    restart: on-failure
