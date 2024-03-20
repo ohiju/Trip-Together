@@ -1,5 +1,7 @@
 package com.ssafy.triptogether.auth.utils;
 
+import org.springframework.stereotype.Component;
+
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
@@ -8,6 +10,7 @@ import com.ssafy.triptogether.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class AuthUtils {
 	// Repository
