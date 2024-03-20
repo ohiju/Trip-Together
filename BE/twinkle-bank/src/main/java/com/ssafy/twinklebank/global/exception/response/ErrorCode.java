@@ -11,7 +11,8 @@ public enum ErrorCode {
 
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
-	WRONG_PASSWORD(401, "사용자 정보를 찾을 수 없습니다."),
+	WRONG_PASSWORD(401, "잘못된 PASSWORD 입니다."),
+	WRONG_USERNAME_OR_PASSWORD(401, "잘못된 ID/PASSWORD 입니다."),
 
 	USER_NOT_KAKAO_JOINED(421, "카카오 가입 회원이 아닙니다."), // 커스텀 에러 사용 예시
 
