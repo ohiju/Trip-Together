@@ -2,7 +2,6 @@ package com.ssafy.triptogether.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.member.data.PinSaveRequest;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.review.domain.Review;
@@ -100,7 +99,7 @@ public class Member extends BaseEntity {
         this.description = profileUpdateRequest.description();
     }
 
-    public void savePin(PinSaveRequest pinSaveRequest) {
-        this.pinNum = pinSaveRequest.pinNum();
+    public void savePin(String pinNum) {
+        this.pinNum = pinNum;
     }
 }
