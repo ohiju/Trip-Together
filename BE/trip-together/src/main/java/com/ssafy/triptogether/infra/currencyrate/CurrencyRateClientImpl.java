@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
-import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
+import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateResponse;
 
 import lombok.RequiredArgsConstructor;
 

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
-import com.ssafy.triptogether.infra.data.response.CurrencyRateResponse;
+import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateResponse;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;

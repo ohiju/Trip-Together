@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.infra.data.response;
+package com.ssafy.triptogether.infra.currencyrate.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
