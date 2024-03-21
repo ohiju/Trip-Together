@@ -24,7 +24,7 @@ public class MemberUtils {
 	 * @param password
 	 * @return 인증된 유저
 	 */
-	public static Member getMember(MemberRepository memberRepository, PasswordEncoder passwordEncoder, String username,
+	public static Member loadMemberByUserNameAndPassword(MemberRepository memberRepository, PasswordEncoder passwordEncoder, String username,
 		String password) {
 
 		Member member = memberRepository.findByUsername(username)
@@ -35,8 +35,15 @@ public class MemberUtils {
 		return member;
 	}
 
-	public static Member getMember(MemberRepository memberRepository, Long id) {
+	public static Member loadMemberById(MemberRepository memberRepository, Long id) {
 		return memberRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
 	}
+
+	public static Member loadMemberByUsername(MemberRepository memberRepository, String username) {
+		return memberRepository.findByUsername(username)
+			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
+	}
+
+
 }
