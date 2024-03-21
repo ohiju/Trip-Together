@@ -18,17 +18,20 @@ import lombok.NoArgsConstructor;
 public class SecurityMember implements UserDetails {
 
 	private Long id;
+	private String uuid;
 	private String username;
 	private String password;
 
 	public SecurityMember(Member member) {
 		this.id = member.getId();
+		this.uuid = member.getUuid();
 		this.username = member.getUsername();
 		this.password = member.getPassword();
 	}
 
-	public SecurityMember(Long id, String username, String password) {
+	public SecurityMember(Long id, String uuid, String username, String password) {
 		this.id = id;
+		this.uuid = uuid;
 		this.username = username;
 		this.password = password;
 	}
