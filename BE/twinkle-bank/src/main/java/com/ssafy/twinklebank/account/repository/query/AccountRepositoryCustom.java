@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AccountRepositoryCustom {
     List<AccountResponse> getAccountList(long clientId, long memberId);
+
 }
