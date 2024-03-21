@@ -15,6 +15,7 @@ import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccounts
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
+import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
@@ -57,7 +58,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	 */
 	@Override
 	public BankAccountsLoadResponse bankAccountsLoad(Long memberId) {
-		Member member = getMember(memberId);
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 		TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse = twinkleBankAccountsLoad(member);
 
 		List<BankAccountsDetail> bankAccountsDetails = twinkleBankAccountsLoadResponse.twinkleBankAccountsDetails()
@@ -81,13 +82,6 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 			.build();
 		return twinkleBankClient.bankAccountsLoad(
 			twinkleBankAccountsLoadRequest);
-	}
-
-	private Member getMember(Long memberId) {
-		return memberRepository.findById(memberId)
-			.orElseThrow(
-				() -> new NotFoundException("BankAccountsLoad", ErrorCode.UNDEFINED_MEMBER)
-			);
 	}
 
 	/**
