@@ -11,6 +11,8 @@ public enum StatusCode {
 	SUCCESS_JOIN(200, "회원가입 성공"),
 	SUCCESS_GENERATE_TOKEN(200, "토큰 발급 성공"),
 	SUCCESS_GET_ACCOUNT_LIST(200, "계좌 목록 조회 성공"),
+
+	SUCCESS_REISSUE(200,"토큰 재발급 성공"),
 	CREATED_LINKED_ACCOUNT(201, "계좌 연동 성공"),
 	;
 	//

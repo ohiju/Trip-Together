@@ -1,4 +1,4 @@
-package com.ssafy.twinklebank.auth.utils;
+package com.ssafy.twinklebank.auth.provider;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -13,6 +13,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.ssafy.twinklebank.auth.utils.SecurityMember;
+import com.ssafy.twinklebank.auth.utils.SecurityUtil;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,9 +47,10 @@ public class JwtTokenProvider {
 	}
 
 	// Member 정보를 가지고 AccessToken, RefreshToken을 생성
-	public Map<String, String> generateToken(long id, Authentication authentication) {
+	public Map<String, String> generateToken(long id, String uuid, Authentication authentication) {
 		SecurityMember securityMember = new SecurityMember(
 			id,
+			uuid,
 			(String)authentication.getPrincipal(),
 			(String)authentication.getCredentials()
 		);
@@ -61,6 +65,7 @@ public class JwtTokenProvider {
 		String accessToken = Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim("auth", authorities)
+			.claim("uuid",uuid)
 			.claim("id", id)
 			.setExpiration(accessTokenExpireIn)
 			.signWith(key, SignatureAlgorithm.HS256)
@@ -123,7 +128,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private Claims parseClaims(String accessToken) {
+	public Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder()
 				.setSigningKey(key)
