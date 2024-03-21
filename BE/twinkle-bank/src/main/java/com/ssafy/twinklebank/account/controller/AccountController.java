@@ -38,11 +38,9 @@ public class AccountController {
 
     @PostMapping("accounts")
     public ResponseEntity<ApiResponse<Void>> addLinkedAccount(
-//        @AuthenticationPrincipal ,
-            @RequestBody AddAccountRequest addAccountRequest
-            ) {
-        // TODO: clientId는 AuthenticationPrincipal 로부터 가져오기
-        long clientId = 1L;
+        @RequestBody AddAccountRequest addAccountRequest,
+        @RequestParam("client_id") String clientId
+    ) {
         accountSaveService.addLinkedAccount(clientId, addAccountRequest);
         return ApiResponse.emptyResponse(CREATED, CREATED_LINKED_ACCOUNT);
     }

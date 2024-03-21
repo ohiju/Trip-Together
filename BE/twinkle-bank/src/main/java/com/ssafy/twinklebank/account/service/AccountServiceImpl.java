@@ -25,20 +25,19 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     private final AccountRepository accountRepository;
     private final WithdrawalAgreementRepository withdrawalAgreementRepository;
     private final ApplicationRepository applicationRepository;
-    // private final ApplicationUtils applicationUtils;
+
     @Override
     public List<AccountResponse> getAccounts(long clientId, long memberId) {
         return accountRepository.getAccountList(clientId, memberId);
     }
 
     @Override
-    public void addLinkedAccount(long clientId, AddAccountRequest addAccountRequest) {
+    public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
         // Account Not Found
         Account account = accountRepository.findAccountByUuid(addAccountRequest.accountUUID())
             .orElseThrow(() -> new NotFoundException("addLinkedAccount: account", ACCOUNT_NOT_FOUND, addAccountRequest.accountUUID()));
-        // Application Not Found
-        Application application = applicationRepository.findById(clientId)
-            .orElseThrow(() -> new NotFoundException("addLinkedAccount: application", APPLICATION_NOT_FOUND, clientId));
+
+        Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
 
         WithdrawalAgreement withdrawalAgreement = new WithdrawalAgreement(account, application);
         withdrawalAgreementRepository.save(withdrawalAgreement);
