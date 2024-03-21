@@ -9,4 +9,6 @@ import com.ssafy.triptogether.syncaccount.repository.query.SyncAccountRepository
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SyncAccountRepository extends JpaRepository<SyncAccount, Long>, SyncAccountRepositoryCustom {
+	Optional<SyncAccount> findByMemberIdAndIsMain(long memberId, boolean isMain);
+	Optional<SyncAccount> findByUuid(String uuid);
 }

@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.auth.utils;
+package com.ssafy.triptogether.auth.validator.pin;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
@@ -22,64 +24,47 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
-class AuthUtilsTest {
+class PinVerifyAspectTest {
 	@InjectMocks
-	AuthUtils authUtils;
+	PinVerifyAspect pinVerifyAspect;
 	@Mock
 	MemberRepository memberRepository;
+	@Mock
+	JoinPoint joinPoint;
 
 	@Nested
-	@DisplayName("PIN 번호 인증")
+	@DisplayName("사용자 PIN 인증")
 	class PinVerifyTest {
-		Long validMemberId;
+		Long memberId = 1L;
 		PinVerifyRequest pinVerifyRequest;
-		Member member;
+		Member member = Member.builder()
+			.uuid("test")
+			.nickname("test")
+			.gender(Gender.MALE)
+			.birth(LocalDate.now())
+			.build();
 
 		@BeforeEach
 		void setUp() {
-			validMemberId = 1L;
+			MockitoAnnotations.openMocks(this);
 			pinVerifyRequest = PinVerifyRequest.builder()
 				.pinNum("1234")
 				.build();
-			member = Member.builder()
-				.nickname("테스트")
-				.uuid("test")
-				.birth(LocalDate.now())
-				.gender(Gender.MALE)
-				.build();
+			member.savePin("1234");
 		}
 
 		@Test
-		@DisplayName("회원이 존재하지 않을 때 NotFoundException 발생")
-		void pinVerifyMemberNotFound() {
+		@DisplayName("사용자 조회 실패")
+		void memberLoadFail() {
 			// given
-			given(memberRepository.findById(1L)).willReturn(Optional.empty());
-
+			Object[] args = new Object[]{memberId, pinVerifyRequest};
+			given(joinPoint.getArgs()).willReturn(args);
+			given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 			// when & then
 			assertThrows(NotFoundException.class, () -> {
-				authUtils.pinVerify(validMemberId, pinVerifyRequest);
+				pinVerifyAspect.pinVerifyAdvice(joinPoint);
 			});
-		}
-
-		@Test
-		@DisplayName("성공적으로 PIN 번호 인증")
-		void pinVerifySuccess() {
-			// given
-
-			// when
-
-			// then
-		}
-
-		@Test
-		@DisplayName("PIN 번호가 불일치 할 경우 UnAuthorizedException 발생")
-		void pinVerifyFail() {
-			// given
-
-			// when
-
-			// then
+			verify(memberRepository, times(1)).findById(memberId);
 		}
 	}
-
 }

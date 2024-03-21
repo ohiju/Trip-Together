@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record CurrenciesDetailResponse(
+public record CurrenciesLoadDetail(
 	@JsonProperty("currency_code")
 	String code,
 	@JsonProperty("nation")
