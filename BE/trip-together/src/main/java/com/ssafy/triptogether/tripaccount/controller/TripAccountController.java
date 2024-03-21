@@ -4,17 +4,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/account/v1/trip-account")
+@RequestMapping("/account/v1/trip-account")
 @RequiredArgsConstructor
 public class TripAccountController {
 	// Service
@@ -26,6 +28,17 @@ public class TripAccountController {
 
 		return ApiResponse.toResponseEntity(
 			HttpStatus.OK, StatusCode.SUCCESS_CURRENCY_LOAD, currenciesLoadResponse
+		);
+	}
+
+	@GetMapping("/rate")
+	public ResponseEntity<ApiResponse<RateLoadResponse>> rateLoad(
+		@RequestParam("currency_code") String currencyCode
+	) {
+		RateLoadResponse rateLoadResponse = tripAccountLoadService.rateLoad(currencyCode);
+
+		return ApiResponse.toResponseEntity(
+			HttpStatus.OK, StatusCode.SUCCESS_RATE_LOAD, rateLoadResponse
 		);
 	}
 }
