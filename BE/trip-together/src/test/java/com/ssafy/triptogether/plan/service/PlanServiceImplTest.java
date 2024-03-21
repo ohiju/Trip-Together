@@ -26,6 +26,7 @@ import com.ssafy.triptogether.attraction.domain.Nation;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -147,10 +148,11 @@ class PlanServiceImplTest {
 
 		@Test
 		@DisplayName("계획 저장 성공")
-		void plansSave() {
+		void plansSaveSuccess() {
 			// given
 			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
 			given(regionRepository.findById(anyLong())).willReturn(Optional.ofNullable(region));
+			given(planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt())).willReturn(false);
 			given(planRepository.save(any(Plan.class))).willReturn(plan);
 			given(attractionRepository.findById(eq(1L))).willReturn(Optional.ofNullable(attraction1));
 			given(attractionRepository.findById(eq(2L))).willReturn(Optional.ofNullable(attraction2));
@@ -163,6 +165,23 @@ class PlanServiceImplTest {
 			verify(planRepository, times(1)).save(any(Plan.class));
 			verify(attractionRepository, times(4)).findById(anyLong());
 			verify(planAttractionRepository, times(4)).save(any(PlanAttraction.class));
+		}
+
+		@Test
+		@DisplayName("이미 같은 기간에 계획이 존재하는 경우")
+		void plansSaveFail() {
+			// given
+			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+			given(regionRepository.findById(anyLong())).willReturn(Optional.ofNullable(region));
+			given(planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt())).willReturn(true);
+			// when
+			assertThrows(BadRequestException.class, () -> {
+				planService.plansSave(memberId, plansSaveRequest);
+			});
+			// then
+			verify(memberRepository, times(1)).findById(memberId);
+			verify(regionRepository, times(1)).findById(anyLong());
+			verify(planRepository, times(1)).existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
 		}
 	}
 }

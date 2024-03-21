@@ -10,6 +10,8 @@ import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
@@ -44,6 +46,10 @@ public class PlanServiceImpl implements PlanSaveService {
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 		Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
 
+		if (existOverlappingPlan(plansSaveRequest, member)) {
+			throw new BadRequestException("PlanSave", ErrorCode.PLAN_SAVE_BAD_REQUEST);
+		}
+
 		Plan plan = planSave(plansSaveRequest, startRegion, member);
 		plansSaveRequest.planDetails()
 			.forEach(planDetail -> {
@@ -56,6 +62,10 @@ public class PlanServiceImpl implements PlanSaveService {
 					planAttractionSave(planDetail, attraction, plan);
 				});
 			});
+	}
+
+	private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
+		return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
 	}
 
 	private void planAttractionSave(PlanDetail planDetail, Attraction attraction, Plan plan) {
