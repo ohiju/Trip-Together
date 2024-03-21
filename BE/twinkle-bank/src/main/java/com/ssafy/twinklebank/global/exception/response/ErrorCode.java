@@ -21,6 +21,8 @@ public enum ErrorCode {
 	UNAUTHORIZED_REFRESH(401,"유효하지 않은 refresh token입니다."),
 	EXPIRED_TOKEN(401, "만료된 토큰입니다."),
 
+	UNAUTHORIZED_MEMBER(401, "권한이 없는 멤버입니다."),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	WRONG_PASSWORD(401, "잘못된 PASSWORD 입니다."),
