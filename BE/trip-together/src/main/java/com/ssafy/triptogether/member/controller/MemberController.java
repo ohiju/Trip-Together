@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.member.controller;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.member.data.PinSaveRequest;
 import com.ssafy.triptogether.member.data.PinUpdateRequest;
@@ -57,11 +58,12 @@ public class MemberController {
     @PatchMapping("/members/pin")
     public ResponseEntity<ApiResponse<Void>> updatePin(
             // @AuthenticationPrincipal 인증객체 주입받기
-            @RequestBody PinUpdateRequest pinUpdateRequest
+            @Valid @RequestBody PinUpdateRequest pinUpdateRequest
     ) {
         // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
         long memberId = 1L;
-        memberSaveService.updatePin(memberId, pinUpdateRequest);
+        PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder().pinNum(pinUpdateRequest.prePinNum()).build();
+        memberSaveService.updatePin(memberId, pinVerifyRequest, pinUpdateRequest);
         return ApiResponse.emptyResponse(OK, SUCCESS_PIN_UPDATE);
     }
 }

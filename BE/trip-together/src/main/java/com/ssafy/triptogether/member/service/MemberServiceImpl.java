@@ -1,5 +1,7 @@
 package com.ssafy.triptogether.member.service;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
+import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ValidationException;
 import com.ssafy.triptogether.member.data.PinSaveRequest;
@@ -53,27 +55,21 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         member.savePin(pinSaveRequest.pinNum());
     }
 
+    @PinVerify
     @Transactional
     @Override
-    public void updatePin(long memberId, PinUpdateRequest pinUpdateRequest) {
+    public void updatePin(long memberId, PinVerifyRequest pinVerifyRequest, PinUpdateRequest pinUpdateRequest) {
         // validate request if miss match
         if (!pinUpdateRequest.newPinNum().equals(pinUpdateRequest.newPinNumCheck())) {
             throw new ValidationException("PinUpdate", PIN_CHECK_MISS_MATCH, pinUpdateRequest.newPinNum(), pinUpdateRequest.newPinNumCheck());
         }
 
         // find member
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("PinUpdate", UNDEFINED_MEMBER, memberId));
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
         // validate member
         if (member.getPinNum() == null) {
             throw new NotFoundException("PinUpdate", PIN_NOT_EXISTS, memberId);
-        }
-
-        // validate request if not authenticated
-        // TODO: PasswordEncoder 적용해서 matches() 메소드 활용
-        if (!member.getPinNum().equals(pinUpdateRequest.prePinNum())) {
-            throw new ValidationException("PinUpdate", PIN_NOT_AUTHENTICATED, pinUpdateRequest.prePinNum());
         }
 
         // update pin
