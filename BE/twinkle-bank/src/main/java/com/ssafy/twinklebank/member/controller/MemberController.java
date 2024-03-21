@@ -4,6 +4,7 @@ import com.ssafy.twinklebank.application.domain.Application;
 import com.ssafy.twinklebank.application.repository.ApplicationRepository;
 import com.ssafy.twinklebank.application.utils.ApplicationUtils;
 import com.ssafy.twinklebank.auth.data.response.TokenResponse;
+import com.ssafy.twinklebank.auth.provider.CookieProvider;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
 import com.ssafy.twinklebank.global.data.response.StatusCode;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
@@ -38,6 +39,7 @@ public class MemberController {
 	private final MemberSaveService memberSaveService;
 	private final MemberLoadService memberLoadService;
 	private final ApplicationRepository applicationRepository;
+	private final CookieProvider cookieProvider;
 
 	@PostMapping("/join")
 	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody MemberJoinRequest request) {
@@ -65,7 +67,7 @@ public class MemberController {
 		Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
 
 		// 쿠키에서 refresh token 꺼내기
-		Cookie cookie = getCookie(request, "refreshToken").orElseThrow(
+		Cookie cookie = cookieProvider.getCookie(request, "refreshToken").orElseThrow(
 			() -> new NotFoundException("MemberController", COOKIE_NOT_FOUND));
 
 		String refreshToken = cookie.getValue();
@@ -73,10 +75,10 @@ public class MemberController {
 
 		refreshToken = tokenMap.get("refresh");
 		// refresh token은 헤더에 쿠키에 다시 넣어준다
-		ResponseCookie newCookie = getResponseCookie(refreshToken);
+		ResponseCookie newCookie = cookieProvider.createCookie(refreshToken);
 
 		// 쿠키를 담을 헤더 생성
-		HttpHeaders headers = getHttpHeaders(newCookie);
+		HttpHeaders headers = cookieProvider.addCookieHttpHeaders(newCookie);
 
 		// ApiResponse 객체 생성
 		ApiResponse<TokenResponse> apiResponse = getApiResponse(tokenMap);
@@ -88,41 +90,12 @@ public class MemberController {
 			.body(apiResponse);
 	}
 
-	private static HttpHeaders getHttpHeaders(ResponseCookie newCookie) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.SET_COOKIE, newCookie.toString());
-		return headers;
-	}
-
 	private static ApiResponse<TokenResponse> getApiResponse(Map<String, String> tokenMap) {
 		return ApiResponse.<TokenResponse>builder()
 			.status(SUCCESS_REISSUE.getStatus())
 			.message(SUCCESS_REISSUE.getMessage())
 			.data(new TokenResponse(tokenMap.get("access")))
 			.build();
-	}
-
-	private static ResponseCookie getResponseCookie(String refreshToken) {
-		return ResponseCookie.from("refreshToken", refreshToken)
-			.maxAge(7 * 24 * 60 * 60)
-			.path("/") // 쿠키 헤더를 전송하기 위해 요청되는 url내에서 반드시 존재해야하는 url 경로
-			.secure(true) // https를 통해서만 쿠키를 전송
-			.sameSite("None") // 서로 다른 도메인간(cross-site)의 모든 쿠키 전송 가능하도록 설정
-			.httpOnly(true) // cross-site 스크립팅 공격을 방지하기위한 옵션 (클라이언트에서 js로 접근불가)
-			.build();
-	}
-
-	public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
-		Cookie[] cookies = request.getCookies();
-
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (name.equals(cookie.getName())) {
-					return Optional.of(cookie);
-				}
-			}
-		}
-		return Optional.empty();
 	}
 
 }
