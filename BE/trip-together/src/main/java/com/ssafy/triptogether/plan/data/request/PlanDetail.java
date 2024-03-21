@@ -14,6 +14,6 @@ public record PlanDetail(
 	@NotNull @JsonProperty("daily_estimated_budget")
 	Double dailyEstimatedBudget,
 	@NotNull @JsonProperty("attractions")
-	List<Long> attractions
+	List<AttractionDetail> attractions
 ) {
 }

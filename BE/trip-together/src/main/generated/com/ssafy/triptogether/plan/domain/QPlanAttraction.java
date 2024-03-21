@@ -29,13 +29,13 @@ public class QPlanAttraction extends EntityPathBase<PlanAttraction> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    public final NumberPath<Double> dailyEstimatedBudget = createNumber("dailyEstimatedBudget", Double.class);
+
     public final QPlan plan;
 
     public final NumberPath<Long> planAttractionId = createNumber("planAttractionId", Long.class);
 
     public final NumberPath<Integer> sequence = createNumber("sequence", Integer.class);
-
-    public final DateTimePath<java.time.LocalDateTime> tripAt = createDateTime("tripAt", java.time.LocalDateTime.class);
 
     public QPlanAttraction(String variable) {
         this(PlanAttraction.class, forVariable(variable), INITS);

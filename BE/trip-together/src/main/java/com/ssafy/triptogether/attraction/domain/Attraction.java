@@ -12,8 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +40,11 @@ public class Attraction extends BaseEntity {
 
     @NotBlank
     @Column(name = "start_at")
-    private Time startAt;
+    private LocalTime startAt;
 
     @NotBlank
     @Column(name = "end_at")
-    private Time endAt;
+    private LocalTime endAt;
 
     @NotBlank
     @Column(name = "latitude")
@@ -98,7 +98,7 @@ public class Attraction extends BaseEntity {
     private List<FlashMob> flashMobs = new ArrayList<>();
 
     @Builder
-    public Attraction(String businessNum, String thumbnailImageUrl, String address, Time startAt, Time endAt, String latitude, String longitude, String name, Region region) {
+    public Attraction(String businessNum, String thumbnailImageUrl, String address, LocalTime startAt, LocalTime endAt, String latitude, String longitude, String name, Region region) {
         this.businessNum = businessNum;
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.address = address;

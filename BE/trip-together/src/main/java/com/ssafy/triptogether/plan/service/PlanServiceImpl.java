@@ -48,7 +48,8 @@ public class PlanServiceImpl implements PlanSaveService {
 		plansSaveRequest.planDetails()
 			.forEach(planDetail -> {
 				List<Attraction> attractions = planDetail.attractions().stream()
-					.map(attractionId -> AttractionUtils.findByAttractionId(attractionRepository, attractionId))
+					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
+						attraction.attractionId()))
 					.toList();
 
 				attractions.forEach(attraction -> {
