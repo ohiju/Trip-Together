@@ -41,7 +41,7 @@ const ButtonImage = styled.Image`
 `;
 
 const PlanImage = styled.Image`
-  width: 55;
+  width: 55px;
   height: 55px;
   resize-mode: contain;
 `;

@@ -1,18 +1,25 @@
 import React from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
   Modal,
   FlatList,
+  StyleSheet,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
 import {
   PaginationStyle,
+  PaginationContainer,
+  NavContainer,
   PaginationText,
+  DownImage,
   CenteredView,
   ModalView,
   Item,
+  ItemText,
+  NavButton,
+  NavText1,
+  NavText2,
 } from './RenderPaginationStyle';
 
 interface PaginationProps {
@@ -35,106 +42,64 @@ const RenderPagination = ({
   setModalVisible,
 }: PaginationProps) => {
   const pages = Array.from({length: total}, (_, i) => i + 1);
+  const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
+
+  const handleFinishPress = () => {
+    navigation.navigate('travel_main');
+  };
+
+  const handleMapPress = () => {
+    navigation.navigate('map');
+  };
 
   return (
-    <View style={styles.paginationStyle}>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <PaginationText>
-          {currentPage + 1} / {total}
-        </PaginationText>
-      </TouchableOpacity>
+    <PaginationStyle>
+      <NavContainer />
+      <PaginationContainer onPress={() => setModalVisible(!modalVisible)}>
+        <PaginationText>{currentPage + 1} 일차</PaginationText>
+        <DownImage source={require('../../assets/images/toggledown.png')} />
+      </PaginationContainer>
+      <NavContainer>
+        <NavButton onPress={handleMapPress}>
+          <NavText1>지도</NavText1>
+        </NavButton>
+        <NavButton onPress={handleFinishPress}>
+          <NavText2>완료</NavText2>
+        </NavButton>
+      </NavContainer>
       <Modal
-        animationType="slide"
+        style={styles.modal}
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <CenteredView>
-          <ModalView>
-            <FlatList
-              data={pages}
-              renderItem={({item}) => (
-                <Item
-                  onPress={() => {
-                    setCurrentPage(item - 1);
-                    context.scrollBy(item - index - 1);
-                    setModalVisible(false);
-                  }}>
-                  <Text style={styles.itemText}>{item}일차</Text>
-                </Item>
-              )}
-              keyExtractor={item => item.toString()}
-            />
-          </ModalView>
-        </CenteredView>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <CenteredView>
+            <ModalView>
+              <FlatList
+                data={pages}
+                renderItem={({item}) => (
+                  <Item
+                    onPress={() => {
+                      setCurrentPage(item - 1);
+                      context.scrollBy(item - index - 1);
+                      setModalVisible(false);
+                    }}>
+                    <ItemText>{item}일차</ItemText>
+                  </Item>
+                )}
+                keyExtractor={item => item.toString()}
+              />
+            </ModalView>
+          </CenteredView>
+        </TouchableWithoutFeedback>
       </Modal>
-    </View>
+    </PaginationStyle>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {},
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  paginationStyle: {
-    position: 'absolute',
-    top: 10,
-    right: 180,
-  },
-  paginationText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  item: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    width: '100%',
-    alignItems: 'center',
-  },
-  itemText: {
-    fontSize: 18,
+  modal: {
+    width: 100,
   },
 });
 

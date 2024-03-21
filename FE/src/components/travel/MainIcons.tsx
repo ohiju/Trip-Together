@@ -50,7 +50,7 @@ const Page = ({item, style}: IPage) => {
           }}
           style={styles.iconContainer}>
           <Image
-            source={require('../images/trip.png')}
+            source={require('../../assets/images/trip.png')}
             style={{width: 40, height: 40}}
           />
         </TouchableOpacity>

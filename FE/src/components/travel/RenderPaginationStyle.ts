@@ -1,27 +1,63 @@
 import styled from 'styled-components/native';
-import {bg_light} from '../../constants/colors';
+import {bg_light, primary} from '../../constants/colors';
+import {TouchableOpacity} from 'react-native';
 
 const PaginationStyle = styled.View`
   position: absolute;
-  top: 30px;
-  right: 30px;
+  width: 100%;
+  background-color: ${bg_light};
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const PaginationContainer = styled(TouchableOpacity)`
+  width: 120px;
+  height: 50px;
+  background-color: ${bg_light};
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const NavContainer = styled.View`
+  width: 120px;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const NavButton = styled(TouchableOpacity)``;
+
+const NavText1 = styled.Text`
+  font-size: 18px;
+  color: ${primary};
+`;
+
+const NavText2 = styled.Text`
+  font-size: 18px;
 `;
 
 const PaginationText = styled.Text`
-  color: ${bg_light};
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const DownImage = styled.Image`
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
 `;
 
 const CenteredView = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: 22px;
+  margin-top: 100px;
 `;
 
 const ModalView = styled.View`
   margin: 20px;
-  margin-bottom: 100px;
   background-color: white;
   border-radius: 20px;
   padding: 35px;
@@ -50,7 +86,13 @@ const ItemText = styled.Text`
 
 export {
   PaginationStyle,
+  PaginationContainer,
+  NavContainer,
+  NavButton,
+  NavText1,
+  NavText2,
   PaginationText,
+  DownImage,
   CenteredView,
   ModalView,
   Item,

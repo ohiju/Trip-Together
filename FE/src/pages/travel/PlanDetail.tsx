@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
+// import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const renderPagination = (index, total, context) => {
+  const renderPagination = (index: any, total: any, context: any) => {
     return (
       <RenderPagination
         index={index}
@@ -28,6 +29,7 @@ const PlanDetail = () => {
       renderPagination={renderPagination}
       onIndexChanged={index => setCurrentPage(index)}
       loop={false}>
+      {/* <PlanDay /> */}
       <View style={styles.slide1}>
         <Text style={styles.text}>1일차 계획</Text>
       </View>
@@ -67,45 +69,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 30,
     fontWeight: 'bold',
-  },
-  paginationStyle: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-  },
-  paginationText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  item: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    width: '100%',
-    alignItems: 'center',
-  },
-  itemText: {
-    fontSize: 18,
   },
 });

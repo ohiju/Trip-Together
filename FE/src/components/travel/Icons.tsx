@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {FlatList} from 'react-native';
-import Page from '../../assets/data/MainIcons.tsx';
+import Page from './MainIcons.tsx';
 import {Container, Indicator, IndicatorWrapper} from './IconsStyle.tsx';
 
 interface ICarousel {
