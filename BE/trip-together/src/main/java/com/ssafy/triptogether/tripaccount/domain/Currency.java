@@ -43,14 +43,19 @@ public class Currency extends BaseEntity {
     @Column(name = "currency_nation")
     private CurrencyNation currencyNation;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL)
-    private List<TripAccount> tripAccounts = new ArrayList<>();
+    @NotBlank
+    @Column(name = "rate")
+    private Double rate;
 
     @Builder
-    public Currency(String code, Integer unit, CurrencyNation currencyNation) {
+    public Currency(String code, Integer unit, CurrencyNation currencyNation, Double rate) {
         this.code = code;
         this.unit = unit;
         this.currencyNation = currencyNation;
+        this.rate = rate;
+    }
+
+    public void updateRate(Double newRate) {
+        this.rate = newRate;
     }
 }

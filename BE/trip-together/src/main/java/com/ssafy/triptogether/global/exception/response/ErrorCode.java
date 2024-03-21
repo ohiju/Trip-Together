@@ -18,6 +18,11 @@ public enum ErrorCode {
 	// EXTERNAL_SERVER
 	TWINKLE_BANK_SERVER_ERROR(500, "반짝 은행 API 요청에 실패했습니다"),
 
+	// TRIP_ACCOUNT
+	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
+	// EXTERNAL_SERVER
+	CURRENCY_RATE_LOAD_SERVER_ERROR(500, "환율 조회 API 요청에 실패했습니다"),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),

@@ -37,8 +37,6 @@ class SyncAccountServiceImplTest {
 	SyncAccountServiceImpl syncAccountService;
 	@Mock
 	SyncAccountRepository syncAccountRepository;
-	@Mock
-	AuthUtils authUtils;
 
 	@Nested
 	@DisplayName("연동 계좌 목록 조회")
@@ -126,15 +124,13 @@ class SyncAccountServiceImplTest {
 				.willReturn(Optional.of(currentMainSyncAccount));
 			given(syncAccountRepository.findByUuid(anyString()))
 				.willReturn(Optional.of(newMainSyncAccount));
-			willDoNothing().given(authUtils).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			// when`
-			syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
+			syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
 			// then
 			assertAll(
 				() -> assertFalse(currentMainSyncAccount.getIsMain(), "이전 주계좌가 비활성화 되지 않았습니다."),
 				() -> assertTrue(newMainSyncAccount.getIsMain(), "새로운 계좌가 주계좌로 설정되지 않았습니다.")
 			);
-			verify(authUtils, times(1)).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
 			verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
 		}
@@ -147,12 +143,10 @@ class SyncAccountServiceImplTest {
 				.willReturn(Optional.empty());
 			given(syncAccountRepository.findByUuid(anyString()))
 				.willReturn(Optional.empty());
-			willDoNothing().given(authUtils).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			// when`& then
 			assertThrows(NotFoundException.class, () -> {
-				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
+				syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
 			});
-			verify(authUtils, times(1)).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
 			verify(syncAccountRepository, times(0)).findByUuid(mainSyncAccountUpdateRequest.uuid());
 		}
@@ -165,12 +159,10 @@ class SyncAccountServiceImplTest {
 				.willReturn(Optional.of(currentMainSyncAccount));
 			given(syncAccountRepository.findByUuid(anyString()))
 				.willReturn(Optional.empty());
-			willDoNothing().given(authUtils).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			// when`& then
 			assertThrows(BadRequestException.class, () -> {
-				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
+				syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
 			});
-			verify(authUtils, times(1)).pinVerify(eq(memberId), eq(pinVerifyRequest));
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
 			verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
 		}
