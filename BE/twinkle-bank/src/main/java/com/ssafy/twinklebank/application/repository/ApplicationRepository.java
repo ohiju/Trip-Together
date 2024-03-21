@@ -8,6 +8,4 @@ import com.ssafy.twinklebank.application.domain.Application;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 	Optional<Application> findByClientId(String clientId);
-
-	Optional<Application> findById(long applicationId);
 }
