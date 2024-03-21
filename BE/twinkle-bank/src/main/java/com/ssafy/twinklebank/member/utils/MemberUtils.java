@@ -27,7 +27,7 @@ public class MemberUtils {
 	public static Member getMember(MemberRepository memberRepository, PasswordEncoder passwordEncoder, String username,
 		String password) {
 
-		Member member = memberRepository.findMemberByUsername(username)
+		Member member = memberRepository.findByUsername(username)
 			.orElseThrow(() -> new WrongUserNameOrPassWordException("MemberUtils"));
 		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new WrongPasswordException("MemberUtils");
