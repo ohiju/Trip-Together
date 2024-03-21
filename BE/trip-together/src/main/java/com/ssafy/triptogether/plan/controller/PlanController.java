@@ -29,7 +29,7 @@ public class PlanController {
 		planSaveService.plansSave(1L, plansSaveRequest);
 
 		return ApiResponse.emptyResponse(
-			HttpStatus.OK, StatusCode.SUCCESS_PLANS_SAVE
+			HttpStatus.CREATED, StatusCode.SUCCESS_PLANS_SAVE
 		);
 	}
 }
