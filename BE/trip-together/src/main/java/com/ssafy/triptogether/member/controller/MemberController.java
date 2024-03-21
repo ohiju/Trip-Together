@@ -7,6 +7,7 @@ import com.ssafy.triptogether.member.data.ProfileFindResponse;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
 import com.ssafy.triptogether.member.service.MemberLoadService;
 import com.ssafy.triptogether.member.service.MemberSaveService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class MemberController {
     @PatchMapping("/members")
     public ResponseEntity<ApiResponse<Void>> updateProfile(
             // @AuthenticationPrincipal 인증객체 주입받기
-            @RequestBody ProfileUpdateRequest profileUpdateRequest
+            @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest
     ) {
         // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
         long memberId = 1L;
