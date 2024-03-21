@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
 	private final RestTemplate restTemplate;
-	static final String TWINKLE_BANK_URI = "";
+	static final String TWINKLE_BANK_URI = "https://www.twinklebank.go.kr";
 
 	/**
 	 * 요청자의 은행 계좌 목록 조회 요청
