@@ -7,12 +7,14 @@ import com.ssafy.twinklebank.account.data.AccountResponse;
 import com.ssafy.twinklebank.account.data.AddAccountRequest;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
+import com.ssafy.twinklebank.auth.utils.SecurityMember;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,11 +29,10 @@ public class AccountController {
 
     @GetMapping("accounts")
     public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
-//        @AuthenticationPrincipal ,
+        @AuthenticationPrincipal SecurityMember securityMember,
         @RequestParam("client_id") String clientId
     ) {
-        // TODO: userId는 AuthenticationPrincipal 로부터 가져오기
-        long userId = 1L;
+        long userId = securityMember.getId();
         List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
 
         return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST, accountResponseList);
