@@ -20,12 +20,18 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
-import com.ssafy.triptogether.auth.utils.AuthUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsDetail;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.member.repository.MemberRepository;
+import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
@@ -37,6 +43,10 @@ class SyncAccountServiceImplTest {
 	SyncAccountServiceImpl syncAccountService;
 	@Mock
 	SyncAccountRepository syncAccountRepository;
+	@Mock
+	TwinkleBankClient twinkleBankClient;
+	@Mock
+	MemberRepository memberRepository;
 
 	@Nested
 	@DisplayName("연동 계좌 목록 조회")
@@ -168,4 +178,47 @@ class SyncAccountServiceImplTest {
 		}
 	}
 
+	@Nested
+	@DisplayName("사용자 은행 계좌 목록 조회")
+	class BankAccountLoadTest {
+		Member member;
+		TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse;
+
+		@BeforeEach
+		void setUp() {
+			member = Member.builder()
+				.gender(Gender.MALE)
+				.nickname("TestUser")
+				.uuid("TestUser")
+				.birth(LocalDate.now())
+				.build();
+			TwinkleBankAccountsDetail bankAccount1 = TwinkleBankAccountsDetail.builder()
+				.uuid("TestAccount1")
+				.balance(3.0)
+				.name("TestAccount1")
+				.num("123-123")
+				.build();
+			TwinkleBankAccountsDetail bankAccount2 = TwinkleBankAccountsDetail.builder()
+				.uuid("TestAccount2")
+				.balance(3.0)
+				.name("TestAccount2")
+				.num("456-456")
+				.build();
+			twinkleBankAccountsLoadResponse = TwinkleBankAccountsLoadResponse.builder()
+				.twinkleBankAccountsDetails(List.of(bankAccount1, bankAccount2))
+				.build();
+		}
+		@Test
+		void bankAccountLoad() {
+			// given
+			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+			given(twinkleBankClient.bankAccountsLoad(any(TwinkleBankAccountsLoadRequest.class))).willReturn(twinkleBankAccountsLoadResponse);
+			// when
+			BankAccountsLoadResponse response = syncAccountService.bankAccountsLoad(1L);
+			// then
+			assertEquals(2, response.bankAccountsDetails().size());
+			assertEquals("TestAccount1", response.bankAccountsDetails().get(0).uuid());
+			assertEquals("TestAccount2", response.bankAccountsDetails().get(1).uuid());
+		}
+	}
 }

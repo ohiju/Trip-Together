@@ -11,7 +11,15 @@ import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
+import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
+import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.member.repository.MemberRepository;
+import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
+import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
@@ -25,6 +33,42 @@ import lombok.RequiredArgsConstructor;
 public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccountSaveService {
 	// Repository
 	private final SyncAccountRepository syncAccountRepository;
+	private final MemberRepository memberRepository;
+	// Client
+	private final TwinkleBankClient twinkleBankClient;
+
+	/**
+	 * 요청자의 은행 계좌 목록 반환
+	 * @param memberId 요청자 member_id
+	 * @return 은행 계좌 목록
+	 */
+	@Override
+	public BankAccountsLoadResponse bankAccountsLoad(Long memberId) {
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+		TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse = twinkleBankAccountsLoad(member);
+
+		List<BankAccountsDetail> bankAccountsDetails = twinkleBankAccountsLoadResponse.twinkleBankAccountsDetails()
+			.stream()
+			.map(twinkleBankAccountsDetail ->
+				BankAccountsDetail.builder()
+					.uuid(twinkleBankAccountsDetail.uuid())
+					.name(twinkleBankAccountsDetail.name())
+					.num(twinkleBankAccountsDetail.num())
+					.balance(twinkleBankAccountsDetail.balance())
+					.build()
+			).toList();
+		return BankAccountsLoadResponse.builder()
+			.bankAccountsDetails(bankAccountsDetails)
+			.build();
+	}
+
+	private TwinkleBankAccountsLoadResponse twinkleBankAccountsLoad(Member member) {
+		TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest = TwinkleBankAccountsLoadRequest.builder()
+			.uuid(member.getUuid())
+			.build();
+		return twinkleBankClient.bankAccountsLoad(
+			twinkleBankAccountsLoadRequest);
+	}
 
 	/**
 	 * 사용자의 연동 계좌 목록 조회
