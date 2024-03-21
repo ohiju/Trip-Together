@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     private final ApplicationRepository applicationRepository;
 
     @Override
-    public List<AccountResponse> getAccounts(long clientId, long memberId) {
+    public List<AccountResponse> getAccounts(String clientId, long memberId) {
         return accountRepository.getAccountList(clientId, memberId);
     }
 
