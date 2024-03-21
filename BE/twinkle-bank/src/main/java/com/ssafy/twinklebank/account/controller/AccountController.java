@@ -9,6 +9,7 @@ import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AccountController {
 
     @PostMapping("accounts")
     public ResponseEntity<ApiResponse<Void>> addLinkedAccount(
-        @RequestBody AddAccountRequest addAccountRequest,
+        @RequestBody @Valid AddAccountRequest addAccountRequest,
         @RequestParam("client_id") String clientId
     ) {
         accountSaveService.addLinkedAccount(clientId, addAccountRequest);

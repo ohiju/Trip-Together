@@ -39,7 +39,11 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
         Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
 
-        WithdrawalAgreement withdrawalAgreement = new WithdrawalAgreement(account, application);
+        WithdrawalAgreement withdrawalAgreement = WithdrawalAgreement.builder()
+            .account(account)
+            .application(application)
+            .build();
+
         withdrawalAgreementRepository.save(withdrawalAgreement);
     }
 }
