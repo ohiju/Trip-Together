@@ -41,8 +41,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         }
 
         // find member
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("PinSave", UNDEFINED_MEMBER, memberId));
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
         // validate member
         if (member.getPinNum() != null) {

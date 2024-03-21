@@ -46,7 +46,7 @@ public class MemberController {
     @PostMapping("/members/pin")
     public ResponseEntity<ApiResponse<Void>> savePin(
             // @AuthenticationPrincipal 인증객체 주입받기
-            @RequestBody PinSaveRequest pinSaveRequest
+            @Valid @RequestBody PinSaveRequest pinSaveRequest
     ) {
         // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
         long memberId = 1L;
