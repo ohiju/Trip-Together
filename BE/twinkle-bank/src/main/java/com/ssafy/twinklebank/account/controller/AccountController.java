@@ -28,6 +28,7 @@ public class AccountController {
     public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
 //        @AuthenticationPrincipal ,
         ) {
+        // TODO: userId, clientId는 AuthenticationPrincipal 로부터 가져오기
         long userId = 1L;
         long clientId = 1L;
         List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
@@ -35,14 +36,14 @@ public class AccountController {
         return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST, accountResponseList);
     }
 
-    // TODO : 완성하기
     @PostMapping("accounts")
     public ResponseEntity<ApiResponse<Void>> addLinkedAccount(
 //        @AuthenticationPrincipal ,
             @RequestBody AddAccountRequest addAccountRequest
             ) {
+        // TODO: clientId는 AuthenticationPrincipal 로부터 가져오기
         long clientId = 1L;
         accountSaveService.addLinkedAccount(clientId, addAccountRequest);
-        return null;
+        return ApiResponse.emptyResponse(CREATED, CREATED_LINKED_ACCOUNT);
     }
 }

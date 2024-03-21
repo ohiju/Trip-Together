@@ -10,7 +10,8 @@ public enum StatusCode {
     SUCCESS_AUTH_INFO_FIND(200, "은행 사용자 정보 조회 성공"),
 	SUCCESS_JOIN(200, "회원가입 성공"),
 	SUCCESS_GENERATE_TOKEN(200, "토큰 발급 성공"),
-	SUCCESS_GET_ACCOUNT_LIST(200, "계좌 목록 조회 성공")
+	SUCCESS_GET_ACCOUNT_LIST(200, "계좌 목록 조회 성공"),
+	CREATED_LINKED_ACCOUNT(201, "계좌 연동 성공"),
 	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),

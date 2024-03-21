@@ -2,7 +2,7 @@ package com.ssafy.twinklebank.application.utils;
 
 import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.ssafy.twinklebank.application.domain.Application;
 import com.ssafy.twinklebank.application.repository.ApplicationRepository;
@@ -12,7 +12,7 @@ import com.ssafy.twinklebank.global.exception.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ApplicationUtils {
@@ -20,6 +20,11 @@ public class ApplicationUtils {
 
 	public Application getApplication(String clientId) {
 		return applicationRepository.findByClientId(clientId)
+			.orElseThrow(() -> new NotFoundException("ApplicationUtils : ", APPLICATION_NOT_FOUND));
+	}
+
+	public Application getApplication(long applicationId) {
+		return applicationRepository.findById(applicationId)
 			.orElseThrow(() -> new NotFoundException("ApplicationUtils : ", APPLICATION_NOT_FOUND));
 	}
 }
