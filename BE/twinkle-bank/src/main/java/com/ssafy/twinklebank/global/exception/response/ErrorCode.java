@@ -18,6 +18,8 @@ public enum ErrorCode {
 	COOKIE_NOT_FOUND(404, "해당하는 쿠키가 없습니다."),
 
 	REFRESH_NOT_FOUND(404, "refresh token이 비어있습니다."),
+	UNAUTHORIZED_REFRESH(401,"유효하지 않은 refresh token입니다."),
+	EXPIRED_TOKEN(401, "만료된 토큰입니다."),
 
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
