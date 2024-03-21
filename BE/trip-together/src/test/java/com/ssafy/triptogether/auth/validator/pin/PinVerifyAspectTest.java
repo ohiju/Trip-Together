@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
-import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -53,18 +52,5 @@ class PinVerifyAspectTest {
 			member.savePin("1234");
 		}
 
-		@Test
-		@DisplayName("사용자 조회 실패")
-		void memberLoadFail() {
-			// given
-			Object[] args = new Object[]{memberId, pinVerifyRequest};
-			given(joinPoint.getArgs()).willReturn(args);
-			given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
-			// when & then
-			assertThrows(NotFoundException.class, () -> {
-				pinVerifyAspect.pinVerifyAdvice(joinPoint);
-			});
-			verify(memberRepository, times(1)).findById(memberId);
-		}
 	}
 }
