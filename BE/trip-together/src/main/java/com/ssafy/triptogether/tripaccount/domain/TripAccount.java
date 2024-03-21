@@ -42,17 +42,12 @@ public class TripAccount extends BaseEntity {
     @Builder
     public TripAccount(Member member, Currency currency, Double balance) {
         setMember(member);
-        setCurrency(currency);
+        this.currency = currency;
         this.balance = balance;
     }
 
     public void setMember(Member member) {
         this.member = member;
         member.getTripAccounts().add(this);
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-        currency.getTripAccounts().add(this);
     }
 }

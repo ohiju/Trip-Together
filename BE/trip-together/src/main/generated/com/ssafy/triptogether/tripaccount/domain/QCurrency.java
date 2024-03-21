@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -31,7 +30,7 @@ public class QCurrency extends EntityPathBase<Currency> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<TripAccount, QTripAccount> tripAccounts = this.<TripAccount, QTripAccount>createList("tripAccounts", TripAccount.class, QTripAccount.class, PathInits.DIRECT2);
+    public final NumberPath<Double> rate = createNumber("rate", Double.class);
 
     public final NumberPath<Integer> unit = createNumber("unit", Integer.class);
 
