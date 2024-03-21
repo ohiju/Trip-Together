@@ -12,7 +12,7 @@ import com.ssafy.twinklebank.application.domain.Application;
 import com.ssafy.twinklebank.application.repository.ApplicationRepository;
 import com.ssafy.twinklebank.application.utils.ApplicationUtils;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.twinklebank.global.exception.response.ErrorCode;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +34,8 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     @Override
     public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
         // Account Not Found
-        Account account = accountRepository.findAccountByUuid(addAccountRequest.accountUUID())
-            .orElseThrow(() -> new NotFoundException("addLinkedAccount: account", ACCOUNT_NOT_FOUND, addAccountRequest.accountUUID()));
+        Account account = accountRepository.findAccountByUuid(addAccountRequest.accountUuid())
+            .orElseThrow(() -> new NotFoundException("addLinkedAccount: account", ACCOUNT_NOT_FOUND, addAccountRequest.accountUuid()));
 
         Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
 
