@@ -12,6 +12,11 @@ public enum ErrorCode {
     PIN_ALREADY_EXISTS(400, "지갑이 이미 존재합니다."),
     PIN_NOT_AUTHENTICATED(401, "기존의 핀번호와 일치하지 않습니다."),
     PIN_NOT_EXISTS(404, "지갑 정보를 찾을 수 없습니다."),
+	// SYNC_ACCOUNT
+	SYNC_ACCOUNTS_NOT_FOUND(404, "사용자의 연동 계좌가 존재하지 않습니다."),
+	SYNC_ACCOUNT_BAD_REQUEST(400, "요청 연동 계좌가 존재하지 않습니다"),
+	// EXTERNAL_SERVER
+	TWINKLE_BANK_SERVER_ERROR(500, "반짝 은행 API 요청에 실패했습니다"),
 
 	// TRIP_ACCOUNT
 	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
