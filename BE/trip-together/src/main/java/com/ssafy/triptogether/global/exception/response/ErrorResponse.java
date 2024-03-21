@@ -1,5 +1,7 @@
 package com.ssafy.triptogether.global.exception.response;
 
+import org.springframework.http.HttpStatus;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -22,4 +24,10 @@ public class ErrorResponse {
 		this.status = errorCode.getStatus();
 		this.message = errorCode.getMessage();
 	}
+
+	public ErrorResponse(HttpStatus code, String errorMessage) {
+		this.status = code.value();
+		this.message = errorMessage;
+	}
+
 }

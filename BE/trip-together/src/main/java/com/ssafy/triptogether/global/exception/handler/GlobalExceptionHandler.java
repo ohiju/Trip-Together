@@ -19,8 +19,9 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ErrorResponse methodValidationHandler(MethodArgumentNotValidException exception) {
-		log.error(exception.getMessage(), exception);
-		return new ErrorResponse(ErrorCode.BAD_REQUEST);
+		String message = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+		log.error(message, exception);
+		return new ErrorResponse(HttpStatus.BAD_REQUEST, message);
 	} // 400
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
