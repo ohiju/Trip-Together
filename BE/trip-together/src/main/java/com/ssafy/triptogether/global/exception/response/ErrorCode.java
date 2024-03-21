@@ -16,6 +16,11 @@ public enum ErrorCode {
 	SYNC_ACCOUNTS_NOT_FOUND(404, "사용자의 연동 계좌가 존재하지 않습니다."),
 	SYNC_ACCOUNT_BAD_REQUEST(400, "요청 연동 계좌가 존재하지 않습니다"),
 
+	// TRIP_ACCOUNT
+	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
+	// EXTERNAL_SERVER
+	CURRENCY_RATE_LOAD_SERVER_ERROR(500, "환율 조회 API 요청에 실패했습니다"),
+
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),
