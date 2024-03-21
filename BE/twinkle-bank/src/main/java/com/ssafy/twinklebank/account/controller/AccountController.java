@@ -28,10 +28,10 @@ public class AccountController {
     @GetMapping("accounts")
     public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
 //        @AuthenticationPrincipal ,
-        ) {
-        // TODO: userId, clientId는 AuthenticationPrincipal 로부터 가져오기
+        @RequestParam("client_id") String clientId
+    ) {
+        // TODO: userId는 AuthenticationPrincipal 로부터 가져오기
         long userId = 1L;
-        long clientId = 1L;
         List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
 
         return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST, accountResponseList);

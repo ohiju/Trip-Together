@@ -25,7 +25,7 @@ public class AccountServiceImplTest {
 	void getAccountList() {
 		// given
 		long memberId = 1L;
-		long clientId = 1L;
+		String clientId = "T0000001U0000000002";
 		List<AccountResponse> accounts = accountRepository.getAccountList(clientId, memberId);
 		assertThat(accounts.size()).isEqualTo(1);
 	}
