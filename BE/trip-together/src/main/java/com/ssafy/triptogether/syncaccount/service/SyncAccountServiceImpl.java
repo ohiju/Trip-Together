@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.AuthUtils;
+import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
@@ -22,8 +23,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccountSaveService {
-	// Utils
-	private final AuthUtils authUtils;
 	// Repository
 	private final SyncAccountRepository syncAccountRepository;
 
@@ -43,21 +42,15 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	/**
 	 * 사용자의 연동 계좌의 주계좌 설정 변경
 	 * @param memberId 요청자의 member_id
-	 * @param mainSyncAccountUpdateRequest PIN 인증 요청과 요청 계좌 번호
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param mainSyncAccountUpdateRequest 주계좌 변경 요청
 	 */
+	@PinVerify
 	@Transactional
 	@Override
-	public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-		pinVerifyCheck(memberId, mainSyncAccountUpdateRequest);
+	public void mainSyncAccountUpdate(Long memberId, PinVerifyRequest pinVerifyRequest, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
 		deactivateCurrentMainSyncAccount(memberId);
 		activateNewMainSyncAccount(mainSyncAccountUpdateRequest);
-	}
-
-	private void pinVerifyCheck(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
-			.pinNum(mainSyncAccountUpdateRequest.pinNum())
-			.build();
-		authUtils.pinVerify(memberId, pinVerifyRequest);
 	}
 
 	private void deactivateCurrentMainSyncAccount(Long memberId) {

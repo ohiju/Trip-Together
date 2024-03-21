@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
@@ -39,7 +40,10 @@ public class SyncAccountController {
 	public ResponseEntity<ApiResponse<Void>> mainSyncAccountUpdate(
 		@RequestBody @Valid MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest
 	) {
-		syncAccountSaveService.mainSyncAccountUpdate(1L, mainSyncAccountUpdateRequest);
+		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
+			.pinNum(mainSyncAccountUpdateRequest.pinNum())
+			.build();
+		syncAccountSaveService.mainSyncAccountUpdate(1L, pinVerifyRequest, mainSyncAccountUpdateRequest);
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE
