@@ -26,7 +26,7 @@ const menus: menu[] = [
       />
     ),
     text: '내 지갑 관리',
-    navigation: '',
+    navigation: 'WalletManage',
   },
   {
     id: 1,
@@ -38,7 +38,7 @@ const menus: menu[] = [
       />
     ),
     text: '내 카드 관리',
-    navigation: '',
+    navigation: 'CardManage',
   },
   {
     id: 2,
@@ -50,7 +50,7 @@ const menus: menu[] = [
       />
     ),
     text: '연동 계좌 관리',
-    navigation: '',
+    navigation: 'SyncManage',
   },
 ];
 

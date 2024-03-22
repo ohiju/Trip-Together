@@ -13,7 +13,7 @@ const MyAccounts = () => {
     <Wrapper showsVerticalScrollIndicator={false}>
       <Accounts>
         {tripAccounts.map(account => (
-          <MyAccount key={account.id} myAccount={account} />
+          <MyAccount key={account.nation} myAccount={account} />
         ))}
       </Accounts>
     </Wrapper>

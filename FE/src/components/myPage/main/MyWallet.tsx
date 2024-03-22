@@ -37,7 +37,7 @@ const MyWallet = () => {
   };
   const handleToExchange = () => {
     if (checkBankAccount()) {
-      navigation.navigate('ExchangeMain');
+      navigation.navigate('ExchangeSearch');
     } else {
       navigation.navigate('SyncMain');
     }
