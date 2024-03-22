@@ -16,7 +16,8 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
 	@Override
 	public boolean existOverlappingPlan(Member member, LocalDate startAt, LocalDate endAt) {
 		return queryFactory
-			.selectFrom(plan)
+			.selectOne()
+			.from(plan)
 			.where(plan.member.eq(member)
 				.and(plan.startAt.after(endAt)
 					.or(plan.endAt.before(startAt))

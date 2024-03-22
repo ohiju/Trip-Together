@@ -23,7 +23,9 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsDetail;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.member.domain.Gender;
@@ -31,6 +33,7 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
@@ -219,6 +222,63 @@ class SyncAccountServiceImplTest {
 			assertEquals(2, response.bankAccountsDetails().size());
 			assertEquals("TestAccount1", response.bankAccountsDetails().get(0).uuid());
 			assertEquals("TestAccount2", response.bankAccountsDetails().get(1).uuid());
+		}
+	}
+
+	@Nested
+	@DisplayName("연동 계좌 등록")
+	class AccountSyncTest {
+		PinVerifyRequest pinVerifyRequest;
+		SyncAccountSaveRequest syncAccountSaveRequest;
+		TwinkleAccountSyncResponse twinkleAccountSyncResponse;
+		Member member;
+		@BeforeEach
+		void setUp() {
+			pinVerifyRequest = PinVerifyRequest.builder()
+				.pinNum("1234")
+				.build();
+			syncAccountSaveRequest = SyncAccountSaveRequest.builder()
+				.pinNum("test")
+				.bankAccountUuid("test")
+				.isMain(false)
+				.build();
+			twinkleAccountSyncResponse = TwinkleAccountSyncResponse.builder()
+				.accountName("test")
+				.accountNum("test")
+				.accountUuid("test")
+				.build();
+			member = Member.builder()
+				.gender(Gender.MALE)
+				.nickname("TestUser")
+				.uuid("TestUser")
+				.birth(LocalDate.now())
+				.build();
+		}
+
+		@Test
+		@DisplayName("첫 계좌 연동인 경우")
+		void accountSyncInit() {
+			// given
+			given(twinkleBankClient.bankAccountsSync(any(TwinkleAccountSyncRequest.class))).willReturn(twinkleAccountSyncResponse);
+			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+			given(syncAccountRepository.memberSyncAccountExist(anyLong())).willReturn(true);
+			// when
+			syncAccountService.syncAccountSave(1L, pinVerifyRequest, syncAccountSaveRequest);
+			// then
+			verify(syncAccountRepository, times(1)).save(any(SyncAccount.class));
+		}
+
+		@Test
+		@DisplayName("이미 연동 계좌가 있는 경우")
+		void accountSync() {
+			// given
+			given(twinkleBankClient.bankAccountsSync(any(TwinkleAccountSyncRequest.class))).willReturn(twinkleAccountSyncResponse);
+			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+			given(syncAccountRepository.memberSyncAccountExist(anyLong())).willReturn(false);
+			// when
+			syncAccountService.syncAccountSave(1L, pinVerifyRequest, syncAccountSaveRequest);
+			// then
+			verify(syncAccountRepository, times(1)).save(any(SyncAccount.class));
 		}
 	}
 }
