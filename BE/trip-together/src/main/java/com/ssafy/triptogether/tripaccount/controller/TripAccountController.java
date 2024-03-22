@@ -11,6 +11,7 @@ import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class TripAccountController {
 
 	@GetMapping("/rate")
 	public ResponseEntity<ApiResponse<RateLoadResponse>> rateLoad(
-		@RequestParam("currency_code") String currencyCode
+		@RequestParam("currency_code") CurrencyCode currencyCode
 	) {
 		RateLoadResponse rateLoadResponse = tripAccountLoadService.rateLoad(currencyCode);
 
