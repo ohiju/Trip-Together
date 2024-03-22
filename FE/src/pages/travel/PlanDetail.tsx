@@ -3,7 +3,7 @@ import {Text, View, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
-// import PlanDay from '../../components/travel/PlanDay';
+import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
 
 const PlanDetail = () => {
@@ -42,7 +42,7 @@ const PlanDetail = () => {
       renderPagination={renderPagination}
       onIndexChanged={index => setCurrentPage(index)}
       loop={false}>
-      {/* <PlanDay /> */}
+      <PlanDay />
       <View style={styles.slide1}>
         <Text style={styles.text}>1일차 계획</Text>
       </View>
