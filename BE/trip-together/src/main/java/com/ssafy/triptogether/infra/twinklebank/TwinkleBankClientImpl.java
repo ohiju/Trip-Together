@@ -1,24 +1,18 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
@@ -113,6 +107,31 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 			HttpMethod.DELETE,
 			entity,
 			ApiResponse.class
+		);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public void bankLogout(TwinkleBankLogoutRequest twinkleBankLogoutRequest) {
+		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회 & 해당 저장 삭제
+
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members/logout")
+				.queryParam("여행 클라이언트 키")
+				.toUriString();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Bearer " + "access_token");
+		HttpEntity<TwinkleBankLogoutRequest> entity = new HttpEntity<>(twinkleBankLogoutRequest, headers);
+
+		ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
 		);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
