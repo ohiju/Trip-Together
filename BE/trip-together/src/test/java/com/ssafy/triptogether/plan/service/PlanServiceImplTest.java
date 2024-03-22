@@ -1,10 +1,8 @@
 package com.ssafy.triptogether.plan.service;
 
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -18,8 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Nation;
@@ -27,6 +24,8 @@ import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -56,7 +55,7 @@ class PlanServiceImplTest {
 	@Nested
 	@DisplayName("여행 계획 저장")
 	class PlansSaveTest {
-		Long memberId = 1L;
+		long memberId = 1L;
 		Member member;
 		Region region;
 		Attraction attraction1, attraction2, attraction3;
@@ -206,6 +205,75 @@ class PlanServiceImplTest {
 			verify(memberRepository, times(1)).findById(memberId);
 			verify(regionRepository, times(1)).findById(anyLong());
 			verify(planRepository, times(0)).existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
+		}
+	}
+
+	@Nested
+	@DisplayName("여행 계획 삭제")
+	class PlanDeleteTest {
+		long memberId = 1L;
+		long planId = 1L;
+		Plan plan;
+
+		@BeforeEach
+		void setUp() {
+			Member member = Member.builder()
+				.gender(Gender.MALE)
+				.nickname("TestUser")
+				.uuid("TestUser")
+				.birth(LocalDate.now())
+				.build();
+			ReflectionTestUtils.setField(member, "id", memberId);
+			Region region = Region.builder()
+				.latitude("test")
+				.longitude("test")
+				.nation(Nation.UK)
+				.cityName("test")
+				.build();
+			plan = Plan.builder()
+				.title("test")
+				.startAt(LocalDate.now())
+				.endAt(LocalDate.now())
+				.estimatedBudget(2.0)
+				.member(member)
+				.region(region)
+				.build();
+		}
+
+		@Test
+		@DisplayName("여행 계획 삭제 성공")
+		void planDeleteSuccess() {
+			// given
+			given(planRepository.findById(anyLong())).willReturn(Optional.ofNullable(plan));
+			// when
+			planService.planDelete(memberId, planId);
+			// then
+			verify(planRepository, times(1)).findById(planId);
+			verify(planRepository, times(1)).delete(plan);
+		}
+
+		@Test
+		@DisplayName("존재하지 않는 여행 계획인 경우")
+		void planNotFound() {
+			// given
+			given(planRepository.findById(anyLong())).willReturn(Optional.empty());
+			// when & then
+			assertThrows(NotFoundException.class, () -> {
+				planService.planDelete(memberId, planId);
+			});
+			verify(planRepository, times(1)).findById(planId);
+		}
+
+		@Test
+		@DisplayName("권한이 없는 사용자의 접근인 경우")
+		void forbiddenMember() {
+			// given
+			given(planRepository.findById(anyLong())).willReturn(Optional.ofNullable(plan));
+			// when & then
+			assertThrows(ForbiddenException.class, () -> {
+				planService.planDelete(2L, planId);
+			});
+			verify(planRepository, times(1)).findById(planId);
 		}
 	}
 }

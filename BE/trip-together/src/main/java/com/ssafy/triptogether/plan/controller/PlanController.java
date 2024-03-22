@@ -2,6 +2,8 @@ package com.ssafy.triptogether.plan.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,17 @@ public class PlanController {
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.CREATED, StatusCode.SUCCESS_PLANS_SAVE
+		);
+	}
+
+	@DeleteMapping("/plans/{plan_id}")
+	public ResponseEntity<ApiResponse<Void>> planDelete(
+		@PathVariable("plan_id") Long planId
+	) {
+		planSaveService.planDelete(1L, planId);
+
+		return ApiResponse.emptyResponse(
+			HttpStatus.NO_CONTENT, StatusCode.SUCCESS_PLAN_DELETE
 		);
 	}
 }
