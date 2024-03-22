@@ -70,10 +70,14 @@ public class PlanServiceImpl implements PlanSaveService {
 	@Override
 	public void planDelete(Long memberId, Long planId) {
 		Plan plan = planFindById(planId, "PlanDelete");
-		if (!Objects.equals(memberId, plan.getMember().getId())) {
-			throw new ForbiddenException("PlanDelete", ErrorCode.FORBIDDEN_ACCESS_MEMBER);
-		}
+		planForbiddenCheck(memberId, plan, "PlanDelete");
 		planRepository.delete(plan);
+	}
+
+	private static void planForbiddenCheck(Long memberId, Plan plan, String detailMessageKey) {
+		if (!memberId.equals(plan.getMember().getId())) {
+			throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+		}
 	}
 
 	private Plan planFindById(Long planId, String detailMessageKey) {
