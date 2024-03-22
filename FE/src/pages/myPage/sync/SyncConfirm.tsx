@@ -53,7 +53,7 @@ const SyncConfirm = () => {
   const navigation = useNavigation<NavigationProp<SyncStackParams>>();
   const registAccount = (is_main: 0 | 1) => {
     const account = {
-      uuid: route.params.selected.account_uuid,
+      account_uuid: route.params.selected.account_uuid,
       account_num: route.params.selected.account_num,
       name: route.params.selected.name,
       is_main,

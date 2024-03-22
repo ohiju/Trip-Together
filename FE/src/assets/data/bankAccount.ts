@@ -9,7 +9,7 @@ const bankAccounts: bankAccount[] = [
   {
     account_uuid: 'CA43D328-C7ED-4E30-941D-FD647ECDB560',
     account_num: '1002-620-123456',
-    balance: 1253672524845,
+    balance: 1253672000,
     name: '반짝 정기 예금 통장',
   },
   {

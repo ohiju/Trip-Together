@@ -11,6 +11,7 @@ interface IconPath {
   lock: ImageSourcePropType;
   plane: ImageSourcePropType;
   plus: ImageSourcePropType;
+  search: ImageSourcePropType;
   shield: ImageSourcePropType;
   trip: ImageSourcePropType;
   user: ImageSourcePropType;
@@ -27,6 +28,7 @@ export const iconPath: IconPath = {
   lock: require('./lock.svg'),
   plane: require('./plane.svg'),
   plus: require('./plus_round.svg'),
+  search: require('./search.svg'),
   shield: require('./shield.svg'),
   trip: require('./trip.svg'),
   user: require('./user.svg'),
