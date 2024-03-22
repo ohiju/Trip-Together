@@ -1,20 +1,10 @@
 package com.ssafy.triptogether.plan.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ssafy.triptogether.auth.utils.SecurityMember;
-
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
+import com.ssafy.triptogether.plan.data.response.AttractionDetailFindResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.service.PlanLoadService;
 import com.ssafy.triptogether.plan.service.PlanSaveService;
@@ -22,20 +12,22 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_ATTRACTION_DETAIL_FIND;
 import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PLAN_DETAIL_FIND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/plan/v1/plans")
+@RequestMapping("/plan/v1")
 @RequiredArgsConstructor
 public class PlanController {
 	// Service
 	private final PlanSaveService planSaveService;
 	private final PlanLoadService planLoadService;
 
-	@PostMapping
+	@PostMapping("plans")
 	public ResponseEntity<ApiResponse<Void>> plansSave(
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid PlansSaveRequest plansSaveRequest
@@ -48,7 +40,7 @@ public class PlanController {
 		);
 	}
 
-	@DeleteMapping("/{plan_id}")
+	@DeleteMapping("/plans/{plan_id}")
 	public ResponseEntity<ApiResponse<Void>> planDelete(
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@PathVariable("plan_id") Long planId
@@ -61,11 +53,19 @@ public class PlanController {
 		);
 	}
 
-	@GetMapping("/{plan_id}")
+	@GetMapping("/plans/{plan_id}")
 	public ResponseEntity<ApiResponse<PlanDetailFindResponse>> findPlanDetail(
 			@PathVariable("plan_id") long planId
 	) {
 		PlanDetailFindResponse response = planLoadService.findPlanDetail(planId);
 		return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, response);
+	}
+
+	@GetMapping("/attractions/{attraction_id}")
+	public ResponseEntity<ApiResponse<AttractionDetailFindResponse>> findAttractionDetail(
+			@PathVariable("attraction_id") long attractionId
+	) {
+		AttractionDetailFindResponse response = planLoadService.findAttractionDetail(attractionId);
+		return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_DETAIL_FIND, response);
 	}
 }
