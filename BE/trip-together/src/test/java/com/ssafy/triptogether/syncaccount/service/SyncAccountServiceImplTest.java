@@ -18,9 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
-import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
@@ -31,8 +32,8 @@ import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccount
 import com.ssafy.triptogether.member.domain.Gender;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
-import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
@@ -105,6 +106,7 @@ class SyncAccountServiceImplTest {
 				.uuid("TestUser")
 				.birth(LocalDate.now())
 				.build();
+			ReflectionTestUtils.setField(member, "id", memberId);
 			currentMainSyncAccount = SyncAccount.builder()
 				.uuid("currentMain")
 				.num("123-123")
@@ -149,15 +151,12 @@ class SyncAccountServiceImplTest {
 		void memberSyncAccountsEmpty() {
 			// given
 			given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
-				.willReturn(Optional.empty());
-			given(syncAccountRepository.findByUuid(anyString()))
-				.willReturn(Optional.empty());
+				.willReturn(Optional.of(currentMainSyncAccount));
 			// when`& then
 			assertThrows(NotFoundException.class, () -> {
 				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 			});
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
-			verify(syncAccountRepository, times(0)).findByUuid(mainSyncAccountUpdateRequest.uuid());
 		}
 
 		@Test
@@ -169,10 +168,26 @@ class SyncAccountServiceImplTest {
 			given(syncAccountRepository.findByUuid(anyString()))
 				.willReturn(Optional.empty());
 			// when`& then
-			assertThrows(BadRequestException.class, () -> {
+			assertThrows(NotFoundException.class, () -> {
 				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 			});
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
+			verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
+		}
+
+		@Test
+		@DisplayName("주계좌 설정 권한이 없는 경우")
+		void newMainSyncAccountForbidden() {
+			// given
+			given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
+				.willReturn(Optional.of(currentMainSyncAccount));
+			given(syncAccountRepository.findByUuid(anyString()))
+				.willReturn(Optional.of(newMainSyncAccount));
+			// when`& then
+			assertThrows(ForbiddenException.class, () -> {
+				syncAccountService.mainSyncAccountUpdate(2L, mainSyncAccountUpdateRequest);
+			});
+			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(2L, true);
 			verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
 		}
 	}
@@ -275,6 +290,73 @@ class SyncAccountServiceImplTest {
 			syncAccountService.syncAccountSave(1L, pinVerifyRequest, syncAccountSaveRequest);
 			// then
 			verify(syncAccountRepository, times(1)).save(any(SyncAccount.class));
+		}
+	}
+
+	@Nested
+	@DisplayName("연동 계좌 해지")
+	class AccountSyncDeleteTest {
+		long memberId = 1L;
+		PinVerifyRequest pinVerifyRequest;
+		SyncAccountDeleteRequest syncAccountDeleteRequest;
+		Member member;
+		SyncAccount syncAccount;
+		@BeforeEach
+		void setUp() {
+			pinVerifyRequest = PinVerifyRequest.builder()
+				.pinNum("1234")
+				.build();
+			syncAccountDeleteRequest = SyncAccountDeleteRequest.builder()
+				.pinNum("test")
+				.bankAccountUuid("test")
+				.build();
+			member = Member.builder()
+				.gender(Gender.MALE)
+				.nickname("TestUser")
+				.uuid("TestUser")
+				.birth(LocalDate.now())
+				.build();
+			syncAccount = SyncAccount.builder()
+				.uuid("newMain")
+				.num("456-456")
+				.name("newMain")
+				.isMain(false)
+				.member(member)
+				.build();
+			ReflectionTestUtils.setField(member, "id", memberId);
+		}
+
+		@Test
+		@DisplayName("연동 해지 성공")
+		void accountSyncDeleteSuccess() {
+			// given
+			given(syncAccountRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(syncAccount));
+			// when
+			syncAccountService.syncAccountDelete(memberId, pinVerifyRequest, syncAccountDeleteRequest);
+			// then
+			verify(syncAccountRepository, times(1)).delete(any(SyncAccount.class));
+		}
+
+		@Test
+		@DisplayName("연동 해지 요청 계좌가 없는 경우")
+		void accountSyncDeleteNotFound() {
+			// given
+			given(syncAccountRepository.findByUuid(anyString())).willReturn(Optional.empty());
+			// when & then
+			assertThrows(NotFoundException.class, () -> {
+				syncAccountService.syncAccountDelete(memberId, pinVerifyRequest, syncAccountDeleteRequest);
+			});
+		}
+
+		@Test
+		@DisplayName("연동 해지 권한이 없는 경우")
+		void accountSyncDeleteForbidden() {
+			// given
+			given(syncAccountRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(syncAccount));
+			// when & then
+			assertThrows(ForbiddenException.class, () -> {
+				syncAccountService.syncAccountDelete(2L, pinVerifyRequest, syncAccountDeleteRequest);
+			});
 		}
 	}
 }

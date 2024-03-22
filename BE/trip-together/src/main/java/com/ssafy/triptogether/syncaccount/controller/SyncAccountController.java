@@ -2,6 +2,7 @@ package com.ssafy.triptogether.syncaccount.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
@@ -61,6 +63,20 @@ public class SyncAccountController {
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE
+		);
+	}
+
+	@DeleteMapping
+	public ResponseEntity<ApiResponse<Void>> syncAccountDelete(
+		@RequestBody @Valid SyncAccountDeleteRequest syncAccountDeleteRequest
+	) {
+		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
+			.pinNum(syncAccountDeleteRequest.pinNum())
+			.build();
+		syncAccountSaveService.syncAccountDelete(1L, pinVerifyRequest, syncAccountDeleteRequest);
+
+		return ApiResponse.emptyResponse(
+			HttpStatus.NO_CONTENT, StatusCode.SUCCESS_SYNC_ACCOUNT_DELETE
 		);
 	}
 

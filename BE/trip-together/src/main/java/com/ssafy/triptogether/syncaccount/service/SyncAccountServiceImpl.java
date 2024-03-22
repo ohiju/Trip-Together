@@ -9,6 +9,7 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.AuthUtils;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
@@ -20,6 +21,7 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
@@ -87,7 +89,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	@Override
 	public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
 		deactivateCurrentMainSyncAccount(memberId);
-		activateNewMainSyncAccount(mainSyncAccountUpdateRequest);
+		activateNewMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
 	}
 
 	/**
@@ -109,6 +111,30 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 			return;
 		}
 		syncAccountSave(twinkleAccountSyncResponse, member, syncAccountSaveRequest.isMain());
+	}
+
+	/**
+	 * 연동 계좌 해지
+	 * @param memberId 요청자 member_id
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param syncAccountDeleteRequest 해지 요청 계좌
+	 */
+	@PinVerify
+	@Transactional
+	@Override
+	public void syncAccountDelete(Long memberId, PinVerifyRequest pinVerifyRequest,
+		SyncAccountDeleteRequest syncAccountDeleteRequest) {
+		SyncAccount syncAccount = getSyncAccountByUuid(syncAccountDeleteRequest.bankAccountUuid());
+		syncAccountForbiddenCheck(memberId, syncAccount, "SyncAccountDelete");
+		syncAccountRepository.delete(syncAccount);
+		twinkleAccountSyncDelete(syncAccountDeleteRequest);
+	}
+
+	private void twinkleAccountSyncDelete(SyncAccountDeleteRequest syncAccountDeleteRequest) {
+		TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
+			.accountUuid(syncAccountDeleteRequest.bankAccountUuid())
+			.build();
+		twinkleBankClient.bankAccountSyncDelete(twinkleAccountSyncRequest);
 	}
 
 	private void syncAccountSave(TwinkleAccountSyncResponse twinkleAccountSyncResponse, Member member, Boolean isMain) {
@@ -145,12 +171,22 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 		syncAccount.updateIsMain(false);
 	}
 
-	private void activateNewMainSyncAccount(MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-		SyncAccount requestSyncAccount = syncAccountRepository.findByUuid(mainSyncAccountUpdateRequest.uuid())
+	private void activateNewMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		SyncAccount syncAccount = getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid());
+		syncAccountForbiddenCheck(memberId, syncAccount, "MainSyncAccountUpdate");
+		syncAccount.updateIsMain(true);
+	}
+
+	private static void syncAccountForbiddenCheck(Long memberId, SyncAccount syncAccount, String detailMessageKey) {
+		if (!memberId.equals(syncAccount.getMember().getId())) {
+			throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+		}
+	}
+
+	private SyncAccount getSyncAccountByUuid(String uuid) {
+		return syncAccountRepository.findByUuid(uuid)
 			.orElseThrow(
-				() -> new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_BAD_REQUEST,
-					mainSyncAccountUpdateRequest.uuid())
+				() -> new NotFoundException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_NOT_FOUND, uuid)
 			);
-		requestSyncAccount.updateIsMain(true);
 	}
 }
