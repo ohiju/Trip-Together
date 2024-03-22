@@ -1,7 +1,6 @@
 package com.ssafy.triptogether.plan.service;
 
 import com.ssafy.triptogether.attraction.domain.Attraction;
-import com.ssafy.triptogether.attraction.domain.AttractionImage;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
@@ -15,13 +14,14 @@ import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
-import com.ssafy.triptogether.plan.data.response.*;
+import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
+import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.PlanAttraction;
 import com.ssafy.triptogether.plan.repository.PlanAttractionRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
 import com.ssafy.triptogether.review.repository.ReviewRepository;
-import com.ssafy.triptogether.review.utils.ReviewUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,24 +143,6 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 				.title(planDetail.title())
 				.totalEstimatedBudget(planDetail.totalEstimatedBudget())
 				.dailyPlans(dailyPlanAttraction)
-				.build();
-	}
-
-	@Override
-	public AttractionDetailFindResponse findAttractionDetail(long attractionId) {
-		// find attraction & reviews
-		Attraction attraction = AttractionUtils.findByAttractionId(attractionRepository, attractionId);
-		List<ReviewResponse> reviewResponses = ReviewUtils.findAllByAttractionId(reviewRepository, attractionId);
-
-		// set attraction detail & return
-		return AttractionDetailFindResponse.builder()
-				.avgPrice(attraction.getAvgPrice())
-				.startAt(attraction.getStartAt())
-				.endAt(attraction.getEndAt())
-				.attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
-				.latitude(attraction.getLatitude())
-				.longitude(attraction.getLongitude())
-				.reviews(reviewResponses)
 				.build();
 	}
 }
