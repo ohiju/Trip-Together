@@ -1,11 +1,5 @@
 package com.ssafy.triptogether.plan.service;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
@@ -20,17 +14,26 @@ import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
+import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
+import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.PlanAttraction;
 import com.ssafy.triptogether.plan.repository.PlanAttractionRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class PlanServiceImpl implements PlanSaveService {
+public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 	// Repository
 	private final PlanRepository planRepository;
 	private final PlanAttractionRepository planAttractionRepository;
@@ -83,7 +86,7 @@ public class PlanServiceImpl implements PlanSaveService {
 	private Plan planFindById(Long planId, String detailMessageKey) {
 		return planRepository.findById(planId)
 			.orElseThrow(
-				() -> new NotFoundException(detailMessageKey, ErrorCode.PLAN_NOT_FOUND)
+					() -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
 			);
 	}
 
@@ -117,9 +120,28 @@ public class PlanServiceImpl implements PlanSaveService {
 						.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
 						.attraction(attraction)
 						.plan(plan)
+							.date(planDetail.date())
 						.build();
 					planAttractionRepository.save(planAttraction);
 				});
 			});
+	}
+
+	@Override
+	public PlanDetailFindResponse findPlanDetail(long planId) {
+		// find daily plans & plan detail
+		List<DailyPlanAttractionResponse> dailyPlanAttraction = planRepository.findAllDailyPlanByPlanId(planId);
+		DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
+				.orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
+
+		// set daily plans to plan detail & return
+		return PlanDetailFindResponse.builder()
+				.startRegion(planDetail.startRegion())
+				.startAt(planDetail.startAt())
+				.endAt(planDetail.endAt())
+				.title(planDetail.title())
+				.totalEstimatedBudget(planDetail.totalEstimatedBudget())
+				.dailyPlans(dailyPlanAttraction)
+				.build();
 	}
 }
