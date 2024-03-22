@@ -10,7 +10,7 @@ spring:
     password: ${MYSQL_ROOT_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -18,3 +18,5 @@ spring:
   mvc:
     servlet:
       path: /api
+jwt:
+  secret: ${JWT_SECRET_KEY}
