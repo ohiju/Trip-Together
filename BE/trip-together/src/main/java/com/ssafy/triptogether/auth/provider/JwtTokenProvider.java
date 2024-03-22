@@ -1,6 +1,6 @@
-package com.ssafy.twinklebank.auth.provider;
+package com.ssafy.triptogether.auth.provider;
 
-import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
 
-import com.ssafy.twinklebank.auth.service.UserDetailsServiceImpl;
-import com.ssafy.twinklebank.auth.utils.SecurityMember;
-import com.ssafy.twinklebank.auth.utils.SecurityUtil;
-import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.triptogether.auth.service.UserDetailsServiceImpl;
+import com.ssafy.triptogether.auth.utils.SecurityMember;
+import com.ssafy.triptogether.auth.utils.SecurityUtil;
+import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -37,10 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-	// 은행의 access token의 유효 시간 : 5분
-	// 은행의 refresh token의 유효 시간 : 7일
 	@Getter
-	private final long ACCESS_TOKEN_EXPIRE_TIME = 5 * 60 * 1000L; // 5분
+	private final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
 	@Getter
 	private final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
@@ -58,8 +56,7 @@ public class JwtTokenProvider {
 		SecurityMember securityMember = new SecurityMember(
 			id,
 			uuid,
-			(String)authentication.getPrincipal(),
-			(String)authentication.getCredentials()
+			(String)authentication.getPrincipal()
 		);
 
 		String authorities = securityMember.getAuthorities().stream()
@@ -70,8 +67,7 @@ public class JwtTokenProvider {
 		long now = (new Date()).getTime();
 		String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
 			.setSubject(authentication.getName())
-			.claim("auth", authorities) // 넣고싶은 값 넣기
-			.claim("uuid", uuid));
+			.claim("auth", authorities));
 
 		// refresh token 발급
 		String refreshToken = createToken(now, id, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder());
@@ -80,6 +76,7 @@ public class JwtTokenProvider {
 		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
 		map.put("refresh", refreshToken); // Bearer을 붙이지 않음
 		return map;
+		// return null;
 	}
 
 	private String createToken(long now, Long id, long EXPIRE_TIME, JwtBuilder authentication) {
@@ -96,12 +93,12 @@ public class JwtTokenProvider {
 		Claims claims = parseClaims(accessToken);
 
 		if (claims.get("auth") == null) {
-			throw new UnAuthorizedException("JwtTokenProvider : ", UNAUTHORIZED_MEMBER);
+			throw new UnAuthorizedException("JwtTokenProvider : ", FORBIDDEN_ACCESS_MEMBER);
 		}
 
 		// claims에서 name으로 securitymember을 가져온다
-		String username = claims.getSubject();
-		SecurityMember securityMember = (SecurityMember)userDetailsService.loadUserByUsername(username);
+		String id = claims.getSubject();
+		SecurityMember securityMember = (SecurityMember)userDetailsService.loadUserByUsername(id);
 
 		List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
 			.map(SimpleGrantedAuthority::new)
