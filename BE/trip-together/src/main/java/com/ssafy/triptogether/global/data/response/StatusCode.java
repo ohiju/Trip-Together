@@ -9,6 +9,7 @@ public enum StatusCode {
     // PLAN
     SUCCESS_PLANS_SAVE(201, "여행 계획 저장 성공"),
     SUCCESS_PLAN_DELETE(204, "여행 계획 삭제 성공"),
+    SUCCESS_PLAN_DETAIL_FIND(200, "여행 계획 상세 조회 성공"),
     // TRIP_ACCOUNT
     SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
     SUCCESS_RATE_LOAD(200, "요청 통화 환율 조회 성공"),
