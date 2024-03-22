@@ -61,7 +61,7 @@ class PlanServiceImplTest {
 		Region region;
 		Attraction attraction1, attraction2, attraction3;
 		Plan plan;
-		PlansSaveRequest plansSaveRequest;
+		PlansSaveRequest plansSaveRequest, weirdPlansSaveRequest;
 		@BeforeEach
 		void setUp() {
 			member = Member.builder()
@@ -136,6 +136,14 @@ class PlanServiceImplTest {
 				.estimatedBudget(2.0)
 				.planDetails(List.of(planDetail1, planDetail2))
 				.build();
+			weirdPlansSaveRequest = PlansSaveRequest.builder()
+				.title("test")
+				.startAt(LocalDate.now())
+				.endAt(LocalDate.now().minusDays(1))
+				.startRegionId(1L)
+				.estimatedBudget(2.0)
+				.planDetails(List.of(planDetail1, planDetail2))
+				.build();
 			plan = Plan.builder()
 				.title("test")
 				.startAt(LocalDate.now())
@@ -169,7 +177,7 @@ class PlanServiceImplTest {
 
 		@Test
 		@DisplayName("이미 같은 기간에 계획이 존재하는 경우")
-		void plansSaveFail() {
+		void OverlappingPlan() {
 			// given
 			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
 			given(regionRepository.findById(anyLong())).willReturn(Optional.ofNullable(region));
@@ -182,6 +190,22 @@ class PlanServiceImplTest {
 			verify(memberRepository, times(1)).findById(memberId);
 			verify(regionRepository, times(1)).findById(anyLong());
 			verify(planRepository, times(1)).existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
+		}
+
+		@Test
+		@DisplayName("시작 날짜가 종료 날짜보다 느린 경우")
+		void endAtOverStartAt() {
+			// given
+			given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+			given(regionRepository.findById(anyLong())).willReturn(Optional.ofNullable(region));
+			// when
+			assertThrows(BadRequestException.class, () -> {
+				planService.plansSave(memberId, weirdPlansSaveRequest);
+			});
+			// then
+			verify(memberRepository, times(1)).findById(memberId);
+			verify(regionRepository, times(1)).findById(anyLong());
+			verify(planRepository, times(0)).existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
 		}
 	}
 }

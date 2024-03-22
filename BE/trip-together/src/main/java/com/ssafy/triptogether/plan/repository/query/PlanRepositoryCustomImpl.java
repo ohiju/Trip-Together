@@ -18,8 +18,11 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
 		return queryFactory
 			.selectFrom(plan)
 			.where(plan.member.eq(member)
-				.and(plan.startAt.loe(endAt))
-				.and(plan.endAt.goe(startAt)))
+				.and(plan.startAt.after(endAt)
+					.or(plan.endAt.before(startAt))
+					.not()
+				)
+			)
 			.fetchFirst() != null;
 	}
 }

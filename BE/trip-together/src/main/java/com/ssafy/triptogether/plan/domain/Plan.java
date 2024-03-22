@@ -3,6 +3,8 @@ package com.ssafy.triptogether.plan.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.global.domain.BaseEntity;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -56,6 +58,13 @@ public class Plan extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
+
+    @PrePersist @PreUpdate
+    private void validateStartAndEndDates() {
+        if (endAt.isBefore(startAt)) {
+            throw new BadRequestException("PlanStartAndEndDates", ErrorCode.PLAN_DATE_BAD_REQUEST);
+        }
+    }
 
     @Builder
     public Plan(String title, Double estimatedBudget, LocalDate startAt, LocalDate endAt, Member member, Region region) {

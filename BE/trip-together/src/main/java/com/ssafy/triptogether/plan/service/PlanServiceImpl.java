@@ -46,6 +46,10 @@ public class PlanServiceImpl implements PlanSaveService {
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 		Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
 
+		if (plansSaveRequest.endAt().isBefore(plansSaveRequest.startAt())) {
+			throw new BadRequestException("PlanSave", ErrorCode.PLAN_DATE_BAD_REQUEST);
+		}
+
 		if (existOverlappingPlan(plansSaveRequest, member)) {
 			throw new BadRequestException("PlanSave", ErrorCode.PLAN_SAVE_BAD_REQUEST);
 		}
