@@ -4,6 +4,8 @@ interface AppButtonStyle {
     bg1?: string;
     bg2?: string;
     borderR?: string;
+    borderC?: string;
+    borderW?: string;
     padding?: string;
   };
   font?: {

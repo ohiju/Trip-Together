@@ -2,6 +2,8 @@
 const primary = '#56E5FF';
 const primary_light = '#93EEFF';
 const primary_dark = '#4DCFE7';
+const secondary = '#62FF85';
+const secondaty_light = '#A3FFB7';
 const dark = '#000000';
 
 // 배경 컬러
@@ -27,4 +29,6 @@ export {
   primary,
   primary_dark,
   primary_light,
+  secondary,
+  secondaty_light,
 };

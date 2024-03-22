@@ -38,8 +38,8 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     restart: always
 
-  sonarqube_container:
-    container_name: sonarqube_container
+  sonarqube:
+    container_name: sonarqube
     image: sonarqube:lts-community
     ports:
       - ${SONARQUBE_BINDING_PORT}:9000

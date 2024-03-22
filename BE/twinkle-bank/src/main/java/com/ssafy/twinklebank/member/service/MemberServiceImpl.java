@@ -110,7 +110,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 		}
 
 		// 6. 동일하다면 access token을 생성해 전달한다.
-		Member member = MemberUtils.getMember(memberRepository, id);
+		Member member = MemberUtils.loadMemberById(memberRepository, id);
 
 		Authentication authentication =
 			new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword(),

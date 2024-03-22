@@ -3,14 +3,14 @@ import dummy from './../slices/dummy';
 import tabState from './../slices/tabState';
 
 export interface AppState {
-  user: ReturnType<typeof user>;
   dummy: ReturnType<typeof dummy>;
   tabState: ReturnType<typeof tabState>;
+  user: ReturnType<typeof user>;
 }
 
 export const reducers = {
-  user,
   tabState,
+  user,
 };
 
 export const asyncReducers = {
