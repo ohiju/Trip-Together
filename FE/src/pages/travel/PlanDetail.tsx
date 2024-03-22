@@ -1,12 +1,23 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
 // import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
+
+  const handleMapPress = () => {
+    navigation.navigate('map');
+  };
+
+  const handleFinishPress = () => {
+    navigation.navigate('travel_main');
+  };
 
   const renderPagination = (index: any, total: any, context: any) => {
     return (
@@ -18,6 +29,8 @@ const PlanDetail = () => {
         setCurrentPage={setCurrentPage}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        handleMapPress={handleMapPress}
+        handleFinishPress={handleFinishPress}
       />
     );
   };

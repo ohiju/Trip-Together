@@ -13,7 +13,7 @@ const PaginationStyle = styled.View`
 
 const PaginationContainer = styled(TouchableOpacity)`
   width: 120px;
-  height: 50px;
+  height: 60px;
   background-color: ${bg_light};
   border-radius: 10px;
   justify-content: center;
@@ -22,7 +22,7 @@ const PaginationContainer = styled(TouchableOpacity)`
 `;
 
 const NavContainer = styled.View`
-  width: 120px;
+  width: 80px;
   flex-direction: row;
   justify-content: space-around;
 `;
@@ -53,10 +53,14 @@ const CenteredView = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
+  width: 100%;
+  height: 90%;
 `;
 
 const ModalView = styled.View`
+  width: 100%;
+  height: 97%;
   margin: 20px;
   background-color: white;
   border-radius: 20px;

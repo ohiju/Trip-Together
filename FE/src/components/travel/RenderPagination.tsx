@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  FlatList,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
+import {Modal, FlatList, TouchableWithoutFeedback} from 'react-native';
 import {
   PaginationStyle,
   PaginationContainer,
@@ -30,6 +23,8 @@ interface PaginationProps {
   modalVisible: boolean;
   setCurrentPage: any;
   setModalVisible: any;
+  handleMapPress: any;
+  handleFinishPress: any;
 }
 
 const RenderPagination = ({
@@ -40,35 +35,28 @@ const RenderPagination = ({
   setCurrentPage,
   modalVisible,
   setModalVisible,
+  handleMapPress,
+  handleFinishPress,
 }: PaginationProps) => {
   const pages = Array.from({length: total}, (_, i) => i + 1);
-  const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
-
-  const handleFinishPress = () => {
-    navigation.navigate('travel_main');
-  };
-
-  const handleMapPress = () => {
-    navigation.navigate('map');
-  };
 
   return (
     <PaginationStyle>
-      <NavContainer />
+      <NavContainer>
+        <NavButton onPress={handleMapPress}>
+          <NavText1>지도</NavText1>
+        </NavButton>
+      </NavContainer>
       <PaginationContainer onPress={() => setModalVisible(!modalVisible)}>
         <PaginationText>{currentPage + 1} 일차</PaginationText>
         <DownImage source={require('../../assets/images/toggledown.png')} />
       </PaginationContainer>
       <NavContainer>
-        <NavButton onPress={handleMapPress}>
-          <NavText1>지도</NavText1>
-        </NavButton>
         <NavButton onPress={handleFinishPress}>
           <NavText2>완료</NavText2>
         </NavButton>
       </NavContainer>
       <Modal
-        style={styles.modal}
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
@@ -96,11 +84,5 @@ const RenderPagination = ({
     </PaginationStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  modal: {
-    width: 100,
-  },
-});
 
 export default RenderPagination;

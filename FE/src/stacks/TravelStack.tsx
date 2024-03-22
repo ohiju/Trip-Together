@@ -56,7 +56,7 @@ const TravelStack = () => {
           name="plandetail"
           component={PlanDetail}
           options={{
-            title: '',
+            headerShown: false,
           }}
         />
       </Stack.Group>
