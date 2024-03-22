@@ -116,7 +116,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 
 	@Override
 	public void bankLogout(TwinkleBankLogoutRequest twinkleBankLogoutRequest) {
-		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
+		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회 & 해당 저장 삭제
 
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members/logout")
 				.queryParam("여행 클라이언트 키")
