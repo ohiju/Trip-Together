@@ -2,7 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
-	id "org.sonarqube" version "3.5.0.2730"
 }
 
 group = 'com.ssafy'
@@ -51,16 +50,6 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-/* SonarQube Start */
-sonarqube {
-	properties {
-		property "sonar.projectKey", "trip"
-		property "sonar.host.url", "http://j10a309.p.ssafy.io:8091"
-		property "sonar.login", "squ_2340cade2a49d5557f1cf3f0cf9d2d29ce2e8b8e"
-	}
-}
-/* SonarQube End */
 
 /* QueryDSL Start */
 clean {
