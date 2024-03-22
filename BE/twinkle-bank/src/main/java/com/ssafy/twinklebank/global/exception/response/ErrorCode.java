@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// ACCOUNT
+	UNDEFINED_WITHDRAWAL_AGREEMENT(404, "출금동의 정보를 찾을 수 없습니다."),
 	// MEMBER
 	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
 
