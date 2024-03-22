@@ -31,6 +31,8 @@ public class QPlanAttraction extends EntityPathBase<PlanAttraction> {
 
     public final NumberPath<Double> dailyEstimatedBudget = createNumber("dailyEstimatedBudget", Double.class);
 
+    public final DatePath<java.time.LocalDate> date = createDate("date", java.time.LocalDate.class);
+
     public final QPlan plan;
 
     public final NumberPath<Long> planAttractionId = createNumber("planAttractionId", Long.class);
