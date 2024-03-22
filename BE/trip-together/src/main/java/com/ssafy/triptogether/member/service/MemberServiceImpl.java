@@ -12,6 +12,7 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -51,8 +53,8 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         }
 
         // save pin
-        // TODO: PasswordEncoder 을 통해 핀번호 암호화
-        member.savePin(pinSaveRequest.pinNum());
+        String encodedPinNum = passwordEncoder.encode(pinSaveRequest.pinNum());
+        member.savePin(encodedPinNum);
     }
 
     @PinVerify
@@ -73,8 +75,8 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         }
 
         // update pin
-        // TODO: PasswordEncoder 을 통해 핀번호 암호화
-        member.savePin(pinUpdateRequest.newPinNum());
+        String encodedPinNum = passwordEncoder.encode(pinUpdateRequest.newPinNum());
+        member.savePin(encodedPinNum);
     }
 
     @Override

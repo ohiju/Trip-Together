@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.member.controller;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
+import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.member.data.PinSaveRequest;
 import com.ssafy.triptogether.member.data.PinUpdateRequest;
@@ -11,6 +12,7 @@ import com.ssafy.triptogether.member.service.MemberSaveService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.ssafy.triptogether.global.data.response.StatusCode.*;
@@ -27,11 +29,10 @@ public class MemberController {
 
     @PatchMapping("/members")
     public ResponseEntity<ApiResponse<Void>> updateProfile(
-            // @AuthenticationPrincipal 인증객체 주입받기
+            @AuthenticationPrincipal SecurityMember securityMember,
             @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest
     ) {
-        // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
-        long memberId = 1L;
+        long memberId = securityMember.getId();
         memberSaveService.updateProfile(memberId, profileUpdateRequest);
         return ApiResponse.emptyResponse(OK, SUCCESS_PROFILE_UPDATE);
     }
@@ -46,22 +47,20 @@ public class MemberController {
 
     @PostMapping("/members/pin")
     public ResponseEntity<ApiResponse<Void>> savePin(
-            // @AuthenticationPrincipal 인증객체 주입받기
+            @AuthenticationPrincipal SecurityMember securityMember,
             @Valid @RequestBody PinSaveRequest pinSaveRequest
     ) {
-        // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
-        long memberId = 1L;
+        long memberId = securityMember.getId();
         memberSaveService.savePin(memberId, pinSaveRequest);
         return ApiResponse.emptyResponse(CREATED, SUCCESS_PIN_SAVE);
     }
 
     @PatchMapping("/members/pin")
     public ResponseEntity<ApiResponse<Void>> updatePin(
-            // @AuthenticationPrincipal 인증객체 주입받기
+            @AuthenticationPrincipal SecurityMember securityMember,
             @Valid @RequestBody PinUpdateRequest pinUpdateRequest
     ) {
-        // long memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
-        long memberId = 1L;
+        long memberId = securityMember.getId();
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder().pinNum(pinUpdateRequest.prePinNum()).build();
         memberSaveService.updatePin(memberId, pinVerifyRequest, pinUpdateRequest);
         return ApiResponse.emptyResponse(OK, SUCCESS_PIN_UPDATE);
