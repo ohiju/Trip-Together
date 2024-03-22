@@ -17,11 +17,16 @@ public enum ErrorCode {
 	SYNC_ACCOUNT_BAD_REQUEST(400, "요청 연동 계좌가 존재하지 않습니다"),
 	// EXTERNAL_SERVER
 	TWINKLE_BANK_SERVER_ERROR(500, "반짝 은행 API 요청에 실패했습니다"),
-
+	CURRENCY_RATE_LOAD_SERVER_ERROR(500, "환율 조회 API 요청에 실패했습니다"),
 	// TRIP_ACCOUNT
 	CURRENCY_NOT_FOUND(404, "통화를 찾을 수 없습니다."),
-	// EXTERNAL_SERVER
-	CURRENCY_RATE_LOAD_SERVER_ERROR(500, "환율 조회 API 요청에 실패했습니다"),
+	// ATTRACTION
+	REGION_NOT_FOUND(404, "지역을 찾을 수 없습니다"),
+	ATTRACTION_NOT_FOUND(404, "여행지를 찾을 수 없습니다"),
+	// PLAN
+	PLAN_SAVE_BAD_REQUEST(400, "해당 기간에 여행 계획이 존재합니다."),
+	PLAN_DATE_BAD_REQUEST(400, "종료 날짜가 시작 날짜보다 작을 수 없습니다."),
+
 
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 

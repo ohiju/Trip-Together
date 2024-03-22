@@ -1,7 +1,5 @@
 package com.ssafy.twinklebank.member.service;
 
-import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
-
 import com.ssafy.twinklebank.auth.provider.JwtTokenProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
@@ -10,11 +8,9 @@ import com.ssafy.twinklebank.member.data.response.AuthInfoFindResponse;
 import com.ssafy.twinklebank.member.domain.Member;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
 import com.ssafy.twinklebank.member.utils.MemberUtils;
-
 import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +59,21 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 		response.put("name", member.getName());
 
 		return response;
+	}
+
+	@Override
+	public void logout(long memberId, String accessToken) {
+		// delete refresh token
+		if (redisTemplate.opsForValue().get("refresh:" + memberId) != null) {
+			redisTemplate.delete("refresh:" + memberId);
+		}
+
+		// add access token to a blacklist
+		redisTemplate.opsForValue().set(
+				"blacklist:" + accessToken, accessToken,
+				jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(),
+				TimeUnit.MILLISECONDS
+		);
 	}
 
 	@Override

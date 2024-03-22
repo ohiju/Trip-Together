@@ -4,12 +4,11 @@ import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,11 +20,11 @@ public class PlanAttraction extends BaseEntity {
     @Column(name = "plan_attraction_id")
     private Long planAttractionId;
 
-    @NotBlank
-    @Column(name = "trip_at")
-    private LocalDateTime tripAt;
+    @NotNull
+    @Column(name = "daily_estimated_budget")
+    private Double dailyEstimatedBudget;
 
-    @NotBlank
+    @NotNull
     @Column(name = "sequence")
     private Integer sequence;
 
@@ -38,8 +37,8 @@ public class PlanAttraction extends BaseEntity {
     private Attraction attraction;
 
     @Builder
-    public PlanAttraction(LocalDateTime tripAt, Integer sequence, Plan plan, Attraction attraction) {
-        this.tripAt = tripAt;
+    public PlanAttraction(Double dailyEstimatedBudget, Integer sequence, Plan plan, Attraction attraction) {
+        this.dailyEstimatedBudget = dailyEstimatedBudget;
         this.sequence = sequence;
         setPlan(plan);
         setAttraction(attraction);

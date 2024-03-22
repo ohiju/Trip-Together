@@ -5,6 +5,8 @@ import com.ssafy.twinklebank.application.repository.ApplicationRepository;
 import com.ssafy.twinklebank.application.utils.ApplicationUtils;
 import com.ssafy.twinklebank.auth.data.response.TokenResponse;
 import com.ssafy.twinklebank.auth.provider.CookieProvider;
+import com.ssafy.twinklebank.auth.utils.SecurityMember;
+import com.ssafy.twinklebank.auth.utils.SecurityUtil;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
 import com.ssafy.twinklebank.global.data.response.StatusCode;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
@@ -12,22 +14,21 @@ import com.ssafy.twinklebank.member.data.request.MemberJoinRequest;
 import com.ssafy.twinklebank.member.data.response.AuthInfoFindResponse;
 import com.ssafy.twinklebank.member.service.MemberLoadService;
 import com.ssafy.twinklebank.member.service.MemberSaveService;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 import static com.ssafy.twinklebank.global.data.response.StatusCode.*;
-import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.COOKIE_NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -46,12 +47,22 @@ public class MemberController {
 		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_JOIN, memberResponse);
 	}
 
+	@PostMapping("/logout")
+	public ResponseEntity<ApiResponse<Void>> logout(
+			@AuthenticationPrincipal SecurityMember securityMember,
+			HttpServletRequest request
+	) {
+		long memberId = securityMember.getId();
+		String accessToken = SecurityUtil.getAccessToken(request);
+		memberSaveService.logout(memberId, accessToken);
+		return ApiResponse.emptyResponse(OK, SUCCESS_LOGOUT);
+	}
+
 	@GetMapping
 	public ResponseEntity<ApiResponse<AuthInfoFindResponse>> findAuthInfo(
-		// @AuthenticationPrincipal 인증객체 주입받기
+			@AuthenticationPrincipal SecurityMember securityMember
 	) {
-		// String memberId = 인증객체.getId(); TODO: 시큐리티 인증객체 주입받기
-		long memberId = 1L;
+		long memberId = securityMember.getId();
 		AuthInfoFindResponse response = memberLoadService.findAuthInfo(memberId);
 		return ApiResponse.toResponseEntity(OK, SUCCESS_AUTH_INFO_FIND, response);
 	}
