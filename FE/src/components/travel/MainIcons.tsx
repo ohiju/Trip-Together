@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {bg_lightgray} from '../../constants/colors';
+import {bg_light} from '../../constants/colors';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {TravelStackParams} from '../../interfaces/router/TravelStackParams';
 
@@ -21,17 +21,20 @@ const PageItem = styled.View<{color: string}>`
   align-items: center;
   border-radius: 10px;
   flex-direction: row;
+  padding-right: 20px;
 `;
 
 const styles = StyleSheet.create({
   iconContainer: {
     width: 60,
     height: 60,
-    backgroundColor: bg_lightgray,
+    backgroundColor: bg_light,
     justifyContent: 'center',
     margin: 10,
     alignItems: 'center',
     borderRadius: 10,
+    shadowColor: '#000',
+    elevation: 9,
   },
 });
 
@@ -47,7 +50,7 @@ const Page = ({item, style}: IPage) => {
           }}
           style={styles.iconContainer}>
           <Image
-            source={require('../images/trip.png')}
+            source={require('../../assets/images/trip.png')}
             style={{width: 40, height: 40}}
           />
         </TouchableOpacity>
