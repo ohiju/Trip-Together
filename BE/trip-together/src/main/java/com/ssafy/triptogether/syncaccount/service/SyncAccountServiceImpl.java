@@ -81,13 +81,11 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	/**
 	 * 사용자의 연동 계좌의 주계좌 설정 변경
 	 * @param memberId 요청자의 member_id
-	 * @param pinVerifyRequest PIN 인증 요청
 	 * @param mainSyncAccountUpdateRequest 주계좌 변경 요청
 	 */
-	@PinVerify
 	@Transactional
 	@Override
-	public void mainSyncAccountUpdate(Long memberId, PinVerifyRequest pinVerifyRequest, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+	public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
 		deactivateCurrentMainSyncAccount(memberId);
 		activateNewMainSyncAccount(mainSyncAccountUpdateRequest);
 	}

@@ -5,7 +5,7 @@ import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequ
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 
 public interface SyncAccountSaveService {
-	void mainSyncAccountUpdate(Long memberId, PinVerifyRequest pinVerifyRequest, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest);
+	void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest);
 
 	void syncAccountSave(Long memberId, PinVerifyRequest pinVerifyRequest, SyncAccountSaveRequest syncAccountSaveRequest);
 }

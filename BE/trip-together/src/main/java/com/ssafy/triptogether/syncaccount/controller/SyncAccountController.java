@@ -57,10 +57,7 @@ public class SyncAccountController {
 	public ResponseEntity<ApiResponse<Void>> mainSyncAccountUpdate(
 		@RequestBody @Valid MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest
 	) {
-		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
-			.pinNum(mainSyncAccountUpdateRequest.pinNum())
-			.build();
-		syncAccountSaveService.mainSyncAccountUpdate(1L, pinVerifyRequest, mainSyncAccountUpdateRequest);
+		syncAccountSaveService.mainSyncAccountUpdate(1L, mainSyncAccountUpdateRequest);
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE

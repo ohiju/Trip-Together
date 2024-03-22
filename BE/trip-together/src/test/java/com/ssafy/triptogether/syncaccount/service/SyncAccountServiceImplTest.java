@@ -95,7 +95,6 @@ class SyncAccountServiceImplTest {
 		Long memberId = 1L;
 		Member member;
 		SyncAccount currentMainSyncAccount, newMainSyncAccount;
-		PinVerifyRequest pinVerifyRequest;
 		MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest;
 
 		@BeforeEach
@@ -124,9 +123,6 @@ class SyncAccountServiceImplTest {
 				.uuid("newMain")
 				.pinNum("1234")
 				.build();
-			pinVerifyRequest = PinVerifyRequest.builder()
-				.pinNum("1234")
-				.build();
 		}
 
 		@Test
@@ -138,7 +134,7 @@ class SyncAccountServiceImplTest {
 			given(syncAccountRepository.findByUuid(anyString()))
 				.willReturn(Optional.of(newMainSyncAccount));
 			// when`
-			syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
+			syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 			// then
 			assertAll(
 				() -> assertFalse(currentMainSyncAccount.getIsMain(), "이전 주계좌가 비활성화 되지 않았습니다."),
@@ -158,7 +154,7 @@ class SyncAccountServiceImplTest {
 				.willReturn(Optional.empty());
 			// when`& then
 			assertThrows(NotFoundException.class, () -> {
-				syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
+				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 			});
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
 			verify(syncAccountRepository, times(0)).findByUuid(mainSyncAccountUpdateRequest.uuid());
@@ -174,7 +170,7 @@ class SyncAccountServiceImplTest {
 				.willReturn(Optional.empty());
 			// when`& then
 			assertThrows(BadRequestException.class, () -> {
-				syncAccountService.mainSyncAccountUpdate(memberId, pinVerifyRequest, mainSyncAccountUpdateRequest);
+				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 			});
 			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
 			verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
