@@ -43,4 +43,6 @@ services:
     image: sonarqube:lts-community
     ports:
       - ${SONARQUBE_BINDING_PORT}:9000
+    environment:
+      SONARQUBE_ACCESS_TOKEN: ${SONARQUBE_ACCESS_TOKEN}
     restart: on-failure

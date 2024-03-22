@@ -55,7 +55,15 @@ tasks.named('test') {
 /* sonarqube start */
 sonar {
 	properties {
+		property 'sonar.host.url', 'http://j10a309.p.ssafy.io:8091'
+		property 'sonar.login', System.getenv("SONARQUBE_ACCESS_TOKEN")
 		property "sonar.projectKey", "trip"
+		property 'sonar.sources', 'src'
+		property 'sonar.language', 'java'
+		property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+		property 'sonar.java.binaries', '${buildDir}/classes'
 	}
 }
 /* sonarqube end */
