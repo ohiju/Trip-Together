@@ -5,6 +5,7 @@ const Wrapper = styled.View`
   flex: 11;
   width: 100%;
   background: ${bg_light};
+  margin-bottom: 15px;
 `;
 
 const AdView = styled.View`

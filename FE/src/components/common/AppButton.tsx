@@ -2,7 +2,7 @@ import React from 'react';
 import {defaultStyle} from '../../constants/AppButton';
 import {bg_lightgray} from '../../constants/colors';
 import {AppButtonProps} from '../../interfaces/props/AppButton';
-import {Btn, BtnText, BtnView} from './AppButtonStyle';
+import {Btn, BtnBox, BtnText} from './AppButtonStyle';
 
 const AppButton = ({
   style = defaultStyle,
@@ -14,20 +14,30 @@ const AppButton = ({
   const bg2 = style.button?.bg2 ? style.button.bg2 : defaultStyle.button.bg2;
 
   return (
-    <BtnView>
+    <BtnBox>
       <Btn
         $width={
           style.button?.width ? style.button.width : defaultStyle.button.width
+        }
+        $padding={
+          style.button?.padding
+            ? style.button.padding
+            : defaultStyle.button.padding
         }
         $borderR={
           style.button?.borderR
             ? style.button.borderR
             : defaultStyle.button.borderR
         }
-        $padding={
-          style.button?.padding
-            ? style.button.padding
-            : defaultStyle.button.padding
+        $borderW={
+          style.button?.borderW
+            ? style.button.borderW
+            : defaultStyle.button.borderW
+        }
+        $borderC={
+          style.button?.borderC
+            ? style.button.borderC
+            : defaultStyle.button.borderC
         }
         onPress={onPress}
         style={({pressed}) => ({
@@ -42,7 +52,7 @@ const AppButton = ({
           {text}
         </BtnText>
       </Btn>
-    </BtnView>
+    </BtnBox>
   );
 };
 
