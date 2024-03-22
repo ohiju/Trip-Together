@@ -1,6 +1,6 @@
 import React, {ReactNode, useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
-import {AnimatedMessage} from '../../pages/myPage/pin/PinRegistStyle';
+import {AnimatedMessage} from './ShakeMessageStyle';
 
 interface ShakeMessageProps {
   children: ReactNode;

@@ -1,12 +1,11 @@
 interface syncAccount {
   account_uuid: string;
   account_num: string;
-  balance: number;
   name: string;
+  is_main: 0 | 1;
 }
 
 interface tripAccount {
-  id: number;
   nation: string;
   nation_kr: string;
   unit: number;

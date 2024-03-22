@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import {font_dark} from '../../../constants/colors';
 
-const Wrapper = styled.View`
+const Wrapper = styled.Pressable`
   flex: 1;
   flex-direction: row;
   align-items: center;

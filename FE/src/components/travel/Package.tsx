@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import styled from 'styled-components/native';
 import Page from '../../assets/data/Page';
+import {Container, PackageTitle} from './PackageStyle';
 
 interface ICarousel {
   gap: number;
@@ -9,15 +9,6 @@ interface ICarousel {
   pages: any[];
   pageWidth: number;
 }
-
-const Container = styled.View`
-  height: 35%;
-  width: 90%;
-  padding: 40px 0px;
-  background-color: white;
-  justify-content: center;
-  align-items: center;
-`;
 
 const Package = ({pages, pageWidth, gap, offset}: ICarousel) => {
   const renderItem = ({item}: any) => {
@@ -28,7 +19,7 @@ const Package = ({pages, pageWidth, gap, offset}: ICarousel) => {
 
   return (
     <Container>
-      {/* <Text>여행 상품 추천</Text> */}
+      <PackageTitle>여행 상품 추천</PackageTitle>
       <FlatList
         automaticallyAdjustContentInsets={false}
         contentContainerStyle={{

@@ -3,6 +3,11 @@ import {Text} from 'react-native';
 import {imagePath} from '../../assets/images/imagePath';
 import {
   ButtonText,
+  DdayText,
+  DurationText,
+  MoneyImage,
+  MoneyText,
+  MoneyUnit,
   PlanCenter,
   PlanDescription,
   PlanDescriptionBox,
@@ -27,8 +32,8 @@ const Plans = () => {
             <Text>몽펠리에</Text>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
-            <Text>D-52</Text>
-            <Text>총 12일</Text>
+            <DdayText>D-52</DdayText>
+            <DurationText>총 12일</DurationText>
           </PlanDescriptionBox>
         </PlanDescription>
         <PlanSlideButton>
@@ -36,7 +41,9 @@ const Plans = () => {
         </PlanSlideButton>
       </PlanCenter>
       <PlanMoney>
-        <Text>3,200,000</Text>
+        <MoneyImage source={require('../../assets/images/money.png')} />
+        <MoneyUnit>₩</MoneyUnit>
+        <MoneyText>3,200,000</MoneyText>
       </PlanMoney>
     </PlanView>
   );

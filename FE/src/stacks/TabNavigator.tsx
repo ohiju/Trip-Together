@@ -2,6 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import MyPageTabBarIcon from '../components/myPage/TabBarIcon';
 import MypageTabBarLabel from '../components/myPage/TabBarLabel';
+import TravelIcon from '../components/travel/TabBarIcon';
+import TravelLabel from '../components/travel/TabBarLabel';
 import {TabParams} from '../interfaces/router/TabParams';
 import FlashMob from '../pages/FlashMob';
 import {RootState} from '../store';
@@ -18,7 +20,14 @@ const TabNavigator = () => {
     <Tab.Navigator
       tabBar={isShown ? undefined : () => null}
       screenOptions={{headerShown: false}}>
-      <Tab.Screen name="trip" component={TravelStack} options={{}} />
+      <Tab.Screen
+        name="trip"
+        component={TravelStack}
+        options={{
+          tabBarIcon: TravelIcon,
+          tabBarLabel: TravelLabel,
+        }}
+      />
       <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
       <Tab.Screen
         name="MyPage"

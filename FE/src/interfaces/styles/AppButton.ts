@@ -2,6 +2,8 @@ interface BtnProps {
   $width: string;
   $borderR: string;
   $padding: string;
+  $borderC?: string;
+  $borderW?: string;
 }
 
 interface BtnTextProps {
@@ -9,4 +11,4 @@ interface BtnTextProps {
   $size: string;
 }
 
-export type {BtnProps, BtnTextProps};
+export type {BtnProps, BtnTextProps, BtnViewProps};
