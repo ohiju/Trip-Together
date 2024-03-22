@@ -16,6 +16,7 @@ import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -38,9 +39,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.map(
 				currency -> CurrenciesLoadDetail.builder()
 					.code(currency.getCode())
-					.nation(currency.getCurrencyNation().name())
+					.nation(currency.getCurrencyNation())
 					.nationKr(currency.getCurrencyNation().getMessage())
-					.unit(currency.getUnit())
+					.unit(currency.getCode().getUnit())
 					.build()
 			).toList();
 		return CurrenciesLoadResponse.builder()
@@ -54,7 +55,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	 * @return 환율 정보
 	 */
 	@Override
-	public RateLoadResponse rateLoad(String currencyCode) {
+	public RateLoadResponse rateLoad(CurrencyCode currencyCode) {
 		Currency currency = currencyRepository.findByCode(currencyCode)
 			.orElseThrow(
 				() -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
@@ -71,11 +72,12 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@Override
 	public void currencyRateUpdate() {
 		List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
-		Map<String, Currency> currencyMap = currencyRepository.findAll()
+		Map<CurrencyCode, Currency> currencyMap = currencyRepository.findAll()
 			.stream()
 			.collect(Collectors.toMap(Currency::getCode, Function.identity()));
 		currencyRateResponses.forEach(currencyRateResponse -> {
-			Currency currency = currencyMap.get(currencyRateResponse.cur_unit());
+			CurrencyCode currencyCode = CurrencyCode.fromString(currencyRateResponse.cur_unit());
+			Currency currency = currencyMap.get(currencyCode);
 			if (currency != null) {
 				currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
 			}

@@ -22,6 +22,7 @@ import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundExcep
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyNation;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 
@@ -41,15 +42,13 @@ class TripAccountServiceImplTest {
 		@BeforeEach
 		void setUp() {
 			Currency currency1 = Currency.builder()
-				.code("EUR")
+				.code(CurrencyCode.EUR)
 				.currencyNation(CurrencyNation.EUR)
-				.unit(8356)
 				.rate(365.1)
 				.build();
 			Currency currency2 = Currency.builder()
-				.code("GBP")
+				.code(CurrencyCode.GBP)
 				.currencyNation(CurrencyNation.UK)
-				.unit(163)
 				.rate(255.5)
 				.build();
 
@@ -67,7 +66,7 @@ class TripAccountServiceImplTest {
 			assertAll(
 				() -> assertNotNull(response, "응답은 null 이 아니어야 합니다."),
 				() -> assertEquals(2, response.currenciesLoadDetail().size(), "통화 목록의 크기가 예상과 다릅니다."),
-				() -> assertEquals("EUR", response.currenciesLoadDetail().get(0).code(), "첫 번째 통화 코드가 예상과 다릅니다."),
+				() -> assertEquals(CurrencyCode.EUR, response.currenciesLoadDetail().get(0).code(), "첫 번째 통화 코드가 예상과 다릅니다."),
 				() -> assertEquals("유럽", response.currenciesLoadDetail().get(0).nationKr(), "첫 번째 통화의 한국어 국가명이 예상과 다릅니다.")
 			);
 		}
@@ -76,10 +75,10 @@ class TripAccountServiceImplTest {
 		@DisplayName("통화 환율 조회 실패")
 		void currencyRateLoadFail() {
 			// given
-			given(currencyRepository.findByCode("USD")).willReturn(Optional.empty());
+			given(currencyRepository.findByCode(CurrencyCode.fromString("USD"))).willReturn(Optional.empty());
 			// when & then
 			assertThrows(NotFoundException.class, () -> {
-				tripAccountService.rateLoad("USD");
+				tripAccountService.rateLoad(CurrencyCode.fromString("USD"));
 			});
 		}
 
@@ -87,9 +86,9 @@ class TripAccountServiceImplTest {
 		@DisplayName("통화 환율 조회 성공")
 		void currencyRateLoadSuccess() {
 			// given
-			given(currencyRepository.findByCode("GBP")).willReturn(Optional.ofNullable(testCurrencies.get(1)));
+			given(currencyRepository.findByCode(CurrencyCode.GBP)).willReturn(Optional.ofNullable(testCurrencies.get(1)));
 			// when
-			RateLoadResponse rateLoadResponse = tripAccountService.rateLoad("GBP");
+			RateLoadResponse rateLoadResponse = tripAccountService.rateLoad(CurrencyCode.GBP);
 			// then
 			assertEquals(testCurrencies.get(1).getRate(), rateLoadResponse.rate());
 		}
