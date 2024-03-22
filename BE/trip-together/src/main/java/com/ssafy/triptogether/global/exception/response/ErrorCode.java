@@ -12,6 +12,7 @@ public enum ErrorCode {
     PIN_ALREADY_EXISTS(400, "지갑이 이미 존재합니다."),
     PIN_NOT_AUTHENTICATED(401, "기존의 핀번호와 일치하지 않습니다."),
     PIN_NOT_EXISTS(404, "지갑 정보를 찾을 수 없습니다."),
+	FORBIDDEN_ACCESS_MEMBER(403, "접근 권한이 없는 사용자입니다."),
 	// SYNC_ACCOUNT
 	SYNC_ACCOUNTS_NOT_FOUND(404, "사용자의 연동 계좌가 존재하지 않습니다."),
 	SYNC_ACCOUNT_BAD_REQUEST(400, "요청 연동 계좌가 존재하지 않습니다"),
@@ -26,6 +27,7 @@ public enum ErrorCode {
 	// PLAN
 	PLAN_SAVE_BAD_REQUEST(400, "해당 기간에 여행 계획이 존재합니다."),
 	PLAN_DATE_BAD_REQUEST(400, "종료 날짜가 시작 날짜보다 작을 수 없습니다."),
+	PLAN_NOT_FOUND(404, "여행 계획을 찾을 수 없습니다."),
 
 
 	BAD_REQUEST(400, "잘못된 요청입니다."),

@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.plan.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,8 @@ import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -55,31 +58,33 @@ public class PlanServiceImpl implements PlanSaveService {
 		}
 
 		Plan plan = planSave(plansSaveRequest, startRegion, member);
-		plansSaveRequest.planDetails()
-			.forEach(planDetail -> {
-				List<Attraction> attractions = planDetail.attractions().stream()
-					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
-						attraction.attractionId()))
-					.toList();
+		planAttractionSave(plansSaveRequest.planDetails(), plan);
+	}
 
-				attractions.forEach(attraction -> {
-					planAttractionSave(planDetail, attraction, plan);
-				});
-			});
+	/**
+	 * 요청한 여행 계획 삭제
+	 * @param memberId 요청자의 member_id
+	 * @param planId 삭제하고 싶은 여행 계획의 plan_id
+	 */
+	@Transactional
+	@Override
+	public void planDelete(Long memberId, Long planId) {
+		Plan plan = planFindById(planId, "PlanDelete");
+		if (!Objects.equals(memberId, plan.getMember().getId())) {
+			throw new ForbiddenException("PlanDelete", ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+		}
+		planRepository.delete(plan);
+	}
+
+	private Plan planFindById(Long planId, String detailMessageKey) {
+		return planRepository.findById(planId)
+			.orElseThrow(
+				() -> new NotFoundException(detailMessageKey, ErrorCode.PLAN_NOT_FOUND)
+			);
 	}
 
 	private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
 		return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
-	}
-
-	private void planAttractionSave(PlanDetail planDetail, Attraction attraction, Plan plan) {
-		PlanAttraction planAttraction = PlanAttraction.builder()
-			.sequence(planDetail.sequence())
-			.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
-			.attraction(attraction)
-			.plan(plan)
-			.build();
-		planAttractionRepository.save(planAttraction);
 	}
 
 	private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
@@ -92,5 +97,25 @@ public class PlanServiceImpl implements PlanSaveService {
 			.member(member)
 			.build();
 		return planRepository.save(plan);
+	}
+
+	private void planAttractionSave(List<PlanDetail> planDetails, Plan plan) {
+		planDetails
+			.forEach(planDetail -> {
+				List<Attraction> attractions = planDetail.attractions().stream()
+					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
+						attraction.attractionId()))
+					.toList();
+
+				attractions.forEach(attraction -> {
+					PlanAttraction planAttraction = PlanAttraction.builder()
+						.sequence(planDetail.sequence())
+						.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+						.attraction(attraction)
+						.plan(plan)
+						.build();
+					planAttractionRepository.save(planAttraction);
+				});
+			});
 	}
 }
