@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	private final MemberRepository memberRepository;
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username){ // TODO : throws UsernameNotFoundException 확인해보기
 		Member member = MemberUtils.loadMemberByUsername(memberRepository, username);
 		return new SecurityMember(member);
 	}
