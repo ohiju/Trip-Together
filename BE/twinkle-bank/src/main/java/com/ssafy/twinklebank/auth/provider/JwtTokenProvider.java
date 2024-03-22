@@ -54,7 +54,7 @@ public class JwtTokenProvider {
 	}
 
 	// Member 정보를 가지고 AccessToken, RefreshToken을 생성
-	public Map<String, String> generateToken(long id, String uuid, Authentication authentication) {
+	public Map<String, String> generateToken(Long id, String uuid, Authentication authentication) {
 		SecurityMember securityMember = new SecurityMember(
 			id,
 			uuid,
@@ -68,13 +68,13 @@ public class JwtTokenProvider {
 
 		// access token 발급
 		long now = (new Date()).getTime();
-		String accessToken = createToken(now, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
+		String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
 			.setSubject(authentication.getName())
-			.claim("auth", authorities)
-			.claim("uuid", uuid), id);
+			.claim("auth", authorities) // 넣고싶은 값 넣기
+			.claim("uuid", uuid));
 
 		// refresh token 발급
-		String refreshToken = createToken(now, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder(), id);
+		String refreshToken = createToken(now, id, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder());
 
 		HashMap<String, String> map = new HashMap<>();
 		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
@@ -82,12 +82,12 @@ public class JwtTokenProvider {
 		return map;
 	}
 
-	private String createToken(long now, long EXPIRE_TIME, JwtBuilder authentication, long id) {
-		Date accessTokenExpireIn = new Date(now + EXPIRE_TIME);
+	private String createToken(long now, Long id, long EXPIRE_TIME, JwtBuilder authentication) {
+		Date tokenExpireIn = new Date(now + EXPIRE_TIME);
 		return authentication
+			.setExpiration(tokenExpireIn)
 			.claim("id", id)
-			.setExpiration(accessTokenExpireIn)
-			.signWith(key, SignatureAlgorithm.HS256)
+			.signWith(key, SignatureAlgorithm.HS256) // 원하는 방식
 			.compact();
 	}
 
