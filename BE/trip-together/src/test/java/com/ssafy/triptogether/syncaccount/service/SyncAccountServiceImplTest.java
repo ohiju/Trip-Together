@@ -147,19 +147,6 @@ class SyncAccountServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("회원의 연동 계좌가 없는 경우")
-		void memberSyncAccountsEmpty() {
-			// given
-			given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
-				.willReturn(Optional.of(currentMainSyncAccount));
-			// when`& then
-			assertThrows(NotFoundException.class, () -> {
-				syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
-			});
-			verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
-		}
-
-		@Test
 		@DisplayName("주계좌 변경을 위한 요청 계좌가 없는 경우")
 		void newMainSyncAccountEmpty() {
 			// given

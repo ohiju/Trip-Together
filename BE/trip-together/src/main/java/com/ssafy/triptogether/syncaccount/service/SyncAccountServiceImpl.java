@@ -164,11 +164,10 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	}
 
 	private void deactivateCurrentMainSyncAccount(Long memberId) {
-		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-			.orElseThrow(
-				() -> new NotFoundException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNTS_NOT_FOUND, memberId)
-			);
-		syncAccount.updateIsMain(false);
+		syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+				.ifPresent(syncAccount -> {
+					syncAccount.updateIsMain(false);
+				});
 	}
 
 	private void activateNewMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
