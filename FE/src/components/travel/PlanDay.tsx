@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
   Animated,
-  Image,
   StyleSheet,
   Text,
   Platform,
@@ -10,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
+import {PlaceImage} from './PlanDayStyle';
 
 const window = Dimensions.get('window');
 
@@ -34,28 +34,27 @@ const data = {
   },
 };
 
-function Row(props) {
+function Row(props: any) {
   const {active, data} = props;
 
   const activeAnim = useRef(new Animated.Value(0));
   const style = useMemo(
     () => ({
       ...Platform.select({
-        ios: {
-          transform: [
-            {
-              scale: activeAnim.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1.07],
-              }),
-            },
-          ],
-          shadowRadius: activeAnim.current.interpolate({
-            inputRange: [0, 1],
-            outputRange: [2, 10],
-          }),
-        },
-
+        // ios: {
+        //   transform: [
+        //     {
+        //       scale: activeAnim.current.interpolate({
+        //         inputRange: [0, 1],
+        //         outputRange: [1, 1.07],
+        //       }),
+        //     },
+        //   ],
+        //   shadowRadius: activeAnim.current.interpolate({
+        //     inputRange: [0, 1],
+        //     outputRange: [2, 10],
+        //   }),
+        // },
         android: {
           transform: [
             {
@@ -85,13 +84,17 @@ function Row(props) {
 
   return (
     <Animated.View style={[styles.row, style]}>
+      <PlaceImage
+        source={require('../../assets/images/drag.png')}
+        resizeMode="contain"
+      />
       <Text style={styles.text}>{data.text}</Text>
     </Animated.View>
   );
 }
 
 const App = () => {
-  const renderRow = useCallback(({data, active}) => {
+  const renderRow = useCallback(({data, active}: any) => {
     return <Row data={data} active={active} />;
   }, []);
 
