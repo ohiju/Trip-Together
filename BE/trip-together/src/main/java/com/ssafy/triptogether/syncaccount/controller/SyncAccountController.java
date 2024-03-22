@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
+import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
@@ -34,6 +36,20 @@ public class SyncAccountController {
 
 		return ApiResponse.toResponseEntity(
 			HttpStatus.OK, StatusCode.SUCCESS_SYNC_ACCOUNTS_LOAD, syncAccountsLoadResponse
+		);
+	}
+
+	@PostMapping("/sync-accounts")
+	public ResponseEntity<ApiResponse<Void>> syncAccountSave(
+		@RequestBody @Valid SyncAccountSaveRequest syncAccountSaveRequest
+	) {
+		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
+			.pinNum(syncAccountSaveRequest.pinNum())
+			.build();
+		syncAccountSaveService.syncAccountSave(1L, pinVerifyRequest, syncAccountSaveRequest);
+
+		return ApiResponse.emptyResponse(
+			HttpStatus.CREATED, StatusCode.SUCCESS_SYNC_ACCOUNTS_SAVE
 		);
 	}
 
