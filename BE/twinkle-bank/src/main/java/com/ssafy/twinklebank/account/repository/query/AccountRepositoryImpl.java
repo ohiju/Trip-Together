@@ -16,7 +16,7 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<AccountResponse> getAccountList(long clientId, long memberId) {
+    public List<AccountResponse> getAccountList(String clientId, long memberId) {
         return queryFactory.select(Projections.constructor(AccountResponse.class,
                 account.uuid,
                 account.accountNum,
@@ -27,7 +27,7 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
                 .join(withdrawalAgreement).on(withdrawalAgreement.id.eq(account.id))
                 .where(
                     account.member.id.eq(memberId).and(
-                        withdrawalAgreement.application.id.eq(clientId)))
+                        withdrawalAgreement.application.clientId.eq(clientId)))
                 .fetch();
     }
 }

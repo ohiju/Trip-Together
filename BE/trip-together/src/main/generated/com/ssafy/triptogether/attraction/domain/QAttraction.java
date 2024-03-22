@@ -41,7 +41,7 @@ public class QAttraction extends EntityPathBase<Attraction> {
 
     public final StringPath description = createString("description");
 
-    public final TimePath<java.sql.Time> endAt = createTime("endAt", java.sql.Time.class);
+    public final TimePath<java.time.LocalTime> endAt = createTime("endAt", java.time.LocalTime.class);
 
     public final ListPath<com.ssafy.triptogether.flashmob.domain.FlashMob, com.ssafy.triptogether.flashmob.domain.QFlashMob> flashMobs = this.<com.ssafy.triptogether.flashmob.domain.FlashMob, com.ssafy.triptogether.flashmob.domain.QFlashMob>createList("flashMobs", com.ssafy.triptogether.flashmob.domain.FlashMob.class, com.ssafy.triptogether.flashmob.domain.QFlashMob.class, PathInits.DIRECT2);
 
@@ -61,7 +61,7 @@ public class QAttraction extends EntityPathBase<Attraction> {
 
     public final ListPath<com.ssafy.triptogether.review.domain.Review, com.ssafy.triptogether.review.domain.QReview> reviews = this.<com.ssafy.triptogether.review.domain.Review, com.ssafy.triptogether.review.domain.QReview>createList("reviews", com.ssafy.triptogether.review.domain.Review.class, com.ssafy.triptogether.review.domain.QReview.class, PathInits.DIRECT2);
 
-    public final TimePath<java.sql.Time> startAt = createTime("startAt", java.sql.Time.class);
+    public final TimePath<java.time.LocalTime> startAt = createTime("startAt", java.time.LocalTime.class);
 
     public final StringPath thumbnailImageUrl = createString("thumbnailImageUrl");
 

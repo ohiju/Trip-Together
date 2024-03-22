@@ -1,4 +1,6 @@
-package com.ssafy.twinklebank.auth.utils;
+package com.ssafy.twinklebank.auth.provider;
+
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -8,14 +10,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.ssafy.twinklebank.auth.service.UserDetailsServiceImpl;
+import com.ssafy.twinklebank.auth.utils.SecurityMember;
+import com.ssafy.twinklebank.auth.utils.SecurityUtil;
+import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,12 +40,13 @@ public class JwtTokenProvider {
 	// 은행의 access token의 유효 시간 : 5분
 	// 은행의 refresh token의 유효 시간 : 7일
 	@Getter
-	private final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
+	private final long ACCESS_TOKEN_EXPIRE_TIME = 5 * 60 * 1000L; // 5분
 	@Getter
 	private final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
 	// security Key
 	private final Key key;
+	private UserDetailsServiceImpl userDetailsService;
 
 	public JwtTokenProvider(@Value("${jwt.secret}") String key) {
 		byte[] keyBytes = Decoders.BASE64.decode(key);
@@ -44,9 +54,10 @@ public class JwtTokenProvider {
 	}
 
 	// Member 정보를 가지고 AccessToken, RefreshToken을 생성
-	public Map<String, String> generateToken(long id, Authentication authentication) {
+	public Map<String, String> generateToken(long id, String uuid, Authentication authentication) {
 		SecurityMember securityMember = new SecurityMember(
 			id,
+			uuid,
 			(String)authentication.getPrincipal(),
 			(String)authentication.getCredentials()
 		);
@@ -57,49 +68,46 @@ public class JwtTokenProvider {
 
 		// access token 발급
 		long now = (new Date()).getTime();
-		Date accessTokenExpireIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-		String accessToken = Jwts.builder()
+		String accessToken = createToken(now, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim("auth", authorities)
+			.claim("uuid", uuid), id);
+
+		// refresh token 발급
+		String refreshToken = createToken(now, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder(), id);
+
+		HashMap<String, String> map = new HashMap<>();
+		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
+		map.put("refresh", refreshToken); // Bearer을 붙이지 않음
+		return map;
+	}
+
+	private String createToken(long now, long EXPIRE_TIME, JwtBuilder authentication, long id) {
+		Date accessTokenExpireIn = new Date(now + EXPIRE_TIME);
+		return authentication
 			.claim("id", id)
 			.setExpiration(accessTokenExpireIn)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
-
-		// refresh token 발급
-		Date refreshTokenExpireIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
-		String refreshToken = Jwts.builder()
-			.setExpiration(refreshTokenExpireIn)
-			.signWith(key, SignatureAlgorithm.HS256)
-			.compact();
-
-		HashMap<String, String> map = new HashMap<>();
-		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
-		map.put("refresh", refreshToken); // cookie에 담으므로 Bearer을 붙이지 않음
-		return map;
 	}
 
 	// access token을 복호하하여 토큰에 들어있는 정보를 꺼내는 메소드
 	public Authentication getAuthentication(String accessToken) {
-		// 토큰 복호화
 		Claims claims = parseClaims(accessToken);
 
 		if (claims.get("auth") == null) {
-			// TODO : 에러 처리 다시 하기
-			throw new RuntimeException("권한 정보가 없는 토큰임");
+			throw new UnAuthorizedException("JwtTokenProvider : ", UNAUTHORIZED_MEMBER);
 		}
 
-		// TODO : authentication 을 만들어서 getName을 설정하는 부분이 완료되면 다시 작성하기
-		// 사용자 이름으로 로그인한 유저 정보 가져오기
-		String name = claims.getSubject();
-		// SecurityMember securityMember =
+		// claims에서 name으로 securitymember을 가져온다
+		String username = claims.getSubject();
+		SecurityMember securityMember = (SecurityMember)userDetailsService.loadUserByUsername(username);
 
 		List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
 			.map(SimpleGrantedAuthority::new)
-			.collect(Collectors.toList());
+			.toList();
 
-		// return new UsernamePasswordAuthenticationToken(securityUser, "", authorities);
-		return null;
+		return new UsernamePasswordAuthenticationToken(securityMember, "", authorities);
 	}
 
 	// 토큰 정보를 검증하는 메서드
@@ -122,7 +130,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private Claims parseClaims(String accessToken) {
+	public Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder()
 				.setSigningKey(key)

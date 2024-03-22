@@ -1,10 +1,12 @@
 package com.ssafy.triptogether.global.exception.handler;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.*;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.global.exception.response.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +15,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ErrorResponse methodValidationHandler(MethodArgumentNotValidException exception) {
+		String message = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+		log.error(message, exception);
+		return new ErrorResponse(HttpStatus.BAD_REQUEST, message);
+	} // 400
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BadRequestException.class)
 	public ErrorResponse badRequestHandler(TripRuntimeException exception) {

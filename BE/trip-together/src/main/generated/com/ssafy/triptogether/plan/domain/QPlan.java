@@ -27,7 +27,9 @@ public class QPlan extends EntityPathBase<Plan> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final DateTimePath<java.time.LocalDateTime> endAt = createDateTime("endAt", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> endAt = createDate("endAt", java.time.LocalDate.class);
+
+    public final NumberPath<Double> estimatedBudget = createNumber("estimatedBudget", Double.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -39,7 +41,7 @@ public class QPlan extends EntityPathBase<Plan> {
 
     public final com.ssafy.triptogether.attraction.domain.QRegion region;
 
-    public final DateTimePath<java.time.LocalDateTime> startAt = createDateTime("startAt", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> startAt = createDate("startAt", java.time.LocalDate.class);
 
     public final StringPath title = createString("title");
 
