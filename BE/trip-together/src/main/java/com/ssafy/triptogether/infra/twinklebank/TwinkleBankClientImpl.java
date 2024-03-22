@@ -90,4 +90,33 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 
 		throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
 	}
+
+	/**
+	 * 계좌 연동 해지 요청
+	 * @param twinkleAccountSyncRequest 연동 해지 할 계좌
+	 */
+	@Override
+	public void bankAccountSyncDelete(TwinkleAccountSyncRequest twinkleAccountSyncRequest) {
+		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
+
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts")
+			.queryParam("여행 클라이언트 키")
+			.toUriString();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Bearer " + "access_token");
+		HttpEntity<TwinkleAccountSyncRequest> entity = new HttpEntity<>(twinkleAccountSyncRequest, headers);
+
+		ResponseEntity<ApiResponse> response = restTemplate.exchange(
+			url,
+			HttpMethod.DELETE,
+			entity,
+			ApiResponse.class
+		);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
 }

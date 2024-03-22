@@ -138,7 +138,7 @@ class TwinkleBankClientImplTest {
 
 		@Test
 		@DisplayName("반짝 은행 계좌 연동 성공")
-		void bankAccountsLoadSuccess() {
+		void bankAccountsSyncSuccess() {
 			// given
 			given(restTemplate.exchange(
 				anyString(),
@@ -158,7 +158,7 @@ class TwinkleBankClientImplTest {
 
 		@Test
 		@DisplayName("반짝 은행 계좌 연동 실패")
-		void bankAccountsLoadFail() {
+		void bankAccountsSyncFail() {
 			// given
 			given(restTemplate.exchange(
 				anyString(),
@@ -169,6 +169,42 @@ class TwinkleBankClientImplTest {
 			// when & then
 			assertThrows(ExternalServerException.class, () -> {
 				twinkleBankClient.bankAccountsSync(twinkleAccountSyncRequest);
+			});
+		}
+	}
+
+	@Nested
+	@MockitoSettings(strictness = Strictness.LENIENT)
+	@DisplayName("반짝 은행 계좌 연동 해지 요청")
+	class BankAccountSyncDeleteTest {
+		TwinkleAccountSyncRequest twinkleAccountSyncRequest;
+		ApiResponse apiResponse;
+
+		@BeforeEach
+		void setUp() {
+			twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
+				.accountUuid("test")
+				.build();
+			apiResponse = ApiResponse.builder()
+				.status(1)
+				.message("test")
+				.data(null)
+				.build();
+		}
+
+		@Test
+		@DisplayName("반짝 은행 계좌 연동 해지 실패")
+		void bankAccountsLoadFail() {
+			// given
+			given(restTemplate.exchange(
+				anyString(),
+				eq(HttpMethod.DELETE),
+				any(HttpEntity.class),
+				eq(ApiResponse.class)
+			)).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST));
+			// when & then
+			assertThrows(ExternalServerException.class, () -> {
+				twinkleBankClient.bankAccountSyncDelete(twinkleAccountSyncRequest);
 			});
 		}
 	}
