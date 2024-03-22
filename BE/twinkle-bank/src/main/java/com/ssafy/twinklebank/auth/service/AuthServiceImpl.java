@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 
 	public Map<String, String> getToken(TokenRequest request) {
 
-		Member member = MemberUtils.getMember(memberRepository, passwordEncoder, request.username(), request.password());
+		Member member = MemberUtils.loadMemberByUserNameAndPassword(memberRepository, passwordEncoder, request.username(), request.password());
 		Authentication authentication =
 			new UsernamePasswordAuthenticationToken(request.username(), request.password(),
 				Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
@@ -37,10 +37,13 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 		Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), member.getUuid(),authentication);
 
 		// refresh token redis에 저장
-		System.out.println(jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
+		saveRefreshToken(member, tokenMap);
+		return tokenMap;
+	}
+
+	private void saveRefreshToken(Member member, Map<String, String> tokenMap) {
 		redisTemplate.opsForValue()
 			.set("refresh:" + member.getId(), tokenMap.get("refresh"),
 				jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
-		return tokenMap;
 	}
 }

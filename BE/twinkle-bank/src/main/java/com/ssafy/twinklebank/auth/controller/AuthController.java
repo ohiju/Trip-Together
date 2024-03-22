@@ -19,6 +19,7 @@ import com.ssafy.twinklebank.global.data.response.ApiResponse;
 
 import java.util.Map;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,7 +30,7 @@ public class AuthController {
 	private final CookieProvider cookieProvider;
 
 	@PostMapping("/token")
-	public ResponseEntity<ApiResponse<TokenResponse>> getToken(@RequestBody TokenRequest request) {
+	public ResponseEntity<ApiResponse<TokenResponse>> getToken(@RequestBody @Valid TokenRequest request) {
 
 		Map<String, String> tokenMap = authService.getToken(request);
 		String accessToken = tokenMap.get("access");

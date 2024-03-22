@@ -16,6 +16,7 @@ import com.ssafy.twinklebank.member.service.MemberLoadService;
 import com.ssafy.twinklebank.member.service.MemberSaveService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class MemberController {
 	private final CookieProvider cookieProvider;
 
 	@PostMapping("/join")
-	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody MemberJoinRequest request) {
+	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody @Valid MemberJoinRequest request) {
 		Map<String, String> memberResponse = memberSaveService.join(request);
 		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_JOIN, memberResponse);
 	}
