@@ -1,48 +1,67 @@
-import React from 'react';
-import {Shadow} from 'react-native-shadow-2';
-import {imagePath} from '../../assets/images/imagePath';
-import {imageBaseUrl} from '../../constants/urls';
-import {RootState} from '../../store';
-import {useAppSelector} from '../../store/hooks';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
+// import {imagePath} from '../../assets/images/imagePath';
+// import {imageBaseUrl} from '../../constants/urls';
+import useSwipeTop from '../../hooks/useSwipeTop';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import StarRating from 'react-native-star-rating-widget';
+// import {RootState} from '../../store';
+// import {useAppSelector} from '../../store/hooks';
 import {
-  //   Description,
-  //   Nickname,
-  //   Username,
+  Description,
   DragBar,
-  ProfileImage,
-  ProfileImageView,
-  ProfileView,
-  UserInfoView,
+  PlaceName,
+  PlaceBox,
+  PlaceImage,
+  PlaceImageView,
+  PlaceView,
+  StyledShadow,
+  PlaceInfoView,
+  Address,
   Wrapper,
+  Price,
+  Rating,
 } from './PlaceInfoStyle';
 
 const PlaceInfo = () => {
-  const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
-  const image = userInfo.image_url
-    ? {uri: `${imageBaseUrl}${userInfo.image_url}`}
-    : imagePath.basicProfile;
-  //   const description = userInfo.description
-  //     ? userInfo.description
-  //     : '자기소개를 입력하고 마음에 맞는 동행을 구해보세요!';
-  //   const nickname = userInfo.nickname ? userInfo.nickname : userInfo.username;
+  const [rating, setRating] = useState(4.9);
+  // 라우팅
+  const navigation = useNavigation<NavigationProp<MapStackParams>>();
+  const onSwipeTop = () => {
+    navigation.navigate('placeinfo');
+  };
+  const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
 
   return (
-    <Wrapper>
-      <Shadow distance={10} offset={[0, 1]}>
-        <ProfileView>
+    <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <StyledShadow offset={[0, 1]}>
+        <PlaceBox>
           <DragBar />
-          <ProfileImageView>
-            <ProfileImage source={image} resizeMode="contain" />
-          </ProfileImageView>
-          <UserInfoView>
-            {/* <Nickname>{nickname}</Nickname>
-            <Username>{userInfo.username}</Username>
-            <Description numberOfLines={1} ellipsizeMode="tail">
-              {description}
-            </Description> */}
-          </UserInfoView>
-        </ProfileView>
-      </Shadow>
+          <PlaceView>
+            <PlaceImageView>
+              <PlaceImage
+                source={require('../../assets/images/sagradafamilia.png')}
+                resizeMode="contain"
+              />
+            </PlaceImageView>
+            <PlaceInfoView>
+              <PlaceName>La Sagrada Familia</PlaceName>
+              <Address>
+                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
+              </Address>
+              <Description>
+                <Rating>{rating}</Rating>
+                <StarRating
+                  rating={rating}
+                  onChange={setRating}
+                  starSize={20}
+                />
+                <Price>₩123,398</Price>
+              </Description>
+            </PlaceInfoView>
+          </PlaceView>
+        </PlaceBox>
+      </StyledShadow>
     </Wrapper>
   );
 };

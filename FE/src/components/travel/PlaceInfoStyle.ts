@@ -1,22 +1,37 @@
+import {Shadow} from 'react-native-shadow-2';
 import styled from 'styled-components/native';
-import {bg_light, bg_lightgray, font_dark} from '../../constants/colors';
+import {
+  bg_light,
+  bg_lightgray,
+  bg_main,
+  font_dark,
+} from '../../constants/colors';
 
 const Wrapper = styled.View`
-  flex: 0.2;
   width: 100%;
-  justify-content: start;
+  background: ${bg_main};
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
 `;
 
-const ProfileView = styled.View`
+const StyledShadow = styled(Shadow)`
+  align-self: stretch;
+`;
+
+const PlaceBox = styled.View`
   position: relative;
-  flex: 1;
-  width: 100%;
-  flex-direction: row;
   background: ${bg_light};
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
+  padding-top: 20px;
+  height: 150px;
+  width: 100%;
+`;
+
+const PlaceView = styled.View`
+  flex-direction: row;
   align-items: center;
-  padding-top: 8px;
+  padding: 10px 15px;
 `;
 
 const DragBar = styled.View`
@@ -28,46 +43,65 @@ const DragBar = styled.View`
   border-radius: 5px;
 `;
 
-const ProfileImageView = styled.View`
-  width: 25%;
+const PlaceImageView = styled.View`
+  height: 80px;
+  width: 80px;
   aspect-ratio: 1/1;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  border-radius: 40px;
+  overflow: hidden;
 `;
 
-const ProfileImage = styled.Image`
-  width: 100%;
-  height: 100%;
-  border-radius: 100px;
+const PlaceImage = styled.Image`
+  width: 110px;
+  height: 110px;
 `;
 
-const UserInfoView = styled.View`
-  width: 75%;
+const PlaceInfoView = styled.View`
+  flex: 1;
+  margin-left: 10px;
 `;
 
-const Nickname = styled.Text`
+const PlaceName = styled.Text`
   color: ${font_dark};
   font-weight: 600;
+  font-size: 18px;
 `;
 
-const Username = styled.Text`
-  font-size: 12px;
+const Address = styled.Text`
+  font-size: 14px;
 `;
 
-const Description = styled.Text`
+const Description = styled.View`
   width: 100%;
-  font-size: 12px;
+  margin-top: 10px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Rating = styled.Text`
+  font-size: 20px;
+  margin-right: 5px;
+`;
+
+const Price = styled.Text`
+  margin-left: 15px;
+  font-size: 15px;
 `;
 
 export {
   Description,
   DragBar,
-  Nickname,
-  ProfileImage,
-  ProfileImageView,
-  ProfileView,
-  UserInfoView,
-  Username,
+  PlaceName,
+  PlaceBox,
+  PlaceImage,
+  PlaceImageView,
+  PlaceView,
+  StyledShadow,
+  PlaceInfoView,
+  Address,
   Wrapper,
+  Rating,
+  Price,
 };

@@ -7,6 +7,8 @@ import Calendar from '../pages/travel/Calendar';
 import TripTitle from '../pages/travel/TripTitle';
 import GoogleMap from '../pages/travel/Map';
 import PlanDetail from '../pages/travel/PlanDetail';
+import PlaceInfoList from '../pages/travel/PlaceInfoList';
+import PlaceDetail from '../pages/travel/PlaceDetail';
 
 const TravelStack = () => {
   const Stack = createNativeStackNavigator<TravelStackParams>();
@@ -57,6 +59,20 @@ const TravelStack = () => {
           component={PlanDetail}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="placeinfo"
+          component={PlaceInfoList}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="placedetail"
+          component={PlaceDetail}
+          options={{
+            title: '',
           }}
         />
       </Stack.Group>

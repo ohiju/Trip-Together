@@ -93,7 +93,7 @@ function Row(props: any) {
   );
 }
 
-const App = () => {
+const PlanDay = () => {
   const renderRow = useCallback(({data, active}: any) => {
     return <Row data={data} active={active} />;
   }, []);
@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default PlanDay;

@@ -1,7 +1,7 @@
 const Places = [
   {
     attraction_id: 1,
-    thumbnail_image_url: '썸네일 이미지 url',
+    thumbnail_image_url: 'https://ibb.co/2NkjSF5',
     name: 'La Sagrada Familia',
     address: 'C/ de Mallorca, 401, L`Eixample, 08013 Barcelona',
     avg_rating: '4.9',
@@ -10,8 +10,8 @@ const Places = [
     longitude: 2.1744,
   },
   {
-    attraction_id: 1,
-    thumbnail_image_url: '썸네일 이미지 url',
+    attraction_id: 2,
+    thumbnail_image_url: 'https://ibb.co/2NkjSF5',
     name: 'La Sagrada Familia',
     address: 'C/ de Mallorca, 401, L`Eixample, 08013 Barcelona',
     avg_rating: '4.9',
@@ -20,8 +20,8 @@ const Places = [
     longitude: 2.1744,
   },
   {
-    attraction_id: 1,
-    thumbnail_image_url: '썸네일 이미지 url',
+    attraction_id: 3,
+    thumbnail_image_url: 'https://ibb.co/2NkjSF5',
     name: 'La Sagrada Familia',
     address: 'C/ de Mallorca, 401, L`Eixample, 08013 Barcelona',
     avg_rating: '4.9',
@@ -30,8 +30,8 @@ const Places = [
     longitude: 2.1744,
   },
   {
-    attraction_id: 1,
-    thumbnail_image_url: '썸네일 이미지 url',
+    attraction_id: 4,
+    thumbnail_image_url: 'https://ibb.co/2NkjSF5',
     name: 'La Sagrada Familia',
     address: 'C/ de Mallorca, 401, L`Eixample, 08013 Barcelona',
     avg_rating: '4.9',
