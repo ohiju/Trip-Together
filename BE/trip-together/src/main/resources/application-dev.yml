@@ -16,3 +16,5 @@ spring:
       path: /api
 
 EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
+jwt:
+  secret: ${JWT_SECRET_KEY}

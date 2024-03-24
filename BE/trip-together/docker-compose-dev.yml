@@ -37,6 +37,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: dev
       EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     restart: always
 
   sonarqube:
