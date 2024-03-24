@@ -1,13 +1,32 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import {PlaceDetail} from '../../assets/data/placedetail';
+import {
+  Container,
+  ImageBackground,
+  DetailsContainer,
+  Title,
+  Info,
+  Bag,
+  ReviewsContainer,
+  ReviewItem,
+  ReviewImage,
+  ProfileImage,
+  ReviewDetails,
+  ReviewWriter,
+  ReviewRating,
+  HeaderContainer,
+  ReviewContent,
+  NavigationButtons,
+  NavButton,
+  HeadersContainer,
+  BagImage,
+  Address,
+  Header,
+  StarInfo,
+  Line,
+} from './PlaceDetailStyle';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 
 const AttractionDetailsPage = ({route}: any) => {
   const attraction = PlaceDetail[0];
@@ -18,24 +37,19 @@ const AttractionDetailsPage = ({route}: any) => {
     source: require('../../assets/images/review.jpg'),
   }));
 
-  // Render item for carousel of images
   const renderImageItem = ({item}: {item: any}) => (
-    <Image source={item.source} style={styles.reviewImage} />
+    <ReviewImage source={item.source} />
   );
 
-  // Render item for carousel of reviews
   const renderReviewItem = ({item}: {item: any}) => (
-    <View style={styles.reviewItem}>
-      <Image
-        source={require('../../assets/images/basicProfile.png')}
-        style={styles.profileImage}
-      />
-      <View style={styles.reviewDetails}>
-        <Text style={styles.reviewWriter}>{item.writer_nickname}</Text>
-        <Text style={styles.reviewRating}>Rating: {item.rating}</Text>
-        <Text style={styles.reviewContent}>{item.content}</Text>
-      </View>
-    </View>
+    <ReviewItem>
+      <ProfileImage source={require('../../assets/images/basicProfile.png')} />
+      <ReviewDetails>
+        <ReviewWriter>{item.writer_nickname}</ReviewWriter>
+        <ReviewRating>Rating: {item.rating}</ReviewRating>
+        <ReviewContent>{item.content}</ReviewContent>
+      </ReviewDetails>
+    </ReviewItem>
   );
 
   const goToPreviousReview = () => {
@@ -55,41 +69,59 @@ const AttractionDetailsPage = ({route}: any) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image
+    <Container>
+      <ImageBackground
         source={require('../../assets/images/sagradafamilia.png')}
-        style={styles.image}
         resizeMode="cover"
       />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>La Sagrada Familia</Text>
-        <Text style={styles.reviewsTitle}>정보</Text>
-        <Text style={styles.info}>평균 가격: {attraction.avg_price}</Text>
-        <Text style={styles.info}>
+      <HeadersContainer>
+        <Header>
+          <Title>La Sagrada Familia</Title>
+          <Address> C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'</Address>
+        </Header>
+        <Bag>
+          <BagImage
+            source={require('../../assets/images/shopping.jpg')}
+            resizeMode="cover"
+          />
+        </Bag>
+      </HeadersContainer>
+
+      <DetailsContainer>
+        <Title>정보</Title>
+        <Line />
+        <StarInfo>
+          <Info>평점: 4.9</Info>
+          <StarRatingDisplay rating={4.9} starSize={18} />
+        </StarInfo>
+        <Info>평균 가격: {attraction.avg_price}</Info>
+        <Info>
           운영 시간: {attraction.start_at} - {attraction.end_at}
-        </Text>
+        </Info>
 
-        <Text style={styles.reviewsTitle}>사진</Text>
-        <FlatList
-          data={images}
-          renderItem={renderImageItem}
-          horizontal
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <ReviewsContainer>
+          <Title>사진</Title>
+          <Line />
+          <FlatList
+            data={images}
+            renderItem={renderImageItem}
+            horizontal
+            keyExtractor={item => item.id}
+          />
 
-        <View style={styles.reviewsContainer}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.reviewsTitle}>리뷰</Text>
-            <View style={styles.navigationButtons}>
+          <HeaderContainer>
+            <Title>리뷰</Title>
+            <NavigationButtons>
               <TouchableOpacity onPress={goToPreviousReview}>
-                <Text style={styles.navButton}>{'<'}</Text>
+                <NavButton>{'<'}</NavButton>
               </TouchableOpacity>
               <TouchableOpacity onPress={goToNextReview}>
-                <Text style={styles.navButton}>{'>'}</Text>
+                <NavButton>{'>'}</NavButton>
               </TouchableOpacity>
-            </View>
-          </View>
+            </NavigationButtons>
+          </HeaderContainer>
 
+          <Line />
           <FlatList
             data={[attraction.reviews[currentReviewIndex]]}
             renderItem={renderReviewItem}
@@ -100,86 +132,10 @@ const AttractionDetailsPage = ({route}: any) => {
             pagingEnabled
             keyExtractor={(item, index) => index.toString()}
           />
-        </View>
-      </View>
-    </View>
+        </ReviewsContainer>
+      </DetailsContainer>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-  },
-  detailsContainer: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  info: {
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  reviewsContainer: {
-    marginTop: 20,
-  },
-  reviewsTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  reviewItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    width: 300,
-  },
-  reviewImage: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-  },
-  profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  reviewDetails: {
-    flex: 1,
-  },
-  reviewWriter: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  reviewRating: {
-    fontSize: 14,
-    color: 'green',
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  reviewContent: {
-    fontSize: 14,
-  },
-  navigationButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  navButton: {
-    fontSize: 35,
-    marginRight: 10,
-  },
-});
 
 export default AttractionDetailsPage;

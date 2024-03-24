@@ -1,60 +1,58 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Animated, StyleSheet, Platform, Easing, Dimensions} from 'react-native';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {
-  Animated,
-  StyleSheet,
-  Text,
-  Platform,
-  Easing,
-  View,
-  Dimensions,
-} from 'react-native';
-import SortableList from 'react-native-sortable-list';
-import {PlaceImage} from './PlanDayStyle';
+  DragBar,
+  Container,
+  FirstHalf,
+  SecondHalf,
+  List,
+  Image,
+  InfoContainer,
+  Name,
+  RatingContainer,
+  Rating,
+  Price,
+  Middle,
+  MiddleTitle,
+  MiddlePrice,
+  PlaceImage,
+  Button,
+} from './PlanDayStyle';
+import {RootState} from '../../store';
+import {useAppSelector} from '../../store/hooks';
+import {useAppDispatch} from '../../store/hooks';
+import {deleteItemFromBag, addItemToBag} from '../../store/slices/bag';
+import {addDailyPlan, deleteDailyPlan} from '../../store/slices/trip';
 
 const window = Dimensions.get('window');
 
-const data = {
-  0: {
-    text: '장소1',
-  },
-  1: {
-    text: '장소2',
-  },
-  2: {
-    text: '장소3',
-  },
-  3: {
-    text: '장소4',
-  },
-  4: {
-    text: '장소5',
-  },
-  5: {
-    text: '장소6',
-  },
-};
+interface SortableDataItem {
+  attraction_id: number;
+  thumbnail_image_url: string;
+  name: string;
+  address: string;
+  avg_rating: string;
+  avg_price: string;
+}
+
+interface SortableDownDataItem {
+  attraction_id: number;
+  thumbnail_image_url: string;
+  name: string;
+  address: string;
+  avg_rating: string;
+  avg_price: string;
+}
 
 function Row(props: any) {
-  const {active, data} = props;
+  const {active, data, UporDown, onPressUp, onPressDown} = props;
 
   const activeAnim = useRef(new Animated.Value(0));
+
   const style = useMemo(
     () => ({
       ...Platform.select({
-        // ios: {
-        //   transform: [
-        //     {
-        //       scale: activeAnim.current.interpolate({
-        //         inputRange: [0, 1],
-        //         outputRange: [1, 1.07],
-        //       }),
-        //     },
-        //   ],
-        //   shadowRadius: activeAnim.current.interpolate({
-        //     inputRange: [0, 1],
-        //     outputRange: [2, 10],
-        //   }),
-        // },
         android: {
           transform: [
             {
@@ -73,6 +71,7 @@ function Row(props: any) {
     }),
     [],
   );
+
   useEffect(() => {
     Animated.timing(activeAnim.current, {
       duration: 300,
@@ -86,57 +85,147 @@ function Row(props: any) {
     <Animated.View style={[styles.row, style]}>
       <PlaceImage
         source={require('../../assets/images/drag.png')}
-        resizeMode="contain"
+        resizeMode="cover"
       />
-      <Text style={styles.text}>{data.text}</Text>
+      <Image
+        source={require('../../assets/images/sagradafamilia.png')}
+        resizeMode="cover"
+      />
+      <InfoContainer>
+        <Name>{data.name}</Name>
+        {/* <Address>{data.address}</Address> */}
+        <RatingContainer>
+          <Rating>{`평점: ${data.avg_rating}`}</Rating>
+          <StarRatingDisplay rating={4.9} starSize={12} />
+        </RatingContainer>
+        <Price>{`평균 가격: ${data.avg_price}`}</Price>
+      </InfoContainer>
+      {UporDown === 'up' ? (
+        <Button onPress={() => onPressDown(data)}>
+          <PlaceImage
+            source={require('../../assets/images/godown.png')}
+            resizeMode="cover"
+          />
+        </Button>
+      ) : (
+        <Button onPress={() => onPressUp(data)}>
+          <PlaceImage
+            source={require('../../assets/images/goup.png')}
+            resizeMode="cover"
+          />
+        </Button>
+      )}
+      <Button>
+        <PlaceImage
+          source={require('../../assets/images/trash.png')}
+          resizeMode="cover"
+        />
+      </Button>
     </Animated.View>
   );
 }
 
-const PlanDay = () => {
-  const renderRow = useCallback(({data, active}: any) => {
-    return <Row data={data} active={active} />;
+interface RenderRowProp {
+  data: any;
+  active: boolean;
+}
+
+interface DailyPlan {
+  attractions: any[];
+  order: number;
+  daily_estimated_budget: number;
+}
+
+const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
+  const topList = dailyPlan.attractions;
+  const today = dailyPlan.order;
+  const bottomList = useAppSelector((state: RootState) => state.bag.bagInfo);
+  const dispatch = useAppDispatch();
+
+  const handleRowPress = useCallback((row, action) => {
+    if (action === 'up') {
+      dispatch(addDailyPlan({order: today, attraction: row}));
+      dispatch(deleteItemFromBag(row.attraction_id));
+    } else if (action === 'down') {
+      dispatch(
+        deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
+      );
+      dispatch(addItemToBag(row));
+    }
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>React Native Sortable List</Text>
-      <SortableList
-        style={styles.list}
-        contentContainerStyle={styles.contentContainer}
+  const renderRowUp = useCallback(({data, active}: RenderRowProp) => {
+    return (
+      <Row
         data={data}
-        renderRow={renderRow}
+        active={active}
+        UporDown="up"
+        onPressDown={row => handleRowPress(row, 'down')}
       />
-    </View>
+    );
+  }, []);
+
+  const renderRowDown = useCallback(({data, active}: RenderRowProp) => {
+    return (
+      <Row
+        data={data}
+        active={active}
+        UporDown="down"
+        onPressUp={row => handleRowPress(row, 'up')}
+      />
+    );
+  }, []);
+
+  const sortableUpData: {[key: number]: SortableDataItem} = topList.reduce(
+    (acc, place, index) => {
+      acc[index] = {...place, id: index};
+      return acc;
+    },
+    {} as {[key: number]: SortableDataItem},
+  );
+
+  const sortableDownData: {[key: number]: SortableDownDataItem} =
+    bottomList.reduce((acc, place, index) => {
+      acc[index] = {...place, id: index};
+      return acc;
+    }, {} as {[key: number]: SortableDownDataItem});
+
+  return (
+    <Container>
+      <FirstHalf>
+        <List
+          style={styles.list}
+          contentContainerStyle={styles.contentContainer}
+          data={sortableUpData}
+          renderRow={renderRowUp}
+        />
+      </FirstHalf>
+      <Middle>
+        <MiddleTitle>일 예산</MiddleTitle>
+        <MiddlePrice>₩123</MiddlePrice>
+        <MiddleTitle>총 예산</MiddleTitle>
+        <MiddlePrice>₩123</MiddlePrice>
+      </Middle>
+      <SecondHalf>
+        <List
+          style={styles.list}
+          contentContainerStyle={styles.contentContainer}
+          data={sortableDownData}
+          renderRow={renderRowDown}
+        />
+        <DragBar />
+      </SecondHalf>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-    ...Platform.select({
-      ios: {
-        paddingTop: 20,
-      },
-    }),
-  },
-  title: {
-    fontSize: 20,
-    paddingVertical: 20,
-    color: '#999999',
-  },
   list: {
     flex: 1,
   },
   contentContainer: {
     width: window.width,
     ...Platform.select({
-      ios: {
-        paddingHorizontal: 30,
-      },
       android: {
         paddingHorizontal: 0,
       },
@@ -146,36 +235,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
-    height: 80,
-    flex: 1,
-    marginTop: 7,
-    marginBottom: 12,
-    borderRadius: 4,
-    ...Platform.select({
-      ios: {
-        width: window.width - 30 * 2,
-        shadowColor: 'rgba(0,0,0,0.2)',
-        shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
-        shadowRadius: 2,
-      },
-      android: {
-        width: window.width - 30 * 2,
-        elevation: 0,
-        marginHorizontal: 30,
-      },
-    }),
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 30,
-    borderRadius: 25,
-  },
-  text: {
-    fontSize: 24,
-    color: '#222222',
+    padding: 8,
+    marginHorizontal: 16,
+    marginVertical: 9,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

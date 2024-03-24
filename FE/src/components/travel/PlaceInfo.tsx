@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 // import {imageBaseUrl} from '../../constants/urls';
 import useSwipeTop from '../../hooks/useSwipeTop';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import StarRating from 'react-native-star-rating-widget';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 // import {RootState} from '../../store';
 // import {useAppSelector} from '../../store/hooks';
 import {
@@ -24,7 +24,7 @@ import {
 } from './PlaceInfoStyle';
 
 const PlaceInfo = () => {
-  const [rating, setRating] = useState(4.9);
+  const [rating] = useState(4.9);
   // 라우팅
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const onSwipeTop = () => {
@@ -51,11 +51,7 @@ const PlaceInfo = () => {
               </Address>
               <Description>
                 <Rating>{rating}</Rating>
-                <StarRating
-                  rating={rating}
-                  onChange={setRating}
-                  starSize={20}
-                />
+                <StarRatingDisplay rating={rating} starSize={20} />
                 <Price>₩123,398</Price>
               </Description>
             </PlaceInfoView>

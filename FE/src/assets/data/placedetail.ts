@@ -29,7 +29,7 @@ const PlaceDetail = [
         writer_profile_image_url: 'url',
         writer_nickname: 'ohiju',
         rating: '4.9',
-        content: 'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR',
+        content: 'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR',
       },
     ],
   },

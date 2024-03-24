@@ -3,7 +3,6 @@ import {primary, bg_lightgray} from '../../constants/colors';
 
 const Container = styled.View`
   height: 20%;
-  width: 90%;
   border-radius: 10px;
   justify-content: center;
   align-items: center;

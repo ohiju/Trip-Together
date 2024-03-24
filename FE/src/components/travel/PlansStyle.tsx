@@ -31,6 +31,11 @@ const ButtonText = styled.Text`
   margin-bottom: 0px;
 `;
 
+const ButtonImage = styled.Image`
+  width: 30px;
+  height: 30px;
+`;
+
 const PlanDescription = styled.View`
   width: 70%;
   height: 50px;
@@ -59,12 +64,17 @@ const StartCityText = styled.Text`
 
 const DdayText = styled.Text`
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 900;
 `;
 
 const DurationText = styled.Text`
   font-size: 15px;
   margin-top: 10px;
+  font-weight: bold;
+`;
+
+const CityName = styled.Text`
+  font-weight: bold;
 `;
 
 const PlanMoney = styled.View`
@@ -89,7 +99,7 @@ const MoneyUnit = styled.Text`
 
 const MoneyText = styled.Text`
   font-size: 25px;
-  font-weight: bold;
+  font-weight: 900;
 `;
 
 export {
@@ -98,9 +108,11 @@ export {
   PlanCenter,
   PlanSlideButton,
   ButtonText,
+  ButtonImage,
   StartCityText,
   DdayText,
   DurationText,
+  CityName,
   PlanDescription,
   PlanDescriptionBox,
   PlanImage,

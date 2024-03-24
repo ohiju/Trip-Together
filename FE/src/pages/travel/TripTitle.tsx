@@ -12,14 +12,17 @@ import AppButton from '../../components/common/AppButton';
 import {BottomButton} from '../../constants/AppButton';
 import DismissKeyboardView from '../../components/common/DismissKeyboardView';
 import {StyleSheet} from 'react-native';
+import {useAppDispatch} from '../../store/hooks';
+import {setTripTitle} from '../../store/slices/trip';
 
 const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
-
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState('오희주님의 프랑스 여행 계획');
 
   const handleSubmit = () => {
     navigation.navigate('map', {title});
+    dispatch(setTripTitle(title));
   };
 
   return (
