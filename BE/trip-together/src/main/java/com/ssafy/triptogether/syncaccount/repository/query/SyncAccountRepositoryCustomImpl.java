@@ -31,4 +31,18 @@ public class SyncAccountRepositoryCustomImpl implements SyncAccountRepositoryCus
 			.where(syncAccount.member.id.eq(memberId))
 			.fetch();
 	}
+
+	/**
+	 * 사용자의 연동 계좌가 한개라도 존재하는지 체크
+	 * @param memberId 요청자의 member_id
+	 * @return 존재 여부
+	 */
+	@Override
+	public Boolean memberSyncAccountExist(long memberId) {
+		return queryFactory
+			.selectOne()
+			.from(syncAccount)
+			.where(syncAccount.member.id.eq(memberId))
+			.fetchFirst() != null;
+	}
 }

@@ -1,39 +1,46 @@
 package com.ssafy.triptogether.plan.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
+import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
+import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.PlanAttraction;
 import com.ssafy.triptogether.plan.repository.PlanAttractionRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
-
+import com.ssafy.triptogether.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class PlanServiceImpl implements PlanSaveService {
+public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 	// Repository
 	private final PlanRepository planRepository;
 	private final PlanAttractionRepository planAttractionRepository;
 	private final MemberRepository memberRepository;
 	private final RegionRepository regionRepository;
 	private final AttractionRepository attractionRepository;
+	private final ReviewRepository reviewRepository;
 
 	/**
 	 * 요청자의 여행 계획 저장
@@ -55,31 +62,37 @@ public class PlanServiceImpl implements PlanSaveService {
 		}
 
 		Plan plan = planSave(plansSaveRequest, startRegion, member);
-		plansSaveRequest.planDetails()
-			.forEach(planDetail -> {
-				List<Attraction> attractions = planDetail.attractions().stream()
-					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
-						attraction.attractionId()))
-					.toList();
+		planAttractionSave(plansSaveRequest.planDetails(), plan);
+	}
 
-				attractions.forEach(attraction -> {
-					planAttractionSave(planDetail, attraction, plan);
-				});
-			});
+	/**
+	 * 요청한 여행 계획 삭제
+	 * @param memberId 요청자의 member_id
+	 * @param planId 삭제하고 싶은 여행 계획의 plan_id
+	 */
+	@Transactional
+	@Override
+	public void planDelete(Long memberId, Long planId) {
+		Plan plan = planFindById(planId, "PlanDelete");
+		planForbiddenCheck(memberId, plan, "PlanDelete");
+		planRepository.delete(plan);
+	}
+
+	private static void planForbiddenCheck(Long memberId, Plan plan, String detailMessageKey) {
+		if (!memberId.equals(plan.getMember().getId())) {
+			throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+		}
+	}
+
+	private Plan planFindById(Long planId, String detailMessageKey) {
+		return planRepository.findById(planId)
+			.orElseThrow(
+					() -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
+			);
 	}
 
 	private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
 		return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
-	}
-
-	private void planAttractionSave(PlanDetail planDetail, Attraction attraction, Plan plan) {
-		PlanAttraction planAttraction = PlanAttraction.builder()
-			.sequence(planDetail.sequence())
-			.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
-			.attraction(attraction)
-			.plan(plan)
-			.build();
-		planAttractionRepository.save(planAttraction);
 	}
 
 	private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
@@ -92,5 +105,44 @@ public class PlanServiceImpl implements PlanSaveService {
 			.member(member)
 			.build();
 		return planRepository.save(plan);
+	}
+
+	private void planAttractionSave(List<PlanDetail> planDetails, Plan plan) {
+		planDetails
+			.forEach(planDetail -> {
+				List<Attraction> attractions = planDetail.attractions().stream()
+					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
+						attraction.attractionId()))
+					.toList();
+
+				attractions.forEach(attraction -> {
+					PlanAttraction planAttraction = PlanAttraction.builder()
+						.sequence(planDetail.sequence())
+						.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+						.attraction(attraction)
+						.plan(plan)
+							.date(planDetail.date())
+						.build();
+					planAttractionRepository.save(planAttraction);
+				});
+			});
+	}
+
+	@Override
+	public PlanDetailFindResponse findPlanDetail(long planId) {
+		// find daily plans & plan detail
+		List<DailyPlanAttractionResponse> dailyPlanAttraction = planRepository.findAllDailyPlanByPlanId(planId);
+		DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
+				.orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
+
+		// set daily plans to plan detail & return
+		return PlanDetailFindResponse.builder()
+				.startRegion(planDetail.startRegion())
+				.startAt(planDetail.startAt())
+				.endAt(planDetail.endAt())
+				.title(planDetail.title())
+				.totalEstimatedBudget(planDetail.totalEstimatedBudget())
+				.dailyPlans(dailyPlanAttraction)
+				.build();
 	}
 }

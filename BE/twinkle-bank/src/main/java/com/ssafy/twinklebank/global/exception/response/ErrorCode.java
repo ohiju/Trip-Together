@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// ACCOUNT
+	UNDEFINED_WITHDRAWAL_AGREEMENT(404, "출금동의 정보를 찾을 수 없습니다."),
 	// MEMBER
 	UNDEFINED_MEMBER(404, "사용자 정보를 찾을 수 없습니다."),
 
@@ -13,9 +15,13 @@ public enum ErrorCode {
 
 	// APPLICATION
 	APPLICATION_NOT_FOUND(404, "등록된 APPLICATION이 아닙니다."),
+	WRONG_CLIENT_ID(401, "잘못된 CLIENT ID입니다."),
 
 	// COOKIE
 	COOKIE_NOT_FOUND(404, "해당하는 쿠키가 없습니다."),
+
+	// CODE
+	CODE_NOT_FOUND(404, "인증 코드가 없습니다."),
 
 	REFRESH_NOT_FOUND(404, "refresh token이 비어있습니다."),
 	UNAUTHORIZED_REFRESH(401,"유효하지 않은 refresh token입니다."),
