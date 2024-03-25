@@ -3,6 +3,7 @@ package com.ssafy.twinklebank.account.controller;
 import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
 import com.ssafy.twinklebank.account.data.AccountResponse;
 import com.ssafy.twinklebank.account.data.AddAccountRequest;
+import com.ssafy.twinklebank.account.data.DepositRequest;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
 import com.ssafy.twinklebank.auth.utils.SecurityMember;
@@ -55,5 +56,15 @@ public class AccountController {
         Long memberId = securityMember.getId();
         accountSaveService.deleteLinkedAccount(clientId, memberId, accountDeleteRequest);
         return ApiResponse.emptyResponse(NO_CONTENT, DELETE_LINKED_ACCOUNT);
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<ApiResponse<Void>> deposit(
+            @AuthenticationPrincipal SecurityMember securityMember,
+            @Valid @RequestBody DepositRequest depositRequest
+    ) {
+        Long memberId = securityMember.getId();
+        accountSaveService.deposit(memberId, depositRequest);
+        return ApiResponse.emptyResponse(OK, SUCCESS_DEPOSIT);
     }
 }
