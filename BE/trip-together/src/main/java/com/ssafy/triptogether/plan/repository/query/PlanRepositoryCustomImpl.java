@@ -3,12 +3,10 @@ package com.ssafy.triptogether.plan.repository.query;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.triptogether.plan.domain.QPlan.plan;
@@ -29,11 +27,6 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                         )
                 )
                 .fetchFirst() != null;
-    }
-
-    @Override
-    public List<DailyPlanAttractionResponse> findAllDailyPlanByPlanId(long planId) {
-        return null;
     }
 
     @Override
