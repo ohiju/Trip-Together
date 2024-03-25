@@ -17,7 +17,8 @@ public enum StatusCode {
 	CREATED_LINKED_ACCOUNT(201, "계좌 연동 성공"),
 	DELETE_LINKED_ACCOUNT(204, "계좌 해지 성공"),
 	SUCCESS_DEPOSIT(200, "입금 성공"),
-	SUCCESS_WITHDRAW(200, "출금 성공")
+	SUCCESS_WITHDRAW(200, "출금 성공"),
+	SUCCESS_GET_BALANCE(200, "계좌 목록 조회 성공"),
 	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),

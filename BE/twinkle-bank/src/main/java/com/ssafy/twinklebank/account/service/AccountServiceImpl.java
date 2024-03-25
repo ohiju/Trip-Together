@@ -41,6 +41,15 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         return accountRepository.getAccountList(clientId, memberId);
     }
 
+    @Override
+    @Transactional
+    public double getBalance(long memberId, String accountId) {
+        Account account = findAccountByUuid(accountId);
+        if (account.getMember().getId() != memberId)
+            throw new ForbiddenException("getBalance", FORBIDDEN, memberId);
+        return account.getBalance();
+    }
+
     @Transactional
     @Override
     public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
