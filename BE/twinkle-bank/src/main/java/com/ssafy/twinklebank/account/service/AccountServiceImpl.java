@@ -4,7 +4,7 @@ import com.ssafy.twinklebank.account.aop.DistributedLock;
 import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
 import com.ssafy.twinklebank.account.data.AccountResponse;
 import com.ssafy.twinklebank.account.data.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.DepositRequest;
+import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.WithdrawalAgreement;
@@ -73,7 +73,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     @DistributedLock(key = "#request.type().toString().concat('-').concat('#request.accountUuid()')")
     @Transactional
     @Override
-    public void deposit(long memberId, DepositRequest request) {
+    public void deposit(long memberId, DepositWithdrawRequest request) {
         // find account
         Account account = findAccountByUuid(request.accountUuid());
 
@@ -94,6 +94,32 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
         // increase balance & update
         account.increase(request.price());
+    }
+
+    @DistributedLock(key = "#request.type().toString().concat('-').concat('#request.accountUuid()')")
+    @Transactional
+    @Override
+    public void withdraw(long memberId, DepositWithdrawRequest request) {
+        // find account
+        Account account = findAccountByUuid(request.accountUuid());
+
+        // validate account
+        if (account.getMember().getId() != memberId) {
+            throw new ForbiddenException("Withdraw", MEMBER_NOT_AUTHORIZED);
+        }
+
+        // create account history & save
+        AccountHistory accountHistory = AccountHistory.builder()
+            .account(account)
+            .type(request.type())
+            .businessName(request.businessName())
+            .address(request.address())
+            .price(request.price())
+            .build();
+        accountHistoryRepository.save(accountHistory);
+
+        // decrease balance & update
+        account.decrease(request.price());
     }
 
     private Account findAccountByUuid(String accountUuid) {

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.twinklebank.account.domain.Type;
 import jakarta.validation.constraints.NotBlank;
 
-public record DepositRequest(
+public record DepositWithdrawRequest(
         @NotBlank @JsonProperty("account_uuid") String accountUuid,
         Type type,
         Double price,
