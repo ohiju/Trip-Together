@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Getter
-@Document(collation = "daily_plans")
+@Document(collection = "daily_plans")
 public class DailyPlans {
     private final Long planId;
     List<DailyPlan> dailyPlans;

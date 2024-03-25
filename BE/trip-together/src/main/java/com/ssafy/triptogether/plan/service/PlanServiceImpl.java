@@ -81,8 +81,14 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     @Transactional
     @Override
     public void planDelete(Long memberId, Long planId) {
+        // find plan
         Plan plan = planFindById(planId, "PlanDelete");
+
+        // validate auth
         planForbiddenCheck(memberId, plan, "PlanDelete");
+
+        // delete daily plans & plan
+        dailyPlansRepository.deleteByPlanId(plan.getId());
         planRepository.delete(plan);
     }
 
