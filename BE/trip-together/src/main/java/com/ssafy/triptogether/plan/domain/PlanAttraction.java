@@ -22,10 +22,6 @@ public class PlanAttraction extends BaseEntity {
     private Long planAttractionId;
 
     @NotNull
-    @Column(name = "daily_estimated_budget")
-    private Double dailyEstimatedBudget;
-
-    @NotNull
     @Column(name = "sequence")
     private Integer sequence;
 
@@ -40,8 +36,7 @@ public class PlanAttraction extends BaseEntity {
     private LocalDate date;
 
     @Builder
-    public PlanAttraction(Double dailyEstimatedBudget, Integer sequence, Plan plan, Attraction attraction, LocalDate date) {
-        this.dailyEstimatedBudget = dailyEstimatedBudget;
+    public PlanAttraction(Integer sequence, Plan plan, Attraction attraction, LocalDate date) {
         this.sequence = sequence;
         this.date = date;
         setPlan(plan);

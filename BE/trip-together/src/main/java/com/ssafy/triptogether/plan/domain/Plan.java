@@ -59,13 +59,6 @@ public class Plan extends BaseEntity {
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
 
-    @PrePersist @PreUpdate
-    private void validateStartAndEndDates() {
-        if (endAt.isBefore(startAt)) {
-            throw new BadRequestException("PlanStartAndEndDates", ErrorCode.PLAN_DATE_BAD_REQUEST);
-        }
-    }
-
     @Builder
     public Plan(String title, Double estimatedBudget, LocalDate startAt, LocalDate endAt, Member member, Region region) {
         this.title = title;
@@ -74,6 +67,14 @@ public class Plan extends BaseEntity {
         this.endAt = endAt;
         setMember(member);
         setRegion(region);
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validateStartAndEndDates() {
+        if (endAt.isBefore(startAt)) {
+            throw new BadRequestException("PlanStartAndEndDates", ErrorCode.PLAN_DATE_BAD_REQUEST);
+        }
     }
 
     public void setRegion(Region region) {
