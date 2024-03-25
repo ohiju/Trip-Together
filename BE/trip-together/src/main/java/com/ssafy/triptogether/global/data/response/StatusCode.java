@@ -26,7 +26,9 @@ public enum StatusCode {
     SUCCESS_PROFILE_FIND(200, "프로필 조회 성공"),
     SUCCESS_PIN_SAVE(200, "pin 번호 등록 성공"),
     SUCCESS_PIN_UPDATE(200, "pin 번호 수정 성공"),
-    SUCCESS_LOGOUT(200, "로그아웃 성공");
+    SUCCESS_LOGOUT(200, "로그아웃 성공"),
+
+    SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공");
 
     private final int status;
     private final String message;
