@@ -27,11 +27,11 @@ public class PlanController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> plansSave(
-            @AuthenticationPrincipal SecurityMember securityMember,
+//            @AuthenticationPrincipal SecurityMember securityMember,
             @RequestBody @Valid PlansSaveRequest plansSaveRequest
     ) {
-        long memberId = securityMember.getId();
-        planSaveService.plansSave(memberId, plansSaveRequest);
+//        long memberId = securityMember.getId();
+        planSaveService.plansSave(1L, plansSaveRequest);
 
         return ApiResponse.emptyResponse(
                 HttpStatus.CREATED, StatusCode.SUCCESS_PLANS_SAVE
