@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 const Container = styled.View`
-  height: 35%;
+  height: 37%;
   width: 100%;
   padding: 15px 0px;
   background-color: white;

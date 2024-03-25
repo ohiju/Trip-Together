@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {Animated, StyleSheet, Platform, Easing, Dimensions} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {
@@ -46,7 +46,7 @@ interface SortableDownDataItem {
 }
 
 function Row(props: any) {
-  const {active, data, UporDown, onPressUp, onPressDown} = props;
+  const {active, data, UporDown, onPressUp, onPressDown, onPressTrash} = props;
 
   const activeAnim = useRef(new Animated.Value(0));
 
@@ -95,7 +95,7 @@ function Row(props: any) {
         <Name>{data.name}</Name>
         {/* <Address>{data.address}</Address> */}
         <RatingContainer>
-          <Rating>{`평점: ${data.avg_rating}`}</Rating>
+          <Rating>{`${data.avg_rating}`}</Rating>
           <StarRatingDisplay rating={4.9} starSize={12} />
         </RatingContainer>
         <Price>{`평균 가격: ${data.avg_price}`}</Price>
@@ -115,12 +115,21 @@ function Row(props: any) {
           />
         </Button>
       )}
-      <Button>
-        <PlaceImage
-          source={require('../../assets/images/trash.png')}
-          resizeMode="cover"
-        />
-      </Button>
+      {UporDown === 'up' ? (
+        <Button onPress={() => onPressTrash(data)}>
+          <PlaceImage
+            source={require('../../assets/images/trash.png')}
+            resizeMode="cover"
+          />
+        </Button>
+      ) : (
+        <Button onPress={() => onPressTrash(data)}>
+          <PlaceImage
+            source={require('../../assets/images/trash.png')}
+            resizeMode="cover"
+          />
+        </Button>
+      )}
     </Animated.View>
   );
 }
@@ -154,6 +163,16 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
     }
   }, []);
 
+  const handleTrashPress = useCallback((row, action) => {
+    if (action === 'down') {
+      dispatch(deleteItemFromBag(row.attraction_id));
+    } else if (action === 'up') {
+      dispatch(
+        deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
+      );
+    }
+  }, []);
+
   const renderRowUp = useCallback(({data, active}: RenderRowProp) => {
     return (
       <Row
@@ -161,6 +180,7 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
         active={active}
         UporDown="up"
         onPressDown={row => handleRowPress(row, 'down')}
+        onPressTrash={row => handleTrashPress(row, 'up')}
       />
     );
   }, []);
@@ -172,6 +192,7 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
         active={active}
         UporDown="down"
         onPressUp={row => handleRowPress(row, 'up')}
+        onPressTrash={row => handleTrashPress(row, 'down')}
       />
     );
   }, []);

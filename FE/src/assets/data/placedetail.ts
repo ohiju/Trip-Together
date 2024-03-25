@@ -1,5 +1,6 @@
 const PlaceDetail = [
   {
+    attraction_id: 14,
     avg_price: '₩123,398',
     start_at: '09:00',
     end_at: '18:00',

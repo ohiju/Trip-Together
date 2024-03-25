@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 import {PlaceDetail} from '../../assets/data/placedetail';
 import {
@@ -27,10 +27,25 @@ import {
   Line,
 } from './PlaceDetailStyle';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {useAppSelector} from '../../store/hooks';
+import {useAppDispatch} from '../../store/hooks';
+import {addItemToBag} from '../../store/slices/bag';
 
 const AttractionDetailsPage = ({route}: any) => {
-  const attraction = PlaceDetail[0];
+  const [show, setShow] = useState(true);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const attraction = PlaceDetail[0];
+  const attraction_id = PlaceDetail[0].attraction_id;
+  const PlaceBag = useAppSelector(state => state.bag.bagInfo);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    PlaceBag.forEach(item => {
+      if (item.attraction_id === attraction_id) {
+        setShow(false);
+      }
+    });
+  }, [PlaceBag, attraction_id]);
 
   const images = Array.from({length: 5}, (_, index) => ({
     id: index.toString(),
@@ -68,73 +83,100 @@ const AttractionDetailsPage = ({route}: any) => {
     );
   };
 
+  const handleAddItem = () => {
+    const data = {
+      attraction_id: 14,
+      thumbnail_image_url: '',
+      name: 'La Sagrada Familia',
+      address: '',
+      avg_rating: 2.4,
+      avg_price: 123,
+    };
+    dispatch(addItemToBag(data));
+  };
+
+  const keyExtractor = (item: any, index: number) => index.toString();
+
   return (
-    <Container>
-      <ImageBackground
-        source={require('../../assets/images/sagradafamilia.png')}
-        resizeMode="cover"
-      />
-      <HeadersContainer>
-        <Header>
-          <Title>La Sagrada Familia</Title>
-          <Address> C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'</Address>
-        </Header>
-        <Bag>
-          <BagImage
-            source={require('../../assets/images/shopping.jpg')}
+    <FlatList
+      data={[attraction]}
+      renderItem={({item}) => (
+        <Container>
+          <ImageBackground
+            source={require('../../assets/images/sagradafamilia.png')}
             resizeMode="cover"
           />
-        </Bag>
-      </HeadersContainer>
+          <HeadersContainer>
+            <Header>
+              <Title>La Sagrada Familia</Title>
+              <Address>
+                {' '}
+                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
+              </Address>
+            </Header>
+            <Bag onPress={handleAddItem}>
+              {show ? (
+                <BagImage
+                  source={require('../../assets/images/shopping.jpg')}
+                  resizeMode="cover"
+                />
+              ) : (
+                <></>
+              )}
+            </Bag>
+          </HeadersContainer>
 
-      <DetailsContainer>
-        <Title>정보</Title>
-        <Line />
-        <StarInfo>
-          <Info>평점: 4.9</Info>
-          <StarRatingDisplay rating={4.9} starSize={18} />
-        </StarInfo>
-        <Info>평균 가격: {attraction.avg_price}</Info>
-        <Info>
-          운영 시간: {attraction.start_at} - {attraction.end_at}
-        </Info>
+          <DetailsContainer>
+            <Title>정보</Title>
+            <Line />
+            <StarInfo>
+              <Info>평점: 4.9</Info>
+              <StarRatingDisplay rating={4.9} starSize={18} />
+            </StarInfo>
+            <Info>평균 가격: {item.avg_price}</Info>
+            <Info>
+              운영 시간: {item.start_at} - {item.end_at}
+            </Info>
 
-        <ReviewsContainer>
-          <Title>사진</Title>
-          <Line />
-          <FlatList
-            data={images}
-            renderItem={renderImageItem}
-            horizontal
-            keyExtractor={item => item.id}
-          />
+            <ReviewsContainer>
+              <Title>사진</Title>
+              <Line />
+              <FlatList
+                data={images}
+                renderItem={renderImageItem}
+                horizontal
+                keyExtractor={keyExtractor}
+              />
 
-          <HeaderContainer>
-            <Title>리뷰</Title>
-            <NavigationButtons>
-              <TouchableOpacity onPress={goToPreviousReview}>
-                <NavButton>{'<'}</NavButton>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={goToNextReview}>
-                <NavButton>{'>'}</NavButton>
-              </TouchableOpacity>
-            </NavigationButtons>
-          </HeaderContainer>
+              <HeaderContainer>
+                <Title>리뷰</Title>
+                <NavigationButtons>
+                  <TouchableOpacity onPress={goToPreviousReview}>
+                    <NavButton>{'<'}</NavButton>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={goToNextReview}>
+                    <NavButton>{'>'}</NavButton>
+                  </TouchableOpacity>
+                </NavigationButtons>
+              </HeaderContainer>
 
-          <Line />
-          <FlatList
-            data={[attraction.reviews[currentReviewIndex]]}
-            renderItem={renderReviewItem}
-            contentContainerStyle={{
-              paddingHorizontal: 20 / 2,
-            }}
-            horizontal
-            pagingEnabled
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </ReviewsContainer>
-      </DetailsContainer>
-    </Container>
+              <Line />
+              <FlatList
+                data={[item.reviews[currentReviewIndex]]}
+                renderItem={renderReviewItem}
+                contentContainerStyle={{
+                  paddingHorizontal: 20 / 2,
+                }}
+                horizontal
+                pagingEnabled
+                keyExtractor={keyExtractor}
+              />
+            </ReviewsContainer>
+          </DetailsContainer>
+        </Container>
+      )}
+      keyExtractor={keyExtractor}
+    />
   );
 };
 

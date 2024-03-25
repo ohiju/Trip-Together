@@ -25,7 +25,7 @@ function Travel() {
         pages={PAGES}
         gap={15}
         offset={35}
-        pageWidth={screenWidth - (16 + 36) * 4.7}
+        pageWidth={screenWidth - (10 + 36) * 4.7}
       />
     </Wrapper>
   );

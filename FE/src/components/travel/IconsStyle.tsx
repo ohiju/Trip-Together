@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {primary, bg_lightgray} from '../../constants/colors';
 
 const Container = styled.View`
-  height: 20%;
+  height: 23%;
   border-radius: 10px;
   justify-content: center;
   align-items: center;

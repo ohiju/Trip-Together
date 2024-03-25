@@ -9,6 +9,7 @@ import GoogleMap from '../pages/travel/Map';
 import PlanDetail from '../pages/travel/PlanDetail';
 import PlaceInfoList from '../pages/travel/PlaceInfoList';
 import PlaceDetail from '../pages/travel/PlaceDetail';
+import Camera from '../components/common/Camera';
 
 const TravelStack = () => {
   const Stack = createNativeStackNavigator<TravelStackParams>();
@@ -20,6 +21,7 @@ const TravelStack = () => {
         component={Travel}
         options={{
           title: '여행',
+          headerRight: Camera,
         }}
       />
       <Stack.Group>

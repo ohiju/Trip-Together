@@ -49,7 +49,7 @@ const Bag = styled(TouchableOpacity)`
   background-color: white;
   justify-content: center;
   align-items: center;
-  background-color: ${primary};
+  // background-color: ${primary};
 `;
 
 const BagImage = styled.Image`
@@ -77,7 +77,7 @@ const ReviewItem = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-  width: 350px;
+  width: 330px;
   border: 1px solid ${font_dark};
   border-radius: 10px;
   padding: 12px;
