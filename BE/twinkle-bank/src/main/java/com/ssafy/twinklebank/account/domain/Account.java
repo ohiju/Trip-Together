@@ -64,4 +64,8 @@ public class Account extends BaseEntity {
 	public void increase(double price) {
 		this.balance += price;
 	}
+
+	public void decrease(double price) {
+		this.balance -= price;
+	}
 }
