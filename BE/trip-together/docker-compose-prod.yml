@@ -40,7 +40,7 @@ services:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     restart: always
 
-  dev_trip_dev_mongodb_container:
+  prod_trip_dev_mongodb_container:
     container_name: prod_trip_mongodb_container
     image: mongo
     ports:
