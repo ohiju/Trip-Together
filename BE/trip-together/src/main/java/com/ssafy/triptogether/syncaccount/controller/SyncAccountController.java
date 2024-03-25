@@ -28,9 +28,9 @@ public class SyncAccountController {
 
     @GetMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<SyncAccountsLoadResponse>> syncAccountsLoad(
-            @AuthenticationPrincipal SecurityMember securityMember
+            // @AuthenticationPrincipal SecurityMember
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         SyncAccountsLoadResponse syncAccountsLoadResponse = syncAccountLoadService.syncAccountsLoad(memberId);
 
         return ApiResponse.toResponseEntity(
@@ -40,10 +40,10 @@ public class SyncAccountController {
 
     @PostMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> syncAccountSave(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember,
             @RequestBody @Valid SyncAccountSaveRequest syncAccountSaveRequest
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
                 .pinNum(syncAccountSaveRequest.pinNum())
                 .build();
@@ -56,10 +56,10 @@ public class SyncAccountController {
 
     @PatchMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> mainSyncAccountUpdate(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember,
             @RequestBody @Valid MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         syncAccountSaveService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 
         return ApiResponse.emptyResponse(
@@ -69,10 +69,10 @@ public class SyncAccountController {
 
     @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> syncAccountDelete(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember,
             @RequestBody @Valid SyncAccountDeleteRequest syncAccountDeleteRequest
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
                 .pinNum(syncAccountDeleteRequest.pinNum())
                 .build();
@@ -85,9 +85,9 @@ public class SyncAccountController {
 
     @GetMapping("/bank-accounts")
     public ResponseEntity<ApiResponse<BankAccountsLoadResponse>> bankAccountsLoad(
-            @AuthenticationPrincipal SecurityMember securityMember
+            // @AuthenticationPrincipal SecurityMember
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         BankAccountsLoadResponse bankAccountsLoadResponse = syncAccountLoadService.bankAccountsLoad(memberId);
 
         return ApiResponse.toResponseEntity(
