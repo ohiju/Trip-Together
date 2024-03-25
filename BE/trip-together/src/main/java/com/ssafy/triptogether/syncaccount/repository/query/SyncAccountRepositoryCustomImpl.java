@@ -22,11 +22,11 @@ public class SyncAccountRepositoryCustomImpl implements SyncAccountRepositoryCus
 	 */
 	@Override
 	public List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId) {
-		return queryFactory.select(Projections.bean(SyncAccountsDetail.class,
-				syncAccount.uuid.as("uuid"),
-				syncAccount.num.as("accountNum"),
-				syncAccount.name.as("name"),
-				syncAccount.isMain.as("isMain")
+		return queryFactory.select(Projections.constructor(SyncAccountsDetail.class,
+				syncAccount.uuid,
+				syncAccount.num,
+				syncAccount.name,
+				syncAccount.isMain
 			)).from(syncAccount)
 			.where(syncAccount.member.id.eq(memberId))
 			.fetch();
