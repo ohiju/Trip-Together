@@ -34,115 +34,117 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NO
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
-	// Repository
-	private final PlanRepository planRepository;
-	private final PlanAttractionRepository planAttractionRepository;
-	private final MemberRepository memberRepository;
-	private final RegionRepository regionRepository;
-	private final AttractionRepository attractionRepository;
-	private final ReviewRepository reviewRepository;
+    // Repository
+    private final PlanRepository planRepository;
+    private final PlanAttractionRepository planAttractionRepository;
+    private final MemberRepository memberRepository;
+    private final RegionRepository regionRepository;
+    private final AttractionRepository attractionRepository;
+    private final ReviewRepository reviewRepository;
 
-	/**
-	 * 요청자의 여행 계획 저장
-	 * @param memberId 요청자의 member_id
-	 * @param plansSaveRequest 요청자의 여행 계획
-	 */
-	@Transactional
-	@Override
-	public void plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
-		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
-		Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
+    private static void planForbiddenCheck(Long memberId, Plan plan, String detailMessageKey) {
+        if (!memberId.equals(plan.getMember().getId())) {
+            throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+        }
+    }
 
-		if (plansSaveRequest.endAt().isBefore(plansSaveRequest.startAt())) {
-			throw new BadRequestException("PlanSave", ErrorCode.PLAN_DATE_BAD_REQUEST);
-		}
+    /**
+     * 요청자의 여행 계획 저장
+     *
+     * @param memberId         요청자의 member_id
+     * @param plansSaveRequest 요청자의 여행 계획
+     */
+    @Transactional
+    @Override
+    public void plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+        Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
 
-		if (existOverlappingPlan(plansSaveRequest, member)) {
-			throw new BadRequestException("PlanSave", ErrorCode.PLAN_SAVE_BAD_REQUEST);
-		}
+        if (plansSaveRequest.endAt().isBefore(plansSaveRequest.startAt())) {
+            throw new BadRequestException("PlanSave", ErrorCode.PLAN_DATE_BAD_REQUEST);
+        }
 
-		Plan plan = planSave(plansSaveRequest, startRegion, member);
-		planAttractionSave(plansSaveRequest.planDetails(), plan);
-	}
+        if (existOverlappingPlan(plansSaveRequest, member)) {
+            throw new BadRequestException("PlanSave", ErrorCode.PLAN_SAVE_BAD_REQUEST);
+        }
 
-	/**
-	 * 요청한 여행 계획 삭제
-	 * @param memberId 요청자의 member_id
-	 * @param planId 삭제하고 싶은 여행 계획의 plan_id
-	 */
-	@Transactional
-	@Override
-	public void planDelete(Long memberId, Long planId) {
-		Plan plan = planFindById(planId, "PlanDelete");
-		planForbiddenCheck(memberId, plan, "PlanDelete");
-		planRepository.delete(plan);
-	}
+        Plan plan = planSave(plansSaveRequest, startRegion, member);
+        planAttractionSave(plansSaveRequest.planDetails(), plan);
+    }
 
-	private static void planForbiddenCheck(Long memberId, Plan plan, String detailMessageKey) {
-		if (!memberId.equals(plan.getMember().getId())) {
-			throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
-		}
-	}
+    /**
+     * 요청한 여행 계획 삭제
+     *
+     * @param memberId 요청자의 member_id
+     * @param planId   삭제하고 싶은 여행 계획의 plan_id
+     */
+    @Transactional
+    @Override
+    public void planDelete(Long memberId, Long planId) {
+        Plan plan = planFindById(planId, "PlanDelete");
+        planForbiddenCheck(memberId, plan, "PlanDelete");
+        planRepository.delete(plan);
+    }
 
-	private Plan planFindById(Long planId, String detailMessageKey) {
-		return planRepository.findById(planId)
-			.orElseThrow(
-					() -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
-			);
-	}
+    private Plan planFindById(Long planId, String detailMessageKey) {
+        return planRepository.findById(planId)
+                .orElseThrow(
+                        () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
+                );
+    }
 
-	private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
-		return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
-	}
+    private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
+        return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
+    }
 
-	private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
-		Plan plan = Plan.builder()
-			.title(plansSaveRequest.title())
-			.startAt(plansSaveRequest.startAt())
-			.endAt(plansSaveRequest.endAt())
-			.estimatedBudget(plansSaveRequest.estimatedBudget())
-			.region(startRegion)
-			.member(member)
-			.build();
-		return planRepository.save(plan);
-	}
+    private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
+        Plan plan = Plan.builder()
+                .title(plansSaveRequest.title())
+                .startAt(plansSaveRequest.startAt())
+                .endAt(plansSaveRequest.endAt())
+                .estimatedBudget(plansSaveRequest.estimatedBudget())
+                .region(startRegion)
+                .member(member)
+                .build();
+        return planRepository.save(plan);
+    }
 
-	private void planAttractionSave(List<PlanDetail> planDetails, Plan plan) {
-		planDetails
-			.forEach(planDetail -> {
-				List<Attraction> attractions = planDetail.attractions().stream()
-					.map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
-						attraction.attractionId()))
-					.toList();
+    private void planAttractionSave(List<PlanDetail> planDetails, Plan plan) {
+        planDetails
+                .forEach(planDetail -> {
+                    List<Attraction> attractions = planDetail.attractions().stream()
+                            .map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
+                                    attraction.attractionId()))
+                            .toList();
 
-				attractions.forEach(attraction -> {
-					PlanAttraction planAttraction = PlanAttraction.builder()
-						.sequence(planDetail.sequence())
-						.dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
-						.attraction(attraction)
-						.plan(plan)
-							.date(planDetail.date())
-						.build();
-					planAttractionRepository.save(planAttraction);
-				});
-			});
-	}
+                    attractions.forEach(attraction -> {
+                        PlanAttraction planAttraction = PlanAttraction.builder()
+                                .sequence(planDetail.sequence())
+                                .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+                                .attraction(attraction)
+                                .plan(plan)
+                                .date(planDetail.date())
+                                .build();
+                        planAttractionRepository.save(planAttraction);
+                    });
+                });
+    }
 
-	@Override
-	public PlanDetailFindResponse findPlanDetail(long planId) {
-		// find daily plans & plan detail
-		List<DailyPlanAttractionResponse> dailyPlanAttraction = planRepository.findAllDailyPlanByPlanId(planId);
-		DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
-				.orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
+    @Override
+    public PlanDetailFindResponse findPlanDetail(long planId) {
+        // find daily plans & plan detail
+        List<DailyPlanAttractionResponse> dailyPlanAttraction = planRepository.findAllDailyPlanByPlanId(planId);
+        DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
+                .orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
 
-		// set daily plans to plan detail & return
-		return PlanDetailFindResponse.builder()
-				.startRegion(planDetail.startRegion())
-				.startAt(planDetail.startAt())
-				.endAt(planDetail.endAt())
-				.title(planDetail.title())
-				.totalEstimatedBudget(planDetail.totalEstimatedBudget())
-				.dailyPlans(dailyPlanAttraction)
-				.build();
-	}
+        // set daily plans to plan detail & return
+        return PlanDetailFindResponse.builder()
+                .startRegion(planDetail.startRegion())
+                .startAt(planDetail.startAt())
+                .endAt(planDetail.endAt())
+                .title(planDetail.title())
+                .totalEstimatedBudget(planDetail.totalEstimatedBudget())
+                .dailyPlans(dailyPlanAttraction)
+                .build();
+    }
 }
