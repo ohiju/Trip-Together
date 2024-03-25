@@ -75,6 +75,6 @@ public class AccountController {
     ) {
         Long memberId = securityMember.getId();
         accountSaveService.withdraw(memberId, withdrawRequest);
-        return null;
+        return ApiResponse.emptyResponse(OK, SUCCESS_WITHDRAW);
     }
 }
