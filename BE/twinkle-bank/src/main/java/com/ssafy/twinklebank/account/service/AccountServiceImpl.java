@@ -42,11 +42,11 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     }
 
     @Override
-    @Transactional
     public double getBalance(long memberId, String accountId) {
         Account account = findAccountByUuid(accountId);
-        if (account.getMember().getId() != memberId)
+        if (account.getMember().getId() != memberId) {
             throw new ForbiddenException("getBalance", FORBIDDEN, memberId);
+        }
         return account.getBalance();
     }
 
