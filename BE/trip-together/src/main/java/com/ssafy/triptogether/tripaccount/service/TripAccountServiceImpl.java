@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,14 +15,17 @@ import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundExcep
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
 import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateResponse;
+import com.ssafy.triptogether.tripaccount.data.response.AccountHistoriesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
+import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
+import com.ssafy.triptogether.tripaccount.repository.AccountHistoryRepository;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 
@@ -32,6 +38,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	// Repository
 	private final CurrencyRepository currencyRepository;
 	private final TripAccountRepository tripAccountRepository;
+	private final AccountHistoryRepository accountHistoryRepository;
 	// Client
 	private final CurrencyRateClient currencyRateClient;
 
@@ -92,6 +99,32 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.tripAccountsLoadDetails(tripAccountsLoadDetails)
 			.tripAccountCount(tripAccountsLoadDetails.size())
 			.build();
+	}
+
+	/**
+	 * 지갑 전체 거래 내역 조회
+	 * @param memberId 요청자의 member_id
+	 * @param pageable 페이징 기준
+	 * @return 페이징에 따른 거래 내역
+	 */
+	@Override
+	public Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable) {
+		Page<AccountHistory> accountHistories = accountHistoryRepository.findAccountHistoriesLoadDetailByMemberId(
+			memberId, pageable);
+
+		List<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = accountHistories.getContent().stream()
+			.map(accountHistory -> AccountHistoriesLoadDetail.builder()
+				.currencyNation(accountHistory.getTripAccount().getCurrency().getCurrencyNation())
+				.nationKr(accountHistory.getTripAccount().getCurrency().getCurrencyNation().getMessage())
+				.unit(accountHistory.getTripAccount().getCurrency().getCode().getUnit())
+				.type(accountHistory.getType().getMessage())
+				.usage(accountHistory.getBusinessName())
+				.quantity(accountHistory.getQuantity())
+				.createdAt(accountHistory.getCreatedAt())
+				.build()
+			).toList();
+
+		return new PageImpl<>(accountHistoriesLoadDetails, pageable, accountHistories.getTotalElements());
 	}
 
 	/**
