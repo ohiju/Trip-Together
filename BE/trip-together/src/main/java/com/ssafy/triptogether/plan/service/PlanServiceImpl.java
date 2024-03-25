@@ -120,7 +120,6 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
                     attractions.forEach(attraction -> {
                         PlanAttraction planAttraction = PlanAttraction.builder()
                                 .sequence(planDetail.sequence())
-                                .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
                                 .attraction(attraction)
                                 .plan(plan)
                                 .date(planDetail.date())
