@@ -21,7 +21,7 @@ public class QCurrency extends EntityPathBase<Currency> {
 
     public final com.ssafy.triptogether.global.domain.QBaseEntity _super = new com.ssafy.triptogether.global.domain.QBaseEntity(this);
 
-    public final StringPath code = createString("code");
+    public final EnumPath<CurrencyCode> code = createEnum("code", CurrencyCode.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -31,8 +31,6 @@ public class QCurrency extends EntityPathBase<Currency> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Double> rate = createNumber("rate", Double.class);
-
-    public final NumberPath<Integer> unit = createNumber("unit", Integer.class);
 
     public QCurrency(String variable) {
         super(Currency.class, forVariable(variable));
