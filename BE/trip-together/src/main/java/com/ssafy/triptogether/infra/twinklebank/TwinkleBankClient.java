@@ -5,11 +5,16 @@ import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccounts
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
 
 public interface TwinkleBankClient {
-	TwinkleBankAccountsLoadResponse bankAccountsLoad(TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest);
-	TwinkleAccountSyncResponse bankAccountsSync(TwinkleAccountSyncRequest twinkleAccountSyncRequest);
-	void bankAccountSyncDelete(TwinkleAccountSyncRequest twinkleAccountSyncRequest);
+    TwinkleBankAccountsLoadResponse bankAccountsLoad(TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest);
 
-	void bankLogout(TwinkleBankLogoutRequest twinkleBankLogoutRequest);
+    TwinkleAccountSyncResponse bankAccountsSync(TwinkleAccountSyncRequest twinkleAccountSyncRequest);
+
+    void bankAccountSyncDelete(TwinkleAccountSyncRequest twinkleAccountSyncRequest);
+
+    void bankLogout(TwinkleBankLogoutRequest twinkleBankLogoutRequest);
+
+	TwinkleMemberInfoResponse bankMemberInfoLoad(String clientId, String accessToken);
 }
