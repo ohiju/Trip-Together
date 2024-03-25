@@ -15,6 +15,7 @@ import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
@@ -46,6 +47,11 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         if (!memberId.equals(plan.getMember().getId())) {
             throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
         }
+    }
+
+    @Override
+    public List<DailyPlanListResponse> findPlans(long memberId) {
+        return planRepository.findPlansByMemberId(memberId);
     }
 
     /**
