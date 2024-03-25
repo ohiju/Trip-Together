@@ -7,9 +7,14 @@ import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateRespo
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
+import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
+import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +28,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TripAccountServiceImpl implements TripAccountLoadService, TripAccountSaveService {
-    private final CurrencyRepository currencyRepository;
-    private final CurrencyRateClient currencyRateClient;
+	// Repository
+	private final CurrencyRepository currencyRepository;
+	private final TripAccountRepository tripAccountRepository;
+	// Client
+	private final CurrencyRateClient currencyRateClient;
 
     /**
      * 환전 가능 통화 목록을 조회하는 메서드
@@ -65,22 +73,44 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
                 .build();
     }
 
-    /**
-     * 전체 통화 코드의 환율 정보 업데이트
-     */
-    @Transactional
-    @Override
-    public void currencyRateUpdate() {
-        List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
-        Map<CurrencyCode, Currency> currencyMap = currencyRepository.findAll()
-                .stream()
-                .collect(Collectors.toMap(Currency::getCode, Function.identity()));
-        currencyRateResponses.forEach(currencyRateResponse -> {
-            CurrencyCode currencyCode = CurrencyCode.fromString(currencyRateResponse.cur_unit());
-            Currency currency = currencyMap.get(currencyCode);
-            if (currency != null) {
-                currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
-            }
-        });
-    }
+	/**
+	 * 회원의 지갑 내 목록 조회
+	 * @param memberId 요청자의 member_id
+	 * @return 지갑 내 목록
+	 */
+	@Override
+	public TripAccountsLoadResponse tripAccountsLoad(long memberId) {
+		List<TripAccount> tripAccounts = tripAccountRepository.findByMemberId(memberId);
+		List<TripAccountsLoadDetail> tripAccountsLoadDetails = tripAccounts.stream()
+			.map(tripAccount -> TripAccountsLoadDetail.builder()
+				.currencyNation(tripAccount.getCurrency().getCurrencyNation())
+				.nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
+				.balance(tripAccount.getBalance())
+				.unit(tripAccount.getCurrency().getCode().getUnit())
+				.build()
+			).toList();
+		return TripAccountsLoadResponse.builder()
+			.tripAccountsLoadDetails(tripAccountsLoadDetails)
+			.tripAccountCount(tripAccountsLoadDetails.size())
+			.build();
+	}
+
+	/**
+	 * 전체 통화 코드의 환율 정보 업데이트
+	 */
+	@Transactional
+	@Override
+	public void currencyRateUpdate() {
+		List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
+		Map<CurrencyCode, Currency> currencyMap = currencyRepository.findAll()
+			.stream()
+			.collect(Collectors.toMap(Currency::getCode, Function.identity()));
+		currencyRateResponses.forEach(currencyRateResponse -> {
+			CurrencyCode currencyCode = CurrencyCode.fromString(currencyRateResponse.cur_unit());
+			Currency currency = currencyMap.get(currencyCode);
+			if (currency != null) {
+				currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
+			}
+		});
+	}
 }
