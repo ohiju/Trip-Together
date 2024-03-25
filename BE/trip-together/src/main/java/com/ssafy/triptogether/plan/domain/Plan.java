@@ -5,6 +5,9 @@ import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.plan.data.request.PlansModifyRequest;
+import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -76,5 +79,12 @@ public class Plan extends BaseEntity {
     public void setMember(Member member) {
         this.member = member;
         member.getPlans().add(this);
+    }
+
+    public void modify(PlansSaveRequest plansSaveRequest) {
+        this.title = plansSaveRequest.title();
+        this.estimatedBudget = plansSaveRequest.estimatedBudget();
+        this.startAt = plansSaveRequest.startAt();
+        this.endAt = plansSaveRequest.endAt();
     }
 }

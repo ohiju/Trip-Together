@@ -11,6 +11,7 @@ public enum StatusCode {
     SUCCESS_PLAN_DELETE(204, "여행 계획 삭제 성공"),
     SUCCESS_PLAN_DETAIL_FIND(200, "여행 계획 상세 조회 성공"),
     SUCCESS_PLANS_FIND(200, "여행 계획 목록 조회 성공"),
+    SUCCESS_PLANS_MODIFY(200, "여행 계획 수정 성공"),
     //ATTRACTION
     SUCCESS_ATTRACTION_DETAIL_FIND(200, "여행지별 명소 상세 조회 성공"),
     // TRIP_ACCOUNT
