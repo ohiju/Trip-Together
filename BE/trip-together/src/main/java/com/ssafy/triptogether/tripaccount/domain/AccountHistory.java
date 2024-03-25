@@ -3,6 +3,7 @@ package com.ssafy.triptogether.tripaccount.domain;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class AccountHistory extends BaseEntity {
     @Column(name = "account_history_id")
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private Type type;
@@ -35,26 +36,21 @@ public class AccountHistory extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @NotBlank
+    @NotNull
     @Column(name = "quantity")
     private Double quantity;
-
-    @NotBlank
-    @Column(name = "currency")
-    private String currency;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_account_id")
     private TripAccount tripAccount;
 
     @Builder
-    public AccountHistory(Type type, String businessName, String businessNum, String address, Double quantity, String currency, TripAccount tripAccount) {
+    public AccountHistory(Type type, String businessName, String businessNum, String address, Double quantity, TripAccount tripAccount) {
         this.type = type;
         this.businessName = businessName;
         this.businessNum = businessNum;
         this.address = address;
         this.quantity = quantity;
-        this.currency = currency;
         setTripAccount(tripAccount);
     }
 
