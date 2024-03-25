@@ -29,8 +29,6 @@ public class QPlanAttraction extends EntityPathBase<PlanAttraction> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final NumberPath<Double> dailyEstimatedBudget = createNumber("dailyEstimatedBudget", Double.class);
-
     public final DatePath<java.time.LocalDate> date = createDate("date", java.time.LocalDate.class);
 
     public final QPlan plan;

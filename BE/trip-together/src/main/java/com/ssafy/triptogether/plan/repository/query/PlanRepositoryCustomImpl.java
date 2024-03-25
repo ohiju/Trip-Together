@@ -38,7 +38,6 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
         return queryFactory.select(Projections.constructor(DailyPlanAttractionResponse.class,
                         planAttraction.planAttractionId,
                         planAttraction.sequence,
-                        planAttraction.dailyEstimatedBudget,
                         new CaseBuilder()
                                 .when(planAttraction.date.after(LocalDate.now())).then(false)
                                 .otherwise(true)
