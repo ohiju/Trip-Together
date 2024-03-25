@@ -30,7 +30,7 @@ public class AccountController {
     @GetMapping("{account_id}/balance")
     public ResponseEntity<ApiResponse<Double>> getBalance(
         @AuthenticationPrincipal SecurityMember securityMember,
-        @RequestParam("account-id") String accountId
+        @RequestParam("account_id") String accountId
     ) {
         long memberId = securityMember.getId();
         double balance = accountLoadService.getBalance(memberId, accountId);
