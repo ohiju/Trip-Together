@@ -28,6 +28,7 @@ public class AttractionServiceImpl implements AttractionLoadService {
 
         // set attraction detail & return
         return AttractionDetailFindResponse.builder()
+                .attractionId(attraction.getId())
                 .avgPrice(attraction.getAvgPrice())
                 .startAt(attraction.getStartAt())
                 .endAt(attraction.getEndAt())
