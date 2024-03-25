@@ -35,8 +35,7 @@ public class PlanController {
     public ResponseEntity<ApiResponse<List<DailyPlanListResponse>>> findPlans(
         @AuthenticationPrincipal SecurityMember securityMember
     ) {
-        // long memberId = securityMember.getId();
-        long memberId = 1L;
+        long memberId = securityMember.getId();
         List<DailyPlanListResponse> planList = planLoadService.findPlans(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, planList);
     }
