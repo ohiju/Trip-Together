@@ -1,7 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {imagePath} from '../../../assets/images/imagePath';
-import {imageBaseUrl} from '../../../constants/urls';
+import parseProfile from '../../../hooks/parseProfile';
 import useSwipeTop from '../../../hooks/useSwipeTop';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {RootState} from '../../../store';
@@ -21,14 +20,8 @@ import {
 } from './ProfileStyle';
 
 const Profile = () => {
-  const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
-  const image = userInfo.image_url
-    ? {uri: `${imageBaseUrl}${userInfo.image_url}`}
-    : imagePath.basicProfile;
-  const description = userInfo.description
-    ? userInfo.description
-    : '자기소개를 입력하고 마음에 맞는 동행을 구해보세요!';
-  const nickname = userInfo.nickname ? userInfo.nickname : userInfo.username;
+  const user = useAppSelector((state: RootState) => state.user.user);
+  const {image_url, description, nickname, username} = parseProfile(user);
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
@@ -44,11 +37,11 @@ const Profile = () => {
           <DragBar />
           <ProfileView>
             <ProfileImageView>
-              <ProfileImage source={image} resizeMode="contain" />
+              <ProfileImage source={image_url} resizeMode="contain" />
             </ProfileImageView>
             <UserInfoView>
               <Nickname>{nickname}</Nickname>
-              <Username>{userInfo.username}</Username>
+              <Username>{username}</Username>
               <Description numberOfLines={1} ellipsizeMode="tail">
                 {description}
               </Description>

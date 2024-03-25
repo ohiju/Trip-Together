@@ -23,7 +23,7 @@ import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeSta
 import {Wrapper} from './ExchangeSelectSyncStyle';
 
 const ExchangeSelectSync = () => {
-  const [data, setData] = useState<bankAccount | null>(null);
+  const [account, setAccount] = useState<bankAccount | null>(null);
   const exchangeOptions = useExchangeOptions();
 
   // 라우팅
@@ -31,11 +31,11 @@ const ExchangeSelectSync = () => {
   const {currency} =
     useRoute<RouteProp<ExchangeStackParams, 'ExchangeSelectSync'>>().params;
   const handleToNext = () => {
-    if (!data) {
+    if (!account) {
       Alert.alert('계좌를 선택해주세요.');
       return;
     }
-    navigation.navigate('ExchangeInput', {account: data, currency});
+    navigation.navigate('ExchangeInput', {account, currency});
   };
 
   return (
@@ -50,7 +50,7 @@ const ExchangeSelectSync = () => {
       </SloganView>
       <Body>
         <AppSelect
-          setData={setData}
+          setData={setAccount}
           placeholder="계좌 선택"
           options={exchangeOptions}
         />
@@ -58,7 +58,7 @@ const ExchangeSelectSync = () => {
       <AppButton
         style={BottomButton}
         text="다음"
-        disabled={data === null}
+        disabled={account === null}
         onPress={handleToNext}
       />
     </Wrapper>

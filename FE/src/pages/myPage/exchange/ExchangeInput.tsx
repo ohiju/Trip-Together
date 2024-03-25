@@ -29,8 +29,7 @@ const ExchangeInput = () => {
   // 입력
   const [ammount, setAmmount] = useState('');
   const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = e.nativeEvent.text;
-    setAmmount(value);
+    setAmmount(e.nativeEvent.text);
   };
 
   // 라우팅

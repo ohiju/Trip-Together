@@ -6,9 +6,7 @@ import NoWallet from './NoWallet';
 import {WalletBox, Wrapper} from './WalletStyle';
 
 const Wallet = () => {
-  const isPin = useAppSelector(
-    (state: RootState) => state.user.userInfo.is_pin,
-  );
+  const isPin = useAppSelector((state: RootState) => state.user.user.is_pin);
 
   return (
     <Wrapper>

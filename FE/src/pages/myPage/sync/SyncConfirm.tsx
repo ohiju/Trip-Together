@@ -1,17 +1,14 @@
 import {
-  NavigationProp,
   RouteProp,
-  useNavigation,
-  useRoute,
+  useRoute
 } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  Alert,
   NativeSyntheticEvent,
-  TextInputChangeEventData,
+  TextInputChangeEventData
 } from 'react-native';
-import {WithLocalSvg} from 'react-native-svg/css';
-import {iconPath} from '../../../assets/icons/iconPath';
+import { WithLocalSvg } from 'react-native-svg/css';
+import { iconPath } from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
   Body,
@@ -21,11 +18,10 @@ import {
   Title,
   TitleView,
 } from '../../../components/common/InfoPageStyle';
-import {BottomButton} from '../../../constants/AppButton';
-import {font_danger, font_lightgray} from '../../../constants/colors';
-import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
-import {useAppDispatch} from '../../../store/hooks';
-import {pushSyncAccount} from '../../../store/slices/user';
+import { BottomButton } from '../../../constants/AppButton';
+import { font_danger, font_lightgray } from '../../../constants/colors';
+import { SyncStackParams } from '../../../interfaces/router/myPage/SyncStackParams';
+import { useAppDispatch } from '../../../store/hooks';
 import {
   AgainBtn,
   AgainBtnView,
@@ -38,48 +34,20 @@ import {
 } from './SyncConfirmStyle';
 
 const SyncConfirm = () => {
-  const dummySender = '춤추는 고릴라';
   const dispatch = useAppDispatch();
 
   // 입력 관리
-  const [sender, setSendr] = useState('');
+  const [code, setCode] = useState('');
   const handleSender = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = e.nativeEvent.text;
-    setSendr(value);
+    const value = ;
+    setCode(value);
   };
 
   // 라우팅
-  const route = useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>();
-  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
-  const registAccount = (is_main: 0 | 1) => {
-    const account = {
-      account_uuid: route.params.selected.account_uuid,
-      account_num: route.params.selected.account_num,
-      name: route.params.selected.name,
-      is_main,
-    };
-    dispatch(pushSyncAccount(account));
-    navigation.navigate('SyncComplete');
-  };
+  const {selected} =
+    useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>().params;
   const confirmSender = () => {
     // 1원 인증 검증 API
-    if (sender === dummySender) {
-      let is_main: 0 | 1 = 0;
-      Alert.alert('계좌 인증 성공!', '이 계좌를 주 계좌로 등록하시겠습니까?', [
-        {
-          text: '예',
-          onPress: () => {
-            is_main = 1;
-          },
-        },
-        {
-          text: '아니오',
-        },
-      ]);
-      registAccount(is_main);
-    } else {
-      Alert.alert('송금자를 다시 확인해주세요');
-    }
   };
 
   return (

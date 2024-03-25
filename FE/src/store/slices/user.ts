@@ -1,5 +1,10 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {UserState, syncAccount} from '../../interfaces/states/UserState';
+import {
+  UserState,
+  syncAccount,
+  tripAccount,
+  user,
+} from '../../interfaces/states/UserState';
 
 /* 
 여행 계좌 정보
@@ -15,43 +20,38 @@ import {UserState, syncAccount} from '../../interfaces/states/UserState';
 */
 
 const initialState: UserState = {
-  isLoggedIn: false,
-  userInfo: {
-    user_id: 0,
-    username: '김태규',
-    nickname: '',
-    image_url: '',
-    description: '',
+  user: {
+    member_id: 1,
+    username: 'username',
+    nickname: 'nickname',
+    image_url: '300x300',
+    description: 'description',
     is_pin: false,
-    sync_accounts: [],
-    sync_accounts_length: 0,
-    trip_accounts: [],
-    trip_accounts_length: 0,
   },
+  sync_accounts: [],
+  trip_accounts: [],
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<boolean>) => {
-      state.isLoggedIn = action.payload;
+    setUser: (state, action: PayloadAction<user>) => {
+      state.user = action.payload;
     },
     setPin: (state, action: PayloadAction<boolean>) => {
-      state.userInfo.is_pin = action.payload;
+      state.user.is_pin = action.payload;
     },
-    pushSyncAccount: (state, action: PayloadAction<syncAccount>) => {
-      if (action.payload.is_main === 1) {
-        for (const account of state.userInfo.sync_accounts) {
-          account.is_main = 0;
-        }
-      }
-      state.userInfo.sync_accounts.push(action.payload);
-      state.userInfo.sync_accounts_length += 1;
+    setSyncAccounts: (state, action: PayloadAction<syncAccount[]>) => {
+      state.sync_accounts = action.payload;
+    },
+    setTripAccounts: (state, action: PayloadAction<tripAccount[]>) => {
+      state.trip_accounts = action.payload;
     },
   },
 });
 
-export const {login, setPin, pushSyncAccount} = userSlice.actions;
+export const {setPin, setUser, setSyncAccounts, setTripAccounts} =
+  userSlice.actions;
 
 export default userSlice.reducer;
