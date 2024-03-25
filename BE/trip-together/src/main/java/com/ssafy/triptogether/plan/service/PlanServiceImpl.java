@@ -1,8 +1,6 @@
 package com.ssafy.triptogether.plan.service;
 
-import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.Region;
-import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
@@ -12,6 +10,7 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
+import com.ssafy.triptogether.plan.data.request.AttractionDetail;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
@@ -19,15 +18,18 @@ import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
-import com.ssafy.triptogether.plan.domain.PlanAttraction;
-import com.ssafy.triptogether.plan.repository.PlanAttractionRepository;
+import com.ssafy.triptogether.plan.domain.document.DailyPlan;
+import com.ssafy.triptogether.plan.domain.document.DailyPlanAttraction;
+import com.ssafy.triptogether.plan.domain.document.DailyPlans;
+import com.ssafy.triptogether.plan.repository.DailyPlansRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
-import com.ssafy.triptogether.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NOT_FOUND;
 
@@ -37,11 +39,9 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NO
 public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     // Repository
     private final PlanRepository planRepository;
-    private final PlanAttractionRepository planAttractionRepository;
     private final MemberRepository memberRepository;
     private final RegionRepository regionRepository;
-    private final AttractionRepository attractionRepository;
-    private final ReviewRepository reviewRepository;
+    private final DailyPlansRepository dailyPlansRepository;
 
     private static void planForbiddenCheck(Long memberId, Plan plan, String detailMessageKey) {
         if (!memberId.equals(plan.getMember().getId())) {
@@ -116,23 +116,42 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     }
 
     private void planAttractionSave(List<PlanDetail> planDetails, Plan plan) {
-        planDetails
-                .forEach(planDetail -> {
-                    List<Attraction> attractions = planDetail.attractions().stream()
-                            .map(attraction -> AttractionUtils.findByAttractionId(attractionRepository,
-                                    attraction.attractionId()))
-                            .toList();
+        List<DailyPlan> dailyPlans = new ArrayList<>();
 
-                    attractions.forEach(attraction -> {
-                        PlanAttraction planAttraction = PlanAttraction.builder()
-                                .sequence(planDetail.sequence())
-                                .attraction(attraction)
-                                .plan(plan)
-                                .date(planDetail.date())
-                                .build();
-                        planAttractionRepository.save(planAttraction);
-                    });
-                });
+        // loop daily plans
+        IntStream.range(0, planDetails.size()).forEach(dailyPlanIdx -> {
+            PlanDetail planDetail = planDetails.get(dailyPlanIdx);
+            List<DailyPlanAttraction> dailyPlanAttractions = new ArrayList<>();
+
+            // loop attraction details
+            IntStream.range(0, planDetail.attractionDetails().size()).forEach(attractionIdx -> {
+                AttractionDetail attractionDetail = planDetail.attractionDetails().get(attractionIdx);
+
+                // create attraction details
+                DailyPlanAttraction dailyPlanAttraction = DailyPlanAttraction.builder()
+                        .order(attractionIdx)
+                        .attractionId(attractionDetail.attractionId())
+                        .attractionName(attractionDetail.attractionName())
+                        .avgRating(attractionDetail.avgRating())
+                        .avgPrice(attractionDetail.avgPrice())
+                        .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
+                        .address(attractionDetail.address())
+                        .build();
+                dailyPlanAttractions.add(dailyPlanAttraction);
+            });
+
+            // create daily plans
+            DailyPlan dailyPlan = DailyPlan.builder()
+                    .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+                    .dailyPlanAttractions(dailyPlanAttractions)
+                    .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                    .build();
+            dailyPlans.add(dailyPlan);
+        });
+
+        // create & save daily plan document
+        DailyPlans plans = DailyPlans.builder().planId(plan.getId()).dailyPlans(dailyPlans).build();
+        dailyPlansRepository.save(plans);
     }
 
     @Override
