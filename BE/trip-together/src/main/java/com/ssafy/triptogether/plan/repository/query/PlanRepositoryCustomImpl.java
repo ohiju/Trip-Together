@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.plan.repository.query;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
