@@ -15,9 +15,13 @@ import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateRespo
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
+import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
+import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +29,10 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TripAccountServiceImpl implements TripAccountLoadService, TripAccountSaveService {
+	// Repository
 	private final CurrencyRepository currencyRepository;
+	private final TripAccountRepository tripAccountRepository;
+	// Client
 	private final CurrencyRateClient currencyRateClient;
 
 	/**
@@ -62,6 +69,28 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 		return RateLoadResponse.builder()
 			.rate(currency.getRate())
+			.build();
+	}
+
+	/**
+	 * 회원의 지갑 내 목록 조회
+	 * @param memberId 요청자의 member_id
+	 * @return 지갑 내 목록
+	 */
+	@Override
+	public TripAccountsLoadResponse tripAccountsLoad(long memberId) {
+		List<TripAccount> tripAccounts = tripAccountRepository.findByMemberId(memberId);
+		List<TripAccountsLoadDetail> tripAccountsLoadDetails = tripAccounts.stream()
+			.map(tripAccount -> TripAccountsLoadDetail.builder()
+				.currencyNation(tripAccount.getCurrency().getCurrencyNation())
+				.nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
+				.balance(tripAccount.getBalance())
+				.unit(tripAccount.getCurrency().getCode().getUnit())
+				.build()
+			).toList();
+		return TripAccountsLoadResponse.builder()
+			.tripAccountsLoadDetails(tripAccountsLoadDetails)
+			.tripAccountCount(tripAccountsLoadDetails.size())
 			.build();
 	}
 
