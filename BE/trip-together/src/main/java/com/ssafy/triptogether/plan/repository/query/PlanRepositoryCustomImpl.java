@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.plan.data.response.DailyPlanAttractionResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.domain.Status;
@@ -12,6 +11,7 @@ import com.ssafy.triptogether.plan.domain.Status;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.triptogether.plan.domain.QPlan.plan;
