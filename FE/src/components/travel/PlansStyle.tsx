@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import {TouchableOpacity} from 'react-native';
 
-const PlanView = styled.View`
+const PlanView = styled(TouchableOpacity)`
   background-color: white;
   width: 90%;
   height: 33%;
