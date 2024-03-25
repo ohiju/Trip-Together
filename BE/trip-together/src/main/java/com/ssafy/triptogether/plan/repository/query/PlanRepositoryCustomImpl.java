@@ -12,7 +12,6 @@ import com.ssafy.triptogether.plan.domain.Status;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.triptogether.plan.domain.QPlan.plan;
@@ -33,11 +32,6 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                         )
                 )
                 .fetchFirst() != null;
-    }
-
-    @Override
-    public List<DailyPlanAttractionResponse> findAllDailyPlanByPlanId(long planId) {
-        return null;
     }
 
     @Override

@@ -27,9 +27,12 @@ public enum ErrorCode {
     PLAN_SAVE_BAD_REQUEST(400, "해당 기간에 여행 계획이 존재합니다."),
     PLAN_DATE_BAD_REQUEST(400, "종료 날짜가 시작 날짜보다 작을 수 없습니다."),
     PLAN_NOT_FOUND(404, "여행 계획을 찾을 수 없습니다."),
+    DAILY_PLAN_NOT_FOUND(404, "일자별 여행 계획을 찾을 수 없습니다."),
     // REVIEW
     REVIEW_NOT_FOUND(404, "여행지를 찾을 수 없습니다"),
 
+	UNDEFINED_ACCESS_TOKEN(400, "ACCESS TOKEN 존재하지 않습니다."),
+	UNDEFINED_REFRESH_TOKEN(400, "REFRESH TOKEN 존재하지 않습니다."),
 
     BAD_REQUEST(400, "잘못된 요청입니다."),
 
