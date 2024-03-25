@@ -12,6 +12,7 @@ import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.request.AttractionDetail;
 import com.ssafy.triptogether.plan.data.request.PlanDetail;
+import com.ssafy.triptogether.plan.data.request.PlansModifyRequest;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.DAILY_PLAN_NOT_FOUND;
@@ -98,6 +100,36 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         planRepository.delete(plan);
     }
 
+    @Transactional
+    @Override
+    public void planModify(Long memberId, Long planId, PlansSaveRequest plansSaveRequest) {
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+        Plan plan = planFindById(planId, "PlanModify");
+        Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
+
+        if (plansSaveRequest.endAt().isBefore(plansSaveRequest.startAt())) {
+            throw new BadRequestException("PlanModify", ErrorCode.PLAN_DATE_BAD_REQUEST);
+        }
+
+        if (existOverlappingPlan(plan.getId(), plansSaveRequest, member)) {
+            throw new BadRequestException("PlanModify", ErrorCode.PLAN_SAVE_BAD_REQUEST);
+        }
+        plan.modify(plansSaveRequest);
+        plan.setRegion(startRegion);
+
+        DailyPlans dailyPlans = plansFindById(planId, "PlanModify");
+        String id = dailyPlans.getId();
+
+        planAttractionModify(plansSaveRequest.planDetails(), plan, id);
+    }
+
+    private DailyPlans plansFindById(Long planId, String detailMessageKey) {
+        return dailyPlansRepository.findByPlanId(planId)
+            .orElseThrow(
+                () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
+            );
+    }
+
     private Plan planFindById(Long planId, String detailMessageKey) {
         return planRepository.findById(planId)
                 .orElseThrow(
@@ -107,6 +139,10 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
     private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
         return planRepository.existOverlappingPlan(member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
+    }
+
+    private boolean existOverlappingPlan(long planId, PlansSaveRequest plansSaveRequest, Member member) {
+        return planRepository.existOverlappingPlanModify(planId, member, plansSaveRequest.startAt(), plansSaveRequest.endAt());
     }
 
     private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
@@ -157,6 +193,47 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
         // create & save daily plan document
         DailyPlans plans = DailyPlans.builder().planId(plan.getId()).dailyPlans(dailyPlans).build();
+        dailyPlansRepository.save(plans);
+    }
+
+    private void planAttractionModify(List<PlanDetail> planDetails, Plan plan, String id) {
+        List<DailyPlan> dailyPlans = new ArrayList<>();
+
+        // loop daily plans
+        IntStream.range(0, planDetails.size()).forEach(dailyPlanIdx -> {
+            PlanDetail planDetail = planDetails.get(dailyPlanIdx);
+            List<DailyPlanAttraction> dailyPlanAttractions = new ArrayList<>();
+
+            // loop attraction details
+            IntStream.range(0, planDetail.attractionDetails().size()).forEach(attractionIdx -> {
+                AttractionDetail attractionDetail = planDetail.attractionDetails().get(attractionIdx);
+
+                // create attraction details
+                DailyPlanAttraction dailyPlanAttraction = DailyPlanAttraction.builder()
+                    .order(attractionIdx)
+                    .attractionId(attractionDetail.attractionId())
+                    .attractionName(attractionDetail.attractionName())
+                    .avgRating(attractionDetail.avgRating())
+                    .avgPrice(attractionDetail.avgPrice())
+                    .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
+                    .address(attractionDetail.address())
+                    .build();
+                dailyPlanAttractions.add(dailyPlanAttraction);
+            });
+
+            // create daily plans
+            DailyPlan dailyPlan = DailyPlan.builder()
+                .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+                .dailyPlanAttractions(dailyPlanAttractions)
+                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .build();
+            dailyPlans.add(dailyPlan);
+        });
+
+        // create & save daily plan document
+        DailyPlans plans = DailyPlans.builder().planId(plan.getId()).dailyPlans(dailyPlans).build();
+        plans.updatePlansId(id);
+
         dailyPlansRepository.save(plans);
     }
 

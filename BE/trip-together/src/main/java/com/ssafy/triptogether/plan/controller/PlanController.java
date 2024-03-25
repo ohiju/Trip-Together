@@ -2,6 +2,7 @@ package com.ssafy.triptogether.plan.controller;
 
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
+import com.ssafy.triptogether.plan.data.request.PlansModifyRequest;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
@@ -41,7 +42,8 @@ public class PlanController {
             @AuthenticationPrincipal SecurityMember securityMember,
             @RequestBody @Valid PlansSaveRequest plansSaveRequest
     ) {
-        long memberId = securityMember.getId();
+        // long memberId = securityMember.getId();
+        long memberId = 1L;
         planSaveService.plansSave(memberId, plansSaveRequest);
 
         return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
@@ -55,6 +57,18 @@ public class PlanController {
         long memberId = securityMember.getId();
         planSaveService.planDelete(memberId, planId);
         return ApiResponse.emptyResponse(NO_CONTENT, SUCCESS_PLAN_DELETE);
+    }
+
+    @PatchMapping("/{plan_id}")
+    public ResponseEntity<ApiResponse<Void>> planModify(
+            @AuthenticationPrincipal SecurityMember securityMember,
+            @PathVariable("plan_id") Long planId,
+            @RequestBody PlansSaveRequest plansSaveRequest
+    ) {
+        // long memberId = securityMember.getId();
+        long memberId = 1L;
+        planSaveService.planModify(memberId, planId, plansSaveRequest);
+        return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_SAVE);
     }
 
     @GetMapping("/{plan_id}")

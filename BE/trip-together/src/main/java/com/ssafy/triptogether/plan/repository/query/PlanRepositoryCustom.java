@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface PlanRepositoryCustom {
     boolean existOverlappingPlan(Member member, LocalDate startAt, LocalDate endAt);
 
+    boolean existOverlappingPlanModify(long planId, Member member, LocalDate startAt, LocalDate endAt);
+
     Optional<DailyPlanResponse> findDetailPlanById(long planId);
 
     List<DailyPlanListResponse> findPlansByMemberId(long memberId);

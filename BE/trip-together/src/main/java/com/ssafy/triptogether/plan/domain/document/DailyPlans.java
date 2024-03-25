@@ -27,4 +27,13 @@ public class DailyPlans {
         this.planId = planId;
         this.dailyPlans = dailyPlans;
     }
+
+    public void updatePlans(List<DailyPlan> dailyPlans) {
+        this.dailyPlans = dailyPlans;
+    }
+
+    public void updatePlansId(String id) {
+        this.id = id;
+    }
+
 }
