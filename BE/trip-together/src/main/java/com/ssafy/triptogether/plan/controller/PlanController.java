@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PLANS_SAVE;
 import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PLAN_DETAIL_FIND;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -33,9 +35,7 @@ public class PlanController {
         long memberId = securityMember.getId();
         planSaveService.plansSave(memberId, plansSaveRequest);
 
-        return ApiResponse.emptyResponse(
-                HttpStatus.CREATED, StatusCode.SUCCESS_PLANS_SAVE
-        );
+        return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
     }
 
     @DeleteMapping("/{plan_id}")
