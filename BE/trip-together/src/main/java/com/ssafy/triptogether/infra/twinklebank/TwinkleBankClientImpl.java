@@ -1,18 +1,28 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
-import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+
 
 @Component
 @RequiredArgsConstructor
@@ -50,8 +60,8 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
             return (TwinkleBankAccountsLoadResponse) response.getBody().getData();
         }
 
-        throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
-    }
+		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+	}
 
     /**
      * 계좌 연동 요청
@@ -83,8 +93,8 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
             return (TwinkleAccountSyncResponse) response.getBody().getData();
         }
 
-        throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
-    }
+		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+	}
 
     /**
      * 계좌 연동 해지 요청
@@ -112,7 +122,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
         );
 
         if (response.getStatusCode() != HttpStatus.OK) {
-            throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
+            throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
         }
     }
 
@@ -136,8 +146,33 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
                 ApiResponse.class
         );
 
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new ExternalServerException("TwinkleBankAccountsLoad", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
-        }
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public TwinkleMemberInfoResponse bankMemberInfoLoad(String clientId, String accessToken) {
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/members")
+			.queryParam("client_id", clientId)
+			.toUriString();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", accessToken);
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+
+		ResponseEntity<ApiResponse> response = restTemplate.exchange(
+			url,
+			HttpMethod.GET,
+			entity,
+			ApiResponse.class
+		);
+
+		if (response.getStatusCode() == HttpStatus.OK) {
+			return (TwinkleMemberInfoResponse)response.getBody().getData();
+		}
+
+		throw new ExternalServerException("bankMemberInfoLoad", TWINKLE_BANK_SERVER_ERROR);
     }
 }
