@@ -3,6 +3,7 @@ package com.ssafy.triptogether.tripaccount.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,18 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.member.domain.Gender;
+import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyNation;
+import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
+import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 
 @ExtendWith(MockitoExtension.class)
 class TripAccountServiceImplTest {
@@ -32,6 +39,8 @@ class TripAccountServiceImplTest {
 	TripAccountServiceImpl tripAccountService;
 	@Mock
 	CurrencyRepository currencyRepository;
+	@Mock
+	TripAccountRepository tripAccountRepository;
 
 	@Nested
 	@MockitoSettings(strictness = Strictness.LENIENT)
@@ -91,6 +100,75 @@ class TripAccountServiceImplTest {
 			RateLoadResponse rateLoadResponse = tripAccountService.rateLoad(CurrencyCode.GBP);
 			// then
 			assertEquals(testCurrencies.get(1).getRate(), rateLoadResponse.rate());
+		}
+	}
+
+	@Nested
+	@DisplayName("지갑 내 목록 조회")
+	class TripAccountsLoadTest {
+		long memberId = 1L;
+		List<TripAccount> tripAccounts;
+		TripAccountsLoadResponse testTripAccountsLoadResponse;
+
+		@BeforeEach
+		void setUp() {
+			Member member = Member.builder()
+				.gender(Gender.MALE)
+				.nickname("TestUser")
+				.uuid("TestUser")
+				.birth(LocalDate.now())
+				.build();
+			Currency currency1 = Currency.builder()
+				.code(CurrencyCode.EUR)
+				.currencyNation(CurrencyNation.EUR)
+				.rate(365.1)
+				.build();
+			Currency currency2 = Currency.builder()
+				.code(CurrencyCode.GBP)
+				.currencyNation(CurrencyNation.UK)
+				.rate(255.5)
+				.build();
+			TripAccount tripAccount1 = TripAccount.builder()
+				.balance(3.0)
+				.currency(currency1)
+				.member(member)
+				.build();
+			TripAccount tripAccount2 = TripAccount.builder()
+				.balance(10.0)
+				.currency(currency2)
+				.member(member)
+				.build();
+			tripAccounts = List.of(tripAccount1, tripAccount2);
+			TripAccountsLoadDetail tripAccountsLoadDetail1 = TripAccountsLoadDetail.builder()
+				.currencyNation(CurrencyNation.EUR)
+				.nationKr(CurrencyNation.EUR.getMessage())
+				.balance(3.0)
+				.unit(CurrencyCode.EUR.getUnit())
+				.build();
+			TripAccountsLoadDetail tripAccountsLoadDetail2 = TripAccountsLoadDetail.builder()
+				.currencyNation(CurrencyNation.UK)
+				.nationKr(CurrencyNation.UK.getMessage())
+				.balance(10.0)
+				.unit(CurrencyCode.GBP.getUnit())
+				.build();
+			testTripAccountsLoadResponse = TripAccountsLoadResponse.builder()
+				.tripAccountsLoadDetails(List.of(tripAccountsLoadDetail1, tripAccountsLoadDetail2))
+				.tripAccountCount(2)
+				.build();
+		}
+
+		@Test
+		void tripAccountsLoad() {
+			// given
+			given(tripAccountRepository.findByMemberId(memberId)).willReturn(tripAccounts);
+			// when
+			TripAccountsLoadResponse tripAccountsLoadResponse = tripAccountService.tripAccountsLoad(memberId);
+			// then
+			assertAll(
+				() -> assertEquals(testTripAccountsLoadResponse.tripAccountsLoadDetails(), tripAccountsLoadResponse.tripAccountsLoadDetails()),
+				() -> assertEquals(testTripAccountsLoadResponse.tripAccountCount(), tripAccountsLoadResponse.tripAccountCount())
+			);
+			verify(tripAccountRepository, times(1)).findByMemberId(memberId);
 		}
 	}
 }
