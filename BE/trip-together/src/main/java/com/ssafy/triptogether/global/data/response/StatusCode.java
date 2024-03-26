@@ -11,6 +11,7 @@ public enum StatusCode {
     SUCCESS_PLAN_DELETE(204, "여행 계획 삭제 성공"),
     SUCCESS_PLAN_DETAIL_FIND(200, "여행 계획 상세 조회 성공"),
     SUCCESS_PLANS_FIND(200, "여행 계획 목록 조회 성공"),
+    SUCCESS_PLANS_MODIFY(200, "여행 계획 수정 성공"),
     //ATTRACTION
     SUCCESS_ATTRACTION_DETAIL_FIND(200, "여행지별 명소 상세 조회 성공"),
     // TRIP_ACCOUNT
@@ -24,6 +25,7 @@ public enum StatusCode {
     SUCCESS_BANK_ACCOUNTS_LOAD(200, "회원 은행 계좌 목록 조회 성공"),
     SUCCESS_SYNC_ACCOUNTS_SAVE(201, "연동 계좌 등록 성공"),
     SUCCESS_SYNC_ACCOUNT_DELETE(204, "연동 계좌 해지 성공"),
+    SUCCESS_TRIP_ACCOUNT_EXCHANGE(200, "환전 성공"),
     // MEMBER
     SUCCESS_PROFILE_UPDATE(200, "프로필 수정 성공"),
     SUCCESS_PROFILE_FIND(200, "프로필 조회 성공"),

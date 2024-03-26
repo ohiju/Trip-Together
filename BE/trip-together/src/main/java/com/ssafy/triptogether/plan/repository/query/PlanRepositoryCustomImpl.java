@@ -35,6 +35,21 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     }
 
     @Override
+    public boolean existOverlappingPlanModify(long planId, Member member, LocalDate startAt, LocalDate endAt) {
+        return queryFactory
+            .selectOne()
+            .from(plan)
+            .where(plan.member.eq(member)
+                .and(plan.startAt.after(endAt)
+                    .or(plan.endAt.before(startAt))
+                    .not()
+                )
+                .and(plan.id.ne(planId))
+            )
+            .fetchFirst() != null;
+    }
+
+    @Override
     public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
         return Optional.ofNullable(
                 queryFactory.select(Projections.constructor(DailyPlanResponse.class,

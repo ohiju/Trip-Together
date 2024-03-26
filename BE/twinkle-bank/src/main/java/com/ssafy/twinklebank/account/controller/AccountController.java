@@ -27,6 +27,16 @@ public class AccountController {
     private final AccountSaveService accountSaveService;
     private final AccountLoadService accountLoadService;
 
+    @GetMapping("{account_id}/balance")
+    public ResponseEntity<ApiResponse<Double>> getBalance(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @RequestParam("account_id") String accountId
+    ) {
+        long memberId = securityMember.getId();
+        double balance = accountLoadService.getBalance(memberId, accountId);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_GET_BALANCE, balance);
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
         @AuthenticationPrincipal SecurityMember securityMember,
