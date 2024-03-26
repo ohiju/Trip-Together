@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {imagePath} from '../../assets/images/imagePath';
+import plans from '../../assets/data/alltrips';
 import {
   DdayText,
   DurationText,
@@ -19,24 +20,36 @@ import {
 } from './PlansStyle';
 
 const Plans = () => {
+  const [now, setNow] = useState(0);
+
+  const handleLeftButtonClick = () => {
+    setNow(prevNow => (prevNow === 0 ? plans.length - 1 : prevNow - 1)); // Loop to the last plan if at the first plan
+  };
+
+  const handleRightButtonClick = () => {
+    setNow(prevNow => (prevNow === plans.length - 1 ? 0 : prevNow + 1)); // Loop to the first plan if at the last plan
+  };
+
+  const currentPlan = plans[now];
+
   return (
     <PlanView>
-      <PlanTitle>오희주님의 프랑스 여행 계획</PlanTitle>
+      <PlanTitle>{currentPlan.title}</PlanTitle>
       <PlanCenter>
-        <PlanSlideButton>
+        <PlanSlideButton onPress={handleLeftButtonClick}>
           <ButtonImage source={require('../../assets/images/left-arrow.png')} />
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
             <PlanImage source={imagePath.France} />
-            <CityName>몽펠리에</CityName>
+            <CityName>{currentPlan.start_region}</CityName>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
             <DdayText>D-52</DdayText>
             <DurationText>총 12일</DurationText>
           </PlanDescriptionBox>
         </PlanDescription>
-        <PlanSlideButton>
+        <PlanSlideButton onPress={handleRightButtonClick}>
           <ButtonImage
             source={require('../../assets/images/right-arrow.png')}
           />
@@ -45,7 +58,7 @@ const Plans = () => {
       <PlanMoney>
         <MoneyImage source={require('../../assets/images/profits.png')} />
         <MoneyUnit>₩</MoneyUnit>
-        <MoneyText>3,200,000</MoneyText>
+        <MoneyText>{currentPlan.total_budget}</MoneyText>
       </PlanMoney>
     </PlanView>
   );
