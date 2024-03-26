@@ -67,7 +67,7 @@ public class SyncAccountController {
         );
     }
 
-    @DeleteMapping
+    @DeleteMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> syncAccountDelete(
             // @AuthenticationPrincipal SecurityMember,
             @RequestBody @Valid SyncAccountDeleteRequest syncAccountDeleteRequest
