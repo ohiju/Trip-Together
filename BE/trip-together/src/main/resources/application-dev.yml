@@ -1,7 +1,7 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: j10a309.p.ssafy.io
       port: 6379
     mongodb:
       uri: ${DEV_MONGO_URI}
