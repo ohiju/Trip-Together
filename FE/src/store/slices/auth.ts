@@ -1,28 +1,13 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {AuthState, token} from '../../interfaces/states/tokenState';
+import {createSlice} from '@reduxjs/toolkit';
 
-const initialState: AuthState = {
-  refresh_token: 'ddddddeeeeeeffffff',
-  token: {
-    access_token: 'aaaaaabbbbbbcccccc',
-    expires_in: 1800,
-    created_at: Date.now() / 1000,
-  },
-};
+const initialState = {};
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    setRefresh: (state, action: PayloadAction<string>) => {
-      state.refresh_token = action.payload;
-    },
-    setToken: (state, action: PayloadAction<token>) => {
-      state.token = action.payload;
-    },
-  },
+  reducers: {},
 });
 
-export const {setToken, setRefresh} = authSlice.actions;
+// export const {} = authSlice.actions;
 
 export default authSlice.reducer;

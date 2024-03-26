@@ -3,6 +3,7 @@ import React from 'react';
 import NotYet from '../assets/data/NotYet';
 import AddButton from '../components/myPage/syncManage/AddButton';
 import {MyPageStackParams} from '../interfaces/router/myPage/MyPageStackParams';
+import CardHistory from '../pages/myPage/CardHistory';
 import CardManage from '../pages/myPage/CardManage';
 import MyMain from '../pages/myPage/MyMain';
 import SyncManage from '../pages/myPage/SyncManage';
@@ -47,6 +48,14 @@ const MyPageNavigator = () => {
           title: '연동 계좌 관리',
           headerTitleAlign: 'center',
           headerRight: AddButton,
+        }}
+      />
+      <MyPageStack.Screen
+        name="CardHistory"
+        component={CardHistory}
+        options={{
+          title: '이용 내역',
+          headerTitleAlign: 'center',
         }}
       />
       <MyPageStack.Group

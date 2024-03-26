@@ -43,6 +43,7 @@ const MyWallet = () => {
   };
   const handleToHistory = () => {
     if (checkSyncs()) {
+      navigation.navigate('CardHistory');
     } else {
       navigation.navigate('SyncMain');
     }

@@ -1,14 +1,8 @@
-import {
-  RouteProp,
-  useRoute
-} from '@react-navigation/native';
-import React, { useState } from 'react';
-import {
-  NativeSyntheticEvent,
-  TextInputChangeEventData
-} from 'react-native';
-import { WithLocalSvg } from 'react-native-svg/css';
-import { iconPath } from '../../../assets/icons/iconPath';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import React, {useState} from 'react';
+import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import {WithLocalSvg} from 'react-native-svg/css';
+import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
   Body,
@@ -18,10 +12,10 @@ import {
   Title,
   TitleView,
 } from '../../../components/common/InfoPageStyle';
-import { BottomButton } from '../../../constants/AppButton';
-import { font_danger, font_lightgray } from '../../../constants/colors';
-import { SyncStackParams } from '../../../interfaces/router/myPage/SyncStackParams';
-import { useAppDispatch } from '../../../store/hooks';
+import {BottomButton} from '../../../constants/AppButton';
+import {font_danger, font_lightgray} from '../../../constants/colors';
+import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
+import {useAppDispatch} from '../../../store/hooks';
 import {
   AgainBtn,
   AgainBtnView,
@@ -39,8 +33,7 @@ const SyncConfirm = () => {
   // 입력 관리
   const [code, setCode] = useState('');
   const handleSender = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = ;
-    setCode(value);
+    setCode(e.nativeEvent.text);
   };
 
   // 라우팅
@@ -64,7 +57,7 @@ const SyncConfirm = () => {
         <InputView>
           <WithLocalSvg width={24} height={24} asset={iconPath.coin} />
           <Input
-            value={sender}
+            value={code}
             onChange={handleSender}
             placeholder="송금자 이름을 입력하세요"
           />
@@ -93,7 +86,7 @@ const SyncConfirm = () => {
       <AppButton
         style={BottomButton}
         text="확인"
-        disabled={sender.trim() === ''}
+        disabled={code.trim() === ''}
         onPress={confirmSender}
       />
     </Wrapper>
