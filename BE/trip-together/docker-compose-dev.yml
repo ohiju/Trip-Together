@@ -11,14 +11,14 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    restart: unless-stopped
+    restart: no
 
   dev_redis_container:
     container_name: dev_redis_container
     image: redis:6.2.6-alpine
     ports:
       - ${DEV_REDIS_BINDING_PORT}:6379
-    restart: unless-stopped
+    restart: no
 
   dev_spring_container:
     container_name: dev_spring_container
@@ -38,6 +38,10 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      MONGO_INITDB_DATABASE: ${DEV_TRIP_MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${DEV_TRIP_MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DEV_TRIP_MONGODB_PASSWORD}
+      DEV_TRIP_MONGODB_BINDING_PORT: ${DEV_TRIP_MONGODB_BINDING_PORT}
     restart: always
 
   sonarqube:
@@ -59,4 +63,4 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${DEV_TRIP_MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DEV_TRIP_MONGODB_PASSWORD}
       DEV_TRIP_MONGODB_BINDING_PORT: ${DEV_TRIP_MONGODB_BINDING_PORT}
-    restart: unless-stopped
+    restart: no

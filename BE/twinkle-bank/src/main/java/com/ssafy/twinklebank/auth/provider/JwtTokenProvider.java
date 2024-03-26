@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +47,7 @@ public class JwtTokenProvider {
 
 	// security Key
 	private final Key key;
+	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
 	public JwtTokenProvider(@Value("${jwt.secret}") String key) {
