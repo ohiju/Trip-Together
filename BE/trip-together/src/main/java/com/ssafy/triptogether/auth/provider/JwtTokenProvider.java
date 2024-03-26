@@ -9,6 +9,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,8 @@ public class JwtTokenProvider {
 
     // security Key
     private final Key key;
+
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String key) {
