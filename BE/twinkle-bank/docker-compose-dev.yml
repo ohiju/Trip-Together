@@ -11,6 +11,7 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     restart: unless-stopped
 
   dev_redis_container:
