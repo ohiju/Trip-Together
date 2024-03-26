@@ -17,18 +17,33 @@ public class CodeProvider {
 
 	public String generateRandom(int genSize) {
 		SecureRandom secureRandom = new SecureRandom();
-		StringBuilder sb = new StringBuilder();
+		StringBuilder code = new StringBuilder();
 
 		for (int i = 0; i < genSize; i++) {
 			int index = secureRandom.nextInt(CHARS.length());
-			sb.append(CHARS.charAt(index));
+			code.append(CHARS.charAt(index));
 		}
 
-		if (sb.toString().length() != genSize) {
+		if (code.toString().length() != genSize) {
 			throw new NotFoundException("CodeProvider : ", CODE_NOT_FOUND);
 		}
 
-		return sb.toString();
+		return code.toString();
+	}
+
+	public String generateKoreanCode(int length) {
+		SecureRandom secureRandom = new SecureRandom();
+		StringBuilder code = new StringBuilder();
+
+		for (int i = 0; i < length; i++) {
+			int randomValue = secureRandom.nextInt(0xD7A3 - 0xAC00 + 1) + 0xAC00; // 한글 범위 내 랜덤 값 생성
+			code.append((char)randomValue); // 생성된 값을 문자로 변환하여 추가
+		}
+
+		if (code.toString().length() != length) {
+			throw new NotFoundException("CodeProvider : ", CODE_NOT_FOUND);
+		}
+		return code.toString();
 	}
 
 }

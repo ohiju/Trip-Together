@@ -5,8 +5,10 @@ import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
 import com.ssafy.twinklebank.account.data.AccountResponse;
 import com.ssafy.twinklebank.account.data.AddAccountRequest;
 import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
+import com.ssafy.twinklebank.account.data.Transfer1wonRequest;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
+import com.ssafy.twinklebank.account.domain.Type;
 import com.ssafy.twinklebank.account.domain.WithdrawalAgreement;
 import com.ssafy.twinklebank.account.repository.AccountHistoryRepository;
 import com.ssafy.twinklebank.account.repository.AccountRepository;
@@ -14,14 +16,19 @@ import com.ssafy.twinklebank.account.repository.WithdrawalAgreementRepository;
 import com.ssafy.twinklebank.application.domain.Application;
 import com.ssafy.twinklebank.application.repository.ApplicationRepository;
 import com.ssafy.twinklebank.application.utils.ApplicationUtils;
+import com.ssafy.twinklebank.auth.provider.CodeProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 
@@ -30,11 +37,15 @@ import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 @Service
 public class AccountServiceImpl implements AccountLoadService, AccountSaveService {
 
-    private final AccountRepository accountRepository;
-    private final WithdrawalAgreementRepository withdrawalAgreementRepository;
-    private final ApplicationRepository applicationRepository;
-    private final AccountHistoryRepository accountHistoryRepository;
-    private final MemberRepository memberRepository;
+	private final AccountRepository accountRepository;
+	private final WithdrawalAgreementRepository withdrawalAgreementRepository;
+	private final ApplicationRepository applicationRepository;
+	private final AccountHistoryRepository accountHistoryRepository;
+	private final MemberRepository memberRepository;
+	private final CodeProvider codeProvider;
+	private final StringRedisTemplate redisTemplate;
+
+	private final long CODE_EXPIRE_TIME = 10 * 60 * 1000L; // 10분
 
     @Override
     public List<AccountResponse> getAccounts(String clientId, long memberId) {
@@ -131,8 +142,44 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         account.decrease(request.price());
     }
 
-    private Account findAccountByUuid(String accountUuid) {
-        return accountRepository.findAccountByUuid(accountUuid)
-                .orElseThrow(() -> new NotFoundException("addLinkedAccount: account", ACCOUNT_NOT_FOUND, accountUuid));
-    }
+	@Transactional
+	@Override
+	public void transfer1won(long memberId, Transfer1wonRequest request) {
+		// client id가 존재하는지 확인
+		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+
+		// account uuid로 계좌 찾기
+		Account account = accountRepository.findAccountByUuid(request.accountUuid())
+			.orElseThrow(
+				() -> new NotFoundException("accountService - transfer1won ", ACCOUNT_NOT_FOUND)
+			);
+
+		// 1원 인증 코드
+		String code = codeProvider.generateKoreanCode(4);
+
+		DepositWithdrawRequest depositWithdrawRequest = DepositWithdrawRequest.builder()
+			.accountUuid(request.accountUuid())
+			.type(Type.DEPOSIT)
+			.price(1.0)
+			.businessName(code)
+			.address("twinkle bank")
+			.build();
+
+		// 계좌에 1원 넣어주기
+		deposit(memberId, depositWithdrawRequest);
+
+		// 코드 10분간 저장하기
+		saveCode(request.accountUuid(), code);
+	}
+
+	private Account findAccountByUuid(String accountUuid) {
+		return accountRepository.findAccountByUuid(accountUuid)
+			.orElseThrow(() -> new NotFoundException("addLinkedAccount: account", ACCOUNT_NOT_FOUND, accountUuid));
+	}
+
+	private void saveCode(String accountUuid, String code) {
+		redisTemplate.opsForValue()
+			.set("1won:" + accountUuid, code,
+				CODE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+	}
 }
