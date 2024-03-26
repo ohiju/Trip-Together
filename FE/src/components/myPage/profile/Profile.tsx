@@ -1,5 +1,4 @@
 import React from 'react';
-import {customTransition} from '../../../constants/customTransitions';
 import parseProfile from '../../../hooks/parseProfile';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
@@ -18,9 +17,7 @@ const Profile = () => {
   const {image_url, description, nickname, username} = parseProfile(user);
 
   return (
-    <Wrapper
-      sharedTransitionTag="profile"
-      sharedTransitionStyle={customTransition}>
+    <Wrapper>
       <ProfileImageView>
         <ProfileImage source={image_url} resizeMode="contain" />
       </ProfileImageView>

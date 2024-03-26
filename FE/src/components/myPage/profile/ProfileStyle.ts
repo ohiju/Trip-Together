@@ -1,15 +1,14 @@
-import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 import {font_dark} from '../../../constants/colors';
 
-const Wrapper = styled(Animated.View)`
+const Wrapper = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
 `;
 
 const ProfileImageView = styled.View`
-  height: 80px; // 100%;
+  height: 80px;
   aspect-ratio: 1/1;
 `;
 

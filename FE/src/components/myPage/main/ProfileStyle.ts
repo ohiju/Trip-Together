@@ -1,5 +1,4 @@
-import Animated from 'react-native-reanimated';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import styled from 'styled-components/native';
 import {
   bg_light,
@@ -28,7 +27,7 @@ const DragBar = styled.View`
   border-radius: 5px;
 `;
 
-const ProfileBox = styled(Animated.View)`
+const ProfileBox = styled.View`
   background: ${bg_light};
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
@@ -45,6 +44,7 @@ const ProfileImageView = styled.View`
   aspect-ratio: 1/1;
   align-items: center;
   justify-content: center;
+  padding: 1px;
 `;
 
 const ProfileImage = styled.Image`
@@ -84,5 +84,6 @@ export {
   StyledShadow,
   UserInfoView,
   Username,
-  Wrapper,
+  Wrapper
 };
+
