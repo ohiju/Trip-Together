@@ -36,6 +36,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: dev
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     restart: always
 
   sonarqube_container:
