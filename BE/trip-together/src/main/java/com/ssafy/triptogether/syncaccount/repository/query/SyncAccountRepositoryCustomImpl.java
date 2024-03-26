@@ -13,23 +13,22 @@ import static com.ssafy.triptogether.syncaccount.domain.QSyncAccount.syncAccount
 public class SyncAccountRepositoryCustomImpl implements SyncAccountRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-    /**
-     * 사용자의 연동 계좌 목록 조회
-     *
-     * @param memberId 요청자의 member_id
-     * @return 연동 계좌 목록
-     */
-    @Override
-    public List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId) {
-        return queryFactory.select(Projections.bean(SyncAccountsDetail.class,
-                        syncAccount.uuid.as("uuid"),
-                        syncAccount.num.as("accountNum"),
-                        syncAccount.name.as("name"),
-                        syncAccount.isMain.as("isMain")
-                )).from(syncAccount)
-                .where(syncAccount.member.id.eq(memberId))
-                .fetch();
-    }
+	/**
+	 * 사용자의 연동 계좌 목록 조회
+	 * @param memberId 요청자의 member_id
+	 * @return 연동 계좌 목록
+	 */
+	@Override
+	public List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId) {
+		return queryFactory.select(Projections.constructor(SyncAccountsDetail.class,
+				syncAccount.uuid,
+				syncAccount.num,
+				syncAccount.name,
+				syncAccount.isMain
+			)).from(syncAccount)
+			.where(syncAccount.member.id.eq(memberId))
+			.fetch();
+	}
 
     /**
      * 사용자의 연동 계좌가 한개라도 존재하는지 체크

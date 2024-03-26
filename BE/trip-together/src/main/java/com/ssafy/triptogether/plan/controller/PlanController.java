@@ -2,22 +2,23 @@ package com.ssafy.triptogether.plan.controller;
 
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
-import com.ssafy.triptogether.global.data.response.StatusCode;
+import com.ssafy.triptogether.plan.data.request.PlansModifyRequest;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
+import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.service.PlanLoadService;
 import com.ssafy.triptogether.plan.service.PlanSaveService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PLANS_SAVE;
-import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_PLAN_DETAIL_FIND;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static org.springframework.http.HttpStatus.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/plan/v1/plans")
@@ -27,12 +28,22 @@ public class PlanController {
     private final PlanSaveService planSaveService;
     private final PlanLoadService planLoadService;
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<DailyPlanListResponse>>> findPlans(
+        @AuthenticationPrincipal SecurityMember securityMember
+    ) {
+        long memberId = securityMember.getId();
+        List<DailyPlanListResponse> planList = planLoadService.findPlans(memberId);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, planList);
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> plansSave(
             @AuthenticationPrincipal SecurityMember securityMember,
             @RequestBody @Valid PlansSaveRequest plansSaveRequest
     ) {
-        long memberId = securityMember.getId();
+        // long memberId = securityMember.getId();
+        long memberId = 1L;
         planSaveService.plansSave(memberId, plansSaveRequest);
 
         return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
@@ -45,10 +56,19 @@ public class PlanController {
     ) {
         long memberId = securityMember.getId();
         planSaveService.planDelete(memberId, planId);
+        return ApiResponse.emptyResponse(NO_CONTENT, SUCCESS_PLAN_DELETE);
+    }
 
-        return ApiResponse.emptyResponse(
-                HttpStatus.NO_CONTENT, StatusCode.SUCCESS_PLAN_DELETE
-        );
+    @PatchMapping("/{plan_id}")
+    public ResponseEntity<ApiResponse<Void>> planModify(
+            @AuthenticationPrincipal SecurityMember securityMember,
+            @PathVariable("plan_id") Long planId,
+            @RequestBody PlansSaveRequest plansSaveRequest
+    ) {
+        // long memberId = securityMember.getId();
+        long memberId = 1L;
+        planSaveService.planModify(memberId, planId, plansSaveRequest);
+        return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_SAVE);
     }
 
     @GetMapping("/{plan_id}")
