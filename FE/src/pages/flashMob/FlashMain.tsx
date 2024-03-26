@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native';
 import MyLocationMap from '../../components/flashMob/MyLocationMap';
 import {Container} from './FlashMainStyle';
-import PlaceInfo from '../../components/travel/PlaceInfo';
+import PlaceInfo from '../../components/common/PlaceInfo';
 import Geolocation from '@react-native-community/geolocation';
 
 const FlashMain = () => {
@@ -31,7 +31,7 @@ const FlashMain = () => {
     <SafeAreaView style={{flex: 1}}>
       <Container>
         {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
-        <PlaceInfo />
+        <PlaceInfo theme="flashmob" />
       </Container>
     </SafeAreaView>
   );

@@ -5,6 +5,8 @@ import {FlashMobStackParams} from '../interfaces/router/flashMob/FlashMobStackPa
 import FlashMain from '../pages/flashMob/FlashMain';
 import ChatMain from '../pages/flashMob/ChatMain';
 import ChatRoom from '../pages/flashMob/ChatRoom';
+import PlaceInfoList from '../pages/common/PlaceInfoList';
+import PlaceDetail from '../pages/common/PlaceDetail';
 
 const FlashMobStack = () => {
   const Stack = createNativeStackNavigator<FlashMobStackParams>();
@@ -19,6 +21,24 @@ const FlashMobStack = () => {
           headerRight: ToChat,
         }}
       />
+      <Stack.Group>
+        <Stack.Screen
+          name="flashmobs"
+          component={PlaceInfoList}
+          options={{
+            title: '',
+            headerRight: ToChat,
+          }}
+        />
+        <Stack.Screen
+          name="flashplace"
+          component={PlaceDetail}
+          options={{
+            title: '',
+            headerRight: ToChat,
+          }}
+        />
+      </Stack.Group>
       <Stack.Group>
         <Stack.Screen
           name="chat_main"

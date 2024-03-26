@@ -28,9 +28,13 @@ const PlanDetail = () => {
       daily_plans: trip.daily_plans,
     };
     try {
-      await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
-        headers: {},
-      });
+      await axios.post(
+        `https://j10a309.p.ssafy.io:8080/api/plan/v1/plans`,
+        data,
+        {
+          headers: {},
+        },
+      );
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {

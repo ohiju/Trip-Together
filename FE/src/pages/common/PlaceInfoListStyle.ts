@@ -56,6 +56,18 @@ const Price = styled.Text`
   font-size: 14px;
 `;
 
+const DetailsRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 62%;
+`;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  width: 50%;
+`;
+
 export {
   ItemContainer,
   ThumbnailContainer,
@@ -66,4 +78,6 @@ export {
   Address,
   Rating,
   Price,
+  DetailsRow,
+  ButtonContainer,
 };

@@ -9,6 +9,7 @@ import {
   Info,
   Bag,
   ReviewsContainer,
+  ButtonContainer,
   ReviewItem,
   ReviewImage,
   ProfileImage,
@@ -30,14 +31,25 @@ import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {useAppSelector} from '../../store/hooks';
 import {useAppDispatch} from '../../store/hooks';
 import {addItemToBag} from '../../store/slices/bag';
+import {useRoute} from '@react-navigation/native';
+import AppButton from '../../components/common/AppButton';
+import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
 
-const AttractionDetailsPage = ({route}: any) => {
+interface RouteParams {
+  theme?: string;
+}
+
+const AttractionDetailsPage = () => {
   const [show, setShow] = useState(true);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+
   const attraction = PlaceDetail[0];
   const attraction_id = PlaceDetail[0].attraction_id;
   const PlaceBag = useAppSelector(state => state.bag.bagInfo);
   const dispatch = useAppDispatch();
+
+  const route = useRoute();
+  const {theme}: RouteParams = route.params || {};
 
   useEffect(() => {
     PlaceBag.forEach(item => {
@@ -114,17 +126,26 @@ const AttractionDetailsPage = ({route}: any) => {
                 C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
               </Address>
             </Header>
-            <Bag onPress={handleAddItem}>
-              {show ? (
-                <BagImage
-                  source={require('../../assets/images/shopping.jpg')}
-                  resizeMode="cover"
-                />
-              ) : (
-                <></>
-              )}
-            </Bag>
+            {theme === 'trip' && (
+              <Bag onPress={handleAddItem}>
+                {show ? (
+                  <BagImage
+                    source={require('../../assets/images/shopping.jpg')}
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <></>
+                )}
+              </Bag>
+            )}
           </HeadersContainer>
+
+          {theme === 'flashmob' && (
+            <ButtonContainer>
+              <AppButton text="모임 생성" style={MakeFlashButton} />
+              <AppButton text="모임 검색" style={JoinFlashButton} />
+            </ButtonContainer>
+          )}
 
           <DetailsContainer>
             <Title>정보</Title>
