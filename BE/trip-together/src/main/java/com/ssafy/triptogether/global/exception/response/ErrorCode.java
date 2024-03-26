@@ -35,6 +35,10 @@ public enum ErrorCode {
 
 	UNDEFINED_ACCESS_TOKEN(400, "ACCESS TOKEN 존재하지 않습니다."),
 	UNDEFINED_REFRESH_TOKEN(400, "REFRESH TOKEN 존재하지 않습니다."),
+    REFRESH_NOT_FOUND(404, "REFRESH 토큰을 찾을 수 없습니다."),
+    EXPIRED_TOKEN(408, "만료된 토큰입니다."),
+    UNAUTHORIZED_REFRESH(403, "비정상적인 REFRESH 토큰입니다."),
+    COOKIE_NOT_FOUND(400, "COOKIE를 찾을 수 없습니다."),
 
     BAD_REQUEST(400, "잘못된 요청입니다."),
 

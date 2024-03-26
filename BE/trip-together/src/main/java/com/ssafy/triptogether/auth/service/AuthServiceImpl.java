@@ -64,7 +64,6 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 
 		// accessToken 까서 created at, expires in 빼서 넣어주기
 		Claims claims = jwtTokenProvider.parseClaims(tripTokenMap.get("access").substring(7));
-		System.out.println(claims.get("created").getClass() + " " + claims.get("expiresIn").getClass());
 
 		Long createdAt = (Long)claims.get("created");
 		Integer expiresIn = (Integer)claims.get("expiresIn");
