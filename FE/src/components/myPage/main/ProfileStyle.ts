@@ -1,3 +1,4 @@
+import Animated from 'react-native-reanimated';
 import {Shadow} from 'react-native-shadow-2';
 import styled from 'styled-components/native';
 import {
@@ -8,6 +9,7 @@ import {
 } from '../../../constants/colors';
 
 const Wrapper = styled.View`
+  position: relative;
   flex: 4;
   background: ${bg_main};
 `;
@@ -16,27 +18,26 @@ const StyledShadow = styled(Shadow)`
   align-self: stretch;
 `;
 
-const ProfileBox = styled.View`
-  position: relative;
+const DragBar = styled.View`
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  left: 35%;
+  width: 30%;
+  border: 2px solid ${bg_lightgray};
+  border-radius: 5px;
+`;
+
+const ProfileBox = styled(Animated.View)`
   background: ${bg_light};
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-  padding-top: 8px;
 `;
 
 const ProfileView = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 10px 15px;
-`;
-
-const DragBar = styled.View`
-  position: absolute;
-  top: 8px;
-  left: 35%;
-  width: 30%;
-  border: 2px solid ${bg_lightgray};
-  border-radius: 5px;
 `;
 
 const ProfileImageView = styled.View`

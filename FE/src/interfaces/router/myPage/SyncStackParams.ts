@@ -1,11 +1,15 @@
 import {ParamListBase} from '@react-navigation/native';
-import {bankAccount} from '../../../assets/data/bankAccount';
+
+interface SyncConfirmProps {
+  account_uuid: string;
+  is_main: 0 | 1;
+}
 
 interface SyncStackParams extends ParamListBase {
   SyncMain: undefined;
   SyncSelect: undefined;
-  SyncConfirm: {selected: bankAccount};
+  SyncConfirm: SyncConfirmProps;
   SyncComplete: undefined;
 }
 
-export type {SyncStackParams};
+export type {SyncConfirmProps, SyncStackParams};

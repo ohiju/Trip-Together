@@ -1,9 +1,12 @@
 import {TRIP_API_URL} from '@env';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AxiosError, RawAxiosRequestConfig} from 'axios';
-import {Alert} from 'react-native';
+import {ToastAndroid} from 'react-native';
 import getToken from '../../hooks/getToken';
+import {RootStackParams} from '../../interfaces/router/RootStackParams';
+import {SyncConfirmProps} from '../../interfaces/router/myPage/SyncStackParams';
 import useAxois from '../useAxois';
-import usePostSyncAccount, {PostSyncAccountData} from './usePostSyncAccount';
+import usePostSyncAccount from './usePostSyncAccount';
 
 interface OneVerifyParams {
   account_num: string;
@@ -18,6 +21,7 @@ interface OneVerifyData {
 const useOneVerify = () => {
   const axios = useAxois();
   const postSyncAccount = usePostSyncAccount();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   const oneVerifyConfig = async (
     params: OneVerifyParams,
@@ -40,25 +44,13 @@ const useOneVerify = () => {
   const oneVerify = async (
     params: OneVerifyParams,
     data: OneVerifyData,
-    account: PostSyncAccountData,
+    pinData: SyncConfirmProps,
   ) => {
     const result = await axios
       .request(await oneVerifyConfig(params, data))
       .then(() => {
-        Alert.alert(
-          '계좌 인증 성공!',
-          '이 계좌를 주 계좌로 등록하시겠습니까?',
-          [
-            {
-              text: '예',
-              onPress: () => postSyncAccount({...account, is_main: 1}),
-            },
-            {
-              text: '아니오',
-              onPress: () => postSyncAccount(account),
-            },
-          ],
-        );
+        navigation.navigate('PinAuth', {data: pinData, api: postSyncAccount});
+        ToastAndroid.show('계좌 인증 성공!', ToastAndroid.SHORT);
       })
       .catch((err: AxiosError) => {
         console.error(err);

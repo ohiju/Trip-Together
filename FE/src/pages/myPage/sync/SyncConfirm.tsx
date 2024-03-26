@@ -1,6 +1,15 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  ToastAndroid,
+} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
 import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
@@ -14,8 +23,8 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {font_danger, font_lightgray} from '../../../constants/colors';
+import {RootStackParams} from '../../../interfaces/router/RootStackParams';
 import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
-import {useAppDispatch} from '../../../store/hooks';
 import {
   AgainBtn,
   AgainBtnView,
@@ -28,7 +37,7 @@ import {
 } from './SyncConfirmStyle';
 
 const SyncConfirm = () => {
-  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   // 입력 관리
   const [code, setCode] = useState('');
@@ -37,10 +46,16 @@ const SyncConfirm = () => {
   };
 
   // 라우팅
-  const {selected} =
+  const {account_uuid, is_main} =
     useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>().params;
   const confirmSender = () => {
-    // 1원 인증 검증 API
+    // 1원 검증 API
+    const data = {account_uuid, is_main};
+    navigation.navigate('PinAuth', {
+      data,
+      api: () => navigation.navigate('SyncComplete'),
+    });
+    ToastAndroid.show('계좌 인증 성공!', ToastAndroid.LONG);
   };
 
   return (

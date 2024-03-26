@@ -1,10 +1,9 @@
 import React from 'react';
-import History from '../../components/myPage/cardHistory/History';
+import GroupedHistory from '../../components/myPage/cardHistory/GroupedHistory';
 import groupByDate from '../../hooks/groupByDate';
 import {RootState} from '../../store';
 import {useAppSelector} from '../../store/hooks';
 import {Wrapper} from './CardHistoryStyle';
-import GroupedHistory from '../../components/myPage/cardHistory/GroupedHistory';
 
 const CardHistory = () => {
   const histories = useAppSelector(
@@ -14,7 +13,13 @@ const CardHistory = () => {
 
   return (
     <Wrapper>
-      {Object.entries(groupedHistories).map(([date, histories]) => (<GroupedHistory key={}/>))}
+      {groupedHistories.map(([date, groupedHistory]) => (
+        <GroupedHistory
+          key={date}
+          date={date}
+          groupedHistory={groupedHistory}
+        />
+      ))}
     </Wrapper>
   );
 };

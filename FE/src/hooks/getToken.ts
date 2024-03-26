@@ -1,4 +1,4 @@
-import EncryptedStorage from 'react-native-encrypted-storage/lib/typescript/EncryptedStorage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {token as tokenState} from '../interfaces/states/tokenState';
 
 const getToken = async () => {

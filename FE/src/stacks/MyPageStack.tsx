@@ -58,6 +58,7 @@ const MyPageNavigator = () => {
           headerTitleAlign: 'center',
         }}
       />
+      
       <MyPageStack.Group
         screenOptions={{title: '핀 등록', headerTitleAlign: 'center'}}>
         <MyPageStack.Screen name="PinMain" component={PinMain} />

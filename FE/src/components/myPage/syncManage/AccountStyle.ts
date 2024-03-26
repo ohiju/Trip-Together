@@ -34,7 +34,8 @@ const TitleView = styled.View`
 
 const TitleText = styled.Text`
   color: ${font_dark};
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 600;
   margin: 0 5px 5px 0;
 `;
 
@@ -45,7 +46,7 @@ const NumText = styled.Text`
 const MainView = styled.View`
   background: ${primary};
   border-radius: 100px;
-  padding: 1px 8px;
+  padding: 0 8px;
 `;
 
 const MainText = styled.Text`

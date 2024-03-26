@@ -8,7 +8,7 @@ const groupByDate = <T extends {created_at: Date}>(items: T[]) => {
     groupedItems[date].push(item);
   });
 
-  return groupedItems;
+  return Object.entries(groupedItems);
 };
 
 export default groupByDate;

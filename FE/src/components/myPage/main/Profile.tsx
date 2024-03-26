@@ -1,5 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {customTransition} from '../../../constants/customTransitions';
 import parseProfile from '../../../hooks/parseProfile';
 import useSwipeTop from '../../../hooks/useSwipeTop';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
@@ -33,8 +34,10 @@ const Profile = () => {
   return (
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <StyledShadow offset={[0, 1]}>
-        <ProfileBox>
-          <DragBar />
+        <DragBar />
+        <ProfileBox
+          sharedTransitionTag="profile"
+          sharedTransitionStyle={customTransition}>
           <ProfileView>
             <ProfileImageView>
               <ProfileImage source={image_url} resizeMode="contain" />

@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
 import Login from '../pages/Login';
+import PinAuth from '../pages/PinAuth';
 import SocialLogin from '../pages/SocialLogin';
 import TabNavigator from './TabNavigator';
 
@@ -11,7 +12,14 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {true ? (
-        <Stack.Screen name="Main" component={TabNavigator} />
+        <>
+          <Stack.Screen name="Main" component={TabNavigator} />
+          <Stack.Screen
+            name="PinAuth"
+            component={PinAuth}
+            options={{title: '핀 인증', headerShown: true}}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen name="Login" component={Login} />

@@ -1,7 +1,7 @@
 import {TRIP_API_URL} from '@env';
 import axios, {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage/lib/typescript/EncryptedStorage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {user} from '../../interfaces/states/UserState';
 import {useAppDispatch} from '../../store/hooks';
 import {setUser} from '../../store/slices/user';

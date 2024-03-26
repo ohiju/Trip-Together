@@ -1,7 +1,8 @@
+import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 import {font_dark} from '../../../constants/colors';
 
-const Wrapper = styled.View`
+const Wrapper = styled(Animated.View)`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
