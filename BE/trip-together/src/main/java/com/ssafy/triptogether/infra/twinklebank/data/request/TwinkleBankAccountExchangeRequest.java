@@ -6,6 +6,8 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleBankAccountExchangeRequest(
+	@JsonProperty("uuid")
+	String uuid,
 	@JsonProperty("account_uuid")
 	String accountUuid,
 	@JsonProperty("type")

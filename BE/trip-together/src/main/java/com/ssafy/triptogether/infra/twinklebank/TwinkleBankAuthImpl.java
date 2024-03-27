@@ -51,7 +51,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/oauth/token")
 			.queryParam("code", code)
 			.queryParam("client_id", TWINKLE_CLIENT_ID)
-			.queryParam("redirect_url",TWINKLE_REDIRECT_URL)
+			.queryParam("redirect_url", TWINKLE_REDIRECT_URL)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
@@ -71,10 +71,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 			// refreshToken 꺼내기
 			String refreshToken = getRefreshToken(response);
 
-			if (accessToken == null || accessToken.isEmpty()){
+			if (accessToken == null || accessToken.isEmpty()) {
 				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_ACCESS_TOKEN);
 			}
-			if (refreshToken == null || refreshToken.isEmpty()){
+			if (refreshToken == null || refreshToken.isEmpty()) {
 				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_REFRESH_TOKEN);
 			}
 
@@ -92,7 +92,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	public boolean transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wontransfer")
 			.toUriString();
-		String accessToken = redisTemplate.opsForValue().get("refresh:" + memberUuid);
+		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
 
 		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
 		// if (accessToken == null){ // 만료되었거나, 발급받지 않았거나

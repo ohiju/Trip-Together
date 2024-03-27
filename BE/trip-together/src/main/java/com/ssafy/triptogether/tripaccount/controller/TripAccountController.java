@@ -65,9 +65,9 @@ public class TripAccountController {
 
 	@GetMapping("/trip-accounts")
 	public ResponseEntity<ApiResponse<TripAccountsLoadResponse>> tripAccountsLoad(
-		// @AuthenticationPrincipal SecurityMember
+		@AuthenticationPrincipal SecurityMember securityMember
 	) {
-		long memberId = 1L;
+		long memberId = securityMember.getId();
 		TripAccountsLoadResponse tripAccountsLoadResponse = tripAccountLoadService.tripAccountsLoad(memberId);
 
 		return ApiResponse.toResponseEntity(
@@ -77,10 +77,10 @@ public class TripAccountController {
 
 	@GetMapping("/account-histories")
 	public ResponseEntity<ApiResponse<Page<AccountHistoriesLoadDetail>>> accountHistoriesLoad(
-		// @AuthenticationPrincipal SecurityMember,
+		@AuthenticationPrincipal SecurityMember securityMember,
 		Pageable pageable
 	) {
-		long memberId = 1L;
+		long memberId = securityMember.getId();
 		Page<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = tripAccountLoadService.accountHistoriesLoad(
 			memberId, pageable);
 
@@ -91,10 +91,10 @@ public class TripAccountController {
 
 	@PostMapping("/trip-accounts")
 	public ResponseEntity<ApiResponse<Void>> tripAccountExchange(
-		// @AuthenticationPrincipal SecurityMember,
+		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid TripAccountExchangeRequest tripAccountExchangeRequest
 	) {
-		long memberId = 1L;
+		long memberId = securityMember.getId();
 		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
 			.pinNum(tripAccountExchangeRequest.pinNum())
 			.build();

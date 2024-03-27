@@ -184,7 +184,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.member(member)
 				.build();
 			tripAccountRepository.save(tripAccount);
-			twinkleBankWithdrawRequest(tripAccountExchangeRequest);
+			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
 			return;
 		}
 
@@ -194,7 +194,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
 		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
-		twinkleBankDepositRequest(tripAccountExchangeRequest);
+		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
@@ -205,8 +205,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 	}
 
-	private void twinkleBankDepositRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankDepositRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
 			.type("deposit")
@@ -216,8 +217,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
 	}
 
-	private void twinkleBankWithdrawRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankWithdrawRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
 			.type("withdraw")
