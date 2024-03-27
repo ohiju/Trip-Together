@@ -40,7 +40,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	@Override
 	public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
 		// 쿼리 파라미터로 code , client_id, redirect_url 을 전달하고, request body에 secret_key를 담아서 요청을 보낸다.
-		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/oauth/token")
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/oauth/token")
 			.queryParam("code", code)
 			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.queryParam("redirect_url",TWINKLE_REDIRECT_URL)
