@@ -31,11 +31,8 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE
 @Component
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
-	@Value("${app.clientId}")
+	@Value("${app.bankUrl}")
 	private String TWINKLE_BANK_URI;
-
-	@Value("${app.redirectUrl}")
-	private String TWINKLE_REDIRECT_URL;
 
 	@Value("${app.clientId}")
 	private String TWINKLE_CLIENT_ID;
@@ -165,7 +162,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 
 	@Override
 	public TwinkleMemberInfoResponse bankMemberInfoLoad(String clientId, String accessToken) {
-		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/members")
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members")
 			.queryParam("client_id", clientId)
 			.toUriString();
 
