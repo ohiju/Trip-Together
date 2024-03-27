@@ -20,7 +20,9 @@ public enum StatusCode {
 	SUCCESS_WITHDRAW(200, "출금 성공"),
 	SUCCESS_GET_BALANCE(200, "계좌 목록 조회 성공"),
 
-	SUCCESS_1WON_TRANSFER(200, "1원 전송 성공")
+	SUCCESS_1WON_TRANSFER(200, "1원 전송 성공"),
+
+	SUCCESS_CREATE_CODE(201, "CODE 발급성공")
 	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),
