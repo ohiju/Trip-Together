@@ -26,6 +26,7 @@ const useSocialLogin = () => {
     const result = await axios
       .request(socialLoginConfig(data))
       .then((res: AxiosResponse) => {
+        console.log(res.config.params);
         login(res.config.params.code);
       })
       .catch((err: AxiosError) => {

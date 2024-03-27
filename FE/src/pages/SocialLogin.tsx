@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import useSocialLogin from '../apis/bank/useSocialLogin';
 import {iconPath} from '../assets/icons/iconPath';
 import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
@@ -15,9 +16,9 @@ import {
 } from './SocialLoginStyle';
 
 const SocialLogin = () => {
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
-
+  // 입력
+  const [userId, setUserId] = useState('username');
+  const [password, setPassword] = useState('passwordsss');
   const handleUserId = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setUserId(e.nativeEvent.text);
   };
@@ -27,7 +28,9 @@ const SocialLogin = () => {
     setPassword(e.nativeEvent.text);
   };
 
-  // 로그인 API
+  // 로그인
+  const socialLogin = useSocialLogin();
+  const handlePressLogin = () => {};
 
   return (
     <Wrapper>
