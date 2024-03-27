@@ -1,4 +1,4 @@
-import {LineChart} from 'react-native-chart-kit';
+import {PieChart} from 'react-native-chart-kit';
 import styled from 'styled-components/native';
 import {bg_light} from '../../../constants/colors';
 
@@ -8,13 +8,14 @@ const Wrapper = styled.View`
   padding: 15px;
 `;
 
+const TitleView = styled.View`
+  margin-bottom: 15px;
+`;
+
 const DataView = styled.View`
   flex: 1;
 `;
 
-const Data = styled(LineChart)`
-  margin: 0 8px;
-  border-radius: 16px;
-`;
+const Data = styled(PieChart)``;
 
-export {DataView, Wrapper};
+export {Data, DataView, TitleView, Wrapper};
