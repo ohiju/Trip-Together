@@ -81,13 +81,26 @@ const Description = styled.View`
 `;
 
 const Rating = styled.Text`
-  font-size: 20px;
+  font-size: 15px;
   margin-right: 5px;
+  color: green;
 `;
 
 const Price = styled.Text`
   margin-left: 15px;
   font-size: 15px;
+`;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  width: 50%;
+`;
+
+const DetailsRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 62%;
 `;
 
 export {
@@ -104,4 +117,6 @@ export {
   Wrapper,
   Rating,
   Price,
+  ButtonContainer,
+  DetailsRow,
 };
