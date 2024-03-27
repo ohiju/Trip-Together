@@ -2,7 +2,6 @@ package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.attraction.domain.Attraction;
-import com.ssafy.triptogether.flashmob.domain.document.Settlement;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberFlashMob;
 import jakarta.persistence.*;

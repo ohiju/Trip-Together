@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.flashmob.domain.document;
+package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;

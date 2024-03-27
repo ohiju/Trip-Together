@@ -1,6 +1,6 @@
 package com.ssafy.triptogether.member.domain;
 
-import com.ssafy.triptogether.flashmob.domain.document.Settlement;
+import com.ssafy.triptogether.flashmob.domain.Settlement;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
