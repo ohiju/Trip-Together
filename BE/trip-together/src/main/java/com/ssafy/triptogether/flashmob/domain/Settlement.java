@@ -1,9 +1,9 @@
 package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberSettlement;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -31,6 +31,10 @@ public class Settlement extends BaseEntity {
     @NotNull
     @Column(name = "attendance_count")
     private Integer attendanceCount;
+
+    @NotNull
+    @Column(name = "currency_code")
+    private CurrencyCode currencyCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flash_mob_id")
