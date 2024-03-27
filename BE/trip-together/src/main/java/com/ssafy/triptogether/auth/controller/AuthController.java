@@ -22,9 +22,9 @@ import com.ssafy.triptogether.global.data.response.ApiResponse;
 public class AuthController {
 
 	// TODO : ID , REDIRECT_URL, SECRET_KEY 환경변수로 빼기
-	private final static String CLIENT_ID = "123456"; // 은행의 ID
-	private final static String REDIRECT_URL = "redirecturl"; // 등록 REDIRECT_URL
-	private final static String SECRET_KEY = "secretkey"; // 은행 SECRET KEY
+	private final static String CLIENT_ID = "test"; // 은행의 ID
+	private final static String REDIRECT_URL = "https://j10a309.p.ssafy.io"; // 등록 REDIRECT_URL
+	private final static String SECRET_KEY = "test"; // 은행 SECRET KEY
 	private final AuthServiceImpl authService;
 
 	@GetMapping("/token")
