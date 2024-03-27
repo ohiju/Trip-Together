@@ -1,15 +1,19 @@
 package com.ssafy.triptogether.member.controller;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
+import com.ssafy.triptogether.auth.provider.CookieProvider;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.utils.SecurityUtil;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.data.PinSaveRequest;
 import com.ssafy.triptogether.member.data.PinUpdateRequest;
 import com.ssafy.triptogether.member.data.ProfileFindResponse;
 import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
+import com.ssafy.triptogether.member.data.ReissueResponse;
 import com.ssafy.triptogether.member.service.MemberLoadService;
 import com.ssafy.triptogether.member.service.MemberSaveService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -26,8 +31,9 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 public class MemberController {
 
-    private final MemberSaveService memberSaveService;
-    private final MemberLoadService memberLoadService;
+	private final MemberSaveService memberSaveService;
+	private final MemberLoadService memberLoadService;
+	private final CookieProvider cookieProvider;
 
     @PatchMapping
     public ResponseEntity<ApiResponse<Void>> updateProfile(
@@ -68,13 +74,24 @@ public class MemberController {
         return ApiResponse.emptyResponse(OK, SUCCESS_PIN_UPDATE);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(
-            @AuthenticationPrincipal SecurityMember securityMember,
-            HttpServletRequest request
-    ) {
-        String accessToken = SecurityUtil.getAccessToken(request);
-        memberSaveService.logout(securityMember, accessToken);
-        return ApiResponse.emptyResponse(OK, SUCCESS_LOGOUT);
-    }
+	@PostMapping("/logout")
+	public ResponseEntity<ApiResponse<Void>> logout(
+		@AuthenticationPrincipal SecurityMember securityMember,
+		HttpServletRequest request
+	) {
+		String accessToken = SecurityUtil.getAccessToken(request);
+		memberSaveService.logout(securityMember, accessToken);
+		return ApiResponse.emptyResponse(OK, SUCCESS_LOGOUT);
+	}
+
+	@GetMapping("/reissue")
+	public ResponseEntity<ApiResponse<ReissueResponse>> reissue(HttpServletRequest request) {
+		// 쿠키에서 refresh token 꺼내기
+		Cookie cookie = cookieProvider.getCookie(request, "refreshToken").orElseThrow(
+			() -> new NotFoundException("MemberController", COOKIE_NOT_FOUND));
+		String refreshToken = cookie.getValue();
+
+		return memberLoadService.reissue(refreshToken);
+	}
+
 }

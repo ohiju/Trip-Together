@@ -24,7 +24,6 @@ const ExchangeConfirm = () => {
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const handleExchange = () => {
     // 충전 API
-
     navigation.navigate('MyMain');
   };
 

@@ -9,6 +9,8 @@ import lombok.Builder;
 
 @Builder
 public record AccountHistoriesLoadDetail(
+	@JsonProperty("account_history_id")
+	Long accountHistoryId,
 	@JsonProperty("nation")
 	CurrencyNation currencyNation,
 	@JsonProperty("nation_kr")
