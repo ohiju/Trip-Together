@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.twinklebank.auth.data.request.CodeRequest;
 import com.ssafy.twinklebank.auth.data.request.TokenRequest;
+import com.ssafy.twinklebank.auth.data.response.CodeResponse;
 import com.ssafy.twinklebank.auth.data.response.TokenResponse;
 import com.ssafy.twinklebank.auth.provider.CookieProvider;
 import com.ssafy.twinklebank.auth.service.AuthServiceImpl;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
+import com.ssafy.twinklebank.global.data.response.StatusCode;
 
-import java.io.IOException;
 import java.util.Map;
-
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +34,15 @@ public class AuthController {
 	private final CookieProvider cookieProvider;
 
 	@PostMapping("/authorize")
-	public void getCode(HttpServletResponse httpServletResponse, @RequestBody @Valid CodeRequest request) throws
-		IOException {
+	public ResponseEntity<ApiResponse<CodeResponse>> getCode(@RequestBody @Valid CodeRequest request){
 		Map<String, String> codeAndRedirectUrlMap = authService.getCode(request);
 		String code = codeAndRedirectUrlMap.get("code");
 		String redirectUrl = codeAndRedirectUrlMap.get("redirectUrl");
 		log.info("redirect url : " + redirectUrl + "?code=" + code);
-		httpServletResponse.sendRedirect(redirectUrl + "?code=" + code);
+
+		CodeResponse response = CodeResponse.builder().code(code).build();
+		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_CREATE_CODE, response);
+		// httpServletResponse.sendRedirect(redirectUrl + "?code=" + code);
 	}
 
 	@PostMapping("/token")

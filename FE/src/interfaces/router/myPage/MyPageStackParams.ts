@@ -16,6 +16,7 @@ interface MyPageStackParams
   WalletManage: undefined;
   CardManage: undefined;
   SyncManage: undefined;
+  CardHistory: undefined;
 }
 
 export type {MyPageStackParams};

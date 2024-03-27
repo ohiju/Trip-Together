@@ -1,18 +1,19 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import axios, {AxiosError} from 'axios';
 import React, {useState} from 'react';
 import {Alert, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
 import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
+import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
+import {RootState} from '../../store';
 import {useAppSelector} from '../../store/hooks';
-import axios, {AxiosError} from 'axios';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
-  const trip = useAppSelector(state => state.trip.tripInfo);
+  const trip = useAppSelector((state: RootState) => state.trip.tripInfo);
 
   const handleMapPress = () => {
     navigation.navigate('map');
@@ -20,9 +21,9 @@ const PlanDetail = () => {
 
   const handleFinishPress = async () => {
     const data = {
-      start_region: trip.start_region,
-      start_at: trip.start_at,
-      end_at: trip.end_at,
+      start_region_id: trip.start_region,
+      start_at: new Date(trip.start_at),
+      end_at: new Date(trip.end_at),
       title: trip.title,
       total_estimated_budget: trip.total_estimated_budget,
       daily_plans: trip.daily_plans,

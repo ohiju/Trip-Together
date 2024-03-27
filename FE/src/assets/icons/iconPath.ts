@@ -16,6 +16,7 @@ interface IconPath {
   trip: ImageSourcePropType;
   user: ImageSourcePropType;
   wallet: ImageSourcePropType;
+  lightning: ImageSourcePropType;
 }
 
 export const iconPath: IconPath = {
@@ -33,4 +34,5 @@ export const iconPath: IconPath = {
   trip: require('./trip.svg'),
   user: require('./user.svg'),
   wallet: require('./wallet.svg'),
+  lightning: require('./lightning.svg'),
 };

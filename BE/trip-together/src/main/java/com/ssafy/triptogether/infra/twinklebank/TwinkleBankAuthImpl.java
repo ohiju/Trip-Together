@@ -33,15 +33,17 @@ import lombok.extern.slf4j.Slf4j;
 public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	private final RestTemplate restTemplate;
 	private final StringRedisTemplate redisTemplate;
-	static final String TWINKLE_BANK_URI = "https://www.twinklebank.go.kr";
+	static final String TWINKLE_BANK_URI = "https://j10a309a.p.ssafy.io:8080/api";
+	static final String TWINKLE_CLIENT_ID = "test";
+	static final String TWINKLE_REDIRECT_URL = "https://j10a309.p.ssafy.io";
 
 	@Override
 	public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
 		// 쿼리 파라미터로 code , client_id, redirect_url 을 전달하고, request body에 secret_key를 담아서 요청을 보낸다.
-		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/oauth/token")
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/oauth/token")
 			.queryParam("code", code)
-			.queryParam("client_id", "123456")
-			.queryParam("redirect_url", "redirecturl")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
+			.queryParam("redirect_url",TWINKLE_REDIRECT_URL)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();

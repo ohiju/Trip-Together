@@ -1,20 +1,13 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import AppButton from '../../../components/common/AppButton';
-import {Title} from '../../../components/common/InfoPageStyle';
-import HistoryButton from '../../../components/myPage/profile/HistoryButton';
+import HistoryButtons from '../../../components/myPage/profile/HistoryButtons';
+import MyData from '../../../components/myPage/profile/MyData';
 import Profile from '../../../components/myPage/profile/Profile';
 import {profileEditButton} from '../../../constants/AppButton';
 import useSwipeBottom from '../../../hooks/useSwipeBottom';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
-import {
-  FlashHistoryView,
-  HistoryBtnBox,
-  MyDataView,
-  ProfileView,
-  TripHistoryView,
-  Wrapper,
-} from './ProfileMainStyle';
+import {ProfileView, Wrapper} from './ProfileMainStyle';
 
 const ProfileMain = () => {
   // 라우팅
@@ -23,12 +16,6 @@ const ProfileMain = () => {
     navigation.navigate('MyMain');
   };
   const {onTouchStart, onTouchEnd} = useSwipeBottom(onSwipeBottom);
-  const handleToProfileTrip = () => {
-    navigation.navigate('ProfileTrip');
-  };
-  const handleToProfileFlashMob = () => {
-    navigation.navigate('ProfileFlashMob');
-  };
   const handleToProfileEdit = () => {
     navigation.navigate('ProfileEdit');
   };
@@ -42,26 +29,9 @@ const ProfileMain = () => {
           text="프로필 수정"
           onPress={handleToProfileEdit}
         />
-        <HistoryBtnBox>
-          <TripHistoryView>
-            <HistoryButton
-              source="plane"
-              text="내 여행"
-              onPress={handleToProfileTrip}
-            />
-          </TripHistoryView>
-          <FlashHistoryView>
-            <HistoryButton
-              source="lightning"
-              text="내 번개"
-              onPress={handleToProfileFlashMob}
-            />
-          </FlashHistoryView>
-        </HistoryBtnBox>
+        <HistoryButtons />
       </ProfileView>
-      <MyDataView>
-        <Title>마이 데이터</Title>
-      </MyDataView>
+      <MyData />
     </Wrapper>
   );
 };

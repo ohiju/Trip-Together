@@ -1,8 +1,9 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import NotYet from '../assets/data/NotYet';
 import AddButton from '../components/myPage/syncManage/AddButton';
-import {MyPageStackParams} from '../interfaces/router/myPage/MyPageStackParams';
+import { MyPageStackParams } from '../interfaces/router/myPage/MyPageStackParams';
+import CardHistory from '../pages/myPage/CardHistory';
 import CardManage from '../pages/myPage/CardManage';
 import MyMain from '../pages/myPage/MyMain';
 import SyncManage from '../pages/myPage/SyncManage';
@@ -49,6 +50,14 @@ const MyPageNavigator = () => {
           headerRight: AddButton,
         }}
       />
+      <MyPageStack.Screen
+        name="CardHistory"
+        component={CardHistory}
+        options={{
+          title: '이용 내역',
+          headerTitleAlign: 'center',
+        }}
+      />
       <MyPageStack.Group
         screenOptions={{title: '핀 등록', headerTitleAlign: 'center'}}>
         <MyPageStack.Screen name="PinMain" component={PinMain} />
@@ -79,7 +88,12 @@ const MyPageNavigator = () => {
         <MyPageStack.Screen
           name="ProfileMain"
           component={ProfileMain}
-          options={{title: '내 프로필'}}
+          options={{
+            title: '내 프로필',
+            fullScreenGestureEnabled: true,
+            customAnimationOnGesture: true,
+            animation: 'slide_from_bottom',
+          }}
         />
         <MyPageStack.Screen
           name="ProfileEdit"

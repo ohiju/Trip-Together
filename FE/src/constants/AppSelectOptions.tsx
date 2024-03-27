@@ -19,22 +19,26 @@ const syncOptions: AppOption<bankAccount>[] = bankAccounts.map(account => {
 
 const useExchangeOptions = (): AppOption<bankAccount>[] => {
   const syncAccounts = useAppSelector(
-    (state: RootState) => state.user.userInfo.sync_accounts,
+    (state: RootState) => state.user.sync_accounts,
   );
 
   // 계좌 목록 조화 API
   const bank_data = bankAccounts;
 
-  const exchangeOptions = syncAccounts.map(account => {
-    const data = bank_data.find(
-      bank_account => bank_account.account_uuid === account.account_uuid,
-    );
+  const exchangeOptions = syncAccounts
+    .map(account => {
+      const data = bank_data.find(
+        bank_account => bank_account.account_uuid === account.account_uuid,
+      );
 
-    return {
-      node: <ExchangeOption account={account} />,
-      data,
-    };
-  });
+      if (!data) return;
+
+      return {
+        node: <ExchangeOption account={account} />,
+        data,
+      };
+    })
+    .filter(option => option !== undefined) as AppOption<bankAccount>[];
 
   return exchangeOptions;
 };

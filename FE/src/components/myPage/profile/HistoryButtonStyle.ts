@@ -10,8 +10,8 @@ const Wrapper = styled.Pressable`
 `;
 
 const HistoryBtnImg = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 
 const HistoryBtnText = styled.Text`

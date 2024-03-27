@@ -21,29 +21,29 @@ import {
 import NoAccount from './NoAccount';
 
 const MyWallet = () => {
-  const tripAccountsLength = useAppSelector(
-    (state: RootState) => state.user.userInfo.trip_accounts_length,
+  const tripAccounts = useAppSelector(
+    (state: RootState) => state.user.trip_accounts,
   );
-  const syncAccountsLength = useAppSelector(
-    (state: RootState) => state.user.userInfo.sync_accounts_length,
-  );
+  const syncs = useAppSelector((state: RootState) => state.user.sync_accounts);
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
-  const checkBankAccount = () => {
-    if (syncAccountsLength) {
+  const checkSyncs = () => {
+    if (syncs?.length) {
       return true;
-    } else return false;
+    }
+    return false;
   };
   const handleToExchange = () => {
-    if (checkBankAccount()) {
+    if (checkSyncs()) {
       navigation.navigate('ExchangeSearch');
     } else {
       navigation.navigate('SyncMain');
     }
   };
   const handleToHistory = () => {
-    if (checkBankAccount()) {
+    if (checkSyncs()) {
+      navigation.navigate('CardHistory');
     } else {
       navigation.navigate('SyncMain');
     }
@@ -66,7 +66,7 @@ const MyWallet = () => {
           />
         </HistoryView>
       </Header>
-      <Body>{tripAccountsLength > 0 ? <MyAccounts /> : <NoAccount />}</Body>
+      <Body>{tripAccounts?.length > 0 ? <MyAccounts /> : <NoAccount />}</Body>
       <ButtonMiddle
         style={myWalletButton}
         text="환전하기"

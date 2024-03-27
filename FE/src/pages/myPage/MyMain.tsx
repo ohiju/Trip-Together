@@ -14,6 +14,8 @@ const MyMain = () => {
     dispatch(setDisplay(true));
   });
 
+  // Api 호출
+
   return (
     <Wrapper>
       <Wallet />

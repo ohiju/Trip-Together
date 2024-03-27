@@ -6,9 +6,9 @@ import {
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
-  Alert,
   NativeSyntheticEvent,
   TextInputChangeEventData,
+  ToastAndroid,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
 import {iconPath} from '../../../assets/icons/iconPath';
@@ -23,9 +23,8 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {font_danger, font_lightgray} from '../../../constants/colors';
+import {RootStackParams} from '../../../interfaces/router/RootStackParams';
 import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
-import {useAppDispatch} from '../../../store/hooks';
-import {pushSyncAccount} from '../../../store/slices/user';
 import {
   AgainBtn,
   AgainBtnView,
@@ -38,48 +37,25 @@ import {
 } from './SyncConfirmStyle';
 
 const SyncConfirm = () => {
-  const dummySender = '춤추는 고릴라';
-  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   // 입력 관리
-  const [sender, setSendr] = useState('');
+  const [code, setCode] = useState('');
   const handleSender = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = e.nativeEvent.text;
-    setSendr(value);
+    setCode(e.nativeEvent.text);
   };
 
   // 라우팅
-  const route = useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>();
-  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
-  const registAccount = (is_main: 0 | 1) => {
-    const account = {
-      account_uuid: route.params.selected.account_uuid,
-      account_num: route.params.selected.account_num,
-      name: route.params.selected.name,
-      is_main,
-    };
-    dispatch(pushSyncAccount(account));
-    navigation.navigate('SyncComplete');
-  };
+  const {account_uuid, is_main} =
+    useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>().params;
   const confirmSender = () => {
-    // 1원 인증 검증 API
-    if (sender === dummySender) {
-      let is_main: 0 | 1 = 0;
-      Alert.alert('계좌 인증 성공!', '이 계좌를 주 계좌로 등록하시겠습니까?', [
-        {
-          text: '예',
-          onPress: () => {
-            is_main = 1;
-          },
-        },
-        {
-          text: '아니오',
-        },
-      ]);
-      registAccount(is_main);
-    } else {
-      Alert.alert('송금자를 다시 확인해주세요');
-    }
+    // 1원 검증 API
+    const data = {account_uuid, is_main};
+    navigation.navigate('PinAuth', {
+      data,
+      api: () => navigation.navigate('SyncComplete'),
+    });
+    ToastAndroid.show('계좌 인증 성공!', ToastAndroid.LONG);
   };
 
   return (
@@ -96,7 +72,7 @@ const SyncConfirm = () => {
         <InputView>
           <WithLocalSvg width={24} height={24} asset={iconPath.coin} />
           <Input
-            value={sender}
+            value={code}
             onChange={handleSender}
             placeholder="송금자 이름을 입력하세요"
           />
@@ -125,7 +101,7 @@ const SyncConfirm = () => {
       <AppButton
         style={BottomButton}
         text="확인"
-        disabled={sender.trim() === ''}
+        disabled={code.trim() === ''}
         onPress={confirmSender}
       />
     </Wrapper>
