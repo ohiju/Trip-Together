@@ -1,11 +1,11 @@
-package com.ssafy.triptogether.settlement.domain;
+package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberSettlement;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,13 +24,17 @@ public class Settlement extends BaseEntity {
     @Column(name = "settlement_id")
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "total_price")
     private Double totalPrice;
 
-    @NotBlank
+    @NotNull
     @Column(name = "attendance_count")
     private Integer attendanceCount;
+
+    @NotNull
+    @Column(name = "currency_code")
+    private CurrencyCode currencyCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flash_mob_id")
@@ -40,14 +44,11 @@ public class Settlement extends BaseEntity {
     @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL)
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL)
-    private List<Receipt> receipts = new ArrayList<>();
-
     @Builder
-    public Settlement(Double totalPrice, Integer attendanceCount, FlashMob flashMob) {
+    public Settlement(Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
         this.totalPrice = totalPrice;
         this.attendanceCount = attendanceCount;
+        this.currencyCode = currencyCode;
         setFlashMob(flashMob);
     }
 

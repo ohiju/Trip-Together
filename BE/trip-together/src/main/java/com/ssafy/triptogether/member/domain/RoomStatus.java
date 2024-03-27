@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum RoomStatus {
-    REFUSE("거절됨"),
+    REFUSE_UNCHECK("확인안한거절"),
+    REFUSE_CHECK("확인한거절"),
     WAIT("대기중"),
     ATTEND("참여중");
 
