@@ -56,6 +56,30 @@ const BottomButton: AppButtonStyle = {
   },
 };
 
+const MakeFlashButton: AppButtonStyle = {
+  button: {
+    width: '80px',
+    padding: '10px 5px',
+    bg1: primary,
+  },
+  font: {
+    color: font_light,
+    size: '13px',
+  },
+};
+
+const JoinFlashButton: AppButtonStyle = {
+  button: {
+    width: '80px',
+    padding: '10px 5px',
+    bg1: 'green',
+  },
+  font: {
+    color: font_light,
+    size: '13px',
+  },
+};
+
 const profileEditButton: AppButtonStyle = {
   button: {
     width: '100%',
@@ -77,4 +101,6 @@ export {
   myWalletButton,
   profileEditButton,
   socialLoginButton,
+  MakeFlashButton,
+  JoinFlashButton,
 };

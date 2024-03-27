@@ -58,7 +58,7 @@ const Plans = () => {
       <PlanMoney>
         <MoneyImage source={require('../../assets/images/profits.png')} />
         <MoneyUnit>₩</MoneyUnit>
-        <MoneyText>{currentPlan.total_budget}</MoneyText>
+        <MoneyText>{currentPlan.total_budget.toLocaleString()}</MoneyText>
       </PlanMoney>
     </PlanView>
   );

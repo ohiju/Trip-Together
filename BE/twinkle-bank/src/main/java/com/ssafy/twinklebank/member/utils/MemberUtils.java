@@ -12,6 +12,8 @@ import com.ssafy.twinklebank.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 public class MemberUtils {

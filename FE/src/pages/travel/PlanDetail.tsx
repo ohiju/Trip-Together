@@ -21,9 +21,9 @@ const PlanDetail = () => {
 
   const handleFinishPress = async () => {
     const data = {
-      start_region: trip.start_region,
-      start_at: trip.start_at,
-      end_at: trip.end_at,
+      start_region_id: trip.start_region,
+      start_at: new Date(trip.start_at),
+      end_at: new Date(trip.end_at),
       title: trip.title,
       total_estimated_budget: trip.total_estimated_budget,
       daily_plans: trip.daily_plans,
