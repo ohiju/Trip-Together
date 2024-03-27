@@ -8,13 +8,14 @@ const Wrapper = styled.View`
 `;
 
 const ProfileImageView = styled.View`
-  height: 80px; // 100%;
+  height: 80px;
   aspect-ratio: 1/1;
 `;
 
 const ProfileImage = styled.Image`
   width: 100%;
   height: 100%;
+  border-radius: 200px;
 `;
 
 const UserInfoView = styled.View`

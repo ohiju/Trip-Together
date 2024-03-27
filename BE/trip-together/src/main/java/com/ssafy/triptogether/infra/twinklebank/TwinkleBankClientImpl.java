@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
-	static final String TWINKLE_BANK_URI = "https://j10a309a.p.ssafy.io:8080";
+	static final String TWINKLE_BANK_URI = "https://j10a309a.p.ssafy.io:8080/api";
 	private final RestTemplate restTemplate;
 
 	/**

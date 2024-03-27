@@ -1,7 +1,7 @@
 import {Dimensions, GestureResponderEvent} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 
-const useSwipeTop = (onSwipeTop?: (params?: any) => any, rangeOffset = 4) => {
+const useSwipeTop = (onSwipeTop?: (params?: any) => any, rangeOffset = 5) => {
   let firstTouch = 0;
 
   function onTouchStart(e: GestureResponderEvent) {

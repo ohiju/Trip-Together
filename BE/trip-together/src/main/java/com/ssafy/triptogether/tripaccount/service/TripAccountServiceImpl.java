@@ -125,6 +125,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 
 		List<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = accountHistories.getContent().stream()
 			.map(accountHistory -> AccountHistoriesLoadDetail.builder()
+				.accountHistoryId(accountHistory.getId())
 				.currencyNation(accountHistory.getTripAccount().getCurrency().getCurrencyNation())
 				.nationKr(accountHistory.getTripAccount().getCurrency().getCurrencyNation().getMessage())
 				.unit(accountHistory.getTripAccount().getCurrency().getCode().getUnit())

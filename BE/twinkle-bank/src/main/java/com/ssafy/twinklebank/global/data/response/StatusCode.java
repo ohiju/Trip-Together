@@ -6,19 +6,23 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StatusCode {
-    // MEMBER
-    SUCCESS_AUTH_INFO_FIND(200, "은행 사용자 정보 조회 성공"),
+	// MEMBER
+	SUCCESS_AUTH_INFO_FIND(200, "은행 사용자 정보 조회 성공"),
 	SUCCESS_JOIN(200, "회원가입 성공"),
 	SUCCESS_GENERATE_TOKEN(200, "토큰 발급 성공"),
 	SUCCESS_GET_ACCOUNT_LIST(200, "계좌 목록 조회 성공"),
-    SUCCESS_LOGOUT(200, "로그아웃 성공"),
-	SUCCESS_REISSUE(200,"토큰 재발급 성공"),
+	SUCCESS_LOGOUT(200, "로그아웃 성공"),
+	SUCCESS_REISSUE(200, "토큰 재발급 성공"),
 	// ACCOUNT
 	CREATED_LINKED_ACCOUNT(201, "계좌 연동 성공"),
 	DELETE_LINKED_ACCOUNT(204, "계좌 해지 성공"),
 	SUCCESS_DEPOSIT(200, "입금 성공"),
 	SUCCESS_WITHDRAW(200, "출금 성공"),
 	SUCCESS_GET_BALANCE(200, "계좌 목록 조회 성공"),
+
+	SUCCESS_1WON_TRANSFER(200, "1원 전송 성공"),
+
+	SUCCESS_CREATE_CODE(201, "CODE 발급성공")
 	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),
@@ -41,7 +45,6 @@ public enum StatusCode {
 	//
 	// KAKAO_JOIN_NEEDED(203, "kakao 회원이 아닙니다. 회원가입 진행 필요")
 	// ;
-
 
 	private final int status;
 	private final String message;

@@ -30,16 +30,16 @@ public class PlanController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<DailyPlanListResponse>>> findPlans(
-        @AuthenticationPrincipal SecurityMember securityMember
+        // @AuthenticationPrincipal SecurityMember
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         List<DailyPlanListResponse> planList = planLoadService.findPlans(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, planList);
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> plansSave(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember
             @RequestBody @Valid PlansSaveRequest plansSaveRequest
     ) {
         // long memberId = securityMember.getId();
@@ -51,17 +51,17 @@ public class PlanController {
 
     @DeleteMapping("/{plan_id}")
     public ResponseEntity<ApiResponse<Void>> planDelete(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember
             @PathVariable("plan_id") Long planId
     ) {
-        long memberId = securityMember.getId();
+        long memberId = 1L;
         planSaveService.planDelete(memberId, planId);
         return ApiResponse.emptyResponse(NO_CONTENT, SUCCESS_PLAN_DELETE);
     }
 
     @PatchMapping("/{plan_id}")
     public ResponseEntity<ApiResponse<Void>> planModify(
-            @AuthenticationPrincipal SecurityMember securityMember,
+            // @AuthenticationPrincipal SecurityMember,
             @PathVariable("plan_id") Long planId,
             @RequestBody PlansSaveRequest plansSaveRequest
     ) {

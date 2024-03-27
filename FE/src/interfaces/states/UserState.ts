@@ -12,22 +12,19 @@ interface tripAccount {
   balance: number;
 }
 
-interface userInfo {
-  user_id: number;
-  image_url: string;
-  nickname: string;
+interface user {
+  member_id: number;
   username: string;
+  nickname: string;
+  image_url: string;
   description: string;
   is_pin: boolean;
-  sync_accounts: syncAccount[];
-  sync_accounts_length: number;
-  trip_accounts: tripAccount[];
-  trip_accounts_length: number;
 }
 
 interface UserState {
-  isLoggedIn: boolean;
-  userInfo: userInfo;
+  user: user;
+  sync_accounts: syncAccount[];
+  trip_accounts: tripAccount[];
 }
 
-export type {UserState, syncAccount, tripAccount, userInfo};
+export type {UserState, syncAccount, tripAccount, user};

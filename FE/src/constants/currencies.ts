@@ -24,6 +24,14 @@ const currencies: currency[] = [
     nation_kr: '영국',
     unit: 163,
   },
+  {
+    continent: 'Asia',
+    currency_code: 'KRW',
+    currency_code_kr: '원',
+    nation: 'KR',
+    nation_kr: '한국',
+    unit: 8361,
+  },
 ];
 
 const kr_currency: currency = {
