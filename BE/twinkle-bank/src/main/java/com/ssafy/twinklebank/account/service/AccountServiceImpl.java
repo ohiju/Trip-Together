@@ -2,6 +2,7 @@ package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.aop.DistributedLock;
 import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
+import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
 import com.ssafy.twinklebank.account.data.response.AccountResponse;
 import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
 import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
@@ -19,6 +20,7 @@ import com.ssafy.twinklebank.application.utils.ApplicationUtils;
 import com.ssafy.twinklebank.auth.provider.CodeProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -170,6 +172,30 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
 		// 코드 10분간 저장하기
 		saveCode(request.accountUuid(), code);
+	}
+
+	@Override
+	public void verify1won(Verify1wonRequest request) {
+		// client id가 존재하는지 확인
+		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+
+		// account uuid로 계좌 찾기
+		Account account = accountRepository.findAccountByUuid(request.accountUuid())
+			.orElseThrow(
+				() -> new NotFoundException("accountService - transfer1won ", ACCOUNT_NOT_FOUND)
+			);
+
+		String code = redisTemplate.opsForValue().get("1won:"+request.accountUuid());
+
+		// code가 존재하지 않으면
+		if (code == null){
+			throw new NotFoundException("accountServiceImpl : Verify1won " , ONEWON_NOT_FOUND);
+		}
+
+		// code가 일치하지 않으면
+		if (!code.equals(request.code())){
+			throw new UnAuthorizedException("accountServiceImpl : Verify1won ", UNAUTHORIZED_ONEWON);
+		}
 	}
 
 	private Account findAccountByUuid(String accountUuid) {
