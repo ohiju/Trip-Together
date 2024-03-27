@@ -29,11 +29,6 @@ public class MemberUtils {
 		PasswordEncoder passwordEncoder, String username,
 		String password) {
 
-		List<Member> all = memberRepository.findAll();
-		for (Member m : all) {
-			log.debug(String.valueOf(username.equals(m.getUsername())));
-			log.debug(m.getUsername());
-		}
 		Member member = memberRepository.findByUsername(username)
 			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
 		if (!passwordEncoder.matches(password, member.getPassword())) {
