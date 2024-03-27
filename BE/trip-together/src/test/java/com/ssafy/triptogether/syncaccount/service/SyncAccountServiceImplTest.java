@@ -122,7 +122,6 @@ class SyncAccountServiceImplTest {
                 .build();
             mainSyncAccountUpdateRequest = MainSyncAccountUpdateRequest.builder()
                 .uuid("newMain")
-                .pinNum("1234")
                 .build();
         }
 
