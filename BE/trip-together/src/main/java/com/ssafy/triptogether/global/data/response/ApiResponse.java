@@ -2,15 +2,24 @@ package com.ssafy.triptogether.global.data.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class ApiResponse<T> {
     private int status;
     private String message;
     private T data;
+
+    @Builder
+    public ApiResponse(int status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
 
     /**
      * DefaultResponse 를 ResponseEntity 형식으로 반환하기 위한 메소드입니다.

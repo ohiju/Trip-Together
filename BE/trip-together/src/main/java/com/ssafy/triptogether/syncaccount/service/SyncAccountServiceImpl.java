@@ -2,6 +2,7 @@ package com.ssafy.triptogether.syncaccount.service;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
@@ -93,7 +94,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
     @Transactional
     @Override
     public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-        deactivateCurrentMainSyncAccount(memberId);
+        deactivateCurrentMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
         activateNewMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
     }
 
@@ -170,9 +171,12 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
         return twinkleBankClient.bankAccountsSync(twinkleAccountSyncRequest);
     }
 
-    private void deactivateCurrentMainSyncAccount(Long memberId) {
+    private void deactivateCurrentMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
         syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
                 .ifPresent(syncAccount -> {
+                    if (syncAccount.equals(getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid()))) {
+                        throw new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_MAIN_BAD_REQUEST);
+                    }
                     syncAccount.updateIsMain(false);
                 });
     }
