@@ -15,10 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @Document(collection = "daily_plans")
 public class DailyPlans {
-    @Id
-    private String id;
     @Field("daily_plans")
     List<DailyPlan> dailyPlans;
+    @Id
+    private String id;
     @Field("plan_id")
     private Long planId;
 

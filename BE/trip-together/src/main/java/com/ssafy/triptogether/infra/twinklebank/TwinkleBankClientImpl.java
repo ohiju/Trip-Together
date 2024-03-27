@@ -1,9 +1,7 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +23,10 @@ import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRe
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
-
 import lombok.RequiredArgsConstructor;
+
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
 
 @Component
 @RequiredArgsConstructor

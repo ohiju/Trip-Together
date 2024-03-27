@@ -1,14 +1,10 @@
 package com.ssafy.triptogether.syncaccount.controller;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.*;
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
-import com.ssafy.triptogether.infra.twinklebank.TwinkleBankAuthImpl;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
@@ -17,14 +13,15 @@ import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountSaveService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_1WON_TRANSFER;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
 
 @RestController
 @RequestMapping("/account/v1/sync-account")

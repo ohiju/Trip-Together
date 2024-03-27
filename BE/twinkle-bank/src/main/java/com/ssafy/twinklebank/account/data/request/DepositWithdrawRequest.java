@@ -1,4 +1,4 @@
-package com.ssafy.twinklebank.account.data;
+package com.ssafy.twinklebank.account.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.twinklebank.account.domain.Type;

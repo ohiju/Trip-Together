@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record BankAccountsLoadResponse(
-        @JsonProperty("accounts")
-        List<BankAccountsDetail> bankAccountsDetails
+    @JsonProperty("accounts")
+    List<BankAccountsDetail> bankAccountsDetails
 ) {
 }

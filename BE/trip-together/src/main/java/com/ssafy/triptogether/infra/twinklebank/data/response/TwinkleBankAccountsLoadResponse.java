@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record TwinkleBankAccountsLoadResponse(
-        @JsonProperty("accounts")
-        List<TwinkleBankAccountsDetail> twinkleBankAccountsDetails
+    @JsonProperty("accounts")
+    List<TwinkleBankAccountsDetail> twinkleBankAccountsDetails
 ) {
 }

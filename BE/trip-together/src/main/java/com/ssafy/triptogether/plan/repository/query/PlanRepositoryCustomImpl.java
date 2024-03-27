@@ -7,7 +7,6 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.domain.Status;
-
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -23,15 +22,15 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     @Override
     public boolean existOverlappingPlan(Member member, LocalDate startAt, LocalDate endAt) {
         return queryFactory
-                .selectOne()
-                .from(plan)
-                .where(plan.member.eq(member)
-                        .and(plan.startAt.after(endAt)
-                                .or(plan.endAt.before(startAt))
-                                .not()
-                        )
+            .selectOne()
+            .from(plan)
+            .where(plan.member.eq(member)
+                .and(plan.startAt.after(endAt)
+                    .or(plan.endAt.before(startAt))
+                    .not()
                 )
-                .fetchFirst() != null;
+            )
+            .fetchFirst() != null;
     }
 
     @Override
@@ -52,16 +51,16 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     @Override
     public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
         return Optional.ofNullable(
-                queryFactory.select(Projections.constructor(DailyPlanResponse.class,
-                                plan.region.cityName,
-                                plan.startAt,
-                                plan.endAt,
-                                plan.title,
-                                plan.estimatedBudget
-                        ))
-                        .from(plan)
-                        .where(plan.id.eq(planId))
-                        .fetchOne()
+            queryFactory.select(Projections.constructor(DailyPlanResponse.class,
+                    plan.region.cityName,
+                    plan.startAt,
+                    plan.endAt,
+                    plan.title,
+                    plan.estimatedBudget
+                ))
+                .from(plan)
+                .where(plan.id.eq(planId))
+                .fetchOne()
         );
     }
 
