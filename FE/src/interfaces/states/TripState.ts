@@ -10,7 +10,7 @@ interface attraction {
 interface TripState {
   tripInfo: {
     plan_id: number;
-    start_region: string;
+    start_region: number;
     start_at: string;
     end_at: string;
     title: string;

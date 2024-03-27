@@ -21,16 +21,32 @@ import {
   Wrapper,
   Price,
   Rating,
+  ButtonContainer,
+  DetailsRow,
 } from './PlaceInfoStyle';
+import AppButton from './AppButton';
+import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
 
-const PlaceInfo = () => {
+const PlaceInfo = ({theme}: {theme: string}) => {
   const [rating] = useState(4.9);
   // 라우팅
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const onSwipeTop = () => {
-    navigation.navigate('placeinfo');
+    if (theme === 'trip') {
+      navigation.navigate('placeinfo', {theme});
+    } else if (theme === 'flashmob') {
+      navigation.navigate('flashmobs', {theme});
+    }
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
+
+  const handlePressMake = () => {
+    navigation.navigate('makeflash');
+  };
+
+  const handlePressAllFlash = () => {
+    navigation.navigate('allflash');
+  };
 
   return (
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
@@ -49,11 +65,29 @@ const PlaceInfo = () => {
               <Address>
                 C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
               </Address>
-              <Description>
-                <Rating>{rating}</Rating>
-                <StarRatingDisplay rating={rating} starSize={20} />
-                <Price>₩123,398</Price>
-              </Description>
+              {theme === 'trip' ? (
+                <Description>
+                  <Rating>{rating}</Rating>
+                  <StarRatingDisplay rating={rating} starSize={20} />
+                  <Price>₩123,398</Price>
+                </Description>
+              ) : (
+                <DetailsRow>
+                  <Rating>평점: {rating}</Rating>
+                  <ButtonContainer>
+                    <AppButton
+                      text="모임 생성"
+                      style={MakeFlashButton}
+                      onPress={handlePressMake}
+                    />
+                    <AppButton
+                      text="모임 검색"
+                      style={JoinFlashButton}
+                      onPress={handlePressAllFlash}
+                    />
+                  </ButtonContainer>
+                </DetailsRow>
+              )}
             </PlaceInfoView>
           </PlaceView>
         </PlaceBox>

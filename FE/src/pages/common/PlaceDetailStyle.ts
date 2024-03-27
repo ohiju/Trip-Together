@@ -131,6 +131,14 @@ const NavButton = styled.Text`
   font-size: 35px;
   margin-right: 10px;
 `;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  width: 22%;
+  margin-left: 14px;
+  margin-bottom: 19px;
+`;
+
 export {
   Container,
   ImageBackground,
@@ -155,4 +163,5 @@ export {
   ReviewContent,
   NavigationButtons,
   NavButton,
+  ButtonContainer,
 };

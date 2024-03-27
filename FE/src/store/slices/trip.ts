@@ -23,11 +23,11 @@ interface dailydeleteProp {
 const initialState: TripState = {
   tripInfo: {
     plan_id: 0,
-    start_region: '몽펠리에',
+    start_region: 1,
     start_at: '',
     end_at: '',
     title: '',
-    total_estimated_budget: 0,
+    total_estimated_budget: 123123,
     total_budget: 0,
     status: 'done',
     daily_plans: [],
@@ -38,7 +38,7 @@ export const tripSlice = createSlice({
   name: 'trip',
   initialState,
   reducers: {
-    setStartRegion: (state, action: PayloadAction<string>) => {
+    setStartRegion: (state, action: PayloadAction<number>) => {
       state.tripInfo.start_region = action.payload;
     },
     setDate: (
