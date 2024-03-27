@@ -1,12 +1,18 @@
 package com.ssafy.triptogether.syncaccount.controller;
 
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
+import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
+import com.ssafy.triptogether.infra.twinklebank.TwinkleBankAuthImpl;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
+import com.ssafy.triptogether.syncaccount.data.request.Transfer1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
@@ -93,5 +99,17 @@ public class SyncAccountController {
         return ApiResponse.toResponseEntity(
                 HttpStatus.OK, StatusCode.SUCCESS_BANK_ACCOUNTS_LOAD, bankAccountsLoadResponse
         );
+    }
+
+    @PostMapping("/1wontransfer")
+    public ResponseEntity<ApiResponse<Void>> transfer1won(@RequestBody @Valid Transfer1wonRequest request, @AuthenticationPrincipal SecurityMember securityMember){
+        String memberUuid = securityMember.getUuid();
+        Long memberId = securityMember.getId();
+        boolean isTransfer1won = syncAccountLoadService.transfer1won(memberId, memberUuid, request);
+
+        if (isTransfer1won){
+            return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
+        }
+        throw new ExternalServerException("syncAccountController : transfer1won", TWINKLE_BANK_SERVER_ERROR);
     }
 }

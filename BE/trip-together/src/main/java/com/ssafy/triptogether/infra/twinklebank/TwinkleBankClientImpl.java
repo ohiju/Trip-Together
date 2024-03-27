@@ -2,6 +2,7 @@ package com.ssafy.triptogether.infra.twinklebank;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -28,7 +29,14 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
-	static final String TWINKLE_BANK_URI = "https://j10a309a.p.ssafy.io:8080/api";
+	@Value("${app.clientId}")
+	private String TWINKLE_BANK_URI;
+
+	@Value("${app.redirectUrl}")
+	private String TWINKLE_REDIRECT_URL;
+
+	@Value("${app.clientId}")
+	private String TWINKLE_CLIENT_ID;
 	private final RestTemplate restTemplate;
 
 	/**
