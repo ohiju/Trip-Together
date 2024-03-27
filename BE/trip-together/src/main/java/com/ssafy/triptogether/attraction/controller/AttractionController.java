@@ -32,6 +32,7 @@ public class AttractionController {
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_DETAIL_FIND, response);
     }
 
+    // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
     @GetMapping
     public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick(
         @RequestParam double latitude,
