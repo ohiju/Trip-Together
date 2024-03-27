@@ -7,3 +7,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+app:
+  clientId: ${TWINKLE_CLIENT_ID}
+  redirectUrl: ${TWINKLE_REDIRECT_URL}
+  secretKey: ${TWINKLE_SECRET_KEY}
