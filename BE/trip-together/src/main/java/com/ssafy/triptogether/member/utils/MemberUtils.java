@@ -1,12 +1,12 @@
 package com.ssafy.triptogether.member.utils;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.UNDEFINED_MEMBER;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberUtils {
@@ -17,10 +17,10 @@ public class MemberUtils {
                 );
     }
 
-    public static Member findByUuid(MemberRepository repository, String uuid){
+    public static Member findByUuid(MemberRepository repository, String uuid) {
         return repository.findMemberByUuid(uuid)
-            .orElseThrow(
-                () -> new NotFoundException("findMemberByUuid", UNDEFINED_MEMBER)
-            );
+                .orElseThrow(
+                        () -> new NotFoundException("findMemberByUuid", UNDEFINED_MEMBER)
+                );
     }
 }

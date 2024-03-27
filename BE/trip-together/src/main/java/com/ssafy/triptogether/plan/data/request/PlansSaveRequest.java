@@ -1,14 +1,11 @@
 package com.ssafy.triptogether.plan.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.triptogether.plan.domain.document.DailyPlan;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder

@@ -34,10 +34,9 @@ public enum StatusCode {
     SUCCESS_PIN_UPDATE(200, "pin 번호 수정 성공"),
     SUCCESS_LOGOUT(200, "로그아웃 성공"),
 
-	SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공"),
-	SUCCESS_REISSUE(201, "여행 토큰 재발급 성공"),
-    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공")
-    ;
+    SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공"),
+    SUCCESS_REISSUE(201, "여행 토큰 재발급 성공"),
+    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공");
 
     private final int status;
     private final String message;

@@ -1,7 +1,5 @@
 package com.ssafy.triptogether.syncaccount.service;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
@@ -29,12 +27,13 @@ import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.SYNC_ACCOUNT_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -215,22 +214,22 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
     @Override
     public boolean transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
         SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-            .orElseThrow( () -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
 
-        if (!request.accountUuid().equals(syncAccount.getUuid())){
-			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
+        if (!request.accountUuid().equals(syncAccount.getUuid())) {
+            throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
         }
 
         String accoutUuid = syncAccount.getUuid();
 
         TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
-            .accountUuid(accoutUuid)
-            .clientId(TWINKLE_CLIENT_ID)
-            .build();
+                .accountUuid(accoutUuid)
+                .clientId(TWINKLE_CLIENT_ID)
+                .build();
         boolean isTransfer1won = twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
 
         // 은행에서 1원 전송이 되었다면
-        if (isTransfer1won){
+        if (isTransfer1won) {
             return true;
         }
         return false;

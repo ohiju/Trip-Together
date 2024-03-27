@@ -55,24 +55,24 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
 
-		// access token 발급
-		long now = (new Date()).getTime();
-		String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
-			.setSubject(authentication.getName())
-			.claim("created", now)
-			.claim("expiresIn", ACCESS_TOKEN_EXPIRE_TIME)
-			.claim("auth", authorities));
+        // access token 발급
+        long now = (new Date()).getTime();
+        String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim("created", now)
+                .claim("expiresIn", ACCESS_TOKEN_EXPIRE_TIME)
+                .claim("auth", authorities));
 
 
         // refresh token 발급
         String refreshToken = createToken(now, id, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder());
 
 
-		HashMap<String, String> map = new HashMap<>();
-		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
-		map.put("refresh", refreshToken); // Bearer을 붙이지 않음
-		return map;
-	}
+        HashMap<String, String> map = new HashMap<>();
+        map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
+        map.put("refresh", refreshToken); // Bearer을 붙이지 않음
+        return map;
+    }
 
 
     private String createToken(long now, Long id, long EXPIRE_TIME, JwtBuilder authentication) {

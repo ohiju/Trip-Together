@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record   MainSyncAccountUpdateRequest(
+public record MainSyncAccountUpdateRequest(
         @JsonProperty("account_uuid")
         String uuid
 ) {
