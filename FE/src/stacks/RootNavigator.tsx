@@ -2,22 +2,24 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
 import Login from '../pages/Login';
+import PinAuth from '../pages/PinAuth';
 import SocialLogin from '../pages/SocialLogin';
-import {RootState} from '../store';
-import {useAppSelector} from '../store/hooks';
 import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const isLoggedIn = useAppSelector(
-    (state: RootState) => state.user.isLoggedIn,
-  );
-
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      {isLoggedIn ? (
-        <Stack.Screen name="Main" component={TabNavigator} />
+      {true ? (
+        <>
+          <Stack.Screen name="Main" component={TabNavigator} />
+          <Stack.Screen
+            name="PinAuth"
+            component={PinAuth}
+            options={{title: '핀 인증', headerShown: true}}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen name="Login" component={Login} />

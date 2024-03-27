@@ -1,10 +1,12 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
-import {LoginProps} from '../interfaces/props/LoginProps';
+import {RootStackParams} from '../interfaces/router/RootStackParams';
 import {Logo, LogoView, Slogan, SloganView, Wrapper} from './LoginStyle';
 
-const Login = ({navigation}: LoginProps) => {
+const Login = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const handlePressSocialLogin = () => {
     navigation.navigate('SocialLogin');
   };

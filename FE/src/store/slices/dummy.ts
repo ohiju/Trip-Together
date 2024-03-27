@@ -1,7 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {DummyState} from '../../interfaces/states/DummyState';
 
-const initialState: DummyState = {};
+const initialState = {};
 
 export const dummySlice = createSlice({
   name: 'dummy',
@@ -9,6 +8,6 @@ export const dummySlice = createSlice({
   reducers: {},
 });
 
-// export const {} = userSlice.actions;
+// export const {} = dummySlice.actions;
 
 export default dummySlice.reducer;
