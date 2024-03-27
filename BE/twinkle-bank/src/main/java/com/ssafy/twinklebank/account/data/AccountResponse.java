@@ -6,6 +6,7 @@ public record AccountResponse(
     @JsonProperty("account_uuid") String accountUuid,
     @JsonProperty("account_num") String accountNum,
     double balance,
-    String name
+    String name,
+	@JsonProperty("is_connected") boolean isConnected
 ) {
 }
