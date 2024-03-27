@@ -5,11 +5,11 @@ import lombok.Builder;
 
 @Builder
 public record TokenInfo(
-        @JsonProperty("access_token")
-        String accessToken,
-        @JsonProperty("created_at")
-        Long createdAt,
-        @JsonProperty("expires_in")
-        Integer expiresIn
+    @JsonProperty("access_token")
+    String accessToken,
+    @JsonProperty("created_at")
+    Long createdAt,
+    @JsonProperty("expires_in")
+    Integer expiresIn
 ) {
 }

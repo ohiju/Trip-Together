@@ -29,23 +29,23 @@ public class ApiResponse<T> {
     public static <T> ResponseEntity<ApiResponse<T>> toResponseEntity(HttpStatus httpStatus,
                                                                       StatusCode statusCode, T data) {
         return ResponseEntity
-                .status(httpStatus)
-                .body(ApiResponse.<T>builder()
-                        .status(statusCode.getStatus())
-                        .message(statusCode.getMessage())
-                        .data(data)
-                        .build()
-                );
+            .status(httpStatus)
+            .body(ApiResponse.<T>builder()
+                .status(statusCode.getStatus())
+                .message(statusCode.getMessage())
+                .data(data)
+                .build()
+            );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> emptyResponse(HttpStatus httpStatus,
                                                                    StatusCode statusCode) {
         return ResponseEntity
-                .status(httpStatus)
-                .body(ApiResponse.<T>builder()
-                        .status(statusCode.getStatus())
-                        .message(statusCode.getMessage())
-                        .build()
-                );
+            .status(httpStatus)
+            .body(ApiResponse.<T>builder()
+                .status(statusCode.getStatus())
+                .message(statusCode.getMessage())
+                .build()
+            );
     }
 }

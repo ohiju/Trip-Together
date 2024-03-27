@@ -61,20 +61,20 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
     public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
         // 쿼리 파라미터로 code , client_id, redirect_url 을 전달하고, request body에 secret_key를 담아서 요청을 보낸다.
         String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/oauth/token")
-                .queryParam("code", code)
-                .queryParam("client_id", TWINKLE_CLIENT_ID)
-                .queryParam("redirect_url", TWINKLE_REDIRECT_URL)
-                .toUriString();
+            .queryParam("code", code)
+            .queryParam("client_id", TWINKLE_CLIENT_ID)
+            .queryParam("redirect_url", TWINKLE_REDIRECT_URL)
+            .toUriString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<TwinkleTokenRequest> entity = new HttpEntity<>(twinkleTokenRequest, headers);
 
         ResponseEntity<ApiResponse> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                ApiResponse.class
+            url,
+            HttpMethod.POST,
+            entity,
+            ApiResponse.class
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -103,7 +103,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
     @Override
     public boolean transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
         String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wontransfer")
-                .toUriString();
+            .toUriString();
         String accessToken = redisTemplate.opsForValue().get("refresh:" + memberUuid);
 
         // TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
@@ -117,10 +117,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
         HttpEntity<TwinkleBankTransfer1wonRequest> entity = new HttpEntity<>(twinkleBankTransfer1wonRequest, headers);
 
         ResponseEntity<ApiResponse> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                ApiResponse.class
+            url,
+            HttpMethod.POST,
+            entity,
+            ApiResponse.class
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {

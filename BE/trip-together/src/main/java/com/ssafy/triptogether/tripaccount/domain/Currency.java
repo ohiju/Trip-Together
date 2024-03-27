@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "currency",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {
-                        "code",
-                        "unit",
-                        "currency_nation"
-                })
-        }
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+            "code",
+            "unit",
+            "currency_nation"
+        })
+    }
 )
 public class Currency extends BaseEntity {
     @Id

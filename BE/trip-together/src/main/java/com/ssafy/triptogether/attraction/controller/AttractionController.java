@@ -24,7 +24,7 @@ public class AttractionController {
 
     @GetMapping("/{attraction_id}")
     public ResponseEntity<ApiResponse<AttractionDetailFindResponse>> findAttractionDetail(
-            @PathVariable("attraction_id") long attractionId
+        @PathVariable("attraction_id") long attractionId
     ) {
         AttractionDetailFindResponse response = attractionLoadService.findAttractionDetail(attractionId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_DETAIL_FIND, response);
@@ -32,9 +32,9 @@ public class AttractionController {
 
     @PatchMapping("/{attraction_id}/flashmobs/{flashmob_id}")
     public ResponseEntity<ApiResponse<FlashmobUpdateResponse>> updateFlashmob(
-            @PathVariable("attraction_id") long attractionId,
-            @PathVariable("flashmob_id") long flashmobId,
-            @RequestBody FlashmobUpdateRequest flashmobUpdateRequest
+        @PathVariable("attraction_id") long attractionId,
+        @PathVariable("flashmob_id") long flashmobId,
+        @RequestBody FlashmobUpdateRequest flashmobUpdateRequest
     ) {
         FlashmobUpdateResponse response = attractionSaveService.updateFlashmob(flashmobId, flashmobUpdateRequest);
         return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_UPDATE, response);

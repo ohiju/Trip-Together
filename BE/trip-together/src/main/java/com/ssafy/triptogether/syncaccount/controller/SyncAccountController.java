@@ -33,70 +33,70 @@ public class SyncAccountController {
 
     @GetMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<SyncAccountsLoadResponse>> syncAccountsLoad(
-            // @AuthenticationPrincipal SecurityMember
+        // @AuthenticationPrincipal SecurityMember
     ) {
         long memberId = 1L;
         SyncAccountsLoadResponse syncAccountsLoadResponse = syncAccountLoadService.syncAccountsLoad(memberId);
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_SYNC_ACCOUNTS_LOAD, syncAccountsLoadResponse
+            HttpStatus.OK, StatusCode.SUCCESS_SYNC_ACCOUNTS_LOAD, syncAccountsLoadResponse
         );
     }
 
     @PostMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> syncAccountSave(
-            // @AuthenticationPrincipal SecurityMember,
-            @RequestBody @Valid SyncAccountSaveRequest syncAccountSaveRequest
+        // @AuthenticationPrincipal SecurityMember,
+        @RequestBody @Valid SyncAccountSaveRequest syncAccountSaveRequest
     ) {
         long memberId = 1L;
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
-                .pinNum(syncAccountSaveRequest.pinNum())
-                .build();
+            .pinNum(syncAccountSaveRequest.pinNum())
+            .build();
         syncAccountSaveService.syncAccountSave(memberId, pinVerifyRequest, syncAccountSaveRequest);
 
         return ApiResponse.emptyResponse(
-                HttpStatus.CREATED, StatusCode.SUCCESS_SYNC_ACCOUNTS_SAVE
+            HttpStatus.CREATED, StatusCode.SUCCESS_SYNC_ACCOUNTS_SAVE
         );
     }
 
     @PatchMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> mainSyncAccountUpdate(
-            // @AuthenticationPrincipal SecurityMember,
-            @RequestBody @Valid MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest
+        // @AuthenticationPrincipal SecurityMember,
+        @RequestBody @Valid MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest
     ) {
         long memberId = 1L;
         syncAccountSaveService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
 
         return ApiResponse.emptyResponse(
-                HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE
+            HttpStatus.OK, StatusCode.SUCCESS_MAIN_SYNC_ACCOUNT_UPDATE
         );
     }
 
     @DeleteMapping("/sync-accounts")
     public ResponseEntity<ApiResponse<Void>> syncAccountDelete(
-            // @AuthenticationPrincipal SecurityMember,
-            @RequestBody @Valid SyncAccountDeleteRequest syncAccountDeleteRequest
+        // @AuthenticationPrincipal SecurityMember,
+        @RequestBody @Valid SyncAccountDeleteRequest syncAccountDeleteRequest
     ) {
         long memberId = 1L;
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
-                .pinNum(syncAccountDeleteRequest.pinNum())
-                .build();
+            .pinNum(syncAccountDeleteRequest.pinNum())
+            .build();
         syncAccountSaveService.syncAccountDelete(memberId, pinVerifyRequest, syncAccountDeleteRequest);
 
         return ApiResponse.emptyResponse(
-                HttpStatus.NO_CONTENT, StatusCode.SUCCESS_SYNC_ACCOUNT_DELETE
+            HttpStatus.NO_CONTENT, StatusCode.SUCCESS_SYNC_ACCOUNT_DELETE
         );
     }
 
     @GetMapping("/bank-accounts")
     public ResponseEntity<ApiResponse<BankAccountsLoadResponse>> bankAccountsLoad(
-            // @AuthenticationPrincipal SecurityMember
+        // @AuthenticationPrincipal SecurityMember
     ) {
         long memberId = 1L;
         BankAccountsLoadResponse bankAccountsLoadResponse = syncAccountLoadService.bankAccountsLoad(memberId);
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_BANK_ACCOUNTS_LOAD, bankAccountsLoadResponse
+            HttpStatus.OK, StatusCode.SUCCESS_BANK_ACCOUNTS_LOAD, bankAccountsLoadResponse
         );
     }
 

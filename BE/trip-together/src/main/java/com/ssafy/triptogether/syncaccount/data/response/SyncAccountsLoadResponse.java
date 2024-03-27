@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record SyncAccountsLoadResponse(
-        @JsonProperty("sync_accounts")
-        List<SyncAccountsDetail> syncAccountsDetail
+    @JsonProperty("sync_accounts")
+    List<SyncAccountsDetail> syncAccountsDetail
 ) {
 }

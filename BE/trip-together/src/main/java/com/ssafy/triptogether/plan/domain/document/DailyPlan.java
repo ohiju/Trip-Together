@@ -7,8 +7,8 @@ import java.util.List;
 
 @Builder
 public record DailyPlan(
-        Double dailyEstimatedBudget,
-        LocalDate date,
-        List<DailyPlanAttraction> dailyPlanAttractions
+    Double dailyEstimatedBudget,
+    LocalDate date,
+    List<DailyPlanAttraction> dailyPlanAttractions
 ) {
 }

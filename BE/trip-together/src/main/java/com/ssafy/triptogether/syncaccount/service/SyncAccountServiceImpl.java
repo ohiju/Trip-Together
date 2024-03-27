@@ -73,18 +73,18 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
         TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse = twinkleBankAccountsLoad(member);
 
         List<BankAccountsDetail> bankAccountsDetails = twinkleBankAccountsLoadResponse.twinkleBankAccountsDetails()
-                .stream()
-                .map(twinkleBankAccountsDetail ->
-                        BankAccountsDetail.builder()
-                                .uuid(twinkleBankAccountsDetail.uuid())
-                                .name(twinkleBankAccountsDetail.name())
-                                .num(twinkleBankAccountsDetail.num())
-                                .balance(twinkleBankAccountsDetail.balance())
-                                .build()
-                ).toList();
+            .stream()
+            .map(twinkleBankAccountsDetail ->
+                BankAccountsDetail.builder()
+                    .uuid(twinkleBankAccountsDetail.uuid())
+                    .name(twinkleBankAccountsDetail.name())
+                    .num(twinkleBankAccountsDetail.num())
+                    .balance(twinkleBankAccountsDetail.balance())
+                    .build()
+            ).toList();
         return BankAccountsLoadResponse.builder()
-                .bankAccountsDetails(bankAccountsDetails)
-                .build();
+            .bankAccountsDetails(bankAccountsDetails)
+            .build();
     }
 
     /**
@@ -97,8 +97,8 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
     public SyncAccountsLoadResponse syncAccountsLoad(Long memberId) {
         List<SyncAccountsDetail> syncAccounts = syncAccountRepository.memberSyncAccountsLoad(memberId);
         return SyncAccountsLoadResponse.builder()
-                .syncAccountsDetail(syncAccounts)
-                .build();
+            .syncAccountsDetail(syncAccounts)
+            .build();
     }
 
     /**
@@ -156,45 +156,45 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 
     private void twinkleAccountSyncDelete(SyncAccountDeleteRequest syncAccountDeleteRequest) {
         TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                .accountUuid(syncAccountDeleteRequest.bankAccountUuid())
-                .build();
+            .accountUuid(syncAccountDeleteRequest.bankAccountUuid())
+            .build();
         twinkleBankClient.bankAccountSyncDelete(twinkleAccountSyncRequest);
     }
 
     private void syncAccountSave(TwinkleAccountSyncResponse twinkleAccountSyncResponse, Member member, Boolean isMain) {
         SyncAccount syncAccount = SyncAccount.builder()
-                .name(twinkleAccountSyncResponse.accountName())
-                .num(twinkleAccountSyncResponse.accountNum())
-                .uuid(twinkleAccountSyncResponse.accountUuid())
-                .isMain(isMain)
-                .member(member)
-                .build();
+            .name(twinkleAccountSyncResponse.accountName())
+            .num(twinkleAccountSyncResponse.accountNum())
+            .uuid(twinkleAccountSyncResponse.accountUuid())
+            .isMain(isMain)
+            .member(member)
+            .build();
         syncAccountRepository.save(syncAccount);
     }
 
     private TwinkleBankAccountsLoadResponse twinkleBankAccountsLoad(Member member) {
         TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest = TwinkleBankAccountsLoadRequest.builder()
-                .uuid(member.getUuid())
-                .build();
+            .uuid(member.getUuid())
+            .build();
         return twinkleBankClient.bankAccountsLoad(
-                twinkleBankAccountsLoadRequest);
+            twinkleBankAccountsLoadRequest);
     }
 
     private TwinkleAccountSyncResponse twinkleAccountSync(SyncAccountSaveRequest syncAccountSaveRequest) {
         TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                .accountUuid(syncAccountSaveRequest.bankAccountUuid())
-                .build();
+            .accountUuid(syncAccountSaveRequest.bankAccountUuid())
+            .build();
         return twinkleBankClient.bankAccountsSync(twinkleAccountSyncRequest);
     }
 
     private void deactivateCurrentMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
         syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-                .ifPresent(syncAccount -> {
-                    if (syncAccount.equals(getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid()))) {
-                        throw new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_MAIN_BAD_REQUEST);
-                    }
-                    syncAccount.updateIsMain(false);
-                });
+            .ifPresent(syncAccount -> {
+                if (syncAccount.equals(getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid()))) {
+                    throw new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_MAIN_BAD_REQUEST);
+                }
+                syncAccount.updateIsMain(false);
+            });
     }
 
     private void activateNewMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
@@ -205,16 +205,16 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 
     private SyncAccount getSyncAccountByUuid(String uuid) {
         return syncAccountRepository.findByUuid(uuid)
-                .orElseThrow(
-                        () -> new NotFoundException("MainSyncAccountUpdate", SYNC_ACCOUNT_NOT_FOUND, uuid)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("MainSyncAccountUpdate", SYNC_ACCOUNT_NOT_FOUND, uuid)
+            );
     }
 
     @Transactional
     @Override
     public boolean transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
         SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-                .orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
 
         if (!request.accountUuid().equals(syncAccount.getUuid())) {
             throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
@@ -223,9 +223,9 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
         String accoutUuid = syncAccount.getUuid();
 
         TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
-                .accountUuid(accoutUuid)
-                .clientId(TWINKLE_CLIENT_ID)
-                .build();
+            .accountUuid(accoutUuid)
+            .clientId(TWINKLE_CLIENT_ID)
+            .build();
         boolean isTransfer1won = twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
 
         // 은행에서 1원 전송이 되었다면

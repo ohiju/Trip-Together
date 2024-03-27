@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record MainSyncAccountUpdateRequest(
-        @JsonProperty("account_uuid")
-        String uuid
+    @JsonProperty("account_uuid")
+    String uuid
 ) {
 }

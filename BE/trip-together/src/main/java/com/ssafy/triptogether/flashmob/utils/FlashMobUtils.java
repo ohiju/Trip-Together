@@ -12,6 +12,6 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.UNDEFIN
 public class FlashMobUtils {
     public static FlashMob findByFlashmobId(FlashMobRepository repository, Long flashmobId) {
         return repository.findById(flashmobId)
-                .orElseThrow(() -> new NotFoundException("FindByFlashmobId", UNDEFINED_FLASHMOB));
+            .orElseThrow(() -> new NotFoundException("FindByFlashmobId", UNDEFINED_FLASHMOB));
     }
 }

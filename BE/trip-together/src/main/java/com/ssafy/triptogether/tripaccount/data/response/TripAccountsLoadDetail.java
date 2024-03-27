@@ -6,13 +6,13 @@ import lombok.Builder;
 
 @Builder
 public record TripAccountsLoadDetail(
-        @JsonProperty("nation")
-        CurrencyNation currencyNation,
-        @JsonProperty("nation_kr")
-        String nationKr,
-        @JsonProperty("balance")
-        Double balance,
-        @JsonProperty("unit")
-        Integer unit
+    @JsonProperty("nation")
+    CurrencyNation currencyNation,
+    @JsonProperty("nation_kr")
+    String nationKr,
+    @JsonProperty("balance")
+    Double balance,
+    @JsonProperty("unit")
+    Integer unit
 ) {
 }

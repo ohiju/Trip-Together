@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record RateLoadResponse(
-        @JsonProperty("rate")
-        Double rate
+    @JsonProperty("rate")
+    Double rate
 ) {
 }

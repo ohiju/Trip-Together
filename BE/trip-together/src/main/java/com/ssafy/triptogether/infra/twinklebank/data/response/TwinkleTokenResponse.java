@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleTokenResponse(
-        @NotBlank @JsonProperty("access_token")
-        String accessToken
+    @NotBlank @JsonProperty("access_token")
+    String accessToken
 ) {
 }

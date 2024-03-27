@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         // validate request
         if (!pinSaveRequest.pinNum().equals(pinSaveRequest.pinNumCheck())) {
             throw new ValidationException("PinSave", PIN_CHECK_MISS_MATCH, pinSaveRequest.pinNum(),
-                    pinSaveRequest.pinNumCheck());
+                pinSaveRequest.pinNumCheck());
         }
 
         // find member
@@ -88,7 +88,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         // validate request if miss match
         if (!pinUpdateRequest.newPinNum().equals(pinUpdateRequest.newPinNumCheck())) {
             throw new ValidationException("PinUpdate", PIN_CHECK_MISS_MATCH, pinUpdateRequest.newPinNum(),
-                    pinUpdateRequest.newPinNumCheck());
+                pinUpdateRequest.newPinNumCheck());
         }
 
         // find member
@@ -108,8 +108,8 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     public void logout(SecurityMember securityMember, String accessToken) {
         // logout from twinkle bank
         TwinkleBankLogoutRequest twinkleBankLogoutRequest = TwinkleBankLogoutRequest.builder()
-                .memberUuid(securityMember.getUuid())
-                .build();
+            .memberUuid(securityMember.getUuid())
+            .build();
         twinkleBankClient.bankLogout(twinkleBankLogoutRequest);
 
         // delete refresh token
@@ -119,9 +119,9 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
         // add access token to a blacklist
         redisTemplate.opsForValue().set(
-                "blacklist:" + accessToken, accessToken,
-                jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(),
-                TimeUnit.MILLISECONDS
+            "blacklist:" + accessToken, accessToken,
+            jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(),
+            TimeUnit.MILLISECONDS
         );
     }
 
@@ -130,12 +130,12 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     public Member saveMember(TwinkleMemberInfoResponse twinkleMemberInfoResponse) {
 
         Member member = Member.builder()
-                .username(twinkleMemberInfoResponse.name())
-                .uuid(twinkleMemberInfoResponse.memberUuid())
-                .nickname("")
-                .gender(twinkleMemberInfoResponse.gender())
-                .birth(twinkleMemberInfoResponse.birth())
-                .build();
+            .username(twinkleMemberInfoResponse.name())
+            .uuid(twinkleMemberInfoResponse.memberUuid())
+            .nickname("")
+            .gender(twinkleMemberInfoResponse.gender())
+            .birth(twinkleMemberInfoResponse.birth())
+            .build();
 
         member = memberRepository.save(member);
 
@@ -146,7 +146,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
     public ProfileFindResponse findProfile(long memberId) {
         // find member & return
         return memberRepository.findProfileByMemberId(memberId)
-                .orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
+            .orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
     }
 
     @Override
@@ -175,8 +175,8 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         Member member = MemberUtils.findByMemberId(memberRepository, id);
 
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(member.getId(), member.getUuid(),
-                        Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
+            new UsernamePasswordAuthenticationToken(member.getId(), member.getUuid(),
+                Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
         Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), member.getUuid(), authentication);
         // refresh token redis에 저장
@@ -188,9 +188,9 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         Integer expiresIn = (Integer) claims.get("expiresIn");
 
         ReissueResponse response = ReissueResponse.builder()
-                .access(tokenMap.get("access"))
-                .expiresIn(expiresIn)
-                .createdAt(createdAt).build();
+            .access(tokenMap.get("access"))
+            .expiresIn(expiresIn)
+            .createdAt(createdAt).build();
 
         String newRefreshToken = tokenMap.get("refresh");
         // refresh token은 헤더에 쿠키에 다시 넣어준다
@@ -200,15 +200,15 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         HttpHeaders headers = cookieProvider.addCookieHttpHeaders(newCookie);
         // ApiResponse 객체 생성
         ApiResponse<ReissueResponse> apiResponse = ApiResponse.<ReissueResponse>builder()
-                .status(SUCCESS_REISSUE.getStatus())
-                .message(SUCCESS_REISSUE.getMessage())
-                .data(response)
-                .build();
+            .status(SUCCESS_REISSUE.getStatus())
+            .message(SUCCESS_REISSUE.getMessage())
+            .data(response)
+            .build();
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(headers)
-                .body(apiResponse);
+            .status(HttpStatus.OK)
+            .headers(headers)
+            .body(apiResponse);
     }
 
     private boolean isRefreshTokenExpired(Long id) {
@@ -221,8 +221,8 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
     private void saveTokenRedis(Member member, Map<String, String> tokenMap) {
         redisTemplate.opsForValue()
-                .set("refresh:" + member.getId(), tokenMap.get("refresh"),
-                        jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
+            .set("refresh:" + member.getId(), tokenMap.get("refresh"),
+                jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
     }
 
 }

@@ -9,13 +9,13 @@ import java.time.LocalDate;
 
 @Builder
 public record TwinkleMemberInfoResponse(
-        @NotBlank @JsonProperty("uuid")
-        String memberUuid,
-        @NotBlank @JsonProperty("name")
-        String name,
-        @JsonProperty("gender")
-        Gender gender,
-        @JsonProperty("birth")
-        LocalDate birth
+    @NotBlank @JsonProperty("uuid")
+    String memberUuid,
+    @NotBlank @JsonProperty("name")
+    String name,
+    @JsonProperty("gender")
+    Gender gender,
+    @JsonProperty("birth")
+    LocalDate birth
 ) {
 }
