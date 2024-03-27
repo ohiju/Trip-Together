@@ -1,10 +1,11 @@
 package com.ssafy.twinklebank.account.controller;
 
-import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.account.data.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
+import com.ssafy.twinklebank.account.data.request.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
+import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
+import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.response.getUserAccountsResponse;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
 import com.ssafy.twinklebank.auth.utils.SecurityMember;
@@ -39,14 +40,16 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
-        @AuthenticationPrincipal SecurityMember securityMember,
+    public ResponseEntity<ApiResponse<getUserAccountsResponse>> getUserAccountList(
+        // @AuthenticationPrincipal SecurityMember securityMember,
         @RequestParam("client_id") String clientId
     ) {
-        long userId = securityMember.getId();
+        // long userId = securityMember.getId();
+        long userId = 3L;
         List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
 
-        return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST, accountResponseList);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST,
+            getUserAccountsResponse.builder().accounts(accountResponseList).build());
     }
 
     @PostMapping

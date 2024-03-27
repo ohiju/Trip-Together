@@ -1,16 +1,11 @@
 package com.ssafy.twinklebank.account.repository.query;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.application.domain.QApplication;
-import com.ssafy.twinklebank.member.domain.QMember;
+import com.ssafy.twinklebank.account.data.request.AccountResponse;
 
 import lombok.RequiredArgsConstructor;
 
-import java.beans.Expression;
 import java.util.List;
 
 import static com.ssafy.twinklebank.account.domain.QAccount.account;
@@ -25,31 +20,6 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
 
 	@Override
 	public List<AccountResponse> getAccountList(String clientId, long memberId) {
-		// return queryFactory.select(Projections.constructor(AccountResponse.class,
-		// 		account.uuid,
-		// 		account.accountNum,
-		// 		account.balance,
-		// 		account.name
-		// 	))
-		// 	.from(account)
-		// 	.join(withdrawalAgreement).on(withdrawalAgreement.id.eq(account.id))
-		// 	.where(
-		// 		account.member.id.eq(memberId).and(
-		// 			withdrawalAgreement.application.clientId.eq(clientId)))
-		// 	.fetch();
-
-		// return queryFactory.select(Projections.constructor(AccountResponse.class,
-		// 		account.uuid,
-		// 		account.accountNum,
-		// 		account.balance,
-		// 		account.name,
-		// 	    withdrawalAgreement.application.clientId.eq(clientId)))
-		// 	.from(withdrawalAgreement)
-		// 	.rightJoin(withdrawalAgreement.account, account).on(withdrawalAgreement.id.eq(account.id))
-		// 	.where(
-		// 		account.member.id.eq(memberId))
-		// 	.fetch();
-
 		return queryFactory.select(Projections.constructor(AccountResponse.class,
 				account.uuid,
 				account.accountNum,
