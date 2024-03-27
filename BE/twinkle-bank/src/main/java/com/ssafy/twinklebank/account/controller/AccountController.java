@@ -41,12 +41,11 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<getUserAccountsResponse>> getUserAccountList(
-        // @AuthenticationPrincipal SecurityMember securityMember,
+        @AuthenticationPrincipal SecurityMember securityMember,
         @RequestParam("client_id") String clientId
     ) {
-        // long userId = securityMember.getId();
-        long userId = 3L;
-        List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
+        long memberId = securityMember.getId();
+        List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, memberId);
 
         return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST,
             getUserAccountsResponse.builder().accounts(accountResponseList).build());
