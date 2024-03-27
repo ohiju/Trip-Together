@@ -1,11 +1,11 @@
 package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.aop.DistributedLock;
-import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.account.data.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
+import com.ssafy.twinklebank.account.data.request.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
+import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
+import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
