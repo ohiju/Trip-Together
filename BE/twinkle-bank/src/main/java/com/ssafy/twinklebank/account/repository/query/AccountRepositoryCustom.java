@@ -1,6 +1,6 @@
 package com.ssafy.twinklebank.account.repository.query;
 
-import com.ssafy.twinklebank.account.data.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.AccountResponse;
 
 import java.util.List;
 

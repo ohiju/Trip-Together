@@ -7,11 +7,11 @@ import lombok.Builder;
 
 @Builder
 public record SyncAccountSaveRequest(
-        @NotBlank @JsonProperty("pin_num")
-        String pinNum,
-        @NotNull @JsonProperty("is_main")
-        Boolean isMain,
-        @NotBlank @JsonProperty("account_uuid")
-        String bankAccountUuid
+    @NotBlank @JsonProperty("pin_num")
+    String pinNum,
+    @NotNull @JsonProperty("is_main")
+    Boolean isMain,
+    @NotBlank @JsonProperty("account_uuid")
+    String bankAccountUuid
 ) {
 }

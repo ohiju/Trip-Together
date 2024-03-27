@@ -1,12 +1,13 @@
 package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberFlashMob;
-import com.ssafy.triptogether.settlement.domain.Settlement;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,9 +31,13 @@ public class FlashMob extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @NotBlank
+    @NotNull
     @Column(name = "start_at")
     private LocalDateTime startAt;
+
+    @NotNull
+    @Column(name = "max_member_count")
+    private Integer maxMemberCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attraction_id")
@@ -56,5 +61,11 @@ public class FlashMob extends BaseEntity {
     public void setAttraction(Attraction attraction) {
         this.attraction = attraction;
         attraction.getFlashMobs().add(this);
+    }
+
+    public void update(FlashmobUpdateRequest request) {
+        this.title = request.title();
+        this.startAt = request.startAt();
+        this.maxMemberCount = request.maxMemberCount();
     }
 }

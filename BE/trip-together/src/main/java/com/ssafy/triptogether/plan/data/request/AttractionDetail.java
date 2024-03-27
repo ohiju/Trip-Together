@@ -7,17 +7,17 @@ import lombok.Builder;
 
 @Builder
 public record AttractionDetail(
-        @NotNull @JsonProperty("attraction_id")
-        Long attractionId,
-        @NotNull @JsonProperty("attraction_name")
-        String attractionName,
-        @NotNull @JsonProperty("avg_rating")
-        Integer avgRating,
-        @NotNull @JsonProperty("avg_price")
-        Double avgPrice,
-        @NotBlank @JsonProperty("thumbnail_image_url")
-        String thumbnailImageUrl,
-        @NotBlank
-        String address
+    @NotNull @JsonProperty("attraction_id")
+    Long attractionId,
+    @NotNull @JsonProperty("attraction_name")
+    String attractionName,
+    @NotNull @JsonProperty("avg_rating")
+    Integer avgRating,
+    @NotNull @JsonProperty("avg_price")
+    Double avgPrice,
+    @NotBlank @JsonProperty("thumbnail_image_url")
+    String thumbnailImageUrl,
+    @NotBlank
+    String address
 ) {
 }

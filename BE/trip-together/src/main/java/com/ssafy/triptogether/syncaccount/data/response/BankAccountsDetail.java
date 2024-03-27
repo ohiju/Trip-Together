@@ -5,13 +5,13 @@ import lombok.Builder;
 
 @Builder
 public record BankAccountsDetail(
-        @JsonProperty("account_uuid")
-        String uuid,
-        @JsonProperty("account_num")
-        String num,
-        @JsonProperty("balance")
-        Double balance,
-        @JsonProperty("name")
-        String name
+    @JsonProperty("account_uuid")
+    String uuid,
+    @JsonProperty("account_num")
+    String num,
+    @JsonProperty("balance")
+    Double balance,
+    @JsonProperty("name")
+    String name
 ) {
 }

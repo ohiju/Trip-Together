@@ -4,8 +4,8 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
 
 public interface TripAccountSaveService {
-	void currencyRateUpdate();
+    void currencyRateUpdate();
 
-	void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
-		TripAccountExchangeRequest tripAccountExchangeRequest);
+    void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
+                             TripAccountExchangeRequest tripAccountExchangeRequest);
 }
