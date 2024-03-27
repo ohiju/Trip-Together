@@ -7,17 +7,17 @@ import lombok.Builder;
 
 @Builder
 public record TripAccountExchangeRequest(
-        @NotBlank @JsonProperty("pin_num")
-        String pinNum,
-        @NotBlank @JsonProperty("account_uuid")
-        String accountUuid,
-        @NotNull @JsonProperty("to_currency_code")
-        String toCurrencyCode,
-        @NotNull @JsonProperty("from_currency_code")
-        String fromCurrencyCode,
-        @NotNull @JsonProperty("to_quantity")
-        Double toQuantity,
-        @NotNull @JsonProperty("from_quantity")
-        Double fromQuantity
+    @NotBlank @JsonProperty("pin_num")
+    String pinNum,
+    @NotBlank @JsonProperty("account_uuid")
+    String accountUuid,
+    @NotNull @JsonProperty("to_currency_code")
+    String toCurrencyCode,
+    @NotNull @JsonProperty("from_currency_code")
+    String fromCurrencyCode,
+    @NotNull @JsonProperty("to_quantity")
+    Double toQuantity,
+    @NotNull @JsonProperty("from_quantity")
+    Double fromQuantity
 ) {
 }

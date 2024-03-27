@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record Transfer1wonRequest(
-        @NotBlank @JsonProperty("account_uuid")
-        String accountUuid
+    @NotBlank @JsonProperty("account_uuid")
+    String accountUuid
 ) {
 }

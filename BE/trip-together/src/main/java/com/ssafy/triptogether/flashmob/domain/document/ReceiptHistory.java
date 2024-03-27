@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ReceiptHistory(
-        @Field("business_name") String businessName,
-        @Field("price") Double price,
-        @Field("created_at") LocalDateTime createdAt
+    @Field("business_name") String businessName,
+    @Field("price") Double price,
+    @Field("created_at") LocalDateTime createdAt
 ) {
 }

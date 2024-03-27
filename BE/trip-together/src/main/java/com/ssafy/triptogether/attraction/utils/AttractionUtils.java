@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 public class AttractionUtils {
     public static Region findByRegionId(RegionRepository repository, Long regionId) {
         return repository.findById(regionId)
-                .orElseThrow(
-                        () -> new NotFoundException("FindByRegionId", ErrorCode.REGION_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("FindByRegionId", ErrorCode.REGION_NOT_FOUND)
+            );
     }
 
     public static Attraction findByAttractionId(AttractionRepository repository, Long attractionId) {
         return repository.findById(attractionId)
-                .orElseThrow(
-                        () -> new NotFoundException("FindByAttractionId", ErrorCode.ATTRACTION_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("FindByAttractionId", ErrorCode.ATTRACTION_NOT_FOUND)
+            );
     }
 }

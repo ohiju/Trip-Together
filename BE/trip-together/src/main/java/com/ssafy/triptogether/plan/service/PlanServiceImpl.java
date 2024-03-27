@@ -123,16 +123,16 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
     private DailyPlans plansFindById(Long planId, String detailMessageKey) {
         return dailyPlansRepository.findByPlanId(planId)
-                .orElseThrow(
-                        () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
+            );
     }
 
     private Plan planFindById(Long planId, String detailMessageKey) {
         return planRepository.findById(planId)
-                .orElseThrow(
-                        () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException(detailMessageKey, PLAN_NOT_FOUND)
+            );
     }
 
     private boolean existOverlappingPlan(PlansSaveRequest plansSaveRequest, Member member) {
@@ -145,13 +145,13 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
     private Plan planSave(PlansSaveRequest plansSaveRequest, Region startRegion, Member member) {
         Plan plan = Plan.builder()
-                .title(plansSaveRequest.title())
-                .startAt(plansSaveRequest.startAt())
-                .endAt(plansSaveRequest.endAt())
-                .estimatedBudget(plansSaveRequest.estimatedBudget())
-                .region(startRegion)
-                .member(member)
-                .build();
+            .title(plansSaveRequest.title())
+            .startAt(plansSaveRequest.startAt())
+            .endAt(plansSaveRequest.endAt())
+            .estimatedBudget(plansSaveRequest.estimatedBudget())
+            .region(startRegion)
+            .member(member)
+            .build();
         return planRepository.save(plan);
     }
 
@@ -169,23 +169,23 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
                 // create attraction details
                 DailyPlanAttraction dailyPlanAttraction = DailyPlanAttraction.builder()
-                        .order(attractionIdx)
-                        .attractionId(attractionDetail.attractionId())
-                        .attractionName(attractionDetail.attractionName())
-                        .avgRating(attractionDetail.avgRating())
-                        .avgPrice(attractionDetail.avgPrice())
-                        .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
-                        .address(attractionDetail.address())
-                        .build();
+                    .order(attractionIdx)
+                    .attractionId(attractionDetail.attractionId())
+                    .attractionName(attractionDetail.attractionName())
+                    .avgRating(attractionDetail.avgRating())
+                    .avgPrice(attractionDetail.avgPrice())
+                    .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
+                    .address(attractionDetail.address())
+                    .build();
                 dailyPlanAttractions.add(dailyPlanAttraction);
             });
 
             // create daily plans
             DailyPlan dailyPlan = DailyPlan.builder()
-                    .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
-                    .dailyPlanAttractions(dailyPlanAttractions)
-                    .date(plan.getStartAt().plusDays(dailyPlanIdx))
-                    .build();
+                .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+                .dailyPlanAttractions(dailyPlanAttractions)
+                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .build();
             dailyPlans.add(dailyPlan);
         });
 
@@ -208,23 +208,23 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
                 // create attraction details
                 DailyPlanAttraction dailyPlanAttraction = DailyPlanAttraction.builder()
-                        .order(attractionIdx)
-                        .attractionId(attractionDetail.attractionId())
-                        .attractionName(attractionDetail.attractionName())
-                        .avgRating(attractionDetail.avgRating())
-                        .avgPrice(attractionDetail.avgPrice())
-                        .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
-                        .address(attractionDetail.address())
-                        .build();
+                    .order(attractionIdx)
+                    .attractionId(attractionDetail.attractionId())
+                    .attractionName(attractionDetail.attractionName())
+                    .avgRating(attractionDetail.avgRating())
+                    .avgPrice(attractionDetail.avgPrice())
+                    .thumbnailImageUrl(attractionDetail.thumbnailImageUrl())
+                    .address(attractionDetail.address())
+                    .build();
                 dailyPlanAttractions.add(dailyPlanAttraction);
             });
 
             // create daily plans
             DailyPlan dailyPlan = DailyPlan.builder()
-                    .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
-                    .dailyPlanAttractions(dailyPlanAttractions)
-                    .date(plan.getStartAt().plusDays(dailyPlanIdx))
-                    .build();
+                .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
+                .dailyPlanAttractions(dailyPlanAttractions)
+                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .build();
             dailyPlans.add(dailyPlan);
         });
 
@@ -239,18 +239,18 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     public PlanDetailFindResponse findPlanDetail(long planId) {
         // find daily plans & plan detail
         DailyPlans dailyPlans = dailyPlansRepository.findByPlanId(planId)
-                .orElseThrow(() -> new NotFoundException("PlanDetailFind", DAILY_PLAN_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException("PlanDetailFind", DAILY_PLAN_NOT_FOUND));
         DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
-                .orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
 
         // set daily plans to plan detail & return
         return PlanDetailFindResponse.builder()
-                .startRegion(planDetail.startRegion())
-                .startAt(planDetail.startAt())
-                .endAt(planDetail.endAt())
-                .title(planDetail.title())
-                .totalEstimatedBudget(planDetail.totalEstimatedBudget())
-                .dailyPlans(dailyPlans.getDailyPlans())
-                .build();
+            .startRegion(planDetail.startRegion())
+            .startAt(planDetail.startAt())
+            .endAt(planDetail.endAt())
+            .title(planDetail.title())
+            .totalEstimatedBudget(planDetail.totalEstimatedBudget())
+            .dailyPlans(dailyPlans.getDailyPlans())
+            .build();
     }
 }

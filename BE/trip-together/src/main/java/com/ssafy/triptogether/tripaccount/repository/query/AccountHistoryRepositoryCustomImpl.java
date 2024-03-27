@@ -25,8 +25,8 @@ public class AccountHistoryRepositoryCustomImpl implements AccountHistoryReposit
     @Override
     public Page<AccountHistory> findAccountHistoriesLoadDetailByMemberId(Long memberId, Pageable pageable) {
         JPAQuery<AccountHistory> query = queryFactory.selectFrom(accountHistory)
-                .join(accountHistory.tripAccount, tripAccount)
-                .where(tripAccount.member.id.eq(memberId));
+            .join(accountHistory.tripAccount, tripAccount)
+            .where(tripAccount.member.id.eq(memberId));
 
         for (Sort.Order o : pageable.getSort()) {
             PathBuilder<AccountHistory> entityPath = new PathBuilder<>(AccountHistory.class, "accountHistory");
@@ -35,14 +35,14 @@ public class AccountHistoryRepositoryCustomImpl implements AccountHistoryReposit
         }
 
         List<AccountHistory> accountHistories = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .limit(pageable.getPageSize())
+            .fetch();
 
         Long total = queryFactory.select(accountHistory.count())
-                .from(accountHistory)
-                .join(accountHistory.tripAccount, tripAccount)
-                .where(tripAccount.member.id.eq(memberId))
-                .fetchOne();
+            .from(accountHistory)
+            .join(accountHistory.tripAccount, tripAccount)
+            .where(tripAccount.member.id.eq(memberId))
+            .fetchOne();
         long totalCount = total != null ? total : 0L;
 
         return new PageImpl<>(accountHistories, pageable, totalCount);

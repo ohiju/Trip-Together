@@ -12,15 +12,15 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.UNDEFIN
 public class MemberUtils {
     public static Member findByMemberId(MemberRepository repository, Long memberId) {
         return repository.findById(memberId)
-                .orElseThrow(
-                        () -> new NotFoundException("FindByMemberId", UNDEFINED_MEMBER)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("FindByMemberId", UNDEFINED_MEMBER)
+            );
     }
 
     public static Member findByUuid(MemberRepository repository, String uuid) {
         return repository.findMemberByUuid(uuid)
-                .orElseThrow(
-                        () -> new NotFoundException("findMemberByUuid", UNDEFINED_MEMBER)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("findMemberByUuid", UNDEFINED_MEMBER)
+            );
     }
 }

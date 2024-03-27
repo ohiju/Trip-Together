@@ -5,6 +5,6 @@ import lombok.Builder;
 
 @Builder
 public record FlashmobUpdateResponse(
-        @JsonProperty("flashmob_id") Long flashmobId
+    @JsonProperty("flashmob_id") Long flashmobId
 ) {
 }

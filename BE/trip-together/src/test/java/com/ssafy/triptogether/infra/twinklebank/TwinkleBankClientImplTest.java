@@ -46,28 +46,28 @@ class TwinkleBankClientImplTest {
         @BeforeEach
         void setUp() {
             twinkleBankAccountsLoadRequest = TwinkleBankAccountsLoadRequest.builder()
-                    .uuid("test")
-                    .build();
+                .uuid("test")
+                .build();
             TwinkleBankAccountsDetail bankAccount1 = TwinkleBankAccountsDetail.builder()
-                    .uuid("TestAccount1")
-                    .balance(3.0)
-                    .name("TestAccount1")
-                    .num("123-123")
-                    .build();
+                .uuid("TestAccount1")
+                .balance(3.0)
+                .name("TestAccount1")
+                .num("123-123")
+                .build();
             TwinkleBankAccountsDetail bankAccount2 = TwinkleBankAccountsDetail.builder()
-                    .uuid("TestAccount2")
-                    .balance(3.0)
-                    .name("TestAccount2")
-                    .num("456-456")
-                    .build();
+                .uuid("TestAccount2")
+                .balance(3.0)
+                .name("TestAccount2")
+                .num("456-456")
+                .build();
             twinkleBankAccountsLoadResponse = TwinkleBankAccountsLoadResponse.builder()
-                    .twinkleBankAccountsDetails(List.of(bankAccount1, bankAccount2))
-                    .build();
+                .twinkleBankAccountsDetails(List.of(bankAccount1, bankAccount2))
+                .build();
             apiResponse = ApiResponse.builder()
-                    .status(1)
-                    .message("test")
-                    .data(twinkleBankAccountsLoadResponse)
-                    .build();
+                .status(1)
+                .message("test")
+                .data(twinkleBankAccountsLoadResponse)
+                .build();
         }
 
         @Test
@@ -75,18 +75,18 @@ class TwinkleBankClientImplTest {
         void bankAccountsLoadSuccess() {
             // given
             given(restTemplate.exchange(
-                    anyString(),
-                    eq(HttpMethod.GET),
-                    any(HttpEntity.class),
-                    eq(ApiResponse.class)
+                anyString(),
+                eq(HttpMethod.GET),
+                any(HttpEntity.class),
+                eq(ApiResponse.class)
             )).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.OK));
             // when
             TwinkleBankAccountsLoadResponse response = twinkleBankClient.bankAccountsLoad(
-                    twinkleBankAccountsLoadRequest);
+                twinkleBankAccountsLoadRequest);
             // then
             assertAll(
-                    () -> assertNotNull(response),
-                    () -> assertEquals(twinkleBankAccountsLoadResponse, response)
+                () -> assertNotNull(response),
+                () -> assertEquals(twinkleBankAccountsLoadResponse, response)
             );
         }
 
@@ -95,10 +95,10 @@ class TwinkleBankClientImplTest {
         void bankAccountsLoadFail() {
             // given
             given(restTemplate.exchange(
-                    anyString(),
-                    eq(HttpMethod.GET),
-                    any(HttpEntity.class),
-                    eq(ApiResponse.class)
+                anyString(),
+                eq(HttpMethod.GET),
+                any(HttpEntity.class),
+                eq(ApiResponse.class)
             )).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST));
             // when & then
             assertThrows(ExternalServerException.class, () -> {
@@ -118,18 +118,18 @@ class TwinkleBankClientImplTest {
         @BeforeEach
         void setUp() {
             twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                    .accountUuid("test")
-                    .build();
+                .accountUuid("test")
+                .build();
             twinkleAccountSyncResponse = TwinkleAccountSyncResponse.builder()
-                    .accountUuid("test")
-                    .accountName("test")
-                    .accountNum("test")
-                    .build();
+                .accountUuid("test")
+                .accountName("test")
+                .accountNum("test")
+                .build();
             apiResponse = ApiResponse.builder()
-                    .status(1)
-                    .message("test")
-                    .data(twinkleAccountSyncResponse)
-                    .build();
+                .status(1)
+                .message("test")
+                .data(twinkleAccountSyncResponse)
+                .build();
         }
 
         @Test
@@ -137,18 +137,18 @@ class TwinkleBankClientImplTest {
         void bankAccountsSyncSuccess() {
             // given
             given(restTemplate.exchange(
-                    anyString(),
-                    eq(HttpMethod.POST),
-                    any(HttpEntity.class),
-                    eq(ApiResponse.class)
+                anyString(),
+                eq(HttpMethod.POST),
+                any(HttpEntity.class),
+                eq(ApiResponse.class)
             )).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.OK));
             // when
             TwinkleAccountSyncResponse response = twinkleBankClient.bankAccountsSync(
-                    twinkleAccountSyncRequest);
+                twinkleAccountSyncRequest);
             // then
             assertAll(
-                    () -> assertNotNull(response),
-                    () -> assertEquals(twinkleAccountSyncResponse, response)
+                () -> assertNotNull(response),
+                () -> assertEquals(twinkleAccountSyncResponse, response)
             );
         }
 
@@ -157,10 +157,10 @@ class TwinkleBankClientImplTest {
         void bankAccountsSyncFail() {
             // given
             given(restTemplate.exchange(
-                    anyString(),
-                    eq(HttpMethod.POST),
-                    any(HttpEntity.class),
-                    eq(ApiResponse.class)
+                anyString(),
+                eq(HttpMethod.POST),
+                any(HttpEntity.class),
+                eq(ApiResponse.class)
             )).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST));
             // when & then
             assertThrows(ExternalServerException.class, () -> {
@@ -179,13 +179,13 @@ class TwinkleBankClientImplTest {
         @BeforeEach
         void setUp() {
             twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                    .accountUuid("test")
-                    .build();
+                .accountUuid("test")
+                .build();
             apiResponse = ApiResponse.builder()
-                    .status(1)
-                    .message("test")
-                    .data(null)
-                    .build();
+                .status(1)
+                .message("test")
+                .data(null)
+                .build();
         }
 
         @Test
@@ -193,10 +193,10 @@ class TwinkleBankClientImplTest {
         void bankAccountsLoadFail() {
             // given
             given(restTemplate.exchange(
-                    anyString(),
-                    eq(HttpMethod.DELETE),
-                    any(HttpEntity.class),
-                    eq(ApiResponse.class)
+                anyString(),
+                eq(HttpMethod.DELETE),
+                any(HttpEntity.class),
+                eq(ApiResponse.class)
             )).willReturn(new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST));
             // when & then
             assertThrows(ExternalServerException.class, () -> {

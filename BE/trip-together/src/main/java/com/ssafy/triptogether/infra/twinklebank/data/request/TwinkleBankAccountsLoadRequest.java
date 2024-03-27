@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleBankAccountsLoadRequest(
-        @JsonProperty("uuid")
-        String uuid
+    @JsonProperty("uuid")
+    String uuid
 ) {
 }
