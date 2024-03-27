@@ -8,9 +8,17 @@ import {
   Wrapper,
 } from './ChatMainStyle';
 import Chats from '../../components/flashMob/Chats';
+import {useFocusEffect} from '@react-navigation/native';
+import {setDisplay} from '../../store/slices/tabState';
+import {useAppDispatch} from '../../store/hooks';
 
 const ChatMain = () => {
   const [onChat, setOnChat] = useState(true);
+  const dispatch = useAppDispatch();
+
+  useFocusEffect(() => {
+    dispatch(setDisplay(true));
+  });
 
   const handleOnPress = (direction: string) => {
     if (direction === 'left') {

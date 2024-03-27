@@ -40,6 +40,14 @@ const PlaceInfo = ({theme}: {theme: string}) => {
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
 
+  const handlePressMake = () => {
+    navigation.navigate('makeflash');
+  };
+
+  const handlePressAllFlash = () => {
+    navigation.navigate('allflash');
+  };
+
   return (
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <StyledShadow offset={[0, 1]}>
@@ -67,8 +75,16 @@ const PlaceInfo = ({theme}: {theme: string}) => {
                 <DetailsRow>
                   <Rating>평점: {rating}</Rating>
                   <ButtonContainer>
-                    <AppButton text="모임 생성" style={MakeFlashButton} />
-                    <AppButton text="모임 검색" style={JoinFlashButton} />
+                    <AppButton
+                      text="모임 생성"
+                      style={MakeFlashButton}
+                      onPress={handlePressMake}
+                    />
+                    <AppButton
+                      text="모임 검색"
+                      style={JoinFlashButton}
+                      onPress={handlePressAllFlash}
+                    />
                   </ButtonContainer>
                 </DetailsRow>
               )}

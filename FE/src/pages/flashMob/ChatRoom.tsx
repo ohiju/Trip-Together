@@ -7,11 +7,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {primary} from '../../constants/colors';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStackParams';
 
 const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
+
+  const navigation = useNavigation<NavigationProp<FlashMobStackParams>>();
 
   const handleSend = () => {
     if (newMessage.trim() !== '') {
@@ -22,6 +27,18 @@ const ChatRoom = () => {
 
   const toggleAdditionalButtons = () => {
     setShowAdditionalButtons(!showAdditionalButtons);
+  };
+
+  const handleMoneyGet = () => {
+    navigation.navigate('MoneyGet');
+  };
+
+  const handleMoneyGive = () => {
+    navigation.navigate('MoneyGive');
+  };
+
+  const handleMoneyList = () => {
+    navigation.navigate('MoneyList');
   };
 
   return (
@@ -44,29 +61,39 @@ const ChatRoom = () => {
         <TouchableOpacity
           style={styles.addButton}
           onPress={toggleAdditionalButtons}>
-          <Text style={styles.addButtonText}>+</Text>
+          {!showAdditionalButtons ? (
+            <Text style={styles.addButtonText}>+</Text>
+          ) : (
+            <Text style={styles.addButtonText}>X</Text>
+          )}
         </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={newMessage}
           onChangeText={text => setNewMessage(text)}
-          placeholder="Type your message..."
+          placeholder="채팅을 입력하세요"
           onSubmitEditing={handleSend}
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-          <Text style={styles.sendButtonText}>Send</Text>
+          <Text style={styles.sendButtonText}>전송</Text>
         </TouchableOpacity>
       </View>
 
       {showAdditionalButtons && (
         <View style={styles.additionalButtons}>
-          <TouchableOpacity style={styles.additionalButton}>
+          <TouchableOpacity
+            style={styles.additionalButton}
+            onPress={handleMoneyGet}>
             <Text style={styles.additionalButtonText}>정산</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalButton}>
+          <TouchableOpacity
+            style={styles.additionalButton}
+            onPress={handleMoneyGive}>
             <Text style={styles.additionalButtonText}>송금</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalButton}>
+          <TouchableOpacity
+            style={styles.additionalButton}
+            onPress={handleMoneyList}>
             <Text style={styles.additionalButtonText}>내역</Text>
           </TouchableOpacity>
         </View>
@@ -119,7 +146,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   sendButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: primary,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -130,7 +157,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   addButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: primary,
     borderRadius: 20,
     paddingHorizontal: 13,
     paddingVertical: 5,
@@ -138,7 +165,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: 17,
     fontWeight: 'bold',
   },
   additionalButtons: {
@@ -150,7 +177,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   additionalButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: primary,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,

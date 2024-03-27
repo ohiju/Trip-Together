@@ -20,21 +20,17 @@ const PlanDetail = () => {
 
   const handleFinishPress = async () => {
     const data = {
-      start_region: trip.start_region,
-      start_at: trip.start_at,
-      end_at: trip.end_at,
+      start_region_id: trip.start_region,
+      start_at: new Date(trip.start_at),
+      end_at: new Date(trip.end_at),
       title: trip.title,
       total_estimated_budget: trip.total_estimated_budget,
       daily_plans: trip.daily_plans,
     };
     try {
-      await axios.post(
-        `https://j10a309.p.ssafy.io:8080/api/plan/v1/plans`,
-        data,
-        {
-          headers: {},
-        },
-      );
+      await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
+        headers: {},
+      });
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {

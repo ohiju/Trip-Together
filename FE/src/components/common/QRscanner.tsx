@@ -8,6 +8,7 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {CameraScreen} from 'react-native-camera-kit';
 
@@ -43,10 +44,10 @@ const QRScanner = () => {
             setQrvalue('');
             setOpneScanner(true);
           } else {
-            alert('CAMERA permission denied');
+            Alert.alert('CAMERA permission denied');
           }
         } catch (err) {
-          alert('Camera permission err', err);
+          Alert.alert('Camera permission err', err);
           console.warn(err);
         }
       }
@@ -80,13 +81,10 @@ const QRScanner = () => {
         </View>
       ) : (
         <View style={styles.container}>
-          <Text style={styles.titleText}>
-            Barcode and QR Code Scanner using Camera in React Native
-          </Text>
           <Text style={styles.textStyle}>
             {qrvalue ? 'Scanned Result: ' + qrvalue : ''}
           </Text>
-          {qrvalue.includes('https://') ||
+          {/* {qrvalue.includes('https://') ||
           qrvalue.includes('http://') ||
           qrvalue.includes('geo:') ? (
             <TouchableHighlight onPress={onOpenlink}>
@@ -94,12 +92,7 @@ const QRScanner = () => {
                 {qrvalue.includes('geo:') ? 'Open in Map' : 'Open Link'}
               </Text>
             </TouchableHighlight>
-          ) : null}
-          <TouchableHighlight
-            onPress={onOpneScanner}
-            style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>Open QR Scanner</Text>
-          </TouchableHighlight>
+          ) : null} */}
         </View>
       )}
     </SafeAreaView>

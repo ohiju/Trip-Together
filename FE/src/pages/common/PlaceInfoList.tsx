@@ -41,6 +41,14 @@ const PlaceInfoList = () => {
     }
   };
 
+  const handlePressMake = () => {
+    navigation.navigate('makeflash');
+  };
+
+  const handlePressAllFlash = () => {
+    navigation.navigate('allflash');
+  };
+
   const renderItem = ({item}: any) => (
     <ItemContainer onPress={handlePress}>
       <ThumbnailContainer>
@@ -64,8 +72,16 @@ const PlaceInfoList = () => {
           <DetailsRow>
             <Rating>평점: {item.avg_rating}</Rating>
             <ButtonContainer>
-              <AppButton text="모임 생성" style={MakeFlashButton} />
-              <AppButton text="모임 검색" style={JoinFlashButton} />
+              <AppButton
+                text="모임 생성"
+                style={MakeFlashButton}
+                onPress={handlePressMake}
+              />
+              <AppButton
+                text="모임 검색"
+                style={JoinFlashButton}
+                onPress={handlePressAllFlash}
+              />
             </ButtonContainer>
           </DetailsRow>
         )}

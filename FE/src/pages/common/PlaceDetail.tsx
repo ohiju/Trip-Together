@@ -31,9 +31,14 @@ import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {useAppSelector} from '../../store/hooks';
 import {useAppDispatch} from '../../store/hooks';
 import {addItemToBag} from '../../store/slices/bag';
-import {useRoute} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import AppButton from '../../components/common/AppButton';
 import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
 
 interface RouteParams {
   theme?: string;
@@ -50,6 +55,7 @@ const AttractionDetailsPage = () => {
 
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
+  const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
 
   useEffect(() => {
     PlaceBag.forEach(item => {
@@ -109,6 +115,14 @@ const AttractionDetailsPage = () => {
 
   const keyExtractor = (item: any, index: number) => index.toString();
 
+  const handlePressMake = () => {
+    navigation.navigate('makeflash');
+  };
+
+  const handlePressAllFlash = () => {
+    navigation.navigate('allflash');
+  };
+
   return (
     <FlatList
       data={[attraction]}
@@ -142,8 +156,16 @@ const AttractionDetailsPage = () => {
 
           {theme === 'flashmob' && (
             <ButtonContainer>
-              <AppButton text="모임 생성" style={MakeFlashButton} />
-              <AppButton text="모임 검색" style={JoinFlashButton} />
+              <AppButton
+                text="모임 생성"
+                style={MakeFlashButton}
+                onPress={handlePressMake}
+              />
+              <AppButton
+                text="모임 검색"
+                style={JoinFlashButton}
+                onPress={handlePressAllFlash}
+              />
             </ButtonContainer>
           )}
 
