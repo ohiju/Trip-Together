@@ -6,7 +6,9 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleAccountSyncRequest(
-    @NotBlank @JsonProperty("account_uuid")
-    String accountUuid
+	@JsonProperty("account_uuid")
+	String accountUuid,
+	@JsonProperty("uuid")
+	String uuid
 ) {
 }
