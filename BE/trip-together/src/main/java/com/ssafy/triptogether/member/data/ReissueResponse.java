@@ -7,11 +7,11 @@ import lombok.Builder;
 
 @Builder
 public record ReissueResponse(
-        @NotBlank @JsonProperty("access")
-        String access,
-        @NotNull @JsonProperty("expires_in")
-        Integer expiresIn,
-        @NotNull @JsonProperty("created_at")
-        Long createdAt
+    @NotBlank @JsonProperty("access")
+    String access,
+    @NotNull @JsonProperty("expires_in")
+    Integer expiresIn,
+    @NotNull @JsonProperty("created_at")
+    Long createdAt
 ) {
 }

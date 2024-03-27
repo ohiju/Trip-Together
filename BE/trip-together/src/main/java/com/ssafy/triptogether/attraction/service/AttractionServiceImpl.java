@@ -36,15 +36,15 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 
         // set attraction detail & return
         return AttractionDetailFindResponse.builder()
-                .attractionId(attraction.getId())
-                .avgPrice(attraction.getAvgPrice())
-                .startAt(attraction.getStartAt())
-                .endAt(attraction.getEndAt())
-                .attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
-                .latitude(attraction.getLatitude())
-                .longitude(attraction.getLongitude())
-                .reviews(reviewResponses)
-                .build();
+            .attractionId(attraction.getId())
+            .avgPrice(attraction.getAvgPrice())
+            .startAt(attraction.getStartAt())
+            .endAt(attraction.getEndAt())
+            .attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
+            .latitude(attraction.getLatitude())
+            .longitude(attraction.getLongitude())
+            .reviews(reviewResponses)
+            .build();
     }
 
     @Transactional

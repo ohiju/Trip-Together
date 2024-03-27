@@ -32,60 +32,60 @@ public class TripAccountController {
         CurrenciesLoadResponse currenciesLoadResponse = tripAccountLoadService.currenciesLoad();
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_CURRENCY_LOAD, currenciesLoadResponse
+            HttpStatus.OK, StatusCode.SUCCESS_CURRENCY_LOAD, currenciesLoadResponse
         );
     }
 
     @GetMapping("/rate")
     public ResponseEntity<ApiResponse<RateLoadResponse>> rateLoad(
-            @RequestParam("currency_code") CurrencyCode currencyCode
+        @RequestParam("currency_code") CurrencyCode currencyCode
     ) {
         RateLoadResponse rateLoadResponse = tripAccountLoadService.rateLoad(currencyCode);
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_RATE_LOAD, rateLoadResponse
+            HttpStatus.OK, StatusCode.SUCCESS_RATE_LOAD, rateLoadResponse
         );
     }
 
     @GetMapping("/trip-accounts")
     public ResponseEntity<ApiResponse<TripAccountsLoadResponse>> tripAccountsLoad(
-            // @AuthenticationPrincipal SecurityMember
+        // @AuthenticationPrincipal SecurityMember
     ) {
         long memberId = 1L;
         TripAccountsLoadResponse tripAccountsLoadResponse = tripAccountLoadService.tripAccountsLoad(memberId);
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNTS_LOAD, tripAccountsLoadResponse
+            HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNTS_LOAD, tripAccountsLoadResponse
         );
     }
 
     @GetMapping("/account-histories")
     public ResponseEntity<ApiResponse<Page<AccountHistoriesLoadDetail>>> accountHistoriesLoad(
-            // @AuthenticationPrincipal SecurityMember,
-            Pageable pageable
+        // @AuthenticationPrincipal SecurityMember,
+        Pageable pageable
     ) {
         long memberId = 1L;
         Page<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = tripAccountLoadService.accountHistoriesLoad(
-                memberId, pageable);
+            memberId, pageable);
 
         return ApiResponse.toResponseEntity(
-                HttpStatus.OK, StatusCode.SUCCESS_ACCOUNT_HISTORIES_LOAD, accountHistoriesLoadDetails
+            HttpStatus.OK, StatusCode.SUCCESS_ACCOUNT_HISTORIES_LOAD, accountHistoriesLoadDetails
         );
     }
 
     @PostMapping("/trip-accounts")
     public ResponseEntity<ApiResponse<Void>> tripAccountExchange(
-            // @AuthenticationPrincipal SecurityMember,
-            @RequestBody @Valid TripAccountExchangeRequest tripAccountExchangeRequest
+        // @AuthenticationPrincipal SecurityMember,
+        @RequestBody @Valid TripAccountExchangeRequest tripAccountExchangeRequest
     ) {
         long memberId = 1L;
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
-                .pinNum(tripAccountExchangeRequest.pinNum())
-                .build();
+            .pinNum(tripAccountExchangeRequest.pinNum())
+            .build();
         tripAccountSaveService.tripAccountExchange(memberId, pinVerifyRequest, tripAccountExchangeRequest);
 
         return ApiResponse.emptyResponse(
-                HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_EXCHANGE
+            HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_EXCHANGE
         );
     }
 }

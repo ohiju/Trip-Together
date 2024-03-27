@@ -22,13 +22,13 @@ public class SyncAccountRepositoryCustomImpl implements SyncAccountRepositoryCus
     @Override
     public List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId) {
         return queryFactory.select(Projections.constructor(SyncAccountsDetail.class,
-                        syncAccount.uuid,
-                        syncAccount.num,
-                        syncAccount.name,
-                        syncAccount.isMain
-                )).from(syncAccount)
-                .where(syncAccount.member.id.eq(memberId))
-                .fetch();
+                syncAccount.uuid,
+                syncAccount.num,
+                syncAccount.name,
+                syncAccount.isMain
+            )).from(syncAccount)
+            .where(syncAccount.member.id.eq(memberId))
+            .fetch();
     }
 
     /**
@@ -40,9 +40,9 @@ public class SyncAccountRepositoryCustomImpl implements SyncAccountRepositoryCus
     @Override
     public Boolean memberSyncAccountExist(long memberId) {
         return queryFactory
-                .selectOne()
-                .from(syncAccount)
-                .where(syncAccount.member.id.eq(memberId))
-                .fetchFirst() != null;
+            .selectOne()
+            .from(syncAccount)
+            .where(syncAccount.member.id.eq(memberId))
+            .fetchFirst() != null;
     }
 }

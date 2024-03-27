@@ -33,8 +33,8 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity<ApiResponse<Void>> updateProfile(
-            @AuthenticationPrincipal SecurityMember securityMember,
-            @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest
     ) {
         long memberId = securityMember.getId();
         memberSaveService.updateProfile(memberId, profileUpdateRequest);
@@ -43,7 +43,7 @@ public class MemberController {
 
     @GetMapping("/{member_id}")
     public ResponseEntity<ApiResponse<ProfileFindResponse>> findProfile(
-            @PathVariable("member_id") long memberId
+        @PathVariable("member_id") long memberId
     ) {
         ProfileFindResponse response = memberLoadService.findProfile(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_PROFILE_FIND, response);
@@ -51,8 +51,8 @@ public class MemberController {
 
     @PostMapping("/pin")
     public ResponseEntity<ApiResponse<Void>> savePin(
-            @AuthenticationPrincipal SecurityMember securityMember,
-            @Valid @RequestBody PinSaveRequest pinSaveRequest
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @Valid @RequestBody PinSaveRequest pinSaveRequest
     ) {
         long memberId = securityMember.getId();
         memberSaveService.savePin(memberId, pinSaveRequest);
@@ -61,8 +61,8 @@ public class MemberController {
 
     @PatchMapping("/pin")
     public ResponseEntity<ApiResponse<Void>> updatePin(
-            @AuthenticationPrincipal SecurityMember securityMember,
-            @Valid @RequestBody PinUpdateRequest pinUpdateRequest
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @Valid @RequestBody PinUpdateRequest pinUpdateRequest
     ) {
         long memberId = securityMember.getId();
         PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder().pinNum(pinUpdateRequest.prePinNum()).build();
@@ -72,8 +72,8 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
-            @AuthenticationPrincipal SecurityMember securityMember,
-            HttpServletRequest request
+        @AuthenticationPrincipal SecurityMember securityMember,
+        HttpServletRequest request
     ) {
         String accessToken = SecurityUtil.getAccessToken(request);
         memberSaveService.logout(securityMember, accessToken);
@@ -84,7 +84,7 @@ public class MemberController {
     public ResponseEntity<ApiResponse<ReissueResponse>> reissue(HttpServletRequest request) {
         // 쿠키에서 refresh token 꺼내기
         Cookie cookie = cookieProvider.getCookie(request, "refreshToken").orElseThrow(
-                () -> new NotFoundException("MemberController", COOKIE_NOT_FOUND));
+            () -> new NotFoundException("MemberController", COOKIE_NOT_FOUND));
         String refreshToken = cookie.getValue();
 
         return memberLoadService.reissue(refreshToken);

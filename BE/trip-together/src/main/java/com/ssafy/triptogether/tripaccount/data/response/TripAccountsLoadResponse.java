@@ -7,9 +7,9 @@ import java.util.List;
 
 @Builder
 public record TripAccountsLoadResponse(
-        @JsonProperty("trip_accounts")
-        List<TripAccountsLoadDetail> tripAccountsLoadDetails,
-        @JsonProperty("trip_account_count")
-        Integer tripAccountCount
+    @JsonProperty("trip_accounts")
+    List<TripAccountsLoadDetail> tripAccountsLoadDetails,
+    @JsonProperty("trip_account_count")
+    Integer tripAccountCount
 ) {
 }

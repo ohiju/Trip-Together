@@ -55,17 +55,17 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     public CurrenciesLoadResponse currenciesLoad() {
         List<Currency> currencies = currencyRepository.findAll();
         List<CurrenciesLoadDetail> collectCurrencies = currencies.stream()
-                .map(
-                        currency -> CurrenciesLoadDetail.builder()
-                                .code(currency.getCode())
-                                .nation(currency.getCurrencyNation())
-                                .nationKr(currency.getCurrencyNation().getMessage())
-                                .unit(currency.getCode().getUnit())
-                                .build()
-                ).toList();
+            .map(
+                currency -> CurrenciesLoadDetail.builder()
+                    .code(currency.getCode())
+                    .nation(currency.getCurrencyNation())
+                    .nationKr(currency.getCurrencyNation().getMessage())
+                    .unit(currency.getCode().getUnit())
+                    .build()
+            ).toList();
         return CurrenciesLoadResponse.builder()
-                .currenciesLoadDetail(collectCurrencies)
-                .build();
+            .currenciesLoadDetail(collectCurrencies)
+            .build();
     }
 
     /**
@@ -77,12 +77,12 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     @Override
     public RateLoadResponse rateLoad(CurrencyCode currencyCode) {
         Currency currency = currencyRepository.findByCode(currencyCode)
-                .orElseThrow(
-                        () -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
+            );
         return RateLoadResponse.builder()
-                .rate(currency.getRate())
-                .build();
+            .rate(currency.getRate())
+            .build();
     }
 
     /**
@@ -95,17 +95,17 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     public TripAccountsLoadResponse tripAccountsLoad(long memberId) {
         List<TripAccount> tripAccounts = tripAccountRepository.findByMemberId(memberId);
         List<TripAccountsLoadDetail> tripAccountsLoadDetails = tripAccounts.stream()
-                .map(tripAccount -> TripAccountsLoadDetail.builder()
-                        .currencyNation(tripAccount.getCurrency().getCurrencyNation())
-                        .nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
-                        .balance(tripAccount.getBalance())
-                        .unit(tripAccount.getCurrency().getCode().getUnit())
-                        .build()
-                ).toList();
+            .map(tripAccount -> TripAccountsLoadDetail.builder()
+                .currencyNation(tripAccount.getCurrency().getCurrencyNation())
+                .nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
+                .balance(tripAccount.getBalance())
+                .unit(tripAccount.getCurrency().getCode().getUnit())
+                .build()
+            ).toList();
         return TripAccountsLoadResponse.builder()
-                .tripAccountsLoadDetails(tripAccountsLoadDetails)
-                .tripAccountCount(tripAccountsLoadDetails.size())
-                .build();
+            .tripAccountsLoadDetails(tripAccountsLoadDetails)
+            .tripAccountCount(tripAccountsLoadDetails.size())
+            .build();
     }
 
     /**
@@ -118,20 +118,20 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     @Override
     public Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable) {
         Page<AccountHistory> accountHistories = accountHistoryRepository.findAccountHistoriesLoadDetailByMemberId(
-                memberId, pageable);
+            memberId, pageable);
 
         List<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = accountHistories.getContent().stream()
-                .map(accountHistory -> AccountHistoriesLoadDetail.builder()
-                        .accountHistoryId(accountHistory.getId())
-                        .currencyNation(accountHistory.getTripAccount().getCurrency().getCurrencyNation())
-                        .nationKr(accountHistory.getTripAccount().getCurrency().getCurrencyNation().getMessage())
-                        .unit(accountHistory.getTripAccount().getCurrency().getCode().getUnit())
-                        .type(accountHistory.getType().getMessage())
-                        .usage(accountHistory.getBusinessName())
-                        .quantity(accountHistory.getQuantity())
-                        .createdAt(accountHistory.getCreatedAt())
-                        .build()
-                ).toList();
+            .map(accountHistory -> AccountHistoriesLoadDetail.builder()
+                .accountHistoryId(accountHistory.getId())
+                .currencyNation(accountHistory.getTripAccount().getCurrency().getCurrencyNation())
+                .nationKr(accountHistory.getTripAccount().getCurrency().getCurrencyNation().getMessage())
+                .unit(accountHistory.getTripAccount().getCurrency().getCode().getUnit())
+                .type(accountHistory.getType().getMessage())
+                .usage(accountHistory.getBusinessName())
+                .quantity(accountHistory.getQuantity())
+                .createdAt(accountHistory.getCreatedAt())
+                .build()
+            ).toList();
 
         return new PageImpl<>(accountHistoriesLoadDetails, pageable, accountHistories.getTotalElements());
     }
@@ -144,8 +144,8 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     public void currencyRateUpdate() {
         List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
         Map<CurrencyCode, Currency> currencyMap = currencyRepository.findAll()
-                .stream()
-                .collect(Collectors.toMap(Currency::getCode, Function.identity()));
+            .stream()
+            .collect(Collectors.toMap(Currency::getCode, Function.identity()));
         currencyRateResponses.forEach(currencyRateResponse -> {
             CurrencyCode currencyCode = CurrencyCode.fromString(currencyRateResponse.cur_unit());
             Currency currency = currencyMap.get(currencyCode);
@@ -173,14 +173,14 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
         if (tripAccountExchangeRequest.fromCurrencyCode().equals("KRW")) {
             Currency currency = getCurrency(tripAccountExchangeRequest.toCurrencyCode());
             tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
-                    .ifPresent(tripAccount -> {
-                        tripAccount.depositBalance(tripAccountExchangeRequest.toQuantity());
-                    });
+                .ifPresent(tripAccount -> {
+                    tripAccount.depositBalance(tripAccountExchangeRequest.toQuantity());
+                });
             TripAccount tripAccount = TripAccount.builder()
-                    .balance(tripAccountExchangeRequest.toQuantity())
-                    .currency(currency)
-                    .member(member)
-                    .build();
+                .balance(tripAccountExchangeRequest.toQuantity())
+                .currency(currency)
+                .member(member)
+                .build();
             tripAccountRepository.save(tripAccount);
             twinkleBankWithdrawRequest(tripAccountExchangeRequest);
             return;
@@ -188,9 +188,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 
         Currency currency = getCurrency(tripAccountExchangeRequest.fromCurrencyCode());
         TripAccount tripAccount = tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
-                .orElseThrow(
-                        () -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
+            );
         tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
         twinkleBankDepositRequest(tripAccountExchangeRequest);
     }
@@ -198,30 +198,30 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
     private Currency getCurrency(String tripAccountExchangeRequest) {
         CurrencyCode currencyCode = CurrencyCode.fromString(tripAccountExchangeRequest);
         return currencyRepository.findByCode(currencyCode)
-                .orElseThrow(
-                        () -> new NotFoundException("TripAccountExchange", ErrorCode.CURRENCY_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException("TripAccountExchange", ErrorCode.CURRENCY_NOT_FOUND)
+            );
     }
 
     private void twinkleBankDepositRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
         TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
-                .accountUuid(tripAccountExchangeRequest.accountUuid())
-                .price(tripAccountExchangeRequest.toQuantity())
-                .type("deposit")
-                .address("멀티 캠퍼스")
-                .businessName("trip-together")
-                .build();
+            .accountUuid(tripAccountExchangeRequest.accountUuid())
+            .price(tripAccountExchangeRequest.toQuantity())
+            .type("deposit")
+            .address("멀티 캠퍼스")
+            .businessName("trip-together")
+            .build();
         twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
     }
 
     private void twinkleBankWithdrawRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
         TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
-                .accountUuid(tripAccountExchangeRequest.accountUuid())
-                .price(tripAccountExchangeRequest.fromQuantity())
-                .type("withdraw")
-                .address("멀티 캠퍼스")
-                .businessName("trip-together")
-                .build();
+            .accountUuid(tripAccountExchangeRequest.accountUuid())
+            .price(tripAccountExchangeRequest.fromQuantity())
+            .type("withdraw")
+            .address("멀티 캠퍼스")
+            .businessName("trip-together")
+            .build();
         twinkleBankClient.bankAccountWithdraw(twinkleBankAccountExchangeRequest);
     }
 }

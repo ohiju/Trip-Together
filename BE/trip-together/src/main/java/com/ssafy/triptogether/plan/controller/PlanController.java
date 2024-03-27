@@ -26,7 +26,7 @@ public class PlanController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<DailyPlanListResponse>>> findPlans(
-            // @AuthenticationPrincipal SecurityMember
+        // @AuthenticationPrincipal SecurityMember
     ) {
         long memberId = 1L;
         List<DailyPlanListResponse> planList = planLoadService.findPlans(memberId);
@@ -35,8 +35,8 @@ public class PlanController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> plansSave(
-            // @AuthenticationPrincipal SecurityMember
-            @RequestBody @Valid PlansSaveRequest plansSaveRequest
+        // @AuthenticationPrincipal SecurityMember
+        @RequestBody @Valid PlansSaveRequest plansSaveRequest
     ) {
         // long memberId = securityMember.getId();
         long memberId = 1L;
@@ -47,8 +47,8 @@ public class PlanController {
 
     @DeleteMapping("/{plan_id}")
     public ResponseEntity<ApiResponse<Void>> planDelete(
-            // @AuthenticationPrincipal SecurityMember
-            @PathVariable("plan_id") Long planId
+        // @AuthenticationPrincipal SecurityMember
+        @PathVariable("plan_id") Long planId
     ) {
         long memberId = 1L;
         planSaveService.planDelete(memberId, planId);
@@ -57,9 +57,9 @@ public class PlanController {
 
     @PatchMapping("/{plan_id}")
     public ResponseEntity<ApiResponse<Void>> planModify(
-            // @AuthenticationPrincipal SecurityMember,
-            @PathVariable("plan_id") Long planId,
-            @RequestBody PlansSaveRequest plansSaveRequest
+        // @AuthenticationPrincipal SecurityMember,
+        @PathVariable("plan_id") Long planId,
+        @RequestBody PlansSaveRequest plansSaveRequest
     ) {
         // long memberId = securityMember.getId();
         long memberId = 1L;
@@ -69,7 +69,7 @@ public class PlanController {
 
     @GetMapping("/{plan_id}")
     public ResponseEntity<ApiResponse<PlanDetailFindResponse>> findPlanDetail(
-            @PathVariable("plan_id") long planId
+        @PathVariable("plan_id") long planId
     ) {
         PlanDetailFindResponse response = planLoadService.findPlanDetail(planId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, response);

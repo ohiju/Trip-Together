@@ -59,17 +59,17 @@ class SyncAccountServiceImplTest {
         @BeforeEach
         void setUp() {
             SyncAccountsDetail syncAccount1 = SyncAccountsDetail.builder()
-                    .uuid("test1")
-                    .name("테스트 계좌")
-                    .accountNum("123-123")
-                    .isMain(true)
-                    .build();
+                .uuid("test1")
+                .name("테스트 계좌")
+                .accountNum("123-123")
+                .isMain(true)
+                .build();
             SyncAccountsDetail syncAccount2 = SyncAccountsDetail.builder()
-                    .uuid("test1")
-                    .name("테스트 계좌")
-                    .accountNum("123-123")
-                    .isMain(true)
-                    .build();
+                .uuid("test1")
+                .name("테스트 계좌")
+                .accountNum("123-123")
+                .isMain(true)
+                .build();
             syncAccounts = Arrays.asList(syncAccount1, syncAccount2);
         }
 
@@ -81,8 +81,8 @@ class SyncAccountServiceImplTest {
             SyncAccountsLoadResponse response = syncAccountService.syncAccountsLoad(1L);
             //then
             assertAll(
-                    () -> assertEquals(2, response.syncAccountsDetail().size(), "연동 계좌 목록의 크기가 예상과 다릅니다."),
-                    () -> assertEquals("test1", response.syncAccountsDetail().get(0).uuid(), "첫 번쨰 연동 계좌가 예상과 다릅니다.")
+                () -> assertEquals(2, response.syncAccountsDetail().size(), "연동 계좌 목록의 크기가 예상과 다릅니다."),
+                () -> assertEquals("test1", response.syncAccountsDetail().get(0).uuid(), "첫 번쨰 연동 계좌가 예상과 다릅니다.")
             );
             verify(syncAccountRepository, times(1)).memberSyncAccountsLoad(1L);
         }
@@ -100,30 +100,30 @@ class SyncAccountServiceImplTest {
         @BeforeEach
         void setUp() {
             member = Member.builder()
-                    .gender(Gender.MALE)
-                    .nickname("TestUser")
-                    .uuid("TestUser")
-                    .birth(LocalDate.now())
-                    .build();
+                .gender(Gender.MALE)
+                .nickname("TestUser")
+                .uuid("TestUser")
+                .birth(LocalDate.now())
+                .build();
             ReflectionTestUtils.setField(member, "id", memberId);
             currentMainSyncAccount = SyncAccount.builder()
-                    .uuid("currentMain")
-                    .num("123-123")
-                    .name("currentMain")
-                    .isMain(true)
-                    .member(member)
-                    .build();
+                .uuid("currentMain")
+                .num("123-123")
+                .name("currentMain")
+                .isMain(true)
+                .member(member)
+                .build();
             newMainSyncAccount = SyncAccount.builder()
-                    .uuid("newMain")
-                    .num("456-456")
-                    .name("newMain")
-                    .isMain(false)
-                    .member(member)
-                    .build();
+                .uuid("newMain")
+                .num("456-456")
+                .name("newMain")
+                .isMain(false)
+                .member(member)
+                .build();
             mainSyncAccountUpdateRequest = MainSyncAccountUpdateRequest.builder()
-                    .uuid("newMain")
-                    .pinNum("1234")
-                    .build();
+                .uuid("newMain")
+                .pinNum("1234")
+                .build();
         }
 
         @Test
@@ -131,15 +131,15 @@ class SyncAccountServiceImplTest {
         void mainSyncAccountUpdateSuccess() {
             // given
             given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
-                    .willReturn(Optional.of(currentMainSyncAccount));
+                .willReturn(Optional.of(currentMainSyncAccount));
             given(syncAccountRepository.findByUuid(anyString()))
-                    .willReturn(Optional.of(newMainSyncAccount));
+                .willReturn(Optional.of(newMainSyncAccount));
             // when`
             syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
             // then
             assertAll(
-                    () -> assertFalse(currentMainSyncAccount.getIsMain(), "이전 주계좌가 비활성화 되지 않았습니다."),
-                    () -> assertTrue(newMainSyncAccount.getIsMain(), "새로운 계좌가 주계좌로 설정되지 않았습니다.")
+                () -> assertFalse(currentMainSyncAccount.getIsMain(), "이전 주계좌가 비활성화 되지 않았습니다."),
+                () -> assertTrue(newMainSyncAccount.getIsMain(), "새로운 계좌가 주계좌로 설정되지 않았습니다.")
             );
             verify(syncAccountRepository, times(1)).findByMemberIdAndIsMain(memberId, true);
             verify(syncAccountRepository, times(1)).findByUuid(mainSyncAccountUpdateRequest.uuid());
@@ -150,9 +150,9 @@ class SyncAccountServiceImplTest {
         void newMainSyncAccountEmpty() {
             // given
             given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
-                    .willReturn(Optional.of(currentMainSyncAccount));
+                .willReturn(Optional.of(currentMainSyncAccount));
             given(syncAccountRepository.findByUuid(anyString()))
-                    .willReturn(Optional.empty());
+                .willReturn(Optional.empty());
             // when`& then
             assertThrows(NotFoundException.class, () -> {
                 syncAccountService.mainSyncAccountUpdate(memberId, mainSyncAccountUpdateRequest);
@@ -166,9 +166,9 @@ class SyncAccountServiceImplTest {
         void newMainSyncAccountForbidden() {
             // given
             given(syncAccountRepository.findByMemberIdAndIsMain(anyLong(), eq(true)))
-                    .willReturn(Optional.of(currentMainSyncAccount));
+                .willReturn(Optional.of(currentMainSyncAccount));
             given(syncAccountRepository.findByUuid(anyString()))
-                    .willReturn(Optional.of(newMainSyncAccount));
+                .willReturn(Optional.of(newMainSyncAccount));
             // when`& then
             assertThrows(ForbiddenException.class, () -> {
                 syncAccountService.mainSyncAccountUpdate(2L, mainSyncAccountUpdateRequest);
@@ -187,26 +187,26 @@ class SyncAccountServiceImplTest {
         @BeforeEach
         void setUp() {
             member = Member.builder()
-                    .gender(Gender.MALE)
-                    .nickname("TestUser")
-                    .uuid("TestUser")
-                    .birth(LocalDate.now())
-                    .build();
+                .gender(Gender.MALE)
+                .nickname("TestUser")
+                .uuid("TestUser")
+                .birth(LocalDate.now())
+                .build();
             TwinkleBankAccountsDetail bankAccount1 = TwinkleBankAccountsDetail.builder()
-                    .uuid("TestAccount1")
-                    .balance(3.0)
-                    .name("TestAccount1")
-                    .num("123-123")
-                    .build();
+                .uuid("TestAccount1")
+                .balance(3.0)
+                .name("TestAccount1")
+                .num("123-123")
+                .build();
             TwinkleBankAccountsDetail bankAccount2 = TwinkleBankAccountsDetail.builder()
-                    .uuid("TestAccount2")
-                    .balance(3.0)
-                    .name("TestAccount2")
-                    .num("456-456")
-                    .build();
+                .uuid("TestAccount2")
+                .balance(3.0)
+                .name("TestAccount2")
+                .num("456-456")
+                .build();
             twinkleBankAccountsLoadResponse = TwinkleBankAccountsLoadResponse.builder()
-                    .twinkleBankAccountsDetails(List.of(bankAccount1, bankAccount2))
-                    .build();
+                .twinkleBankAccountsDetails(List.of(bankAccount1, bankAccount2))
+                .build();
         }
 
         @Test
@@ -234,24 +234,24 @@ class SyncAccountServiceImplTest {
         @BeforeEach
         void setUp() {
             pinVerifyRequest = PinVerifyRequest.builder()
-                    .pinNum("1234")
-                    .build();
+                .pinNum("1234")
+                .build();
             syncAccountSaveRequest = SyncAccountSaveRequest.builder()
-                    .pinNum("test")
-                    .bankAccountUuid("test")
-                    .isMain(false)
-                    .build();
+                .pinNum("test")
+                .bankAccountUuid("test")
+                .isMain(false)
+                .build();
             twinkleAccountSyncResponse = TwinkleAccountSyncResponse.builder()
-                    .accountName("test")
-                    .accountNum("test")
-                    .accountUuid("test")
-                    .build();
+                .accountName("test")
+                .accountNum("test")
+                .accountUuid("test")
+                .build();
             member = Member.builder()
-                    .gender(Gender.MALE)
-                    .nickname("TestUser")
-                    .uuid("TestUser")
-                    .birth(LocalDate.now())
-                    .build();
+                .gender(Gender.MALE)
+                .nickname("TestUser")
+                .uuid("TestUser")
+                .birth(LocalDate.now())
+                .build();
         }
 
         @Test
@@ -293,25 +293,25 @@ class SyncAccountServiceImplTest {
         @BeforeEach
         void setUp() {
             pinVerifyRequest = PinVerifyRequest.builder()
-                    .pinNum("1234")
-                    .build();
+                .pinNum("1234")
+                .build();
             syncAccountDeleteRequest = SyncAccountDeleteRequest.builder()
-                    .pinNum("test")
-                    .bankAccountUuid("test")
-                    .build();
+                .pinNum("test")
+                .bankAccountUuid("test")
+                .build();
             member = Member.builder()
-                    .gender(Gender.MALE)
-                    .nickname("TestUser")
-                    .uuid("TestUser")
-                    .birth(LocalDate.now())
-                    .build();
+                .gender(Gender.MALE)
+                .nickname("TestUser")
+                .uuid("TestUser")
+                .birth(LocalDate.now())
+                .build();
             syncAccount = SyncAccount.builder()
-                    .uuid("newMain")
-                    .num("456-456")
-                    .name("newMain")
-                    .isMain(false)
-                    .member(member)
-                    .build();
+                .uuid("newMain")
+                .num("456-456")
+                .name("newMain")
+                .isMain(false)
+                .member(member)
+                .build();
             ReflectionTestUtils.setField(member, "id", memberId);
         }
 

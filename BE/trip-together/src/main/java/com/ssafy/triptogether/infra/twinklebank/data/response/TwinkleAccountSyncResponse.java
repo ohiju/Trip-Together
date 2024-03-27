@@ -5,11 +5,11 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleAccountSyncResponse(
-        @JsonProperty("account_uuid")
-        String accountUuid,
-        @JsonProperty("account_num")
-        String accountNum,
-        @JsonProperty("account_name")
-        String accountName
+    @JsonProperty("account_uuid")
+    String accountUuid,
+    @JsonProperty("account_num")
+    String accountNum,
+    @JsonProperty("account_name")
+    String accountName
 ) {
 }

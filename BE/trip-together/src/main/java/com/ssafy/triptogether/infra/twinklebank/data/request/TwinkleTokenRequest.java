@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record TwinkleTokenRequest(
-        @NotBlank @JsonProperty("secret_key")
-        String secretKey
+    @NotBlank @JsonProperty("secret_key")
+    String secretKey
 ) {
 }

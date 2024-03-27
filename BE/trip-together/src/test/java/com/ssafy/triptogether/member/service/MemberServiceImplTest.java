@@ -33,11 +33,11 @@ class MemberServiceImplTest {
         // given
         long undefinedId = 1L;
         ProfileUpdateRequest request
-                = new ProfileUpdateRequest("/S3/profile/1", "멍멍이", "자유로운 영혼");
+            = new ProfileUpdateRequest("/S3/profile/1", "멍멍이", "자유로운 영혼");
 
         // when
         NotFoundException exception
-                = assertThrows(NotFoundException.class, () -> memberService.updateProfile(undefinedId, request));
+            = assertThrows(NotFoundException.class, () -> memberService.updateProfile(undefinedId, request));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.FindByMemberId");
@@ -52,7 +52,7 @@ class MemberServiceImplTest {
 
         // when
         NotFoundException exception
-                = assertThrows(NotFoundException.class, () -> memberService.findProfile(undefinedId));
+            = assertThrows(NotFoundException.class, () -> memberService.findProfile(undefinedId));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.ProfileFind");
@@ -69,7 +69,7 @@ class MemberServiceImplTest {
 
         // when
         ValidationException exception
-                = assertThrows(ValidationException.class, () -> memberService.savePin(memberId, request));
+            = assertThrows(ValidationException.class, () -> memberService.savePin(memberId, request));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.InValid.PinSave");
@@ -86,7 +86,7 @@ class MemberServiceImplTest {
 
         // when
         NotFoundException exception
-                = assertThrows(NotFoundException.class, () -> memberService.savePin(undefinedId, request));
+            = assertThrows(NotFoundException.class, () -> memberService.savePin(undefinedId, request));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.FindByMemberId");
@@ -103,7 +103,7 @@ class MemberServiceImplTest {
 
         // when
         ValidationException exception
-                = assertThrows(ValidationException.class, () -> memberService.updatePin(memberId, pinVerifyRequest, request));
+            = assertThrows(ValidationException.class, () -> memberService.updatePin(memberId, pinVerifyRequest, request));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.InValid.PinUpdate");
@@ -121,7 +121,7 @@ class MemberServiceImplTest {
 
         // when
         NotFoundException exception
-                = assertThrows(NotFoundException.class, () -> memberService.updatePin(undefinedId, pinVerifyRequest, request));
+            = assertThrows(NotFoundException.class, () -> memberService.updatePin(undefinedId, pinVerifyRequest, request));
 
         // then
         assertThat(exception.getMessageKey()).isEqualTo("error.NotFound.FindByMemberId");
