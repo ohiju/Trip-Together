@@ -1,5 +1,5 @@
 import React from 'react';
-import bankAccounts, {bankAccount} from '../assets/data/bankAccount';
+import {bankAccount} from '../assets/data/bankAccount';
 import ExchangeOption from '../components/myPage/exchange/ExchangeOption';
 import SyncOption from '../components/myPage/sync/SyncOption';
 import {RootState} from '../store';
@@ -10,24 +10,32 @@ interface AppOption<T> {
   data: T;
 }
 
-const syncOptions: AppOption<bankAccount>[] = bankAccounts.map(account => {
-  return {
-    node: <SyncOption account={account} />,
-    data: account,
-  };
-});
+const useSyncOptions = () => {
+  const bankAccounts = useAppSelector(
+    (state: RootState) => state.account.bank_accounts,
+  );
+
+  const syncOptions: AppOption<bankAccount>[] = bankAccounts.map(account => {
+    return {
+      node: <SyncOption account={account} />,
+      data: account,
+    };
+  });
+
+  return syncOptions;
+};
 
 const useExchangeOptions = (): AppOption<bankAccount>[] => {
   const syncAccounts = useAppSelector(
-    (state: RootState) => state.user.sync_accounts,
+    (state: RootState) => state.account.sync_accounts,
   );
-
-  // 계좌 목록 조화 API
-  const bank_data = bankAccounts;
+  const bankAccounts = useAppSelector(
+    (state: RootState) => state.account.bank_accounts,
+  );
 
   const exchangeOptions = syncAccounts
     .map(account => {
-      const data = bank_data.find(
+      const data = bankAccounts.find(
         bank_account => bank_account.account_uuid === account.account_uuid,
       );
 
@@ -43,5 +51,5 @@ const useExchangeOptions = (): AppOption<bankAccount>[] => {
   return exchangeOptions;
 };
 
-export {syncOptions, useExchangeOptions};
+export {useExchangeOptions, useSyncOptions};
 export type {AppOption};

@@ -1,11 +1,13 @@
 import {
   NavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Alert} from 'react-native';
+import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
 import {bankAccount} from '../../../assets/data/bankAccount';
 import AppButton from '../../../components/common/AppButton';
 import AppSelect from '../../../components/common/AppSelect';
@@ -23,8 +25,9 @@ import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeSta
 import {Wrapper} from './ExchangeSelectSyncStyle';
 
 const ExchangeSelectSync = () => {
-  const [account, setAccount] = useState<bankAccount | null>(null);
+  const getBankAccounts = useGetBankAccounts();
   const exchangeOptions = useExchangeOptions();
+  const [account, setAccount] = useState<bankAccount | null>(null);
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<ExchangeStackParams>>();
@@ -37,6 +40,10 @@ const ExchangeSelectSync = () => {
     }
     navigation.navigate('ExchangeInput', {account, currency});
   };
+
+  useFocusEffect(() => {
+    getBankAccounts();
+  });
 
   return (
     <Wrapper>

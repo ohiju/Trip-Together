@@ -2,28 +2,29 @@ import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
 import getToken from '../../hooks/getToken';
-import {tripAccount} from '../../interfaces/states/UserState';
+import {member} from '../../interfaces/states/UserState';
 import {useAppDispatch} from '../../store/hooks';
-import {setTripAccounts} from '../../store/slices/user';
+import {setMember} from '../../store/slices/user';
 import useAxois from '../useAxois';
 
-interface GetTripAccountsResponse {
-  status: number;
-  message: string;
-  data: {
-    trip_accounts: tripAccount[];
-  };
+interface GetMemberParams {
+  member_id: number;
 }
 
-const useGetTripAccounts = () => {
+interface GetMemberResponse {
+  status: number;
+  message: string;
+  data: member;
+}
+
+const useGetMember = () => {
   const axios = useAxois();
   const dispatch = useAppDispatch();
 
-  const getTripAccountsConfig = async () => {
+  const getMemberConfig = async ({member_id}: GetMemberParams) => {
     const {access_token} = await getToken();
-
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/account/v1/trip-account/trip-accounts`,
+      url: `${TRIP_API_URL}/api/member/v1/members/${member_id}`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -33,11 +34,11 @@ const useGetTripAccounts = () => {
     return axiosConfig;
   };
 
-  const getTripAccounts = async () => {
+  const getMember = async (params: GetMemberParams) => {
     const result = await axios
-      .request(await getTripAccountsConfig())
-      .then((res: AxiosResponse<GetTripAccountsResponse>) => {
-        dispatch(setTripAccounts(res.data.data.trip_accounts));
+      .request(await getMemberConfig(params))
+      .then((res: AxiosResponse<GetMemberResponse>) => {
+        dispatch(setMember(res.data.data));
       })
       .catch((err: AxiosError) => {
         Alert.alert(err.message);
@@ -46,7 +47,7 @@ const useGetTripAccounts = () => {
     return result;
   };
 
-  return getTripAccounts;
+  return getMember;
 };
 
-export default useGetTripAccounts;
+export default useGetMember;

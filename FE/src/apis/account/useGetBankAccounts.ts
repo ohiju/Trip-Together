@@ -1,29 +1,29 @@
 import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
+import {bankAccount} from '../../assets/data/bankAccount';
 import getToken from '../../hooks/getToken';
-import {tripAccount} from '../../interfaces/states/UserState';
 import {useAppDispatch} from '../../store/hooks';
-import {setTripAccounts} from '../../store/slices/user';
+import {setBankAccounts} from '../../store/slices/user';
 import useAxois from '../useAxois';
 
-interface GetTripAccountsResponse {
+interface GetBankAccountsResponse {
   status: number;
   message: string;
   data: {
-    trip_accounts: tripAccount[];
+    accounts: bankAccount[];
   };
 }
 
-const useGetTripAccounts = () => {
+const useGetBankAccounts = () => {
   const axios = useAxois();
   const dispatch = useAppDispatch();
 
-  const getTripAccountsConfig = async () => {
+  const getBankAccountsConfig = async () => {
     const {access_token} = await getToken();
 
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/account/v1/trip-account/trip-accounts`,
+      url: `${TRIP_API_URL}/api/account/v1/sync-account/bank-accounts`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -33,11 +33,11 @@ const useGetTripAccounts = () => {
     return axiosConfig;
   };
 
-  const getTripAccounts = async () => {
+  const getBankAccounts = async () => {
     const result = await axios
-      .request(await getTripAccountsConfig())
-      .then((res: AxiosResponse<GetTripAccountsResponse>) => {
-        dispatch(setTripAccounts(res.data.data.trip_accounts));
+      .request(await getBankAccountsConfig())
+      .then((res: AxiosResponse<GetBankAccountsResponse>) => {
+        dispatch(setBankAccounts(res.data.data.accounts));
       })
       .catch((err: AxiosError) => {
         Alert.alert(err.message);
@@ -46,7 +46,7 @@ const useGetTripAccounts = () => {
     return result;
   };
 
-  return getTripAccounts;
+  return getBankAccounts;
 };
 
-export default useGetTripAccounts;
+export default useGetBankAccounts;

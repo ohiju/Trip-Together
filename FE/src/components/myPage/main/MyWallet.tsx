@@ -22,14 +22,16 @@ import NoAccount from './NoAccount';
 
 const MyWallet = () => {
   const tripAccounts = useAppSelector(
-    (state: RootState) => state.user.trip_accounts,
+    (state: RootState) => state.account.trip_accounts,
   );
-  const syncs = useAppSelector((state: RootState) => state.user.sync_accounts);
+  const syncAccounts = useAppSelector(
+    (state: RootState) => state.account.sync_accounts,
+  );
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const checkSyncs = () => {
-    if (syncs?.length) {
+    if (syncAccounts?.length) {
       return true;
     }
     return false;

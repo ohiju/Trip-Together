@@ -1,8 +1,8 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import NotYet from '../assets/data/NotYet';
 import AddButton from '../components/myPage/syncManage/AddButton';
-import { MyPageStackParams } from '../interfaces/router/myPage/MyPageStackParams';
+import {MyPageStackParams} from '../interfaces/router/myPage/MyPageStackParams';
 import CardHistory from '../pages/myPage/CardHistory';
 import CardManage from '../pages/myPage/CardManage';
 import MyMain from '../pages/myPage/MyMain';
@@ -15,6 +15,7 @@ import ExchangeSelectSync from '../pages/myPage/exchange/ExchangeSelectSync';
 import PinConfirm from '../pages/myPage/pin/PinConfirm';
 import PinMain from '../pages/myPage/pin/PinMain';
 import PinRegist from '../pages/myPage/pin/PinRegist';
+import ProfileEdit from '../pages/myPage/profile/ProfileEdit';
 import ProfileMain from '../pages/myPage/profile/ProfileMain';
 import SyncComplete from '../pages/myPage/sync/SyncComplete';
 import SyncConfirm from '../pages/myPage/sync/SyncConfirm';
@@ -69,7 +70,11 @@ const MyPageNavigator = () => {
         <MyPageStack.Screen name="SyncMain" component={SyncMain} />
         <MyPageStack.Screen name="SyncSelect" component={SyncSelect} />
         <MyPageStack.Screen name="SyncConfirm" component={SyncConfirm} />
-        <MyPageStack.Screen name="SyncComplete" component={SyncComplete} />
+        <MyPageStack.Screen
+          name="SyncComplete"
+          component={SyncComplete}
+          options={{headerLeft: () => null}}
+        />
       </MyPageStack.Group>
       <MyPageStack.Group
         screenOptions={{title: '환전 하기', headerTitleAlign: 'center'}}>
@@ -97,7 +102,7 @@ const MyPageNavigator = () => {
         />
         <MyPageStack.Screen
           name="ProfileEdit"
-          component={NotYet}
+          component={ProfileEdit}
           options={{title: '프로필 수정'}}
         />
         <MyPageStack.Screen

@@ -17,18 +17,18 @@ import {
 } from './ExchangeSearchStyle';
 
 const ExchangeSearch = () => {
-  // 탭바 숨기기
-  const dispatch = useAppDispatch();
-  useFocusEffect(() => {
-    dispatch(setDisplay(false));
-  });
-
   // 검색
   const [keyword, setKeyword] = useState('');
   const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     const value = e.nativeEvent.text;
     setKeyword(value);
   };
+
+  // 탭바 숨기기
+  const dispatch = useAppDispatch();
+  useFocusEffect(() => {
+    dispatch(setDisplay(false));
+  });
 
   return (
     <Wrapper>

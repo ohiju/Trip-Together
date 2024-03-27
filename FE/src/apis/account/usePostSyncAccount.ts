@@ -1,6 +1,7 @@
 import {TRIP_API_URL} from '@env';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {AxiosError, RawAxiosRequestConfig} from 'axios';
+import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {Alert, ToastAndroid} from 'react-native';
 import getToken from '../../hooks/getToken';
 import {SyncStackParams} from '../../interfaces/router/myPage/SyncStackParams';
 import useAxois from '../useAxois';
@@ -9,6 +10,12 @@ interface PostSyncAccountData {
   pin_num: string;
   is_main: 0 | 1;
   account_uuid: string;
+}
+
+interface PostSyncAccountResponse {
+  status: number;
+  message: string;
+  data: null;
 }
 
 const usePostSyncAccount = () => {
@@ -32,11 +39,12 @@ const usePostSyncAccount = () => {
   const postSyncAccount = async (data: PostSyncAccountData) => {
     const result = await axios
       .request(await postSyncAccountConfig(data))
-      .then(() => {
+      .then((res: AxiosResponse<PostSyncAccountResponse>) => {
         navigation.navigate('SyncComplete');
+        ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;

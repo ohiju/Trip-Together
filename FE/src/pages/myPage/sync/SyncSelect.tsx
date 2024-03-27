@@ -1,10 +1,10 @@
-import {
-  NavigationProp,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Alert, ToastAndroid} from 'react-native';
+import {Alert} from 'react-native';
+import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
+import useOneTransfer, {
+  OneTransferData,
+} from '../../../apis/account/useOneTransfer';
 import {bankAccount} from '../../../assets/data/bankAccount';
 import AppButton from '../../../components/common/AppButton';
 import AppSelect from '../../../components/common/AppSelect';
@@ -17,21 +17,25 @@ import {
   TitleView,
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
-import {syncOptions} from '../../../constants/AppSelectOptions';
-import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
+import {useSyncOptions} from '../../../constants/AppSelectOptions';
 import {RootState} from '../../../store';
-import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {setDisplay} from '../../../store/slices/tabState';
+import {useAppSelector} from '../../../store/hooks';
 import {Wrapper} from './SyncSelectStyle';
 
 const SyncSelect = () => {
+  const syncOptions = useSyncOptions();
+  const getBankAccounts = useGetBankAccounts();
+  const oneTransfer = useOneTransfer();
+
   // 데이터
   const [selected, setSelected] = useState<bankAccount | null>(null);
 
-  // 유효성 검사
-  const synced = useAppSelector((state: RootState) => state.user.sync_accounts);
+  // 유효성
+  const syncAccounts = useAppSelector(
+    (state: RootState) => state.account.sync_accounts,
+  );
   const checkValid = (target: bankAccount) => {
-    for (const account of synced) {
+    for (const account of syncAccounts) {
       if (account.account_uuid === target.account_uuid) {
         Alert.alert('이미 등록된 계좌입니다.');
         return false;
@@ -41,12 +45,15 @@ const SyncSelect = () => {
   };
 
   // 라우팅
-  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
-  const oneTransfer = () => {
-    if (!selected) return;
-    // 1원 전송 api
-    navigation.navigate('SyncConfirm', {selected});
-    ToastAndroid.show('1원이 송금되었습니다.', ToastAndroid.SHORT);
+  const pressContinue = () => {
+    if (!selected) {
+      Alert.alert('계좌를 선택해주세요.');
+      return;
+    }
+    const data: OneTransferData = {
+      account_uuid: selected.account_uuid,
+    };
+    oneTransfer(data, selected);
   };
   const handleToNext = () => {
     if (!selected) {
@@ -56,7 +63,7 @@ const SyncSelect = () => {
     Alert.alert('해당 계좌로 1원이 송금됩니다', '계속 하시겠습니까?', [
       {
         text: '계속',
-        onPress: oneTransfer,
+        onPress: pressContinue,
       },
       {
         text: '취소',
@@ -64,10 +71,8 @@ const SyncSelect = () => {
     ]);
   };
 
-  // 탭바
-  const dispatch = useAppDispatch();
   useFocusEffect(() => {
-    dispatch(setDisplay(false));
+    getBankAccounts();
   });
 
   return (
