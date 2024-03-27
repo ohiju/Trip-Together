@@ -45,9 +45,10 @@ public class Settlement extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Settlement(Double totalPrice, Integer attendanceCount, FlashMob flashMob) {
+    public Settlement(Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
         this.totalPrice = totalPrice;
         this.attendanceCount = attendanceCount;
+        this.currencyCode = currencyCode;
         setFlashMob(flashMob);
     }
 
