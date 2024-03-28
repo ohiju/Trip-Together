@@ -1,7 +1,7 @@
 package com.ssafy.triptogether.auth.service;
 
+import com.ssafy.triptogether.auth.data.response.MemberInfo;
 import static com.ssafy.triptogether.global.data.response.StatusCode.*;
-
 import com.ssafy.triptogether.auth.data.response.TokenInfo;
 import com.ssafy.triptogether.auth.data.response.TokenResponse;
 import com.ssafy.triptogether.auth.provider.CookieProvider;
@@ -78,21 +78,23 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 		Long expiresIn = (Long)claims.get("expiresIn");
 		Boolean isPin = member.getPinNum() != null;
 
-		System.out.println(createdAt + " " + expiresIn);
-
 		TokenInfo tokenInfo = TokenInfo.builder()
-			.accessToken(tripTokenMap.get("access"))
+			.accessToken(tripTokenMap.get("access").substring(7))
 			.createdAt(createdAt)
 			.expiresIn(expiresIn)
 			.build();
 
-		TokenResponse response = TokenResponse.builder()
+		MemberInfo memberInfo = MemberInfo.builder()
 			.memberId(member.getId())
 			.username(member.getUsername())
 			.nickname(member.getNickname())
 			.imageUrl(member.getImageUrl())
 			.description(member.getDescription())
 			.isPin(isPin)
+			.build();
+
+		TokenResponse response = TokenResponse.builder()
+			.memberInfo(memberInfo)
 			.tokenInfo(tokenInfo)
 			.build();
 

@@ -23,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.http.HttpStatus.OK;
 
 import java.util.List;
 
@@ -89,8 +88,8 @@ public class AttractionController {
         @RequestBody FlashmobCreateRequest flashmobCreateRequest
     ) {
         long memberId = securityMember.getId();
-        attractionSaveService.createFlashmob(memberId, attractionId, flashmobCreateRequest);
-        return null;
+        long flashmobId = attractionSaveService.createFlashmob(memberId, attractionId, flashmobCreateRequest);
+        return ApiResponse.toResponseEntity(CREATED, SUCCESS_CREATE_FLASHMOB, flashmobId);
     }
 
     @PatchMapping("/{attraction_id}/flashmobs/{flashmob_id}")
