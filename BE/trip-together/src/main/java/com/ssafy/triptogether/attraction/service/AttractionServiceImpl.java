@@ -85,13 +85,6 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 			.build();
 	}
 
-	@Transactional
-	@Override
-	public FlashmobUpdateResponse updateFlashmob(long flashmobId, FlashmobUpdateRequest flashmobUpdateRequest) {
-		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
-		flashMob.update(flashmobUpdateRequest);
-		return FlashmobUpdateResponse.builder().flashmobId(flashmobId).build();
-	}
     @Transactional
     @Override
     public FlashmobUpdateResponse updateFlashmob(long flashmobId, FlashmobUpdateRequest flashmobUpdateRequest) {

@@ -6,7 +6,6 @@ import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindRespo
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
-import com.ssafy.triptogether.plan.data.response.AttractionDetailFindResponse;
 
 public interface AttractionLoadService {
 	AttractionDetailFindResponse findAttractionDetail(long attractionId);
