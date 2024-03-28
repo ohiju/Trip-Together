@@ -2,6 +2,7 @@ package com.ssafy.triptogether.flashmob.service;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
+import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
@@ -73,7 +74,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
         memberFlashMobRepository.delete(memberFlashMob);
     }
 
-    // TODO: 해당 사용자에게 메시지 큐 연결
+    // TODO: 해당 사용자에게 메시지 큐 연분
     @Transactional
     @Override
     public boolean applyFlashmob(
@@ -94,6 +95,22 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
             throw new BadRequestException("applyFlashmob", BAD_STATUS_REQUEST, applyFlashmobRequest.status());
         }
         return false;
+    }
+
+    @Override
+    public void exitFlashmob(SecurityMember securityMember, long flashmobId) {
+        long memberCnt = memberFlashMobRepository.countMemberFlashMobsByFlashMob_Id(flashmobId);
+        if (memberCnt == 1L) {
+            flashMobRepository.deleteById(flashmobId);
+            return;
+        }
+
+        boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, securityMember.getId());
+        if (isMaster) {
+            MemberFlashMob memberFlashMob = memberFlashMobRepository.findAMemberFlashMob(flashmobId);
+            // 다른 멤버 찾아서 방장으로 바꿈
+        }
+        // 멤버를 repo.delete
     }
 
     @Override
