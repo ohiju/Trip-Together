@@ -2,9 +2,9 @@ import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
 import getToken from '../../hooks/getToken';
-import {syncAccount} from '../../interfaces/states/UserState';
+import {syncAccount} from '../../interfaces/states/AccountState';
 import {useAppDispatch} from '../../store/hooks';
-import {setSyncAccounts} from '../../store/slices/user';
+import {setSyncAccounts} from '../../store/slices/account';
 import useAxois from '../useAxois';
 
 interface GetSyncAccountsResponse {

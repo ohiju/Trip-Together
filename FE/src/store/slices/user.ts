@@ -1,25 +1,35 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {UserState, member, user} from '../../interfaces/states/UserState';
+import {
+  UserState,
+  member,
+  putData,
+  user,
+} from '../../interfaces/states/UserState';
 
 const initialState: UserState = {
-  isLogin: true,
+  isLogin: false,
   user: {
-    member_id: -1,
-    username: 'Username',
-    nickname: '',
+    member_id: 0,
+    username: 'default',
+    nickname: 'default',
     image_url: '',
-    description: '',
-    is_pin: true,
+    description: 'default',
+    is_pin: false,
   },
   member: {
-    member_id: -1,
+    member_id: 0,
     image_url: '',
-    nickname: '',
-    description: '',
-    gender: '',
+    nickname: 'default',
+    description: 'default',
+    gender: 'MALE',
     birth: '',
     created_at: '',
-    username: '',
+    username: 'default',
+  },
+  putData: {
+    imgConfig: undefined,
+    nickname: '',
+    description: '',
   },
 };
 
@@ -39,9 +49,16 @@ export const userSlice = createSlice({
     setMember: (state, action: PayloadAction<member>) => {
       state.member = action.payload;
     },
+    setPutData: (state, action: PayloadAction<putData>) => {
+      state.putData = {
+        ...state.putData,
+        ...action.payload,
+      };
+    },
   },
 });
 
-export const {setLogin, setUser, setPin, setMember} = userSlice.actions;
+export const {setLogin, setUser, setPin, setMember, setPutData} =
+  userSlice.actions;
 
 export default userSlice.reducer;

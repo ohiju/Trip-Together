@@ -10,6 +10,7 @@ interface IconPath {
   info: ImageSourcePropType;
   lock: ImageSourcePropType;
   plane: ImageSourcePropType;
+  pen: ImageSourcePropType;
   plus: ImageSourcePropType;
   search: ImageSourcePropType;
   shield: ImageSourcePropType;
@@ -26,6 +27,7 @@ export const iconPath: IconPath = {
   coin: require('./coin.svg'),
   info: require('./info.svg'),
   lock: require('./lock.svg'),
+  pen: require('./pen.svg'),
   plane: require('./plane.svg'),
   plus: require('./plus_round.svg'),
   search: require('./search.svg'),

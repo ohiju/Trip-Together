@@ -1,5 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {bankAccount} from '../../assets/data/bankAccount';
+import {bankAccount} from '../../interfaces/bankAccount';
 import {AccountState} from '../../interfaces/states/AccountState';
 import {syncAccount, tripAccount} from '../../interfaces/states/UserState';
 

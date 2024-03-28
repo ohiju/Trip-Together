@@ -1,4 +1,4 @@
-import {bankAccount} from '../../assets/data/bankAccount';
+import {bankAccount} from '../bankAccount';
 
 interface syncAccount {
   account_uuid: string;

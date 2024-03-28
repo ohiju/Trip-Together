@@ -8,7 +8,6 @@ import {
 import React, {useState} from 'react';
 import {Alert} from 'react-native';
 import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
-import {bankAccount} from '../../../assets/data/bankAccount';
 import AppButton from '../../../components/common/AppButton';
 import AppSelect from '../../../components/common/AppSelect';
 import {
@@ -21,6 +20,7 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {useExchangeOptions} from '../../../constants/AppSelectOptions';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
 import {Wrapper} from './ExchangeSelectSyncStyle';
 

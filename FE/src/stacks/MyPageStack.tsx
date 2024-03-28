@@ -15,6 +15,7 @@ import ExchangeSelectSync from '../pages/myPage/exchange/ExchangeSelectSync';
 import PinConfirm from '../pages/myPage/pin/PinConfirm';
 import PinMain from '../pages/myPage/pin/PinMain';
 import PinRegist from '../pages/myPage/pin/PinRegist';
+import EditCompleteBtn from '../components/myPage/profile/EditCompleteBtn';
 import ProfileEdit from '../pages/myPage/profile/ProfileEdit';
 import ProfileMain from '../pages/myPage/profile/ProfileMain';
 import SyncComplete from '../pages/myPage/sync/SyncComplete';
@@ -103,7 +104,7 @@ const MyPageNavigator = () => {
         <MyPageStack.Screen
           name="ProfileEdit"
           component={ProfileEdit}
-          options={{title: '프로필 수정'}}
+          options={{title: '프로필 수정', headerRight: EditCompleteBtn}}
         />
         <MyPageStack.Screen
           name="ProfileTrip"

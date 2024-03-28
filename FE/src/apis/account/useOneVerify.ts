@@ -28,7 +28,7 @@ const useOneVerify = () => {
   const oneVerifyConfig = async (data: OneVerifyData) => {
     const {access_token} = await getToken();
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/account/v1/bank-accounts/1wonverify`,
+      url: `${TRIP_API_URL}/api/account/v1/sync-account/1wonverify`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${access_token}`,

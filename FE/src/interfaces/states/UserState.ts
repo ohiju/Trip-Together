@@ -1,3 +1,5 @@
+import {Asset} from 'react-native-image-picker';
+
 interface user {
   member_id: number;
   username: string;
@@ -12,16 +14,23 @@ interface member {
   image_url: string;
   nickname: string;
   description: string;
-  gender: 'F' | 'M' | '';
+  gender: 'FEMALE' | 'MALE';
   birth: string;
   created_at: string;
   username: string;
+}
+
+interface putData {
+  imgConfig?: Asset;
+  nickname?: string;
+  description?: string;
 }
 
 interface UserState {
   isLogin: boolean;
   user: user;
   member: member;
+  putData: putData;
 }
 
-export type {UserState, member, user};
+export type {UserState, member, putData, user};

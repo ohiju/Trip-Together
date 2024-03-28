@@ -1,7 +1,7 @@
 import React from 'react';
-import {bankAccount} from '../assets/data/bankAccount';
 import ExchangeOption from '../components/myPage/exchange/ExchangeOption';
 import SyncOption from '../components/myPage/sync/SyncOption';
+import {bankAccount} from '../interfaces/bankAccount';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 

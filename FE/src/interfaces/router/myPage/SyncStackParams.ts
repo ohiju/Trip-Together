@@ -1,5 +1,5 @@
 import {ParamListBase} from '@react-navigation/native';
-import {bankAccount} from '../../../assets/data/bankAccount';
+import {bankAccount} from '../../bankAccount';
 
 interface SyncConfirmProps {
   selected: bankAccount;

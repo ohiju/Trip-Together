@@ -23,6 +23,7 @@ const useGetMember = () => {
 
   const getMemberConfig = async ({member_id}: GetMemberParams) => {
     const {access_token} = await getToken();
+
     const axiosConfig: RawAxiosRequestConfig = {
       url: `${TRIP_API_URL}/api/member/v1/members/${member_id}`,
       method: 'get',
@@ -38,6 +39,8 @@ const useGetMember = () => {
     const result = await axios
       .request(await getMemberConfig(params))
       .then((res: AxiosResponse<GetMemberResponse>) => {
+        console.log(res.data);
+
         dispatch(setMember(res.data.data));
       })
       .catch((err: AxiosError) => {

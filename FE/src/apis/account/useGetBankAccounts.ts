@@ -1,10 +1,10 @@
 import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
-import {bankAccount} from '../../assets/data/bankAccount';
 import getToken from '../../hooks/getToken';
+import {bankAccount} from '../../interfaces/bankAccount';
 import {useAppDispatch} from '../../store/hooks';
-import {setBankAccounts} from '../../store/slices/user';
+import {setBankAccounts} from '../../store/slices/account';
 import useAxois from '../useAxois';
 
 interface GetBankAccountsResponse {

@@ -1,11 +1,9 @@
-import {useFocusEffect} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
 import useOneTransfer, {
   OneTransferData,
 } from '../../../apis/account/useOneTransfer';
-import {bankAccount} from '../../../assets/data/bankAccount';
 import AppButton from '../../../components/common/AppButton';
 import AppSelect from '../../../components/common/AppSelect';
 import {
@@ -18,6 +16,7 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {useSyncOptions} from '../../../constants/AppSelectOptions';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
 import {Wrapper} from './SyncSelectStyle';
@@ -71,9 +70,9 @@ const SyncSelect = () => {
     ]);
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     getBankAccounts();
-  });
+  }, []);
 
   return (
     <Wrapper>

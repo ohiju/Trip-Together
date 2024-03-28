@@ -1,22 +1,17 @@
-import {useFocusEffect} from '@react-navigation/native';
 import React from 'react';
-import useGetMember from '../../../apis/member/useGetMember';
+import Editor from '../../../components/myPage/profile/Editor';
+import UserInfo from '../../../components/myPage/profile/UserInfo';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
 import {Wrapper} from './ProfileEditStyle';
 
 const ProfileEdit = () => {
-  const getMember = useGetMember();
-  const {member_id} = useAppSelector((state: RootState) => state.user.user);
-
-  useFocusEffect(() => {
-    getMember({member_id});
-  });
+  const member = useAppSelector((state: RootState) => state.user.member);
 
   return (
     <Wrapper>
-      <></>
-      <></>
+      <Editor member={member} />
+      <UserInfo member={member} />
     </Wrapper>
   );
 };
