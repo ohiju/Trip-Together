@@ -70,18 +70,29 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
     }
 
     @Override
-    public List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude,
-        double latitudeDelta, double longitudeDelta) {
+    public List<AttractionListItemResponse> findAttractionsClick(
+        double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
         double distance = new MysqlNativeSqlCreator().getDistance(
             latitude,
             longitude,
-            latitudeDelta,
-            longitudeDelta
+            latitudeDelta/ 2,
+            longitudeDelta / 2
         );
         return attractionRepository.findAttractionClick(
             latitude,
             longitude,
-            distance
+            distance,
+            category
+        );
+    }
+
+    @Override
+    public List<AttractionListItemResponse> findAttractionsSearch(
+        double latitude, double longitude, String keyword) {
+        return attractionRepository.findAttractionSearch(
+            latitude,
+            longitude,
+            keyword
         );
     }
 }

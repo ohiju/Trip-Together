@@ -74,7 +74,7 @@ public class MemberController {
 	) {
 
 		// 1. client id로 여행이 맞는지 확인 -> application이 없으면 getApplication에서 에러남
-		Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
 
 		// 쿠키에서 refresh token 꺼내기
 		Cookie cookie = cookieProvider.getCookie(request, "refreshToken").orElseThrow(

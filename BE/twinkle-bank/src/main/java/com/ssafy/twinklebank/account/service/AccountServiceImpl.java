@@ -69,7 +69,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         // Account Not Found
         Account account = findAccountByUuid(addAccountRequest.accountUuid());
 
-        Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
+        Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
 
         WithdrawalAgreement withdrawalAgreement = WithdrawalAgreement.builder()
             .account(account)
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     public void deleteLinkedAccount(String clientId, long memberId, AccountDeleteRequest accountDeleteRequest) {
         // find account & application & withdrawal agreement
         Account account = findAccountByUuid(accountDeleteRequest.accountUuid());
-        Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
+        Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
         WithdrawalAgreement withdrawalAgreement = withdrawalAgreementRepository.findByAccountAndApplication(account, application)
                 .orElseThrow(() -> new NotFoundException("LinkedAccountDelete", UNDEFINED_WITHDRAWAL_AGREEMENT));
 
@@ -148,7 +148,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 	@Override
 	public void transfer1won(long memberId, Transfer1wonRequest request) {
 		// client id가 존재하는지 확인
-		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 
 		// account uuid로 계좌 찾기
 		Account account = accountRepository.findAccountByUuid(request.accountUuid())
@@ -177,7 +177,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 	@Override
 	public void verify1won(Verify1wonRequest request) {
 		// client id가 존재하는지 확인
-		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 
 		// account uuid로 계좌 찾기
 		Account account = accountRepository.findAccountByUuid(request.accountUuid())
