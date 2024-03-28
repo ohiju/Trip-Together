@@ -17,6 +17,7 @@ import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
 import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
+import com.ssafy.triptogether.tripaccount.data.request.TripAccountPaymentRequest;
 import com.ssafy.triptogether.tripaccount.data.response.AccountHistoriesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
 import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
@@ -87,7 +88,7 @@ public class TripAccountController {
 		);
 	}
 
-	@PostMapping("/trip-accounts")
+	@PostMapping("/trip-accounts/exchange")
 	public ResponseEntity<ApiResponse<Void>> tripAccountExchange(
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid TripAccountExchangeRequest tripAccountExchangeRequest
@@ -100,6 +101,22 @@ public class TripAccountController {
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_EXCHANGE
+		);
+	}
+
+	@PostMapping("/trip-accounts/pay")
+	public ResponseEntity<ApiResponse<Void>> tripAccountPay(
+		@AuthenticationPrincipal SecurityMember securityMember,
+		@RequestBody @Valid TripAccountPaymentRequest tripAccountPaymentRequest
+	) {
+		long memberId = securityMember.getId();
+		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
+			.pinNum(tripAccountPaymentRequest.pinNum())
+			.build();
+		tripAccountSaveService.tripAccountPay(memberId, pinVerifyRequest, tripAccountPaymentRequest);
+
+		return ApiResponse.emptyResponse(
+			HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_PAY
 		);
 	}
 }
