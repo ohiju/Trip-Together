@@ -61,6 +61,15 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
     }
 
     @Override
+    public void cancelFlashmob(long flashmobId, long memberId) {
+        // find member flashmob
+        MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+
+        // cancel attendance request
+        memberFlashMobRepository.delete(memberFlashMob);
+    }
+
+    @Override
     public AttendingFlashmobListFindResponse findAttendingFlashmobList(long memberId) {
         // find attending flashmobs
         List<AttendingFlashmobFindResponse> elements = flashMobRepository.findAllAttendingFlashmobElementsByMemberId(memberId);
