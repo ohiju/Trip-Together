@@ -42,7 +42,7 @@ public class AttractionController {
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick(
+    public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick (
         @RequestParam double latitude,
         @RequestParam double longitude,
         @RequestParam("latitude_delta") double latitudeDelta,
@@ -54,6 +54,24 @@ public class AttractionController {
                 longitude,
                 latitudeDelta,
                 longitudeDelta
+            );
+        return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
+    }
+
+    // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsSearch (
+        @RequestParam double latitude,
+        @RequestParam double longitude,
+        @RequestParam String category,
+        @RequestParam String keyword
+    ) {
+        List<AttractionListItemResponse> attractionListItemResponseList =
+            attractionLoadService.findAttractionsSearch(
+                latitude,
+                longitude,
+                category,
+                keyword
             );
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
     }
