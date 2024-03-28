@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.util.List;
 
 @RestController
-@RequestMapping("/plan/v1/attractions")
+@RequestMapping("/attraction/v1/attractions")
 @RequiredArgsConstructor
 public class AttractionController {
 
