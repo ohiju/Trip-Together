@@ -10,6 +10,7 @@ import com.ssafy.triptogether.member.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.domain.RoomStatus;
 import com.ssafy.triptogether.member.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.member.repository.MemberRepository;
+import com.ssafy.triptogether.member.utils.MemberFlashmobUtils;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,16 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
         // send chat message
         // TODO: 해당 채팅방에 참가요청에 대한 채팅 메시지 전송
+    }
+
+    @Transactional
+    @Override
+    public void checkDeniedFlashmob(long flashmobId, long memberId) {
+        // find member flashmob
+        MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+
+        // check room status
+        memberFlashMob.checkDenial();
     }
 
     @Override

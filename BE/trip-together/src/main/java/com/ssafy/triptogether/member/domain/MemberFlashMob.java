@@ -53,4 +53,8 @@ public class MemberFlashMob extends BaseEntity {
         this.member = member;
         member.getMemberFlashMobs().add(this);
     }
+
+    public void checkDenial() {
+        this.roomStatus = RoomStatus.REFUSE_CHECK;
+    }
 }

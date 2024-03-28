@@ -35,6 +35,7 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(404, "여행지를 찾을 수 없습니다"),
     // FLASHMOB
     UNDEFINED_FLASHMOB(404, "번개를 찾을 수 없습니다."),
+    UNDEFINED_MEMBER_FLASHMOB(404, "사용자의 번개 참여내역을 찾을 수 없습니다."),
     // AUTH
     UNDEFINED_ACCESS_TOKEN(400, "ACCESS TOKEN 존재하지 않습니다."),
     UNDEFINED_REFRESH_TOKEN(400, "REFRESH TOKEN 존재하지 않습니다."),
