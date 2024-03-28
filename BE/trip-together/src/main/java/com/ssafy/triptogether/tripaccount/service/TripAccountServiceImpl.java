@@ -1,16 +1,5 @@
 package com.ssafy.triptogether.tripaccount.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
@@ -24,12 +13,7 @@ import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.tripaccount.concurrency.DistributedLock;
 import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
-import com.ssafy.triptogether.tripaccount.data.response.AccountHistoriesLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
-import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
-import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.*;
 import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
@@ -37,8 +21,17 @@ import com.ssafy.triptogether.tripaccount.domain.TripAccount;
 import com.ssafy.triptogether.tripaccount.repository.AccountHistoryRepository;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -184,7 +177,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.member(member)
 				.build();
 			tripAccountRepository.save(tripAccount);
-			twinkleBankWithdrawRequest(tripAccountExchangeRequest);
+			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
 			return;
 		}
 
@@ -194,7 +187,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
 		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
-		twinkleBankDepositRequest(tripAccountExchangeRequest);
+		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
@@ -205,8 +198,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 	}
 
-	private void twinkleBankDepositRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankDepositRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
 			.type("deposit")
@@ -216,8 +210,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
 	}
 
-	private void twinkleBankWithdrawRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankWithdrawRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
 			.type("withdraw")

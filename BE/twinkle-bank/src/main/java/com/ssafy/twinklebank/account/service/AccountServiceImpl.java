@@ -1,11 +1,12 @@
 package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.aop.DistributedLock;
-import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.account.data.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
+import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
+import com.ssafy.twinklebank.account.data.response.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
+import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
+import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
@@ -19,6 +20,7 @@ import com.ssafy.twinklebank.application.utils.ApplicationUtils;
 import com.ssafy.twinklebank.auth.provider.CodeProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -67,7 +69,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         // Account Not Found
         Account account = findAccountByUuid(addAccountRequest.accountUuid());
 
-        Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
+        Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
 
         WithdrawalAgreement withdrawalAgreement = WithdrawalAgreement.builder()
             .account(account)
@@ -82,7 +84,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
     public void deleteLinkedAccount(String clientId, long memberId, AccountDeleteRequest accountDeleteRequest) {
         // find account & application & withdrawal agreement
         Account account = findAccountByUuid(accountDeleteRequest.accountUuid());
-        Application application = ApplicationUtils.getApplication(applicationRepository, clientId);
+        Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
         WithdrawalAgreement withdrawalAgreement = withdrawalAgreementRepository.findByAccountAndApplication(account, application)
                 .orElseThrow(() -> new NotFoundException("LinkedAccountDelete", UNDEFINED_WITHDRAWAL_AGREEMENT));
 
@@ -146,7 +148,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 	@Override
 	public void transfer1won(long memberId, Transfer1wonRequest request) {
 		// client id가 존재하는지 확인
-		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 
 		// account uuid로 계좌 찾기
 		Account account = accountRepository.findAccountByUuid(request.accountUuid())
@@ -170,6 +172,30 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
 		// 코드 10분간 저장하기
 		saveCode(request.accountUuid(), code);
+	}
+
+	@Override
+	public void verify1won(Verify1wonRequest request) {
+		// client id가 존재하는지 확인
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
+
+		// account uuid로 계좌 찾기
+		Account account = accountRepository.findAccountByUuid(request.accountUuid())
+			.orElseThrow(
+				() -> new NotFoundException("accountService - transfer1won ", ACCOUNT_NOT_FOUND)
+			);
+
+		String code = redisTemplate.opsForValue().get("1won:"+request.accountUuid());
+
+		// code가 존재하지 않으면
+		if (code == null){
+			throw new NotFoundException("accountServiceImpl : Verify1won " , ONEWON_NOT_FOUND);
+		}
+
+		// code가 일치하지 않으면
+		if (!code.equals(request.code())){
+			throw new UnAuthorizedException("accountServiceImpl : Verify1won ", UNAUTHORIZED_ONEWON);
+		}
 	}
 
 	private Account findAccountByUuid(String accountUuid) {

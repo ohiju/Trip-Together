@@ -40,7 +40,8 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private final ApplicationRepository applicationRepository;
 	private final CodeProvider codeProvider;
 
-	private final long CODE_EXPIRE_TIME = 5 * 60 * 1000L; // 5분
+	// TODO: 인증 코드 유효시간 줄이기
+	private final long CODE_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 5분
 
 	public Map<String, String> getCode(CodeRequest request) {
 		// 	은행 서버는 등록된 `client_id`의 `redirect_url`가 맞는지 검증한다.
@@ -66,7 +67,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	}
 
 	private Application verifyClientAndRedirectUrl(CodeRequest request) {
-		Application application = ApplicationUtils.getApplication(applicationRepository, request.clientId());
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 		if (!application.getRedirectUrl().equals(request.redirectUrl())) {
 			throw new UnAuthorizedException("authController : ", WRONG_CLIENT_ID);
 		}
@@ -85,12 +86,27 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 			.set("memberUuid:" + code, memberUuid, CODE_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 	}
 
-	public Map<String, String> getToken(TokenRequest request) {
+	public Map<String, String> getToken(String code, String clientId, String redirectUrl, TokenRequest request) {
+		// code가 맞는지 확인
+		String memberUuid = redisTemplate.opsForValue().get("memberUuid:"+code);
+		if (memberUuid == null){ // 맞는 코드가 없으면
+			throw new UnAuthorizedException("authServiceImpl : getToken ", UNAUTHORIZED_CODE);
+		}
 
-		Member member = MemberUtils.loadMemberByUserNameAndPassword(memberRepository, passwordEncoder,
-			request.username(), request.password());
+		// 은행인지 확인
+		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
+		if (!redirectUrl.equals(application.getRedirectUrl())){
+			throw new UnAuthorizedException("authServiceImpl : getToken ", WRONG_REDIRECT_URL);
+		}
+
+		if (!request.secretKey().equals(application.getSecretKey())){
+			throw new UnAuthorizedException("authServiceImpl : getToken ", WRONG_SECRET_KEY);
+		}
+
+		Member member = MemberUtils.loadMemberByMemberUuid(memberRepository, memberUuid);
+
 		Authentication authentication =
-			new UsernamePasswordAuthenticationToken(request.username(), request.password(),
+			new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword(),
 				Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
 		Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), member.getUuid(), authentication);

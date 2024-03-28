@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record PinVerifyRequest(
-        @JsonProperty("pin_num")
-        String pinNum
+    @JsonProperty("pin_num")
+    String pinNum
 ) {
 }
