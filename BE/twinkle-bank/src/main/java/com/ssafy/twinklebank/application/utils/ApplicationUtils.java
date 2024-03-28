@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApplicationUtils {
 
-	public static Application getApplication(ApplicationRepository applicationRepository, String clientId) {
+	public static Application loadApplicationByClientId(ApplicationRepository applicationRepository, String clientId) {
 		return applicationRepository.findByClientId(clientId)
 			.orElseThrow(() -> new NotFoundException("ApplicationUtils : ", APPLICATION_NOT_FOUND));
 	}
