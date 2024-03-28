@@ -7,5 +7,5 @@ import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
 public interface AttractionSaveService {
     FlashmobUpdateResponse updateFlashmob(long flashmobId, FlashmobUpdateRequest flashmobUpdateRequest);
 
-	void createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest);
+	long createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest);
 }
