@@ -31,9 +31,9 @@ public class MongoConfig {
     private MongoClientSettings createMongoClientSettings() {
         ConnectionString connectionString = new ConnectionString(uri);
         return MongoClientSettings.builder()
-                .readConcern(ReadConcern.MAJORITY)
-                .writeConcern(WriteConcern.MAJORITY)
-                .applyConnectionString(connectionString)
-                .build();
+            .readConcern(ReadConcern.DEFAULT)
+            .writeConcern(WriteConcern.MAJORITY)
+            .applyConnectionString(connectionString)
+            .build();
     }
 }

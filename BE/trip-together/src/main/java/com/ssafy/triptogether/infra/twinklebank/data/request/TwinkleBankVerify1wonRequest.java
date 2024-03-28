@@ -1,14 +1,17 @@
 package com.ssafy.triptogether.infra.twinklebank.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
-public record TwinkleAccountSyncRequest(
-	@JsonProperty("account_uuid")
+public record TwinkleBankVerify1wonRequest(
+	@NotBlank @JsonProperty("client_id")
+	String clientId,
+	@NotBlank @JsonProperty("account_uuid")
 	String accountUuid,
-	@JsonProperty("uuid")
-	String uuid
+	@NotBlank @JsonProperty("code")
+	String code
 ) {
 }

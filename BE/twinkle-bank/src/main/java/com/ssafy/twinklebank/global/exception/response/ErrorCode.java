@@ -45,6 +45,8 @@ public enum ErrorCode {
 	ALREADY_KAKAO_JOINED(409, "이미 카카오가입을 한 사용자입니다."),
 
 	ACCOUNT_NOT_FOUND(404, "계좌를 찾을 수 없습니다."),
+	ONEWON_NOT_FOUND(404, "발급된 1원 인증코드가 없습니다."),
+	UNAUTHORIZED_ONEWON(401, "유효하지 않은 1원 인증 코드입니다.")
 	;
 
 	private final int status;

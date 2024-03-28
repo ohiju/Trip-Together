@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record CurrenciesLoadResponse(
-        @JsonProperty("currencies")
-        List<CurrenciesLoadDetail> currenciesLoadDetail
+    @JsonProperty("currencies")
+    List<CurrenciesLoadDetail> currenciesLoadDetail
 ) {
 }

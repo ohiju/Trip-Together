@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.MemberFlashMob;
@@ -60,5 +61,11 @@ public class FlashMob extends BaseEntity {
     public void setAttraction(Attraction attraction) {
         this.attraction = attraction;
         attraction.getFlashMobs().add(this);
+    }
+
+    public void update(FlashmobUpdateRequest request) {
+        this.title = request.title();
+        this.startAt = request.startAt();
+        this.maxMemberCount = request.maxMemberCount();
     }
 }

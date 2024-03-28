@@ -45,43 +45,43 @@ public class JwtTokenProvider {
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성
     public Map<String, String> generateToken(Long id, String uuid, Authentication authentication) {
         SecurityMember securityMember = new SecurityMember(
-                id,
-                uuid,
-                String.valueOf(authentication.getPrincipal())
+            id,
+            uuid,
+            String.valueOf(authentication.getPrincipal())
         );
 
         String authorities = securityMember.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
 
 
-		// access token 발급
-		long now = (new Date()).getTime();
-		String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
-			.setSubject(authentication.getName())
-			.claim("created", now)
-			.claim("expiresIn", ACCESS_TOKEN_EXPIRE_TIME)
-			.claim("auth", authorities));
+        // access token 발급
+        long now = (new Date()).getTime();
+        String accessToken = createToken(now, id, ACCESS_TOKEN_EXPIRE_TIME, Jwts.builder()
+            .setSubject(authentication.getName())
+            .claim("created", now)
+            .claim("expiresIn", ACCESS_TOKEN_EXPIRE_TIME)
+            .claim("auth", authorities));
 
 
         // refresh token 발급
         String refreshToken = createToken(now, id, REFRESH_TOKEN_EXPIRE_TIME, Jwts.builder());
 
 
-		HashMap<String, String> map = new HashMap<>();
-		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
-		map.put("refresh", refreshToken); // Bearer을 붙이지 않음
-		return map;
-	}
+        HashMap<String, String> map = new HashMap<>();
+        map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
+        map.put("refresh", refreshToken); // Bearer을 붙이지 않음
+        return map;
+    }
 
 
     private String createToken(long now, Long id, long EXPIRE_TIME, JwtBuilder authentication) {
         Date tokenExpireIn = new Date(now + EXPIRE_TIME);
         return authentication
-                .setExpiration(tokenExpireIn)
-                .claim("id", id)
-                .signWith(key, SignatureAlgorithm.HS256) // 원하는 방식
-                .compact();
+            .setExpiration(tokenExpireIn)
+            .claim("id", id)
+            .signWith(key, SignatureAlgorithm.HS256) // 원하는 방식
+            .compact();
     }
 
     // access token을 복호하하여 토큰에 들어있는 정보를 꺼내는 메소드
@@ -97,8 +97,8 @@ public class JwtTokenProvider {
         SecurityMember securityMember = (SecurityMember) userDetailsService.loadUserByUsername(id);
 
         List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+            .map(SimpleGrantedAuthority::new)
+            .toList();
 
         return new UsernamePasswordAuthenticationToken(securityMember, "", authorities);
     }
@@ -126,10 +126,10 @@ public class JwtTokenProvider {
     public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(accessToken)
-                    .getBody();
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }

@@ -11,3 +11,4 @@ app:
   clientId: ${TWINKLE_CLIENT_ID}
   redirectUrl: ${TWINKLE_REDIRECT_URL}
   secretKey: ${TWINKLE_SECRET_KEY}
+  bankUrl: ${TWINKLE_BANK_URL}

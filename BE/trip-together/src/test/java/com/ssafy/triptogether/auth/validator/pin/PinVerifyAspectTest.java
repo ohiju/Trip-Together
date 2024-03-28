@@ -31,18 +31,18 @@ class PinVerifyAspectTest {
         Long memberId = 1L;
         PinVerifyRequest pinVerifyRequest;
         Member member = Member.builder()
-                .uuid("test")
-                .nickname("test")
-                .gender(Gender.MALE)
-                .birth(LocalDate.now())
-                .build();
+            .uuid("test")
+            .nickname("test")
+            .gender(Gender.MALE)
+            .birth(LocalDate.now())
+            .build();
 
         @BeforeEach
         void setUp() {
             MockitoAnnotations.openMocks(this);
             pinVerifyRequest = PinVerifyRequest.builder()
-                    .pinNum("1234")
-                    .build();
+                .pinNum("1234")
+                .build();
             member.savePin("1234");
         }
 

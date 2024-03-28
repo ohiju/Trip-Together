@@ -1,7 +1,5 @@
 package com.ssafy.triptogether.syncaccount.service;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
@@ -13,6 +11,7 @@ import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankTransfer1wonRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankVerify1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.member.domain.Member;
@@ -22,12 +21,14 @@ import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequ
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.request.Transfer1wonRequest;
+import com.ssafy.triptogether.syncaccount.data.request.Verify1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -36,203 +37,219 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.SYNC_ACCOUNT_NOT_FOUND;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccountSaveService {
-    // Repository
-    private final SyncAccountRepository syncAccountRepository;
-    private final MemberRepository memberRepository;
-    // Client
-    private final TwinkleBankClient twinkleBankClient;
-    private final TwinkleBankAuth twinkleBankAuth;
+	// Repository
+	private final SyncAccountRepository syncAccountRepository;
+	private final MemberRepository memberRepository;
+	// Client
+	private final TwinkleBankClient twinkleBankClient;
+	private final TwinkleBankAuth twinkleBankAuth;
 
-    @Value("${app.clientId}")
-    private String TWINKLE_BANK_URI;
+	@Value("${app.clientId}")
+	private String TWINKLE_CLIENT_ID;
 
-    @Value("${app.redirectUrl}")
-    private String TWINKLE_REDIRECT_URL;
+	/**
+	 * 요청자의 은행 계좌 목록 반환
+	 *
+	 * @param memberId 요청자 member_id
+	 * @return 은행 계좌 목록
+	 */
+	@Override
+	public BankAccountsLoadResponse bankAccountsLoad(Long memberId) {
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+		TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse = twinkleBankAccountsLoad(member);
 
-    @Value("${app.clientId}")
-    private String TWINKLE_CLIENT_ID;
+		List<BankAccountsDetail> bankAccountsDetails = twinkleBankAccountsLoadResponse.twinkleBankAccountsDetails()
+			.stream()
+			.map(twinkleBankAccountsDetail ->
+				BankAccountsDetail.builder()
+					.uuid(twinkleBankAccountsDetail.uuid())
+					.name(twinkleBankAccountsDetail.name())
+					.num(twinkleBankAccountsDetail.num())
+					.balance(twinkleBankAccountsDetail.balance())
+					.build()
+			).toList();
+		return BankAccountsLoadResponse.builder()
+			.bankAccountsDetails(bankAccountsDetails)
+			.build();
+	}
 
-    private static void syncAccountForbiddenCheck(Long memberId, SyncAccount syncAccount, String detailMessageKey) {
-        if (!memberId.equals(syncAccount.getMember().getId())) {
-            throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
-        }
-    }
+	/**
+	 * 사용자의 연동 계좌 목록 조회
+	 *
+	 * @param memberId 요청자의 member_id
+	 * @return 연동 계좌 목록
+	 */
+	@Override
+	public SyncAccountsLoadResponse syncAccountsLoad(Long memberId) {
+		List<SyncAccountsDetail> syncAccounts = syncAccountRepository.memberSyncAccountsLoad(memberId);
+		return SyncAccountsLoadResponse.builder()
+			.syncAccountsDetail(syncAccounts)
+			.build();
+	}
 
-    /**
-     * 요청자의 은행 계좌 목록 반환
-     *
-     * @param memberId 요청자 member_id
-     * @return 은행 계좌 목록
-     */
-    @Override
-    public BankAccountsLoadResponse bankAccountsLoad(Long memberId) {
-        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
-        TwinkleBankAccountsLoadResponse twinkleBankAccountsLoadResponse = twinkleBankAccountsLoad(member);
+	/**
+	 * 사용자의 연동 계좌의 주계좌 설정 변경
+	 *
+	 * @param memberId                     요청자의 member_id
+	 * @param mainSyncAccountUpdateRequest 주계좌 변경 요청
+	 */
+	@Transactional
+	@Override
+	public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		deactivateCurrentMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
+		activateNewMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
+	}
 
-        List<BankAccountsDetail> bankAccountsDetails = twinkleBankAccountsLoadResponse.twinkleBankAccountsDetails()
-                .stream()
-                .map(twinkleBankAccountsDetail ->
-                        BankAccountsDetail.builder()
-                                .uuid(twinkleBankAccountsDetail.uuid())
-                                .name(twinkleBankAccountsDetail.name())
-                                .num(twinkleBankAccountsDetail.num())
-                                .balance(twinkleBankAccountsDetail.balance())
-                                .build()
-                ).toList();
-        return BankAccountsLoadResponse.builder()
-                .bankAccountsDetails(bankAccountsDetails)
-                .build();
-    }
+	/**
+	 * 연동 계좌 등록 요청
+	 *
+	 * @param memberId               요청자의 member_id
+	 * @param pinVerifyRequest       PIN 인증 요청
+	 * @param syncAccountSaveRequest 연동하고자 하는 계좌
+	 */
+	@PinVerify
+	@Transactional
+	@Override
+	public void syncAccountSave(Long memberId, PinVerifyRequest pinVerifyRequest,
+		SyncAccountSaveRequest syncAccountSaveRequest) {
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+		TwinkleAccountSyncResponse twinkleAccountSyncResponse = twinkleAccountSync(member.getUuid(),
+			syncAccountSaveRequest);
 
-    /**
-     * 사용자의 연동 계좌 목록 조회
-     *
-     * @param memberId 요청자의 member_id
-     * @return 연동 계좌 목록
-     */
-    @Override
-    public SyncAccountsLoadResponse syncAccountsLoad(Long memberId) {
-        List<SyncAccountsDetail> syncAccounts = syncAccountRepository.memberSyncAccountsLoad(memberId);
-        return SyncAccountsLoadResponse.builder()
-                .syncAccountsDetail(syncAccounts)
-                .build();
-    }
+		if (!syncAccountRepository.memberSyncAccountExist(memberId)) {
+			syncAccountSave(twinkleAccountSyncResponse, member, true);
+			return;
+		}
+		syncAccountSave(twinkleAccountSyncResponse, member, syncAccountSaveRequest.isMain());
+	}
 
-    /**
-     * 사용자의 연동 계좌의 주계좌 설정 변경
-     *
-     * @param memberId                     요청자의 member_id
-     * @param mainSyncAccountUpdateRequest 주계좌 변경 요청
-     */
-    @Transactional
-    @Override
-    public void mainSyncAccountUpdate(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-        deactivateCurrentMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
-        activateNewMainSyncAccount(memberId, mainSyncAccountUpdateRequest);
-    }
+	/**
+	 * 연동 계좌 해지
+	 *
+	 * @param memberId                 요청자 member_id
+	 * @param pinVerifyRequest         PIN 인증 요청
+	 * @param syncAccountDeleteRequest 해지 요청 계좌
+	 */
+	@PinVerify
+	@Transactional
+	@Override
+	public void syncAccountDelete(Long memberId, PinVerifyRequest pinVerifyRequest,
+		SyncAccountDeleteRequest syncAccountDeleteRequest) {
+		SyncAccount syncAccount = getSyncAccountByUuid(syncAccountDeleteRequest.bankAccountUuid());
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+		syncAccountForbiddenCheck(member, syncAccount, "SyncAccountDelete");
+		syncAccountRepository.delete(syncAccount);
+		twinkleAccountSyncDelete(member.getUuid(), syncAccountDeleteRequest);
+	}
 
-    /**
-     * 연동 계좌 등록 요청
-     *
-     * @param memberId               요청자의 member_id
-     * @param pinVerifyRequest       PIN 인증 요청
-     * @param syncAccountSaveRequest 연동하고자 하는 계좌
-     */
-    @PinVerify
-    @Transactional
-    @Override
-    public void syncAccountSave(Long memberId, PinVerifyRequest pinVerifyRequest,
-                                SyncAccountSaveRequest syncAccountSaveRequest) {
-        TwinkleAccountSyncResponse twinkleAccountSyncResponse = twinkleAccountSync(syncAccountSaveRequest);
-        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+	private void syncAccountForbiddenCheck(Member member, SyncAccount syncAccount, String detailMessageKey) {
+		if (!member.getId().equals(syncAccount.getMember().getId())) {
+			throw new ForbiddenException(detailMessageKey, ErrorCode.FORBIDDEN_ACCESS_MEMBER);
+		}
+	}
 
-        if (!syncAccountRepository.memberSyncAccountExist(memberId)) {
-            syncAccountSave(twinkleAccountSyncResponse, member, true);
-            return;
-        }
-        syncAccountSave(twinkleAccountSyncResponse, member, syncAccountSaveRequest.isMain());
-    }
+	private void twinkleAccountSyncDelete(String memberUuid, SyncAccountDeleteRequest syncAccountDeleteRequest) {
+		TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
+			.accountUuid(syncAccountDeleteRequest.bankAccountUuid())
+			.uuid(memberUuid)
+			.build();
+		twinkleBankClient.bankAccountSyncDelete(twinkleAccountSyncRequest);
+	}
 
-    /**
-     * 연동 계좌 해지
-     *
-     * @param memberId                 요청자 member_id
-     * @param pinVerifyRequest         PIN 인증 요청
-     * @param syncAccountDeleteRequest 해지 요청 계좌
-     */
-    @PinVerify
-    @Transactional
-    @Override
-    public void syncAccountDelete(Long memberId, PinVerifyRequest pinVerifyRequest,
-                                  SyncAccountDeleteRequest syncAccountDeleteRequest) {
-        SyncAccount syncAccount = getSyncAccountByUuid(syncAccountDeleteRequest.bankAccountUuid());
-        syncAccountForbiddenCheck(memberId, syncAccount, "SyncAccountDelete");
-        syncAccountRepository.delete(syncAccount);
-        twinkleAccountSyncDelete(syncAccountDeleteRequest);
-    }
+	private void syncAccountSave(TwinkleAccountSyncResponse twinkleAccountSyncResponse, Member member, Boolean isMain) {
+		SyncAccount syncAccount = SyncAccount.builder()
+			.name(twinkleAccountSyncResponse.accountName())
+			.num(twinkleAccountSyncResponse.accountNum())
+			.uuid(twinkleAccountSyncResponse.accountUuid())
+			.isMain(isMain)
+			.member(member)
+			.build();
+		syncAccountRepository.save(syncAccount);
+	}
 
-    private void twinkleAccountSyncDelete(SyncAccountDeleteRequest syncAccountDeleteRequest) {
-        TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                .accountUuid(syncAccountDeleteRequest.bankAccountUuid())
-                .build();
-        twinkleBankClient.bankAccountSyncDelete(twinkleAccountSyncRequest);
-    }
+	private TwinkleBankAccountsLoadResponse twinkleBankAccountsLoad(Member member) {
+		TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest = TwinkleBankAccountsLoadRequest.builder()
+			.uuid(member.getUuid())
+			.build();
+		return twinkleBankClient.bankAccountsLoad(
+			twinkleBankAccountsLoadRequest);
+	}
 
-    private void syncAccountSave(TwinkleAccountSyncResponse twinkleAccountSyncResponse, Member member, Boolean isMain) {
-        SyncAccount syncAccount = SyncAccount.builder()
-                .name(twinkleAccountSyncResponse.accountName())
-                .num(twinkleAccountSyncResponse.accountNum())
-                .uuid(twinkleAccountSyncResponse.accountUuid())
-                .isMain(isMain)
-                .member(member)
-                .build();
-        syncAccountRepository.save(syncAccount);
-    }
+	private TwinkleAccountSyncResponse twinkleAccountSync(String memberUuid,
+		SyncAccountSaveRequest syncAccountSaveRequest) {
+		TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
+			.accountUuid(syncAccountSaveRequest.bankAccountUuid())
+			.uuid(memberUuid)
+			.build();
+		return twinkleBankClient.bankAccountsSync(twinkleAccountSyncRequest);
+	}
 
-    private TwinkleBankAccountsLoadResponse twinkleBankAccountsLoad(Member member) {
-        TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest = TwinkleBankAccountsLoadRequest.builder()
-                .uuid(member.getUuid())
-                .build();
-        return twinkleBankClient.bankAccountsLoad(
-                twinkleBankAccountsLoadRequest);
-    }
+	private void deactivateCurrentMainSyncAccount(Long memberId,
+		MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+			.ifPresent(syncAccount -> {
+				if (syncAccount.equals(getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid()))) {
+					throw new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_MAIN_BAD_REQUEST);
+				}
+				syncAccount.updateIsMain(false);
+			});
+	}
 
-    private TwinkleAccountSyncResponse twinkleAccountSync(SyncAccountSaveRequest syncAccountSaveRequest) {
-        TwinkleAccountSyncRequest twinkleAccountSyncRequest = TwinkleAccountSyncRequest.builder()
-                .accountUuid(syncAccountSaveRequest.bankAccountUuid())
-                .build();
-        return twinkleBankClient.bankAccountsSync(twinkleAccountSyncRequest);
-    }
+	private void activateNewMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
+		SyncAccount syncAccount = getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid());
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+		syncAccountForbiddenCheck(member, syncAccount, "MainSyncAccountUpdate");
+		syncAccount.updateIsMain(true);
+	}
 
-    private void deactivateCurrentMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-        syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-                .ifPresent(syncAccount -> {
-                    if (syncAccount.equals(getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid()))) {
-                        throw new BadRequestException("MainSyncAccountUpdate", ErrorCode.SYNC_ACCOUNT_MAIN_BAD_REQUEST);
-                    }
-                    syncAccount.updateIsMain(false);
-                });
-    }
+	private SyncAccount getSyncAccountByUuid(String uuid) {
+		return syncAccountRepository.findByUuid(uuid)
+			.orElseThrow(
+				() -> new NotFoundException("MainSyncAccountUpdate", SYNC_ACCOUNT_NOT_FOUND, uuid)
+			);
+	}
 
-    private void activateNewMainSyncAccount(Long memberId, MainSyncAccountUpdateRequest mainSyncAccountUpdateRequest) {
-        SyncAccount syncAccount = getSyncAccountByUuid(mainSyncAccountUpdateRequest.uuid());
-        syncAccountForbiddenCheck(memberId, syncAccount, "MainSyncAccountUpdate");
-        syncAccount.updateIsMain(true);
-    }
+	@Transactional
+	@Override
+	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
+		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
 
-    private SyncAccount getSyncAccountByUuid(String uuid) {
-        return syncAccountRepository.findByUuid(uuid)
-                .orElseThrow(
-                        () -> new NotFoundException("MainSyncAccountUpdate", SYNC_ACCOUNT_NOT_FOUND, uuid)
-                );
-    }
-
-    @Transactional
-    @Override
-    public boolean transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
-        SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-            .orElseThrow( () -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
-
-        if (!request.accountUuid().equals(syncAccount.getUuid())){
+		if (!request.accountUuid().equals(syncAccount.getUuid())) {
 			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
-        }
+		}
 
-        String accoutUuid = syncAccount.getUuid();
+		String accoutUuid = syncAccount.getUuid();
 
-        TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
-            .accountUuid(accoutUuid)
-            .clientId(TWINKLE_CLIENT_ID)
-            .build();
-        boolean isTransfer1won = twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
+		TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
+			.accountUuid(accoutUuid)
+			.clientId(TWINKLE_CLIENT_ID)
+			.build();
 
-        // 은행에서 1원 전송이 되었다면
-        if (isTransfer1won){
-            return true;
-        }
-        return false;
-    }
+		twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
+	}
+
+	@Override
+	public void verify1won(Long memberId, String memberUuid, Verify1wonRequest request) {
+		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
+
+		if (!request.accountUuid().equals(syncAccount.getUuid())) {
+			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
+		}
+		String accoutUuid = syncAccount.getUuid();
+
+		TwinkleBankVerify1wonRequest twinkleBankVerify1wonRequest = TwinkleBankVerify1wonRequest.builder()
+			.clientId(TWINKLE_CLIENT_ID)
+			.accountUuid(accoutUuid)
+			.code(request.code())
+			.build();
+		twinkleBankAuth.verify1won(twinkleBankVerify1wonRequest, memberUuid);
+	}
 }

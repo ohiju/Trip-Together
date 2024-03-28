@@ -19,17 +19,17 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     @Override
     public List<ReviewResponse> findAllReviewsByAttractionId(long attractionId) {
         return queryFactory.select(Projections.constructor(ReviewResponse.class,
-                        review.id,
-                        member.id,
-                        member.imageUrl,
-                        member.nickname,
-                        review.rating,
-                        review.content
-                ))
-                .from(review)
-                .innerJoin(member).on(member.id.eq(review.member.id))
-                .innerJoin(attraction).on(attraction.id.eq(review.attraction.id))
-                .where(attraction.id.eq(attractionId))
-                .fetch();
+                review.id,
+                member.id,
+                member.imageUrl,
+                member.nickname,
+                review.rating,
+                review.content
+            ))
+            .from(review)
+            .innerJoin(member).on(member.id.eq(review.member.id))
+            .innerJoin(attraction).on(attraction.id.eq(review.attraction.id))
+            .where(attraction.id.eq(attractionId))
+            .fetch();
     }
 }

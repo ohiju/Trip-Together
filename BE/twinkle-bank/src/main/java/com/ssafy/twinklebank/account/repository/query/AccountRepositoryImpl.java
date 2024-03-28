@@ -2,7 +2,7 @@ package com.ssafy.twinklebank.account.repository.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.twinklebank.account.data.request.AccountResponse;
+import com.ssafy.twinklebank.account.data.response.AccountResponse;
 
 import lombok.RequiredArgsConstructor;
 

@@ -32,16 +32,16 @@ public class CurrencyRateClientImpl implements CurrencyRateClient {
     @Override
     public List<CurrencyRateResponse> currencyRatesLoad() {
         String url = UriComponentsBuilder.fromHttpUrl(CURRENCY_RATE_API_URL)
-                .queryParam("authkey", authKey)
-                .queryParam("data", data)
-                .toUriString();
+            .queryParam("authkey", authKey)
+            .queryParam("data", data)
+            .toUriString();
 
         ResponseEntity<List<CurrencyRateResponse>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<>() {
+            }
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {

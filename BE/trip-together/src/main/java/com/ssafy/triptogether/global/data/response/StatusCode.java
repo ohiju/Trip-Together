@@ -16,6 +16,7 @@ public enum StatusCode {
     SUCCESS_ATTRACTION_DETAIL_FIND(200, "여행지별 명소 상세 조회 성공"),
     SUCCESS_ATTRACTION_LIST_CLICK_FIND(200, "여행지별 명소 목록 클릭 조회 성공"),
     SUCCESS_ATTRACTION_LIST_SEARCH_FIND(200, "여행지별 명소 목록 검색 조회 성공"),
+    SUCCESS_FLASHMOB_UPDATE(200, "여행지별 번개 수정 성공"),
     // TRIP_ACCOUNT
     SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
     SUCCESS_RATE_LOAD(200, "요청 통화 환율 조회 성공"),
@@ -35,10 +36,10 @@ public enum StatusCode {
     SUCCESS_PIN_UPDATE(200, "pin 번호 수정 성공"),
     SUCCESS_LOGOUT(200, "로그아웃 성공"),
 
-	SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공"),
-	SUCCESS_REISSUE(201, "여행 토큰 재발급 성공"),
-    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공")
-    ;
+    SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공"),
+    SUCCESS_REISSUE(201, "여행 토큰 재발급 성공"),
+    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공"),
+    SUCCESS_1WON_VERIFY(200,"1원 인증 검증 성공");
 
     private final int status;
     private final String message;

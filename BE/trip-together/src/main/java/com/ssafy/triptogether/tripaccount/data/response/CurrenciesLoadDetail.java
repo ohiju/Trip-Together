@@ -7,13 +7,13 @@ import lombok.Builder;
 
 @Builder
 public record CurrenciesLoadDetail(
-        @JsonProperty("currency_code")
-        CurrencyCode code,
-        @JsonProperty("nation")
-        CurrencyNation nation,
-        @JsonProperty("nation_kr")
-        String nationKr,
-        @JsonProperty("unit")
-        Integer unit
+    @JsonProperty("currency_code")
+    CurrencyCode code,
+    @JsonProperty("nation")
+    CurrencyNation nation,
+    @JsonProperty("nation_kr")
+    String nationKr,
+    @JsonProperty("unit")
+    Integer unit
 ) {
 }

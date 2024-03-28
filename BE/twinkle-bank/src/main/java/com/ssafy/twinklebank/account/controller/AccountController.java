@@ -1,7 +1,8 @@
 package com.ssafy.twinklebank.account.controller;
 
 import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.request.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
+import com.ssafy.twinklebank.account.data.response.AccountResponse;
 import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
 import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
 import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
@@ -98,6 +99,12 @@ public class AccountController {
         Long memberId = securityMember.getId();
         accountSaveService.transfer1won(memberId, request);
         return ApiResponse.emptyResponse(OK, SUCCESS_1WON_TRANSFER);
+    }
 
+    @PostMapping("/1wonverify")
+    public ResponseEntity<ApiResponse<Void>> verify1won(
+        @AuthenticationPrincipal SecurityMember securityMember, @Valid @RequestBody Verify1wonRequest request){
+        accountSaveService.verify1won(request);
+        return ApiResponse.emptyResponse(OK, SUCCESS_VERIFY_1WON);
     }
 }

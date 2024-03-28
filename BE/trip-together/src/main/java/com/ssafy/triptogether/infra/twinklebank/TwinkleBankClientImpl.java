@@ -1,8 +1,8 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,21 +23,21 @@ import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRe
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
-
 import lombok.RequiredArgsConstructor;
+
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
 
 @Component
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
-	@Value("${app.clientId}")
+	@Value("${app.bankUrl}")
 	private String TWINKLE_BANK_URI;
-
-	@Value("${app.redirectUrl}")
-	private String TWINKLE_REDIRECT_URL;
 
 	@Value("${app.clientId}")
 	private String TWINKLE_CLIENT_ID;
 	private final RestTemplate restTemplate;
+	private final StringRedisTemplate redisTemplate;
 
 	/**
 	 * 요청자의 은행 계좌 목록 조회 요청
@@ -49,13 +49,13 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	public TwinkleBankAccountsLoadResponse bankAccountsLoad(
 		TwinkleBankAccountsLoadRequest twinkleBankAccountsLoadRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleBankAccountsLoadRequest.uuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
 		ResponseEntity<ApiResponse> response = restTemplate.exchange(
@@ -81,14 +81,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	@Override
 	public TwinkleAccountSyncResponse bankAccountsSync(TwinkleAccountSyncRequest twinkleAccountSyncRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleAccountSyncRequest.uuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleAccountSyncRequest> entity = new HttpEntity<>(twinkleAccountSyncRequest, headers);
 
 		ResponseEntity<ApiResponse> response = restTemplate.exchange(
@@ -113,14 +113,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	@Override
 	public void bankAccountSyncDelete(TwinkleAccountSyncRequest twinkleAccountSyncRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleAccountSyncRequest.uuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleAccountSyncRequest> entity = new HttpEntity<>(twinkleAccountSyncRequest, headers);
 
 		ResponseEntity<ApiResponse> response = restTemplate.exchange(
@@ -138,14 +138,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	@Override
 	public void bankLogout(TwinkleBankLogoutRequest twinkleBankLogoutRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회 & 해당 저장 삭제
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleBankLogoutRequest.memberUuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members/logout")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleBankLogoutRequest> entity = new HttpEntity<>(twinkleBankLogoutRequest, headers);
 
 		ResponseEntity<ApiResponse> response = restTemplate.exchange(
@@ -162,7 +162,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 
 	@Override
 	public TwinkleMemberInfoResponse bankMemberInfoLoad(String clientId, String accessToken) {
-		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/members")
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members")
 			.queryParam("client_id", clientId)
 			.toUriString();
 
@@ -192,14 +192,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	@Override
 	public void bankAccountWithdraw(TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleBankAccountExchangeRequest.uuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/withdraw")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleBankAccountExchangeRequest> entity = new HttpEntity<>(twinkleBankAccountExchangeRequest,
 			headers);
 
@@ -222,14 +222,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	@Override
 	public void bankAccountDeposit(TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest) {
 		// Todo: twinkleBankAccountsLoadRequest 에서 uuid 를 뽑아서 Redis 에서 access_token 조회
-
+		String accessToken = redisTemplate.opsForValue().get("access:" + twinkleBankAccountExchangeRequest.uuid());
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/deposit")
-			.queryParam("여행 클라이언트 키")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + "access_token");
+		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleBankAccountExchangeRequest> entity = new HttpEntity<>(twinkleBankAccountExchangeRequest,
 			headers);
 
