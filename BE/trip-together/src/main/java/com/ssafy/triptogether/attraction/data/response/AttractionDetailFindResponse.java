@@ -1,6 +1,8 @@
-package com.ssafy.triptogether.plan.data.response;
+package com.ssafy.triptogether.attraction.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.triptogether.plan.data.response.ReviewResponse;
+
 import lombok.Builder;
 
 import java.time.LocalTime;

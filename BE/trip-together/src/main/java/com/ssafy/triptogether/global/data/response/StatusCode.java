@@ -14,6 +14,8 @@ public enum StatusCode {
     SUCCESS_PLANS_MODIFY(200, "여행 계획 수정 성공"),
     //ATTRACTION
     SUCCESS_ATTRACTION_DETAIL_FIND(200, "여행지별 명소 상세 조회 성공"),
+    SUCCESS_ATTRACTION_LIST_CLICK_FIND(200, "여행지별 명소 목록 클릭 조회 성공"),
+    SUCCESS_ATTRACTION_LIST_SEARCH_FIND(200, "여행지별 명소 목록 검색 조회 성공"),
     SUCCESS_FLASHMOB_UPDATE(200, "여행지별 번개 수정 성공"),
     SUCCESS_FLASHMOB_LIST_FIND(200, "여행지별 번개 목록조회 수정 성공"),
     // TRIP_ACCOUNT
