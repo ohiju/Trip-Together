@@ -1,0 +1,16 @@
+package com.ssafy.triptogether.attraction.data;
+
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.constraints.NotNull;
+
+public record FlashmobCreateRequest(
+	@NotNull
+	String title,
+	@NotNull @JsonProperty("start_time")
+	LocalDateTime startTime,
+	@NotNull @JsonProperty("max_users")
+	Integer maxUsers
+) { }

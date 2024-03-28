@@ -1,15 +1,18 @@
 package com.ssafy.triptogether.attraction.controller;
 
+import com.ssafy.triptogether.attraction.data.FlashmobCreateRequest;
 import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
 import com.ssafy.triptogether.attraction.service.AttractionLoadService;
 import com.ssafy.triptogether.attraction.service.AttractionSaveService;
+import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +77,16 @@ public class AttractionController {
                 keyword
             );
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
+    }
+
+    @PostMapping("{attraction_id}/flashmobs")
+    public ResponseEntity<ApiResponse<Long>> createFlashmob(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("attraction_id") long attractionId,
+        @RequestBody FlashmobCreateRequest flashmobCreateRequest
+    ) {
+        attractionSaveService.createFlashmob(securityMember.getId(), attractionId, flashmobCreateRequest);
+        return null;
     }
 
     @PatchMapping("/{attraction_id}/flashmobs/{flashmob_id}")
