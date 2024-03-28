@@ -10,15 +10,15 @@ import lombok.Builder;
 @Builder
 public record AttractionListItemResponse(
 	@JsonProperty("attraction_id")
-	String attractionId,
+	Long attractionId,
 	@JsonProperty("thumbnail_image_url")
 	String thumbnailImageUrl,
 	String name,
 	String address,
 	@JsonProperty("avg_rating")
-	String avgRating,
+	Double avgRating,
 	@JsonProperty("avg_price")
-	String avgPrice,
+	Double avgPrice,
 	String latitude,
 	String longitude
 ) { }
