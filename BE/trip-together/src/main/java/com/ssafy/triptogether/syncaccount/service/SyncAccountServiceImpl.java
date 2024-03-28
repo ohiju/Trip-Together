@@ -11,6 +11,7 @@ import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankTransfer1wonRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankVerify1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.member.domain.Member;
@@ -20,12 +21,14 @@ import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequ
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.request.Transfer1wonRequest;
+import com.ssafy.triptogether.syncaccount.data.request.Verify1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -46,12 +49,6 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	// Client
 	private final TwinkleBankClient twinkleBankClient;
 	private final TwinkleBankAuth twinkleBankAuth;
-
-	@Value("${app.clientId}")
-	private String TWINKLE_BANK_URI;
-
-	@Value("${app.redirectUrl}")
-	private String TWINKLE_REDIRECT_URL;
 
 	@Value("${app.clientId}")
 	private String TWINKLE_CLIENT_ID;
@@ -220,7 +217,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 
 	@Transactional
 	@Override
-	public boolean transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
+	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
 		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
 			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
 
@@ -234,12 +231,25 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 			.accountUuid(accoutUuid)
 			.clientId(TWINKLE_CLIENT_ID)
 			.build();
-		boolean isTransfer1won = twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
 
-		// 은행에서 1원 전송이 되었다면
-		if (isTransfer1won) {
-			return true;
+		twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
+	}
+
+	@Override
+	public void verify1won(Long memberId, String memberUuid, Verify1wonRequest request) {
+		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
+			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
+
+		if (!request.accountUuid().equals(syncAccount.getUuid())) {
+			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
 		}
-		return false;
+		String accoutUuid = syncAccount.getUuid();
+
+		TwinkleBankVerify1wonRequest twinkleBankVerify1wonRequest = TwinkleBankVerify1wonRequest.builder()
+			.clientId(TWINKLE_CLIENT_ID)
+			.accountUuid(accoutUuid)
+			.code(request.code())
+			.build();
+		twinkleBankAuth.verify1won(twinkleBankVerify1wonRequest, memberUuid);
 	}
 }

@@ -4,17 +4,19 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.data.response.StatusCode;
-import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.syncaccount.data.request.MainSyncAccountUpdateRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountDeleteRequest;
 import com.ssafy.triptogether.syncaccount.data.request.SyncAccountSaveRequest;
 import com.ssafy.triptogether.syncaccount.data.request.Transfer1wonRequest;
+import com.ssafy.triptogether.syncaccount.data.request.Verify1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountSaveService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -105,11 +107,16 @@ public class SyncAccountController {
 		@AuthenticationPrincipal SecurityMember securityMember) {
 		String memberUuid = securityMember.getUuid();
 		Long memberId = securityMember.getId();
-		boolean isTransfer1won = syncAccountLoadService.transfer1won(memberId, memberUuid, request);
+		syncAccountLoadService.transfer1won(memberId, memberUuid, request);
+		return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
+	}
 
-		if (isTransfer1won) {
-			return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
-		}
-		throw new ExternalServerException("syncAccountController : transfer1won", TWINKLE_BANK_SERVER_ERROR);
+	@PostMapping("/1wonverify")
+	public ResponseEntity<ApiResponse<Void>> verify1won(@RequestBody @Valid Verify1wonRequest request,
+		@AuthenticationPrincipal SecurityMember securityMember) {
+		String memberUuid = securityMember.getUuid();
+		Long memberId = securityMember.getId();
+		syncAccountLoadService.verify1won(memberId, memberUuid, request);
+		return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
 	}
 }
