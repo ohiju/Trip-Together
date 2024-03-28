@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
@@ -31,6 +32,7 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	private final RestTemplate restTemplate;
 	private final StringRedisTemplate redisTemplate;
+	private final ObjectMapper objectMapper;
 
 	@Value("${app.bankUrl}")
 	private String TWINKLE_BANK_URI;
@@ -136,10 +138,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		}
 	}
 
-	private static String getAccessToken(ResponseEntity<ApiResponse> response) {
-		TwinkleTokenResponse res = (TwinkleTokenResponse)response.getBody().getData();
-		String accessToken = res.accessToken();
-		return accessToken;
+	private String getAccessToken(ResponseEntity<ApiResponse> response) {
+		System.out.println(response.getBody().getData());
+		TwinkleTokenResponse res = objectMapper.convertValue(response.getBody().getData(), TwinkleTokenResponse.class);
+		return res.accessToken();
 	}
 
 	private static String getRefreshToken(ResponseEntity<ApiResponse> response) {
