@@ -35,7 +35,6 @@ public class Member extends BaseEntity {
     @Column(name = "pin_num")
     private String pinNum;
 
-    @NotBlank
     @Column(name = "nickname")
     private String nickname;
 
