@@ -26,4 +26,16 @@ public class MemberFlashmobRepositoryCustomImpl implements MemberFlashmobReposit
                 .fetchOne()
         );
     }
+
+    @Override
+    public boolean isMaster(long flashmobId, long memberId) {
+        Integer fetchOne = queryFactory
+            .selectOne()
+            .from(memberFlashMob)
+            .where(memberFlashMob.flashMob.id.eq(flashmobId)
+                .and(memberFlashMob.member.id.eq(memberId))
+                .and(memberFlashMob.isMaster.eq(true)))
+            .fetchFirst();
+        return fetchOne != null;
+    }
 }
