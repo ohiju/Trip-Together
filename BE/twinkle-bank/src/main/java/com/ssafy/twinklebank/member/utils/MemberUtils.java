@@ -47,4 +47,9 @@ public class MemberUtils {
 			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
 	}
 
+	public static Member loadMemberByMemberUuid(MemberRepository memberRepository, String memberUuid){
+		return memberRepository.findByUuid(memberUuid)
+			.orElseThrow(()-> new NotFoundException("MemberUtils : loadMemberByMemberUuid ", UNDEFINED_MEMBER));
+	}
+
 }
