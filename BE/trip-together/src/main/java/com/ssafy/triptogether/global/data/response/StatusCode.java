@@ -36,7 +36,8 @@ public enum StatusCode {
 
     SUCCESS_TRIP_TOKEN(201, "여행 토큰 발급 성공"),
     SUCCESS_REISSUE(201, "여행 토큰 재발급 성공"),
-    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공");
+    SUCCESS_1WON_TRANSFER(201, "1원 인증 요청 성공"),
+    SUCCESS_1WON_VERIFY(200,"1원 인증 검증 성공");
 
     private final int status;
     private final String message;
