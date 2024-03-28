@@ -21,11 +21,14 @@ public enum StatusCode {
 	SUCCESS_ATTRACTION_LIST_SEARCH_FIND(200, "여행지별 명소 목록 검색 조회 성공"),
 	SUCCESS_FLASHMOB_UPDATE(200, "여행지별 번개 수정 성공"),
 	SUCCESS_REGIONS_LOAD(200, "도시 조회 성공"),
+	SUCCESS_CREATE_FLASHMOB(201, "번개 생성 성공"),
 	// FLASHMOB
 	SUCCESS_FLASHMOB_REQUEST(201, "번개 참가신청 등록 성공"),
 	SUCCESS_FLASHMOB_LIST_FIND(200, "번개 목록조회 조회 성공"),
 	SUCCESS_FLASHMOB_DENIED_CHECK(200, "거절된 번개 확인 성공"),
 	SUCCESS_FLASHMOB_CANCEL(204, "번개 신청 취소 성공"),
+	SUCCESS_APPLY_ACCEPT(200, "번개 신청 수락"),
+	SUCCESS_APPLY_DENY(200, "번개 신청 거절"),
 	// TRIP_ACCOUNT
 	SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
 	SUCCESS_RATE_LOAD(200, "요청 통화 환율 조회 성공"),

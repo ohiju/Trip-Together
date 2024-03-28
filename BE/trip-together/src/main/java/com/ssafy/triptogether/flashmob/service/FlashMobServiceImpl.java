@@ -1,9 +1,15 @@
 package com.ssafy.triptogether.flashmob.service;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
+import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.domain.MemberFlashMob;
@@ -17,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.UNDEFINED_FLASHMOB;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -67,6 +71,28 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
         // cancel attendance request
         memberFlashMobRepository.delete(memberFlashMob);
+    }
+
+    @Transactional
+    @Override
+    public boolean applyFlashmob(
+        long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
+        FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
+        boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, masterId);
+        if (!isMaster) {
+            throw new ForbiddenException("applyFlashmob", MEMBER_NOT_MASTER, masterId);
+        }
+
+        MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+        if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
+            memberFlashMob.applyAcceptance();
+            return true; // 수락되었을 시에만 true 반환
+        } else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
+            memberFlashMob.applyDenial();
+        } else {
+            throw new BadRequestException("applyFlashmob", BAD_STATUS_REQUEST, applyFlashmobRequest.status());
+        }
+        return false;
     }
 
     @Override

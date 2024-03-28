@@ -85,4 +85,11 @@ public class GlobalExceptionHandler {
         log.error(exception.getMessageKey(), exception, exception.getParams());
         return new ErrorResponse(exception.getErrorCode());
     } // 400
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ExternalServerException.class)
+    public ErrorResponse externalServerHandler(TripRuntimeException exception) {
+        log.error(exception.getMessageKey(), exception, exception.getParams());
+        return new ErrorResponse(exception.getErrorCode());
+    } // 500
 }
