@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -53,14 +54,13 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleTokenRequest> entity = new HttpEntity<>(twinkleTokenRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() == HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
 			// accessToken 꺼내기
 			String accessToken = getAccessToken(response);
 			// refreshToken 꺼내기
@@ -78,9 +78,9 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 			tokenMap.put("refresh", refreshToken);
 
 			return tokenMap;
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
-
-		throw new ExternalServerException("getTwinkleBankToken", TWINKLE_BANK_SERVER_ERROR);
 	}
 
 	@Override
@@ -99,15 +99,15 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleBankTransfer1wonRequest> entity = new HttpEntity<>(twinkleBankTransfer1wonRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
-			throw new ExternalServerException("transfer1won", TWINKLE_BANK_SERVER_ERROR);
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -124,17 +124,16 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleBankVerify1wonRequest> entity = new HttpEntity<>(twinkleBankVerify1wonRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
-			throw new ExternalServerException("transfer1won", TWINKLE_BANK_SERVER_ERROR);
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
-
 	}
 
 	private static String getAccessToken(ResponseEntity<ApiResponse> response) {
