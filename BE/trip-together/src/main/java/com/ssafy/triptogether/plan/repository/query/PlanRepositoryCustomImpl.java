@@ -70,7 +70,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
 
         return queryFactory.select(Projections.constructor(DailyPlanListResponse.class,
                 plan.id,
-                plan.region.nation,
+                plan.region.cityName,
                 plan.startAt,
                 plan.endAt,
                 plan.title,
