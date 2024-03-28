@@ -10,7 +10,7 @@ public record FlashmobCreateRequest(
 	@NotNull
 	String title,
 	@NotNull @JsonProperty("start_time")
-	LocalDateTime startTime,
+	String startTime,
 	@NotNull @JsonProperty("max_users")
 	Integer maxUsers
 ) { }

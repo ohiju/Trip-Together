@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -87,7 +88,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
         FlashMob flashMob = FlashMob.builder()
             .attraction(attraction)
             .title(flashmobCreateRequest.title())
-            .startAt(flashmobCreateRequest.startTime())
+            .startAt(LocalDateTime.parse(flashmobCreateRequest.startTime()))
             .maxMemberCount(flashmobCreateRequest.maxUsers())
             .build();
         flashMobRepository.save(flashMob);
