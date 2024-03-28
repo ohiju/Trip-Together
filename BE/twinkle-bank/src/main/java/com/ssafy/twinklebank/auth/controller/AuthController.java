@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.twinklebank.auth.data.request.CodeRequest;
@@ -34,7 +35,7 @@ public class AuthController {
 	private final CookieProvider cookieProvider;
 
 	@PostMapping("/authorize")
-	public ResponseEntity<ApiResponse<CodeResponse>> getCode(@RequestBody @Valid CodeRequest request){
+	public ResponseEntity<ApiResponse<CodeResponse>> getCode(@RequestBody @Valid CodeRequest request) {
 		Map<String, String> codeAndRedirectUrlMap = authService.getCode(request);
 		String code = codeAndRedirectUrlMap.get("code");
 		String redirectUrl = codeAndRedirectUrlMap.get("redirectUrl");
@@ -46,9 +47,13 @@ public class AuthController {
 	}
 
 	@PostMapping("/token")
-	public ResponseEntity<ApiResponse<TokenResponse>> getToken(@RequestBody @Valid TokenRequest request) {
+	public ResponseEntity<ApiResponse<TokenResponse>> getToken(
+		@Valid @RequestParam(value = "code") String code,
+		@Valid @RequestParam(value = "client_id") String clientId,
+		@Valid @RequestParam(value = "redirect_url") String redirectUrl,
+		@RequestBody @Valid TokenRequest request) {
 
-		Map<String, String> tokenMap = authService.getToken(request);
+		Map<String, String> tokenMap = authService.getToken(code, clientId, redirectUrl, request);
 		String accessToken = tokenMap.get("access");
 		String refreshToken = tokenMap.get("refresh");
 
