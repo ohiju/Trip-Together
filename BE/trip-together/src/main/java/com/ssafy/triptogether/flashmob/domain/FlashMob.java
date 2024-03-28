@@ -52,10 +52,11 @@ public class FlashMob extends BaseEntity {
     private List<Settlement> settlements = new ArrayList<>();
 
     @Builder
-    public FlashMob(String title, LocalDateTime startAt, Attraction attraction) {
+    public FlashMob(String title, LocalDateTime startAt, Attraction attraction, Integer maxMemberCount) {
         this.title = title;
         this.startAt = startAt;
         setAttraction(attraction);
+        this.maxMemberCount = maxMemberCount;
     }
 
     public void setAttraction(Attraction attraction) {
