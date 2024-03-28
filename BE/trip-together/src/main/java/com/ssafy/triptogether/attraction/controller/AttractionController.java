@@ -44,7 +44,7 @@ public class AttractionController {
     }
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
-    @GetMapping("click")
+    @GetMapping("/click")
     public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick (
         @RequestParam double latitude,
         @RequestParam double longitude,
@@ -64,7 +64,7 @@ public class AttractionController {
     }
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
-    @GetMapping("search")
+    @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsSearch (
         @RequestParam double latitude,
         @RequestParam double longitude,
@@ -79,13 +79,14 @@ public class AttractionController {
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
     }
 
-    @PostMapping("{attraction_id}/flashmobs")
+    @PostMapping("/{attraction_id}/flashmobs")
     public ResponseEntity<ApiResponse<Long>> createFlashmob(
         @AuthenticationPrincipal SecurityMember securityMember,
         @PathVariable("attraction_id") long attractionId,
         @RequestBody FlashmobCreateRequest flashmobCreateRequest
     ) {
-        attractionSaveService.createFlashmob(securityMember.getId(), attractionId, flashmobCreateRequest);
+        long memberId = securityMember.getId();
+        attractionSaveService.createFlashmob(memberId, attractionId, flashmobCreateRequest);
         return null;
     }
 
