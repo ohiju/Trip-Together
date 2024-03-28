@@ -45,7 +45,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-    //“/member/v1/auth/token/**” , “/member/v1/members/reissue”
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
