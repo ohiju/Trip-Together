@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
@@ -38,6 +39,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 	private String TWINKLE_CLIENT_ID;
 	private final RestTemplate restTemplate;
 	private final StringRedisTemplate redisTemplate;
+	private final ObjectMapper objectMapper;
 
 	/**
 	 * 요청자의 은행 계좌 목록 조회 요청
@@ -66,7 +68,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		);
 
 		if (response.getStatusCode() == HttpStatus.OK) {
-			return (TwinkleBankAccountsLoadResponse)response.getBody().getData();
+			return objectMapper.convertValue(response.getBody().getData(), TwinkleBankAccountsLoadResponse.class);
 		}
 
 		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
@@ -99,7 +101,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		);
 
 		if (response.getStatusCode() == HttpStatus.OK) {
-			return (TwinkleAccountSyncResponse)response.getBody().getData();
+			return objectMapper.convertValue(response.getBody().getData(), TwinkleAccountSyncResponse.class);
 		}
 
 		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
@@ -179,7 +181,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		);
 
 		if (response.getStatusCode() == HttpStatus.OK) {
-			return (TwinkleMemberInfoResponse)response.getBody().getData();
+			return objectMapper.convertValue(response.getBody().getData(), TwinkleMemberInfoResponse.class);
 		}
 
 		throw new ExternalServerException("bankMemberInfoLoad", TWINKLE_BANK_SERVER_ERROR);
