@@ -22,7 +22,8 @@ public enum StatusCode {
 
 	SUCCESS_1WON_TRANSFER(200, "1원 전송 성공"),
 
-	SUCCESS_CREATE_CODE(201, "CODE 발급성공")
+	SUCCESS_CREATE_CODE(201, "CODE 발급성공"),
+	SUCCESS_VERIFY_1WON(200, "1원 인증 성공")
 	;
 	//
 	// CREATED_USER(201, "회원가입 성공"),
