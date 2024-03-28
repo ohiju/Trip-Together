@@ -11,7 +11,6 @@ import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
-import com.ssafy.triptogether.global.utils.distance.NativeSqlCreator;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
@@ -70,8 +69,8 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
     }
 
     @Override
-    public List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude,
-        double latitudeDelta, double longitudeDelta) {
+    public List<AttractionListItemResponse> findAttractionsClick(
+        double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
         double distance = new MysqlNativeSqlCreator().getDistance(
             latitude,
             longitude,
@@ -81,7 +80,8 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
         return attractionRepository.findAttractionClick(
             latitude,
             longitude,
-            distance
+            distance,
+            category
         );
     }
 }
