@@ -10,6 +10,6 @@ public record TokenInfo(
     @JsonProperty("created_at")
     Long createdAt,
     @JsonProperty("expires_in")
-    Integer expiresIn
+    Long expiresIn
 ) {
 }
