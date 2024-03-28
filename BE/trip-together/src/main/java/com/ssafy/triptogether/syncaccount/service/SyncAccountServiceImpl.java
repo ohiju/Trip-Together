@@ -218,12 +218,8 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	@Transactional
 	@Override
 	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
-		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
-
-		if (!request.accountUuid().equals(syncAccount.getUuid())) {
-			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
-		}
+		SyncAccount syncAccount = syncAccountRepository.findByUuid(request.accountUuid())
+			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won : 계좌를 찾을 수 없음", SYNC_ACCOUNT_NOT_FOUND));
 
 		String accoutUuid = syncAccount.getUuid();
 
