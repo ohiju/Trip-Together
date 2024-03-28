@@ -10,6 +10,14 @@ interface attractionProp {
   avg_price: string;
 }
 
+interface CityResult {
+  region_id: number;
+  nation: string;
+  city_name: string;
+  latitude: string;
+  longitude: string;
+}
+
 interface dailyplanProp {
   order: number;
   attraction: attractionProp;
@@ -23,7 +31,11 @@ interface dailydeleteProp {
 const initialState: TripState = {
   tripInfo: {
     plan_id: 0,
+    nation: '',
+    start_latitude: '',
+    start_longitude: '',
     start_region: 1,
+    city_name: '',
     start_at: '',
     end_at: '',
     title: '',
@@ -38,8 +50,12 @@ export const tripSlice = createSlice({
   name: 'trip',
   initialState,
   reducers: {
-    setStartRegion: (state, action: PayloadAction<number>) => {
-      state.tripInfo.start_region = action.payload;
+    setStartRegion: (state, action: PayloadAction<CityResult>) => {
+      state.tripInfo.start_region = action.payload.region_id;
+      state.tripInfo.nation = action.payload.nation;
+      state.tripInfo.start_latitude = action.payload.latitude;
+      state.tripInfo.start_longitude = action.payload.longitude;
+      state.tripInfo.city_name = action.payload.city_name;
     },
     setDate: (
       state,

@@ -2,19 +2,27 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Text, FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {bg_light, font_dark} from '../../constants/colors';
+import {useAppSelector} from '../../store/hooks';
+import axios from 'axios';
 
 const KeywordSearch = () => {
   const [searchText, setSearchText] = useState('');
-  const [searchResults, setSearchResults] = useState([
-    '프랑스',
-    '파리',
-    '몽펠리에',
-  ]);
+  const [searchResults, setSearchResults] = useState([]);
   const searchInputRef = useRef(null);
 
-  const handleSearchChange = text => {
+  const trip = useAppSelector(state => state.trip.tripInfo);
+
+  const handleSearchChange = async (text: string) => {
     setSearchText(text);
-    setSearchResults([]);
+    try {
+      const response = await axios.get(
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}`,
+      );
+      const regions = response.data.data;
+      setSearchResults(regions.regions);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
   };
 
   useEffect(() => {
@@ -56,7 +64,7 @@ const KeywordSearch = () => {
         data={searchResults}
         renderItem={({item}) => (
           <ResultItem>
-            <Text>123</Text>
+            <Text>{item.city_name}</Text>
           </ResultItem>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -85,6 +93,7 @@ const IconInputs = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  background-color: ${bg_light};
 `;
 
 const IconImage = styled.Image`

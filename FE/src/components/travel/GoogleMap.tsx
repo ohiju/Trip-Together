@@ -2,22 +2,22 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 
-const GoogleMap = () => {
+const GoogleMap = ({trip}: any) => {
   return (
     <MapView
       style={styles.mapStyle}
       initialRegion={{
-        latitude: 41.3851, // Barcelona latitude
-        longitude: 2.1734, // Barcelona longitude
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: parseInt(trip.start_latitude),
+        longitude: parseInt(trip.start_longitude),
+        latitudeDelta: 2.922,
+        longitudeDelta: 2.421,
       }}
       customMapStyle={mapStyle}>
       <Marker
         draggable
         coordinate={{
-          latitude: 41.3851, // Barcelona latitude
-          longitude: 2.1734, // Barcelona longitude
+          latitude: 41.3851,
+          longitude: 2.1734,
         }}
         title={'Test Marker'}
         description={'This is a description of the marker'}
