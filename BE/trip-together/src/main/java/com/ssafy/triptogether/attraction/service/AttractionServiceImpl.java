@@ -15,7 +15,6 @@ import com.ssafy.triptogether.global.utils.distance.NativeSqlCreator;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
-import com.ssafy.triptogether.plan.data.response.AttractionDetailFindResponse;
 import com.ssafy.triptogether.plan.data.response.ReviewResponse;
 import com.ssafy.triptogether.review.repository.ReviewRepository;
 import com.ssafy.triptogether.review.utils.ReviewUtils;

@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.attraction.controller;
 
+import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
@@ -55,6 +56,7 @@ public class AttractionController {
                 longitudeDelta
             );
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
+    }
 
     @PatchMapping("/{attraction_id}/flashmobs/{flashmob_id}")
     public ResponseEntity<ApiResponse<FlashmobUpdateResponse>> updateFlashmob(
