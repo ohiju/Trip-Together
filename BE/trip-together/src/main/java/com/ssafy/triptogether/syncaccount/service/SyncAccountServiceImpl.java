@@ -30,6 +30,7 @@ import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.SYNC_AC
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccountSaveService {
 	// Repository
 	private final SyncAccountRepository syncAccountRepository;
@@ -218,6 +220,7 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	@Transactional
 	@Override
 	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
+		log.debug("syncaccountserviceimple: request accout uuid " + request.accountUuid());
 		SyncAccount syncAccount = syncAccountRepository.findByUuid(request.accountUuid())
 			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won : 계좌를 찾을 수 없음", SYNC_ACCOUNT_NOT_FOUND));
 
