@@ -73,6 +73,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
         memberFlashMobRepository.delete(memberFlashMob);
     }
 
+    // TODO: 해당 사용자에게 메시지 큐 연결
     @Transactional
     @Override
     public boolean applyFlashmob(
