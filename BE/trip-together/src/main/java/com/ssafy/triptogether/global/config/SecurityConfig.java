@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.global.config;
 
+import com.ssafy.triptogether.auth.filter.JwtAuthenticationFilter;
 import com.ssafy.triptogether.auth.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,10 +37,10 @@ public class SecurityConfig {
                 configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리 정책 설정 : STATELESS
             .authorizeHttpRequests(authorize ->
                 authorize
-                    .requestMatchers("/**").permitAll() // 모든 요청을 허용
-                    .anyRequest().authenticated()); // 인증요구
-        // .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-        // 	UsernamePasswordAuthenticationFilter.class); // jwt 인증필터 추가
+                    .requestMatchers("/member/v1/auth/token/**" , "/member/v1/members/reissue").permitAll() // 모든 요청을 허용
+                    .anyRequest().authenticated()) // 인증요구
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+            	UsernamePasswordAuthenticationFilter.class); // jwt 인증필터 추가
         // .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
 
         return http.build();

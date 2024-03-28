@@ -46,7 +46,7 @@ public class AttractionController {
 	}
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
-    @GetMapping("/click")
+    @GetMapping("/attractions/click")
     public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick (
         @RequestParam double latitude,
         @RequestParam double longitude,
@@ -66,7 +66,7 @@ public class AttractionController {
     }
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
-    @GetMapping("/search")
+    @GetMapping("/attractions/search")
     public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsSearch (
         @RequestParam double latitude,
         @RequestParam double longitude,
@@ -81,7 +81,7 @@ public class AttractionController {
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
     }
 
-    @PostMapping("/{attraction_id}/flashmobs")
+    @PostMapping("/attractions/{attraction_id}/flashmobs")
     public ResponseEntity<ApiResponse<Long>> createFlashmob(
         @AuthenticationPrincipal SecurityMember securityMember,
         @PathVariable("attraction_id") long attractionId,
@@ -92,7 +92,7 @@ public class AttractionController {
         return ApiResponse.toResponseEntity(CREATED, SUCCESS_CREATE_FLASHMOB, flashmobId);
     }
 
-    @PatchMapping("/{attraction_id}/flashmobs/{flashmob_id}")
+    @PatchMapping("/attractions/{attraction_id}/flashmobs/{flashmob_id}")
     public ResponseEntity<ApiResponse<FlashmobUpdateResponse>> updateFlashmob(
         @PathVariable("attraction_id") long attractionId,
         @PathVariable("flashmob_id") long flashmobId,
