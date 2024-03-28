@@ -40,11 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenProvider {
 	// 은행의 access token의 유효 시간 : 5분
 	// 은행의 refresh token의 유효 시간 : 7일
-	// TODO : 은행 access token 유효시간 줄이기
+	// TODO : 은행 access token, refresh 유효시간 줄이기
 	@Getter
-	private final long ACCESS_TOKEN_EXPIRE_TIME = 60 * 60 * 1000L; // 5분
+	private final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L; // 5분
 	@Getter
-	private final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+	private final long REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L; // 7일
 
 	// security Key
 	private final Key key;
