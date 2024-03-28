@@ -13,5 +13,5 @@ public interface AttractionLoadService {
 
     FlashmobListFindResponse findFlashmobList(long attractionId, long memberId);
 
-	List<AttractionListItemResponse> findAttractionsSearch(double latitude, double longitude, String category, String keyword);
+	List<AttractionListItemResponse> findAttractionsSearch(double latitude, double longitude, String keyword);
 }
