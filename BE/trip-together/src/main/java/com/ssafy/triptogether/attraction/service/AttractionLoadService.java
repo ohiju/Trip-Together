@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
+import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 
 public interface AttractionLoadService {
     AttractionDetailFindResponse findAttractionDetail(long attractionId);
 
 	List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude, double latitudeDelta, double longitudeDelta);
+
+    FlashmobListFindResponse findFlashmobList(long attractionId, long memberId);
 }

@@ -1,6 +1,8 @@
 package com.ssafy.triptogether.attraction.service;
 
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
+import com.ssafy.triptogether.attraction.data.FlashmobElementFindResponse;
+import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
 import com.ssafy.triptogether.attraction.domain.Attraction;
@@ -49,6 +51,15 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
             .longitude(attraction.getLongitude())
             .reviews(reviewResponses)
             .build();
+    }
+
+    @Override
+    public FlashmobListFindResponse findFlashmobList(long attractionId, long memberId) {
+        // find all flashmob responses
+        List<FlashmobElementFindResponse> elements = FlashMobUtils.findAllFlashmobElementsByAttractionId(flashMobRepository, attractionId, memberId);
+
+        // create response & return
+        return FlashmobListFindResponse.builder().elements(elements).build();
     }
 
     @Transactional
