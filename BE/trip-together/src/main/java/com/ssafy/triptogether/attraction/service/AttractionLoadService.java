@@ -9,7 +9,7 @@ import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
 public interface AttractionLoadService {
     AttractionDetailFindResponse findAttractionDetail(long attractionId);
 
-	List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude, double latitudeDelta, double longitudeDelta);
+	List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category);
 
     FlashmobListFindResponse findFlashmobList(long attractionId, long memberId);
 

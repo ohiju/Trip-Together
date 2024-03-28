@@ -18,7 +18,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<AttractionListItemResponse> findAttractionClick(double latitude, double longitude, double distance) {
+	public List<AttractionListItemResponse> findAttractionClick(double latitude, double longitude, double distance, String category) {
+		category = (category==null)?"":category;
 		return queryFactory.select(Projections.constructor(AttractionListItemResponse.class,
 				attraction.id,
 				attraction.thumbnailImageUrl,
@@ -35,7 +36,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				longitude,
 				attraction.latitude,
 				attraction.longitude
-			).loe(distance))
+			).loe(distance)
+				.and(attraction.name.like("%"+category+"%")))
 			.fetch();
 	}
 }

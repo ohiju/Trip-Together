@@ -46,14 +46,16 @@ public class AttractionController {
         @RequestParam double latitude,
         @RequestParam double longitude,
         @RequestParam("latitude_delta") double latitudeDelta,
-        @RequestParam("longitude_delta") double longitudeDelta
+        @RequestParam("longitude_delta") double longitudeDelta,
+        @RequestParam String category
     ) {
         List<AttractionListItemResponse> attractionListItemResponseList =
             attractionLoadService.findAttractionsClick(
                 latitude,
                 longitude,
                 latitudeDelta,
-                longitudeDelta
+                longitudeDelta,
+                category
             );
         return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, attractionListItemResponseList);
     }
