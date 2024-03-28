@@ -10,6 +10,7 @@ import PlanDetail from '../pages/travel/PlanDetail';
 import PlaceInfoList from '../pages/common/PlaceInfoList';
 import PlaceDetail from '../pages/common/PlaceDetail';
 import Camera from '../components/common/Camera';
+import KeywordSearch from '../pages/travel/KeywordSearch';
 
 const TravelStack = () => {
   const Stack = createNativeStackNavigator<TravelStackParams>();
@@ -54,6 +55,14 @@ const TravelStack = () => {
           component={GoogleMap}
           options={{
             title: '',
+          }}
+        />
+        <Stack.Screen
+          name="KeywordSearch"
+          component={KeywordSearch}
+          options={{
+            title: '',
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
