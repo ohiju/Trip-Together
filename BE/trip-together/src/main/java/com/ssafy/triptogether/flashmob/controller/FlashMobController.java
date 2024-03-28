@@ -10,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_FLASHMOB_LIST_FIND;
-import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_FLASHMOB_REQUEST;
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -40,5 +39,15 @@ public class FlashMobController {
         long memberId = securityMember.getId();
         AttendingFlashmobListFindResponse response = flashMobLoadService.findAttendingFlashmobList(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
+    }
+
+    @PatchMapping("/{flashmob_id}")
+    public ResponseEntity<ApiResponse<Void>> checkDeniedFlashmob(
+        @PathVariable("flashmob_id") long flashmobId,
+        @AuthenticationPrincipal SecurityMember securityMember
+    ) {
+        long memberId = securityMember.getId();
+        flashMobSaveService.checkDeniedFlashmob(flashmobId, memberId);
+        return ApiResponse.emptyResponse(OK, SUCCESS_FLASHMOB_DENIED_CHECK);
     }
 }
