@@ -1,6 +1,5 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -10,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,8 +26,8 @@ import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRe
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleBankAccountsLoadResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
-import lombok.RequiredArgsConstructor;
 
+import lombok.RequiredArgsConstructor;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
 
@@ -60,18 +62,17 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		headers.set("Authorization", accessToken);
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.GET,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() == HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				entity,
+				ApiResponse.class
+			);
 			return objectMapper.convertValue(response.getBody().getData(), TwinkleBankAccountsLoadResponse.class);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
-
-		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 	}
 
 	/**
@@ -93,18 +94,18 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleAccountSyncRequest> entity = new HttpEntity<>(twinkleAccountSyncRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() == HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
 			return objectMapper.convertValue(response.getBody().getData(), TwinkleAccountSyncResponse.class);
-		}
 
-		throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+		}
 	}
 
 	/**
@@ -125,14 +126,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleAccountSyncRequest> entity = new HttpEntity<>(twinkleAccountSyncRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.DELETE,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.DELETE,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
 			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
@@ -150,14 +151,14 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		headers.set("Authorization", accessToken);
 		HttpEntity<TwinkleBankLogoutRequest> entity = new HttpEntity<>(twinkleBankLogoutRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
 			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
@@ -173,18 +174,18 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		headers.set("Authorization", accessToken);
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.GET,
-			entity,
-			ApiResponse.class
-		);
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				entity,
+				ApiResponse.class
+			);
 
-		if (response.getStatusCode() == HttpStatus.OK) {
 			return objectMapper.convertValue(response.getBody().getData(), TwinkleMemberInfoResponse.class);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
-
-		throw new ExternalServerException("bankMemberInfoLoad", TWINKLE_BANK_SERVER_ERROR);
 	}
 
 	/**
@@ -205,15 +206,15 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		HttpEntity<TwinkleBankAccountExchangeRequest> entity = new HttpEntity<>(twinkleBankAccountExchangeRequest,
 			headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
-			throw new ExternalServerException("TwinkleBankAccountWithdraw", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -235,15 +236,15 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 		HttpEntity<TwinkleBankAccountExchangeRequest> entity = new HttpEntity<>(twinkleBankAccountExchangeRequest,
 			headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() != HttpStatus.OK) {
-			throw new ExternalServerException("TwinkleBankAccountDeposit", ErrorCode.TWINKLE_BANK_SERVER_ERROR);
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 }

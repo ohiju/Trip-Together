@@ -104,7 +104,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
     // TODO: 채팅방(소켓) 생성
     @Transactional
     @Override
-    public void createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest) {
+    public long createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest) {
         Attraction attraction = AttractionUtils.findByAttractionId(attractionRepository, attractionId);
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
@@ -123,6 +123,8 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
             .roomStatus(RoomStatus.ATTEND)
             .build();
         memberFlashMobRepository.save(memberFlashMob);
+
+		return flashMob.getId();
     }
 
     @Override
