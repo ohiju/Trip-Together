@@ -97,10 +97,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		// }
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", accessToken);
+		headers.set("Authorization", "Bearer " + accessToken);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleBankTransfer1wonRequest> entity = new HttpEntity<>(twinkleBankTransfer1wonRequest, headers);
-
+		log.debug("transfer1won bank accesstoken "+headers.get("Authorization"));
 		try {
 			ResponseEntity<ApiResponse> response = restTemplate.exchange(
 				url,
@@ -122,7 +122,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", accessToken);
+		headers.set("Authorization", "Bearer " + accessToken);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleBankVerify1wonRequest> entity = new HttpEntity<>(twinkleBankVerify1wonRequest, headers);
 
