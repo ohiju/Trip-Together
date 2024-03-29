@@ -22,10 +22,6 @@ public class MemberSettlement extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "is_requester")
-    private Boolean isRequester;
-
-    @NotNull
     @Column(name = "has_sent")
     private Boolean hasSent;
 
@@ -42,8 +38,7 @@ public class MemberSettlement extends BaseEntity {
     private Settlement settlement;
 
     @Builder
-    public MemberSettlement(Boolean isRequester, Boolean hasSent, Double price, Member member, Settlement settlement) {
-        this.isRequester = isRequester;
+    public MemberSettlement(Boolean hasSent, Double price, Member member, Settlement settlement) {
         this.hasSent = hasSent;
         this.price = price;
         setMember(member);

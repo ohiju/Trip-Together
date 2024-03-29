@@ -24,6 +24,10 @@ public class Settlement extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Column(name = "requester_id")
+    private Long requesterId;
+
+    @NotNull
     @Column(name = "total_price")
     private Double totalPrice;
 
@@ -44,7 +48,8 @@ public class Settlement extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Settlement(Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
+    public Settlement(Long requesterId, Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
+        this.requesterId = requesterId;
         this.totalPrice = totalPrice;
         this.attendanceCount = attendanceCount;
         this.currencyCode = currencyCode;
