@@ -1,11 +1,13 @@
 import {
   NavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import useGetRate, {GetRateParams} from '../../../apis/account/useGetRate';
 import AppButton from '../../../components/common/AppButton';
 import {Body} from '../../../components/common/InfoPageStyle';
 import Amount from '../../../components/myPage/exchange/Amount';
@@ -13,6 +15,8 @@ import {BottomButton} from '../../../constants/AppButton';
 import {kr_currency} from '../../../constants/currencies';
 import useExchangeData from '../../../hooks/useExchangeData';
 import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
+import {RootState} from '../../../store';
+import {useAppSelector} from '../../../store/hooks';
 import {Wrapper} from './ExchangeInputStyle';
 
 const ExchangeInput = () => {
@@ -20,7 +24,8 @@ const ExchangeInput = () => {
     useRoute<RouteProp<ExchangeStackParams, 'ExchangeInput'>>().params;
 
   // 환율 조회 API
-  const rate = currency.nation === 'UK' ? 1703.6 : 1455.62;
+  const getRate = useGetRate();
+  const rate = useAppSelector((state: RootState) => state.account.rate);
 
   // 데이터
   const exchangeData = useExchangeData();
@@ -37,6 +42,13 @@ const ExchangeInput = () => {
   const handleToNext = () => {
     navigation.navigate('ExchangeConfirm', {account, currency, ammount, rate});
   };
+
+  useFocusEffect(() => {
+    const params: GetRateParams = {
+      currency_code: currency.currency_code,
+    };
+    getRate(params);
+  });
 
   return (
     <Wrapper>

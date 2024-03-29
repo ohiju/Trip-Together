@@ -1,12 +1,21 @@
 import {BANK_API_URL} from '@env';
 import axios, {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {Alert} from 'react-native';
 import useLogin from '../member/useLogin';
 
 interface SocialLoginData {
-  client_id: '123456';
-  redirect_url: 'http://localhost:8081';
-  user_id: 'newuser';
-  password: 'passwordsss';
+  client_id: 'test';
+  redirect_url: 'https://j10a309.p.ssafy.io';
+  user_id: string;
+  password: string;
+}
+
+interface SocialLoginResponse {
+  status: number;
+  message: string;
+  data: {
+    code: string;
+  };
 }
 
 const useSocialLogin = () => {
@@ -15,7 +24,7 @@ const useSocialLogin = () => {
   const socialLoginConfig = (data: SocialLoginData) => {
     const axiosConfig: RawAxiosRequestConfig = {
       url: `${BANK_API_URL}/api/member/v1/oauth/authorize`,
-      method: 'post',
+      method: 'POST',
       data,
     };
 
@@ -25,12 +34,11 @@ const useSocialLogin = () => {
   const socialLogin = async (data: SocialLoginData) => {
     const result = await axios
       .request(socialLoginConfig(data))
-      .then((res: AxiosResponse) => {
-        console.log(res.config.params);
-        login(res.config.params.code);
+      .then((res: AxiosResponse<SocialLoginResponse>) => {
+        login(res.data.data.code);
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;
@@ -39,4 +47,5 @@ const useSocialLogin = () => {
   return socialLogin;
 };
 
+export type {SocialLoginData};
 export default useSocialLogin;
