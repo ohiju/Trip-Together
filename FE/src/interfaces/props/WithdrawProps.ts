@@ -1,5 +1,5 @@
-import {bankAccount} from '../../assets/data/bankAccount';
 import {currency} from '../../constants/currencies';
+import {bankAccount} from '../bankAccount';
 
 interface WithdrawProps {
   account: bankAccount;

@@ -1,6 +1,6 @@
 package com.ssafy.triptogether.flashmob.utils;
 
-import com.ssafy.triptogether.attraction.data.FlashmobElementFindResponse;
+import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;

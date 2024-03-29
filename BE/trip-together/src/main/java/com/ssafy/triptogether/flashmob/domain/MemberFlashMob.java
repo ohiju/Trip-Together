@@ -1,7 +1,10 @@
-package com.ssafy.triptogether.member.domain;
+package com.ssafy.triptogether.flashmob.domain;
 
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
+import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.member.domain.RoomStatus;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

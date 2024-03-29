@@ -1,31 +1,27 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-// import {imagePath} from '../../assets/images/imagePath';
-// import {imageBaseUrl} from '../../constants/urls';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
 import useSwipeTop from '../../hooks/useSwipeTop';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-// import {RootState} from '../../store';
-// import {useAppSelector} from '../../store/hooks';
+import AppButton from './AppButton';
 import {
+  Address,
+  ButtonContainer,
   Description,
+  DetailsRow,
   DragBar,
-  PlaceName,
   PlaceBox,
   PlaceImage,
   PlaceImageView,
-  PlaceView,
-  StyledShadow,
   PlaceInfoView,
-  Address,
-  Wrapper,
+  PlaceName,
+  PlaceView,
   Price,
   Rating,
-  ButtonContainer,
-  DetailsRow,
+  StyledShadow,
+  Wrapper,
 } from './PlaceInfoStyle';
-import AppButton from './AppButton';
-import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
 
 const PlaceInfo = ({theme}: {theme: string}) => {
   const [rating] = useState(4.9);

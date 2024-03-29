@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.attraction.data;
+package com.ssafy.triptogether.attraction.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.triptogether.member.domain.RoomStatus;

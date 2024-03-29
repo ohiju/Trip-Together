@@ -35,7 +35,7 @@ public class QSettlement extends EntityPathBase<Settlement> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<com.ssafy.triptogether.member.domain.MemberSettlement, com.ssafy.triptogether.member.domain.QMemberSettlement> memberSettlements = this.<com.ssafy.triptogether.member.domain.MemberSettlement, com.ssafy.triptogether.member.domain.QMemberSettlement>createList("memberSettlements", com.ssafy.triptogether.member.domain.MemberSettlement.class, com.ssafy.triptogether.member.domain.QMemberSettlement.class, PathInits.DIRECT2);
+    public final ListPath<MemberSettlement, com.ssafy.triptogether.member.domain.QMemberSettlement> memberSettlements = this.<MemberSettlement, com.ssafy.triptogether.member.domain.QMemberSettlement>createList("memberSettlements", MemberSettlement.class, com.ssafy.triptogether.member.domain.QMemberSettlement.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> totalPrice = createNumber("totalPrice", Double.class);
 

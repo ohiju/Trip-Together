@@ -1,6 +1,9 @@
 import {TRIP_API_URL} from '@env';
-import {AxiosError, RawAxiosRequestConfig} from 'axios';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {Alert, ToastAndroid} from 'react-native';
 import getToken from '../../hooks/getToken';
+import {MyPageStackParams} from '../../interfaces/router/myPage/MyPageStackParams';
 import useAxois from '../useAxois';
 
 interface PostExchangeData {
@@ -12,8 +15,15 @@ interface PostExchangeData {
   from_quantity: number;
 }
 
+interface PostExchangeResponse {
+  status: number;
+  message: string;
+  data: null;
+}
+
 const usePostExchange = () => {
   const axios = useAxois();
+  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
 
   const postExchangeConfig = async (data: PostExchangeData) => {
     const {access_token} = await getToken();
@@ -32,9 +42,12 @@ const usePostExchange = () => {
   const postExchange = async (data: PostExchangeData) => {
     const result = await axios
       .request(await postExchangeConfig(data))
-      .then(() => {})
+      .then((res: AxiosResponse<PostExchangeResponse>) => {
+        navigation.navigate('MyMain');
+        ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
+      })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;
@@ -43,4 +56,5 @@ const usePostExchange = () => {
   return postExchange;
 };
 
+export type {PostExchangeData};
 export default usePostExchange;

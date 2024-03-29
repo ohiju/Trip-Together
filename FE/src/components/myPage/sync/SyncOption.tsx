@@ -1,6 +1,6 @@
 import React from 'react';
-import {bankAccount} from '../../../assets/data/bankAccount';
 import {imagePath} from '../../../assets/images/imagePath';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {
   Balance,
   BalanceView,

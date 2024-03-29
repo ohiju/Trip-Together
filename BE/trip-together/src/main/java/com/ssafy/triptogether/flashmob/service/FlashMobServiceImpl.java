@@ -4,18 +4,26 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
+import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
+import com.ssafy.triptogether.flashmob.domain.Settlement;
+import com.ssafy.triptogether.flashmob.domain.document.Receipt;
+import com.ssafy.triptogether.flashmob.domain.document.ReceiptHistory;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberSettlementRepository;
+import com.ssafy.triptogether.flashmob.repository.ReceiptRepository;
+import com.ssafy.triptogether.flashmob.repository.SettlementRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.domain.RoomStatus;
-import com.ssafy.triptogether.member.repository.MemberFlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberFlashmobUtils;
 import com.ssafy.triptogether.member.utils.MemberUtils;
@@ -33,6 +41,9 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
     private final FlashMobRepository flashMobRepository;
     private final MemberFlashMobRepository memberFlashMobRepository;
     private final MemberRepository memberRepository;
+    private final SettlementRepository settlementRepository;
+    private final MemberSettlementRepository memberSettlementRepository;
+    private final ReceiptRepository receiptRepository;
 
     @Transactional
     @Override
@@ -116,6 +127,52 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
         }
         // 멤버를 repo.delete
         memberFlashMobRepository.delete(memberFlashMob);
+    }
+
+    /**
+     * 정산 요청
+     * @param memberId 요청자 member_id
+     * @param flashmobId 발생한 플래시몹 flashmob_id
+     * @param settlementSaveRequest 정산 요청 내용
+     */
+    @Transactional
+    @Override
+    public void settlementSave(long memberId, long flashmobId, SettlementSaveRequest settlementSaveRequest) {
+        memberFlashMobRepository.findMemberFlashmobByFlashmobIdAndMemberId(memberId, flashmobId);
+        FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
+        Settlement settlement = Settlement.builder()
+            .currencyCode(settlementSaveRequest.currencyCode())
+            .attendanceCount(settlementSaveRequest.attendeesCount())
+            .totalPrice(settlementSaveRequest.totalPrice())
+            .flashMob(flashMob)
+            .requesterId(memberId)
+            .build();
+        settlementRepository.save(settlement);
+
+        settlementSaveRequest.attendeesDetails()
+            .forEach(attendeesDetail -> {
+                Member member = MemberUtils.findByMemberId(memberRepository, attendeesDetail.memberId());
+                MemberSettlement memberSettlement = MemberSettlement.builder()
+                    .price(attendeesDetail.memberPrice())
+                    .hasSent(false)
+                    .member(member)
+                    .settlement(settlement)
+                    .build();
+                MemberSettlement savedMemberSettlement = memberSettlementRepository.save(memberSettlement);
+                List<ReceiptHistory> receiptHistories = attendeesDetail.receiptDetails()
+                    .stream().map(attendeesReceiptDetail ->
+                        ReceiptHistory.builder()
+                            .price(attendeesReceiptDetail.price())
+                            .businessName(attendeesReceiptDetail.businessName())
+                            .createdAt(attendeesReceiptDetail.createdAt())
+                            .build()
+                    ).toList();
+                Receipt receipt = Receipt.builder()
+                    .memberSettlementId(savedMemberSettlement.getId())
+                    .receiptHistories(receiptHistories)
+                    .build();
+                receiptRepository.save(receipt);
+            });
     }
 
     @Override

@@ -7,7 +7,9 @@ import {setDisplay} from '../../store/slices/tabState';
 import {Wrapper} from './SyncManageStyle';
 
 const SyncManage = () => {
-  const synced = useAppSelector((state: RootState) => state.user.sync_accounts);
+  const syncAccounts = useAppSelector(
+    (state: RootState) => state.account.sync_accounts,
+  );
 
   // 탭바
   const dispatch = useAppDispatch();
@@ -17,7 +19,7 @@ const SyncManage = () => {
 
   return (
     <Wrapper>
-      {synced.map(account => (
+      {syncAccounts.map(account => (
         <Account key={account.account_uuid} account={account} />
       ))}
     </Wrapper>

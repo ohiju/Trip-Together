@@ -170,7 +170,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@DistributedLock(key = "'exchange:' + #memberId + ':' + #tripAccountExchangeRequest.fromCurrencyCode()")
 	@Transactional
 	@Override
-	public void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
+	public AccountHistorySaveRequest tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
 		TripAccountExchangeRequest tripAccountExchangeRequest) {
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
@@ -199,8 +199,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				)
 				.paymentSenderDetail(null)
 				.build();
-			accountHistoryMaker(accountHistorySaveRequest);
-			return;
+			return accountHistorySaveRequest;
 		}
 
 		Currency currency = getCurrency(tripAccountExchangeRequest.fromCurrencyCode());
@@ -221,7 +220,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.quantity(tripAccountExchangeRequest.fromQuantity())
 				.build())
 			.build();
-		accountHistoryMaker(accountHistorySaveRequest);
+		return accountHistorySaveRequest;
 	}
 
 	/**
@@ -234,7 +233,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@DistributedLock(key = "'pay:' + #memberId + ':' + #tripAccountPaymentRequest.attractionBusinessNum()")
 	@Transactional
 	@Override
-	public void tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
+	public AccountHistorySaveRequest tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
 		TripAccountPaymentRequest tripAccountPaymentRequest) {
 		Attraction attraction = AttractionUtils.findByBusinessNum(attractionRepository,
 			tripAccountPaymentRequest.attractionBusinessNum());
@@ -256,34 +255,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			)
 			.paymentReceiverDetail(null)
 			.build();
-		accountHistoryMaker(accountHistorySaveRequest);
-	}
-
-	private void accountHistoryMaker(AccountHistorySaveRequest accountHistorySaveRequest) {
-		PaymentReceiverDetail receiver = accountHistorySaveRequest.paymentReceiverDetail();
-		if (receiver != null) {
-			AccountHistory receiverAccountHistory = AccountHistory.builder()
-				.tripAccount(receiver.tripAccount())
-				.type(receiver.type())
-				.businessNum(receiver.businessNum())
-				.businessName(receiver.businessName())
-				.address(receiver.address())
-				.quantity(receiver.quantity())
-				.build();
-			accountHistoryRepository.save(receiverAccountHistory);
-		}
-		PaymentSenderDetail sender = accountHistorySaveRequest.paymentSenderDetail();
-		if (sender != null) {
-			AccountHistory senderAccountHistory = AccountHistory.builder()
-				.tripAccount(sender.tripAccount())
-				.type(sender.type())
-				.businessNum(sender.businessNum())
-				.businessName(sender.businessName())
-				.address(sender.address())
-				.quantity(sender.quantity())
-				.build();
-			accountHistoryRepository.save(senderAccountHistory);
-		}
+		return accountHistorySaveRequest;
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
@@ -300,8 +272,8 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
 			.type("deposit")
-			.address("멀티 캠퍼스")
-			.businessName("trip-together")
+			.address("역삼동")
+			.businessName("Trip-Together")
 			.build();
 		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
 	}
@@ -312,8 +284,8 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
 			.type("withdraw")
-			.address("멀티 캠퍼스")
-			.businessName("trip-together")
+			.address("역삼동")
+			.businessName("Trip-Together")
 			.build();
 		twinkleBankClient.bankAccountWithdraw(twinkleBankAccountExchangeRequest);
 	}

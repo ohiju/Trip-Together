@@ -5,14 +5,19 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import React, {useState} from 'react';
+import {PostExchangeData} from '../../../apis/account/usePostExchange';
 import AppButton from '../../../components/common/AppButton';
 import Deposit from '../../../components/myPage/exchange/Deposit';
 import Term from '../../../components/myPage/exchange/Term';
 import Withdraw from '../../../components/myPage/exchange/Withdraw';
 import {BottomButton} from '../../../constants/AppButton';
+import {kr_currency} from '../../../constants/currencies';
 import {infoCollect, term} from '../../../constants/terms';
+import {
+  PinAuthProps,
+  RootStackParams,
+} from '../../../interfaces/router/RootStackParams';
 import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
-import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {Terms, Wrapper} from './ExchangeConfirmStyle';
 
 const ExchangeConfirm = () => {
@@ -21,10 +26,21 @@ const ExchangeConfirm = () => {
     useRoute<RouteProp<ExchangeStackParams, 'ExchangeConfirm'>>().params;
 
   // 라우팅
-  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
-  const handleExchange = () => {
-    // 충전 API
-    navigation.navigate('MyMain');
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
+  const pressExchange = () => {
+    const pinData: PostExchangeData = {
+      pin_num: '',
+      account_uuid: account.account_uuid,
+      to_currency_code: currency.currency_code,
+      from_currency_code: kr_currency.currency_code,
+      to_quantity: parseInt(ammount, 10) * rate,
+      from_quantity: parseInt(ammount, 10),
+    };
+    const props: PinAuthProps = {
+      pinData,
+      api: 'postExchange',
+    };
+    navigation.navigate('PinAuth', props);
   };
 
   // 체크박스
@@ -46,7 +62,7 @@ const ExchangeConfirm = () => {
         style={BottomButton}
         text="충전하기"
         disabled={!term1.isChecked}
-        onPress={handleExchange}
+        onPress={pressExchange}
       />
     </Wrapper>
   );

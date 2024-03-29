@@ -1,7 +1,7 @@
 package com.ssafy.triptogether.member.repository.query;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

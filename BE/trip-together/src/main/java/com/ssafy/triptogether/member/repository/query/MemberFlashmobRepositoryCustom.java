@@ -1,6 +1,6 @@
 package com.ssafy.triptogether.member.repository.query;
 
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 
 import java.util.Optional;
 
