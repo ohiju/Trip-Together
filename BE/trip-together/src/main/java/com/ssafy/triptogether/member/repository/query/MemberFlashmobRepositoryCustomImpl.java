@@ -1,7 +1,7 @@
 package com.ssafy.triptogether.member.repository.query;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static com.ssafy.triptogether.flashmob.domain.QFlashMob.flashMob;
 import static com.ssafy.triptogether.member.domain.QMember.member;
-import static com.ssafy.triptogether.member.domain.QMemberFlashMob.memberFlashMob;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.memberFlashMob;
 
 @RequiredArgsConstructor
 public class MemberFlashmobRepositoryCustomImpl implements MemberFlashmobRepositoryCustom {

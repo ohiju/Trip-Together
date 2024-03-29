@@ -3,8 +3,8 @@ package com.ssafy.triptogether.member.utils;
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
-import com.ssafy.triptogether.member.repository.MemberFlashMobRepository;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
