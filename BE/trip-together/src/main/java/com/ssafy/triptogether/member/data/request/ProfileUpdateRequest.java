@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.member.data;
+package com.ssafy.triptogether.member.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
