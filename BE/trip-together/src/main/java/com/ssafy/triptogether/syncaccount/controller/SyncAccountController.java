@@ -22,8 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_1WON_TRANSFER;
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
 
 @RestController
 @RequestMapping("/account/v1/sync-account")
@@ -117,6 +116,6 @@ public class SyncAccountController {
 		String memberUuid = securityMember.getUuid();
 		Long memberId = securityMember.getId();
 		syncAccountLoadService.verify1won(memberId, memberUuid, request);
-		return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
+		return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_VERIFY);
 	}
 }

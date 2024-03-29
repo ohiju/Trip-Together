@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface MemberFlashmobRepositoryCustom {
     Optional<MemberFlashMob> findMemberFlashmobByFlashmobIdAndMemberId(long flashmobId, long memberId);
     boolean isMaster(long flashmobId, long memberId);
+    Optional<MemberFlashMob> findMemberFlashmobByFlashmobIdNotInMemberId(long flashmobId, long memberId);
 }
