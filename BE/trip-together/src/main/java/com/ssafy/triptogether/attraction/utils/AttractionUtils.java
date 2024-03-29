@@ -24,4 +24,11 @@ public class AttractionUtils {
                 () -> new NotFoundException("FindByAttractionId", ErrorCode.ATTRACTION_NOT_FOUND)
             );
     }
+
+    public static Attraction findByBusinessNum(AttractionRepository repository, String businessNum) {
+        return repository.findByBusinessNum(businessNum)
+            .orElseThrow(
+                () -> new NotFoundException("FindByBusinessNum", ErrorCode.ATTRACTION_NOT_FOUND)
+            );
+    }
 }
