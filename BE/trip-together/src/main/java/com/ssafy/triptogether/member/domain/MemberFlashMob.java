@@ -65,4 +65,12 @@ public class MemberFlashMob extends BaseEntity {
     public void applyDenial() {
         this.roomStatus = RoomStatus.REFUSE_UNCHECK;
     }
+
+    public void memberToMaster() {
+        this.isMaster = true;
+    }
+
+    public void memberToMember() {
+        this.isMaster = false;
+    }
 }

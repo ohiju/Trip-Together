@@ -5,4 +5,5 @@ import com.ssafy.triptogether.member.repository.query.MemberFlashmobRepositoryCu
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberFlashMobRepository extends JpaRepository<MemberFlashMob, Long>, MemberFlashmobRepositoryCustom {
+	long countMemberFlashMobsByFlashMob_Id(long flashmobId);
 }
