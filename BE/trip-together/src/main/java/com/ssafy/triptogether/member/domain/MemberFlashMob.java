@@ -3,7 +3,7 @@ package com.ssafy.triptogether.member.domain;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +19,11 @@ public class MemberFlashMob extends BaseEntity {
     @Column(name = "member_flash_mob_id")
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "is_master")
     private Boolean isMaster;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private RoomStatus roomStatus;
@@ -52,5 +52,25 @@ public class MemberFlashMob extends BaseEntity {
     public void setMember(Member member) {
         this.member = member;
         member.getMemberFlashMobs().add(this);
+    }
+
+    public void checkDenial() {
+        this.roomStatus = RoomStatus.REFUSE_CHECK;
+    }
+
+    public void applyAcceptance() {
+        this.roomStatus = RoomStatus.ATTEND;
+    }
+
+    public void applyDenial() {
+        this.roomStatus = RoomStatus.REFUSE_UNCHECK;
+    }
+
+    public void memberToMaster() {
+        this.isMaster = true;
+    }
+
+    public void memberToMember() {
+        this.isMaster = false;
     }
 }

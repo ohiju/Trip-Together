@@ -12,6 +12,8 @@ import com.ssafy.twinklebank.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 public class MemberUtils {
@@ -43,6 +45,11 @@ public class MemberUtils {
 	public static Member loadMemberByUsername(MemberRepository memberRepository, String username) {
 		return memberRepository.findByUsername(username)
 			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
+	}
+
+	public static Member loadMemberByMemberUuid(MemberRepository memberRepository, String memberUuid){
+		return memberRepository.findByUuid(memberUuid)
+			.orElseThrow(()-> new NotFoundException("MemberUtils : loadMemberByMemberUuid ", UNDEFINED_MEMBER));
 	}
 
 }

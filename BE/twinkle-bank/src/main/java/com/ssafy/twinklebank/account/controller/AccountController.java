@@ -1,10 +1,12 @@
 package com.ssafy.twinklebank.account.controller;
 
-import com.ssafy.twinklebank.account.data.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.AccountResponse;
-import com.ssafy.twinklebank.account.data.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
+import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
+import com.ssafy.twinklebank.account.data.response.AccountResponse;
+import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
+import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
+import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.response.getUserAccountsResponse;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
 import com.ssafy.twinklebank.auth.utils.SecurityMember;
@@ -39,14 +41,15 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AccountResponse>>> getUserAccountList(
+    public ResponseEntity<ApiResponse<getUserAccountsResponse>> getUserAccountList(
         @AuthenticationPrincipal SecurityMember securityMember,
         @RequestParam("client_id") String clientId
     ) {
-        long userId = securityMember.getId();
-        List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, userId);
+        long memberId = securityMember.getId();
+        List<AccountResponse> accountResponseList = accountLoadService.getAccounts(clientId, memberId);
 
-        return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST, accountResponseList);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_GET_ACCOUNT_LIST,
+            getUserAccountsResponse.builder().accounts(accountResponseList).build());
     }
 
     @PostMapping
@@ -96,6 +99,12 @@ public class AccountController {
         Long memberId = securityMember.getId();
         accountSaveService.transfer1won(memberId, request);
         return ApiResponse.emptyResponse(OK, SUCCESS_1WON_TRANSFER);
+    }
 
+    @PostMapping("/1wonverify")
+    public ResponseEntity<ApiResponse<Void>> verify1won(
+        @AuthenticationPrincipal SecurityMember securityMember, @Valid @RequestBody Verify1wonRequest request){
+        accountSaveService.verify1won(request);
+        return ApiResponse.emptyResponse(OK, SUCCESS_VERIFY_1WON);
     }
 }

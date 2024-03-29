@@ -5,7 +5,7 @@ import GoogleMap from '../../components/travel/GoogleMap';
 import SearchPlace from '../../components/travel/SearchPlace';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
 import {Container, PlanImage, PlanIcon} from './MapStyle';
-import PlaceInfo from '../../components/travel/PlaceInfo';
+import PlaceInfo from '../../components/common/PlaceInfo';
 
 const Map = () => {
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
@@ -22,7 +22,7 @@ const Map = () => {
         <PlanIcon onPress={handlePlanPress}>
           <PlanImage source={require('../../assets/images/planning.png')} />
         </PlanIcon>
-        <PlaceInfo />
+        <PlaceInfo theme="trip" />
       </Container>
     </SafeAreaView>
   );

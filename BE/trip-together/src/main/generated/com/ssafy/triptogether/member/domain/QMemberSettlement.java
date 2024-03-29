@@ -37,7 +37,7 @@ public class QMemberSettlement extends EntityPathBase<MemberSettlement> {
 
     public final NumberPath<Double> price = createNumber("price", Double.class);
 
-    public final com.ssafy.triptogether.settlement.domain.QSettlement settlement;
+    public final com.ssafy.triptogether.flashmob.domain.QSettlement settlement;
 
     public QMemberSettlement(String variable) {
         this(MemberSettlement.class, forVariable(variable), INITS);
@@ -58,7 +58,7 @@ public class QMemberSettlement extends EntityPathBase<MemberSettlement> {
     public QMemberSettlement(Class<? extends MemberSettlement> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
-        this.settlement = inits.isInitialized("settlement") ? new com.ssafy.triptogether.settlement.domain.QSettlement(forProperty("settlement"), inits.get("settlement")) : null;
+        this.settlement = inits.isInitialized("settlement") ? new com.ssafy.triptogether.flashmob.domain.QSettlement(forProperty("settlement"), inits.get("settlement")) : null;
     }
 
 }

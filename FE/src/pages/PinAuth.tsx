@@ -1,11 +1,5 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import usePostExchange, {
-  PostExchangeData,
-} from '../apis/account/usePostExchange';
-import usePostSyncAccount, {
-  PostSyncAccountData,
-} from '../apis/account/usePostSyncAccount';
 import AppKeyboard from '../components/common/AppKeyboard';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
 import {
@@ -30,31 +24,12 @@ const PinAuth = () => {
     setTokens(newToken as tokenType);
   }, [pin]);
 
-  // api 호출
-  const {pinData, api} =
-    useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
-  const postSyncAccount = usePostSyncAccount();
-  const postExchange = usePostExchange();
+  // api 요청 매서드
+  const {data, api} = useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
   useEffect(() => {
     if (pin.length === 6) {
-      if (api === 'postSyncAccount') {
-        const data: PostSyncAccountData = {
-          ...(pinData as PostSyncAccountData),
-          pin_num: pin,
-        };
-        postSyncAccount(data);
-      } else if (api === 'postExchange') {
-        const data: PostExchangeData = {
-          ...(pinData as PostExchangeData),
-          pin_num: pin,
-        };
-        postExchange(data);
-      }
+      api({data: {...data, pin_num: pin}});
     }
-  }, [pin]);
-
-  useEffect(() => {
-    console.log(pin);
   }, [pin]);
 
   return (

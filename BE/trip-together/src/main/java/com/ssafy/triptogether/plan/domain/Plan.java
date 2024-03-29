@@ -5,9 +5,7 @@ import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.plan.data.request.PlansModifyRequest;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

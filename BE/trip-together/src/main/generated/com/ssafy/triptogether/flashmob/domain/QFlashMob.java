@@ -31,9 +31,11 @@ public class QFlashMob extends EntityPathBase<FlashMob> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Integer> maxMemberCount = createNumber("maxMemberCount", Integer.class);
+
     public final ListPath<com.ssafy.triptogether.member.domain.MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob> memberFlashMobs = this.<com.ssafy.triptogether.member.domain.MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob>createList("memberFlashMobs", com.ssafy.triptogether.member.domain.MemberFlashMob.class, com.ssafy.triptogether.member.domain.QMemberFlashMob.class, PathInits.DIRECT2);
 
-    public final ListPath<com.ssafy.triptogether.settlement.domain.Settlement, com.ssafy.triptogether.settlement.domain.QSettlement> settlements = this.<com.ssafy.triptogether.settlement.domain.Settlement, com.ssafy.triptogether.settlement.domain.QSettlement>createList("settlements", com.ssafy.triptogether.settlement.domain.Settlement.class, com.ssafy.triptogether.settlement.domain.QSettlement.class, PathInits.DIRECT2);
+    public final ListPath<Settlement, QSettlement> settlements = this.<Settlement, QSettlement>createList("settlements", Settlement.class, QSettlement.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.time.LocalDateTime> startAt = createDateTime("startAt", java.time.LocalDateTime.class);
 

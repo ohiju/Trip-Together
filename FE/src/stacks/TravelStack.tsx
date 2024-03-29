@@ -7,8 +7,8 @@ import Calendar from '../pages/travel/Calendar';
 import TripTitle from '../pages/travel/TripTitle';
 import GoogleMap from '../pages/travel/Map';
 import PlanDetail from '../pages/travel/PlanDetail';
-import PlaceInfoList from '../pages/travel/PlaceInfoList';
-import PlaceDetail from '../pages/travel/PlaceDetail';
+import PlaceInfoList from '../pages/common/PlaceInfoList';
+import PlaceDetail from '../pages/common/PlaceDetail';
 import Camera from '../components/common/Camera';
 
 const TravelStack = () => {

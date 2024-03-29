@@ -1,9 +1,9 @@
 package com.ssafy.triptogether.member.domain;
 
+import com.ssafy.triptogether.flashmob.domain.Settlement;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.settlement.domain.Settlement;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,15 +19,15 @@ public class MemberSettlement extends BaseEntity {
     @Column(name = "member_settlement_id")
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "is_requester")
     private Boolean isRequester;
 
-    @NotBlank
+    @NotNull
     @Column(name = "has_sent")
     private Boolean hasSent;
 
-    @NotBlank
+    @NotNull
     @Column(name = "price")
     private Double price;
 

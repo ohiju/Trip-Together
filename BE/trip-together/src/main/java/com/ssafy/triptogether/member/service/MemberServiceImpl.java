@@ -9,21 +9,20 @@ import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ValidationException;
-import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
 import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRequest;
-import com.ssafy.triptogether.member.data.PinSaveRequest;
-import com.ssafy.triptogether.member.data.PinUpdateRequest;
-import com.ssafy.triptogether.member.data.ProfileFindResponse;
-import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
-import com.ssafy.triptogether.member.data.ReissueResponse;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
+import com.ssafy.triptogether.member.data.request.PinSaveRequest;
+import com.ssafy.triptogether.member.data.request.PinUpdateRequest;
+import com.ssafy.triptogether.member.data.request.ProfileUpdateRequest;
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
+import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
+import com.ssafy.triptogether.member.data.response.ReissueResponse;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
-
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,7 +39,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static com.ssafy.triptogether.global.data.response.StatusCode.SUCCESS_REISSUE;
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 @RequiredArgsConstructor
@@ -48,187 +47,195 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 @Service
 public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
-	private final MemberRepository memberRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final StringRedisTemplate redisTemplate;
-	private final JwtTokenProvider jwtTokenProvider;
-	private final TwinkleBankClient twinkleBankClient;
-	private final CookieProvider cookieProvider;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final StringRedisTemplate redisTemplate;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final TwinkleBankClient twinkleBankClient;
+    private final CookieProvider cookieProvider;
 
-	@Transactional
-	@Override
-	public void updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
-		// find member
-		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+    @Transactional
+    @Override
+    public ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
+        // find member
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
-		// update member
-		member.update(profileUpdateRequest);
-	}
+        // update member
+        member.update(profileUpdateRequest);
 
-	@Transactional
-	@Override
-	public void savePin(long memberId, PinSaveRequest pinSaveRequest) {
-		// validate request
-		if (!pinSaveRequest.pinNum().equals(pinSaveRequest.pinNumCheck())) {
-			throw new ValidationException("PinSave", PIN_CHECK_MISS_MATCH, pinSaveRequest.pinNum(),
-				pinSaveRequest.pinNumCheck());
-		}
+        // create response & return
+        return ProfileUpdateResponse.builder()
+            .memberId(member.getId())
+            .imageUrl(member.getImageUrl())
+            .nickname(member.getNickname())
+            .description(member.getDescription())
+            .build();
+    }
 
-		// find member
-		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+    @Transactional
+    @Override
+    public void savePin(long memberId, PinSaveRequest pinSaveRequest) {
+        // validate request
+        if (!pinSaveRequest.pinNum().equals(pinSaveRequest.pinNumCheck())) {
+            throw new ValidationException("PinSave", PIN_CHECK_MISS_MATCH, pinSaveRequest.pinNum(),
+                pinSaveRequest.pinNumCheck());
+        }
 
-		// validate member
-		if (member.getPinNum() != null) {
-			throw new ValidationException("PinSave", PIN_ALREADY_EXISTS, memberId);
-		}
+        // find member
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
-		// save pin
-		String encodedPinNum = passwordEncoder.encode(pinSaveRequest.pinNum());
-		member.savePin(encodedPinNum);
-	}
+        // validate member
+        if (member.getPinNum() != null) {
+            throw new ValidationException("PinSave", PIN_ALREADY_EXISTS, memberId);
+        }
 
-	@PinVerify
-	@Transactional
-	@Override
-	public void updatePin(long memberId, PinVerifyRequest pinVerifyRequest, PinUpdateRequest pinUpdateRequest) {
-		// validate request if miss match
-		if (!pinUpdateRequest.newPinNum().equals(pinUpdateRequest.newPinNumCheck())) {
-			throw new ValidationException("PinUpdate", PIN_CHECK_MISS_MATCH, pinUpdateRequest.newPinNum(),
-				pinUpdateRequest.newPinNumCheck());
-		}
+        // save pin
+        String encodedPinNum = passwordEncoder.encode(pinSaveRequest.pinNum());
+        member.savePin(encodedPinNum);
+    }
 
-		// find member
-		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+    @PinVerify
+    @Transactional
+    @Override
+    public void updatePin(long memberId, PinVerifyRequest pinVerifyRequest, PinUpdateRequest pinUpdateRequest) {
+        // validate request if miss match
+        if (!pinUpdateRequest.newPinNum().equals(pinUpdateRequest.newPinNumCheck())) {
+            throw new ValidationException("PinUpdate", PIN_CHECK_MISS_MATCH, pinUpdateRequest.newPinNum(),
+                pinUpdateRequest.newPinNumCheck());
+        }
 
-		// validate member
-		if (member.getPinNum() == null) {
-			throw new NotFoundException("PinUpdate", PIN_NOT_EXISTS, memberId);
-		}
+        // find member
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
-		// update pin
-		String encodedPinNum = passwordEncoder.encode(pinUpdateRequest.newPinNum());
-		member.savePin(encodedPinNum);
-	}
+        // validate member
+        if (member.getPinNum() == null) {
+            throw new NotFoundException("PinUpdate", PIN_NOT_EXISTS, memberId);
+        }
 
-	@Override
-	public void logout(SecurityMember securityMember, String accessToken) {
-		// logout from twinkle bank
-		TwinkleBankLogoutRequest twinkleBankLogoutRequest = TwinkleBankLogoutRequest.builder()
-			.memberUuid(securityMember.getUuid())
-			.build();
-		twinkleBankClient.bankLogout(twinkleBankLogoutRequest);
+        // update pin
+        String encodedPinNum = passwordEncoder.encode(pinUpdateRequest.newPinNum());
+        member.savePin(encodedPinNum);
+    }
 
-		// delete refresh token
-		if (redisTemplate.opsForValue().get("refresh:" + securityMember.getId()) != null) {
-			redisTemplate.delete("refresh:" + securityMember.getId());
-		}
+    @Override
+    public void logout(SecurityMember securityMember, String accessToken) {
+        // logout from twinkle bank
+        TwinkleBankLogoutRequest twinkleBankLogoutRequest = TwinkleBankLogoutRequest.builder()
+            .memberUuid(securityMember.getUuid())
+            .build();
+        twinkleBankClient.bankLogout(twinkleBankLogoutRequest);
 
-		// add access token to a blacklist
-		redisTemplate.opsForValue().set(
-			"blacklist:" + accessToken, accessToken,
-			jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(),
-			TimeUnit.MILLISECONDS
-		);
-	}
+        // delete refresh token
+        if (redisTemplate.opsForValue().get("refresh:" + securityMember.getId()) != null) {
+            redisTemplate.delete("refresh:" + securityMember.getId());
+        }
 
-	@Transactional
-	@Override
-	public Member saveMember(TwinkleMemberInfoResponse twinkleMemberInfoResponse) {
+        // add access token to a blacklist
+        redisTemplate.opsForValue().set(
+            "blacklist:" + accessToken, accessToken,
+            jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(),
+            TimeUnit.MILLISECONDS
+        );
+    }
 
-		Member member = Member.builder()
-			.username(twinkleMemberInfoResponse.name())
-			.uuid(twinkleMemberInfoResponse.memberUuid())
-			.nickname("")
-			.gender(twinkleMemberInfoResponse.gender())
-			.birth(twinkleMemberInfoResponse.birth())
-			.build();
+    @Transactional
+    @Override
+    public Member saveMember(TwinkleMemberInfoResponse twinkleMemberInfoResponse) {
 
-		member = memberRepository.save(member);
+        Member member = Member.builder()
+            .username(twinkleMemberInfoResponse.name())
+            .uuid(twinkleMemberInfoResponse.memberUuid())
+            .nickname("")
+            .gender(twinkleMemberInfoResponse.gender())
+            .birth(twinkleMemberInfoResponse.birth())
+            .build();
 
-		return member;
-	}
+        member = memberRepository.save(member);
 
-	@Override
-	public ProfileFindResponse findProfile(long memberId) {
-		// find member & return
-		return memberRepository.findProfileByMemberId(memberId)
-			.orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
-	}
+        return member;
+    }
 
-	@Override
-	public ResponseEntity<ApiResponse<ReissueResponse>> reissue(String refreshToken) {
-		// 1. refreshtoken이 null이 아닌지 확인한다
-		if (refreshToken == null) {
-			throw new NotFoundException("MemberServiceImpl", REFRESH_NOT_FOUND);
-		}
+    @Override
+    public ProfileFindResponse findProfile(long memberId) {
+        // find member & return
+        return memberRepository.findProfileByMemberId(memberId)
+            .orElseThrow(() -> new NotFoundException("ProfileFind", UNDEFINED_MEMBER, memberId));
+    }
 
-		// 2. 존재한다면 복호화 후 claims 객체를 파싱해온다
-		Claims claims = jwtTokenProvider.parseClaims(refreshToken);
-		// 3. claims에서 저장한 id를 가져온다
-		Long id = Long.valueOf(claims.get("id").toString());
+    @Override
+    public ResponseEntity<ApiResponse<ReissueResponse>> reissue(String refreshToken) {
+        // 1. refreshtoken이 null이 아닌지 확인한다
+        if (refreshToken == null) {
+            throw new NotFoundException("MemberServiceImpl", REFRESH_NOT_FOUND);
+        }
 
-		// refresh token이 만료된 경우
-		if (isRefreshTokenExpired(id)) {
-			throw new UnAuthorizedException("MemberServiceImpl : ", EXPIRED_TOKEN);
-		}
+        // 2. 존재한다면 복호화 후 claims 객체를 파싱해온다
+        Claims claims = jwtTokenProvider.parseClaims(refreshToken);
+        // 3. claims에서 저장한 id를 가져온다
+        Long id = Long.valueOf(claims.get("id").toString());
 
-		// 비정상적인 접근으로 refresh token이 일치하지 않는 경우
-		if (!isValidRefreshToken(refreshToken, id)) {
-			throw new UnAuthorizedException("MemberServiceImpl : ", UNAUTHORIZED_REFRESH);
-		}
+        // refresh token이 만료된 경우
+        if (isRefreshTokenExpired(id)) {
+            throw new UnAuthorizedException("MemberServiceImpl : ", EXPIRED_TOKEN);
+        }
 
-		// 6. 동일하다면 access token을 생성해 전달한다.
-		Member member = MemberUtils.findByMemberId(memberRepository, id);
+        // 비정상적인 접근으로 refresh token이 일치하지 않는 경우
+        if (!isValidRefreshToken(refreshToken, id)) {
+            throw new UnAuthorizedException("MemberServiceImpl : ", UNAUTHORIZED_REFRESH);
+        }
 
-		Authentication authentication =
-			new UsernamePasswordAuthenticationToken(member.getId(), member.getUuid(),
-				Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
+        // 6. 동일하다면 access token을 생성해 전달한다.
+        Member member = MemberUtils.findByMemberId(memberRepository, id);
 
-		Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), member.getUuid(), authentication);
-		// refresh token redis에 저장
-		saveTokenRedis(member, tokenMap);
+        Authentication authentication =
+            new UsernamePasswordAuthenticationToken(member.getId(), member.getUuid(),
+                Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
-		// accessToken 까서 created at, expires in 빼서 넣어주기
-		claims = jwtTokenProvider.parseClaims(tokenMap.get("access").substring(7));
-		Long createdAt = (Long)claims.get("created");
-		Integer expiresIn = (Integer)claims.get("expiresIn");
+        Map<String, String> tokenMap = jwtTokenProvider.generateToken(member.getId(), member.getUuid(), authentication);
+        // refresh token redis에 저장
+        saveTokenRedis(member, tokenMap);
 
-		ReissueResponse response = ReissueResponse.builder()
-			.access(tokenMap.get("access"))
-			.expiresIn(expiresIn)
-			.createdAt(createdAt).build();
+        // accessToken 까서 created at, expires in 빼서 넣어주기
+        claims = jwtTokenProvider.parseClaims(tokenMap.get("access").substring(7));
+        Long createdAt = (Long) claims.get("created");
+        Integer expiresIn = (Integer) claims.get("expiresIn");
 
-		String newRefreshToken = tokenMap.get("refresh");
-		// refresh token은 헤더에 쿠키에 다시 넣어준다
-		ResponseCookie newCookie = cookieProvider.createCookie(newRefreshToken);
+        ReissueResponse response = ReissueResponse.builder()
+            .access(tokenMap.get("access"))
+            .expiresIn(expiresIn)
+            .createdAt(createdAt).build();
 
-		// 쿠키를 담을 헤더 생성
-		HttpHeaders headers = cookieProvider.addCookieHttpHeaders(newCookie);
-		// ApiResponse 객체 생성
-		ApiResponse<ReissueResponse> apiResponse = ApiResponse.<ReissueResponse>builder()
-			.status(SUCCESS_REISSUE.getStatus())
-			.message(SUCCESS_REISSUE.getMessage())
-			.data(response)
-			.build();
+        String newRefreshToken = tokenMap.get("refresh");
+        // refresh token은 헤더에 쿠키에 다시 넣어준다
+        ResponseCookie newCookie = cookieProvider.createCookie(newRefreshToken);
 
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.headers(headers)
-			.body(apiResponse);
-	}
+        // 쿠키를 담을 헤더 생성
+        HttpHeaders headers = cookieProvider.addCookieHttpHeaders(newCookie);
+        // ApiResponse 객체 생성
+        ApiResponse<ReissueResponse> apiResponse = ApiResponse.<ReissueResponse>builder()
+            .status(SUCCESS_REISSUE.getStatus())
+            .message(SUCCESS_REISSUE.getMessage())
+            .data(response)
+            .build();
 
-	private boolean isRefreshTokenExpired(Long id) {
-		return redisTemplate.opsForValue().get("refresh:" + id) == null;
-	}
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .headers(headers)
+            .body(apiResponse);
+    }
 
-	private boolean isValidRefreshToken(String refreshToken, Long id) {
-		return refreshToken.equals(redisTemplate.opsForValue().get("refresh:" + id));
-	}
+    private boolean isRefreshTokenExpired(Long id) {
+        return redisTemplate.opsForValue().get("refresh:" + id) == null;
+    }
 
-	private void saveTokenRedis(Member member, Map<String, String> tokenMap) {
-		redisTemplate.opsForValue()
-			.set("refresh:" + member.getId(), tokenMap.get("refresh"),
-				jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
-	}
+    private boolean isValidRefreshToken(String refreshToken, Long id) {
+        return refreshToken.equals(redisTemplate.opsForValue().get("refresh:" + id));
+    }
+
+    private void saveTokenRedis(Member member, Map<String, String> tokenMap) {
+        redisTemplate.opsForValue()
+            .set("refresh:" + member.getId(), tokenMap.get("refresh"),
+                jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
+    }
 
 }

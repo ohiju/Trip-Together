@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum Status {
-	BEFORE("before"),
-	IN_PROGRESS("in_progress"),
-	AFTER("done");
+    BEFORE("before"),
+    IN_PROGRESS("in_progress"),
+    AFTER("done");
 
-	private final String message;
+    private final String message;
 
-	Status(String message) {
-		this.message = message;
-	}
+    Status(String message) {
+        this.message = message;
+    }
 }

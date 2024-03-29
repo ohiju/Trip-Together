@@ -1,16 +1,8 @@
 package com.ssafy.triptogether.tripaccount.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.ssafy.triptogether.attraction.domain.Attraction;
+import com.ssafy.triptogether.attraction.repository.AttractionRepository;
+import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
@@ -23,22 +15,31 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.tripaccount.concurrency.DistributedLock;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentReceiverDetail;
+import com.ssafy.triptogether.tripaccount.data.request.AccountHistorySaveRequest;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentSenderDetail;
 import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
-import com.ssafy.triptogether.tripaccount.data.response.AccountHistoriesLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
-import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
-import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
-import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.request.TripAccountPaymentRequest;
+import com.ssafy.triptogether.tripaccount.data.response.*;
 import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
+import com.ssafy.triptogether.tripaccount.domain.Type;
 import com.ssafy.triptogether.tripaccount.repository.AccountHistoryRepository;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,6 +50,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	private final TripAccountRepository tripAccountRepository;
 	private final AccountHistoryRepository accountHistoryRepository;
 	private final MemberRepository memberRepository;
+	private final AttractionRepository attractionRepository;
 	// Client
 	private final CurrencyRateClient currencyRateClient;
 	private final TwinkleBankClient twinkleBankClient;
@@ -184,7 +186,20 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.member(member)
 				.build();
 			tripAccountRepository.save(tripAccount);
-			twinkleBankWithdrawRequest(tripAccountExchangeRequest);
+			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
+			AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+				.paymentReceiverDetail(PaymentReceiverDetail.builder()
+					.tripAccount(tripAccount)
+					.type(Type.DEPOSIT)
+					.businessNum("19991224")
+					.businessName("Trip-Together")
+					.address("역삼동")
+					.quantity(tripAccountExchangeRequest.toQuantity())
+					.build()
+				)
+				.paymentSenderDetail(null)
+				.build();
+			accountHistoryMaker(accountHistorySaveRequest);
 			return;
 		}
 
@@ -194,7 +209,81 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
 		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
-		twinkleBankDepositRequest(tripAccountExchangeRequest);
+		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentReceiverDetail(null)
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.tripAccount(tripAccount)
+				.type(Type.REFUND)
+				.businessNum("19991224")
+				.businessName("Trip-Together")
+				.address("역삼동")
+				.quantity(tripAccountExchangeRequest.fromQuantity())
+				.build())
+			.build();
+		accountHistoryMaker(accountHistorySaveRequest);
+	}
+
+	/**
+	 * 바코드 결제
+	 * @param memberId 요청자 member_id
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param tripAccountPaymentRequest 결제 요청 정보
+	 */
+	@PinVerify
+	@DistributedLock(key = "'pay:' + #memberId + ':' + #tripAccountPaymentRequest.attractionBusinessNum()")
+	@Transactional
+	@Override
+	public void tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
+		TripAccountPaymentRequest tripAccountPaymentRequest) {
+		Attraction attraction = AttractionUtils.findByBusinessNum(attractionRepository,
+			tripAccountPaymentRequest.attractionBusinessNum());
+		Currency currency = getCurrency(attraction.getRegion().getNation().getMessage());
+		TripAccount tripAccount = tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
+			.orElseThrow(
+				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
+			);
+		tripAccount.withdrawBalance(tripAccountPaymentRequest.quantity());
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.type(Type.WITHDRAW)
+				.address(attraction.getAddress())
+				.businessNum(attraction.getBusinessNum())
+				.businessName(attraction.getName())
+				.quantity(tripAccountPaymentRequest.quantity())
+				.tripAccount(tripAccount)
+				.build()
+			)
+			.paymentReceiverDetail(null)
+			.build();
+		accountHistoryMaker(accountHistorySaveRequest);
+	}
+
+	private void accountHistoryMaker(AccountHistorySaveRequest accountHistorySaveRequest) {
+		PaymentReceiverDetail receiver = accountHistorySaveRequest.paymentReceiverDetail();
+		if (receiver != null) {
+			AccountHistory receiverAccountHistory = AccountHistory.builder()
+				.tripAccount(receiver.tripAccount())
+				.type(receiver.type())
+				.businessNum(receiver.businessNum())
+				.businessName(receiver.businessName())
+				.address(receiver.address())
+				.quantity(receiver.quantity())
+				.build();
+			accountHistoryRepository.save(receiverAccountHistory);
+		}
+		PaymentSenderDetail sender = accountHistorySaveRequest.paymentSenderDetail();
+		if (sender != null) {
+			AccountHistory senderAccountHistory = AccountHistory.builder()
+				.tripAccount(sender.tripAccount())
+				.type(sender.type())
+				.businessNum(sender.businessNum())
+				.businessName(sender.businessName())
+				.address(sender.address())
+				.quantity(sender.quantity())
+				.build();
+			accountHistoryRepository.save(senderAccountHistory);
+		}
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
@@ -205,8 +294,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 	}
 
-	private void twinkleBankDepositRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankDepositRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
 			.type("deposit")
@@ -216,8 +306,9 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
 	}
 
-	private void twinkleBankWithdrawRequest(TripAccountExchangeRequest tripAccountExchangeRequest) {
+	private void twinkleBankWithdrawRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
 		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
 			.type("withdraw")

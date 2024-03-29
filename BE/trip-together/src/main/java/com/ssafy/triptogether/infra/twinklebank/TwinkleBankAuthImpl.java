@@ -1,31 +1,30 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankTransfer1wonRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankVerify1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleTokenRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleTokenResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
@@ -33,38 +32,46 @@ import lombok.extern.slf4j.Slf4j;
 public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	private final RestTemplate restTemplate;
 	private final StringRedisTemplate redisTemplate;
-	static final String TWINKLE_BANK_URI = "https://www.twinklebank.go.kr";
+	private final ObjectMapper objectMapper;
+
+	@Value("${app.bankUrl}")
+	private String TWINKLE_BANK_URI;
+
+	@Value("${app.redirectUrl}")
+	private String TWINKLE_REDIRECT_URL;
+
+	@Value("${app.clientId}")
+	private String TWINKLE_CLIENT_ID;
 
 	@Override
 	public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
 		// 쿼리 파라미터로 code , client_id, redirect_url 을 전달하고, request body에 secret_key를 담아서 요청을 보낸다.
-		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/api/member/v1/oauth/token")
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/oauth/token")
 			.queryParam("code", code)
-			.queryParam("client_id", "123456")
-			.queryParam("redirect_url", "redirecturl")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
+			.queryParam("redirect_url", TWINKLE_REDIRECT_URL)
 			.toUriString();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleTokenRequest> entity = new HttpEntity<>(twinkleTokenRequest, headers);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(
-			url,
-			HttpMethod.POST,
-			entity,
-			ApiResponse.class
-		);
-
-		if (response.getStatusCode() == HttpStatus.OK) {
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
 			// accessToken 꺼내기
 			String accessToken = getAccessToken(response);
 			// refreshToken 꺼내기
 			String refreshToken = getRefreshToken(response);
 
-			if (accessToken == null || accessToken.isEmpty()){
+			if (accessToken == null || accessToken.isEmpty()) {
 				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_ACCESS_TOKEN);
 			}
-			if (refreshToken == null || refreshToken.isEmpty()){
+			if (refreshToken == null || refreshToken.isEmpty()) {
 				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_REFRESH_TOKEN);
 			}
 
@@ -73,15 +80,68 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 			tokenMap.put("refresh", refreshToken);
 
 			return tokenMap;
+		} catch (RestClientException e) {
+			throw new ExternalServerException("getTwinkleBankToken", TWINKLE_BANK_SERVER_ERROR);
 		}
-
-		throw new ExternalServerException("getTwinkleBankToken", TWINKLE_BANK_SERVER_ERROR);
 	}
 
-	private static String getAccessToken(ResponseEntity<ApiResponse> response) {
-		TwinkleTokenResponse res = (TwinkleTokenResponse)response.getBody().getData();
-		String accessToken = res.accessToken();
-		return accessToken;
+	@Override
+	public void transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wontransfer")
+			.toUriString();
+		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
+
+		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
+		// if (accessToken == null){ // 만료되었거나, 발급받지 않았거나
+		//
+		// }
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", accessToken);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<TwinkleBankTransfer1wonRequest> entity = new HttpEntity<>(twinkleBankTransfer1wonRequest, headers);
+		log.debug("transfer1won bank accesstoken " + headers.get("Authorization"));
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("transfer1won", TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public void verify1won(TwinkleBankVerify1wonRequest twinkleBankVerify1wonRequest, String memberUuid) {
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wonverify")
+			.toUriString();
+		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
+
+		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", accessToken);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<TwinkleBankVerify1wonRequest> entity = new HttpEntity<>(twinkleBankVerify1wonRequest, headers);
+
+		try {
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.POST,
+				entity,
+				ApiResponse.class
+			);
+		} catch (RestClientException e) {
+			throw new ExternalServerException("verify1won", TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
+
+	private String getAccessToken(ResponseEntity<ApiResponse> response) {
+		System.out.println(response.getBody().getData());
+		TwinkleTokenResponse res = objectMapper.convertValue(response.getBody().getData(), TwinkleTokenResponse.class);
+		return res.accessToken();
 	}
 
 	private static String getRefreshToken(ResponseEntity<ApiResponse> response) {

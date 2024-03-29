@@ -2,7 +2,7 @@ package com.ssafy.triptogether.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.member.data.ProfileUpdateRequest;
+import com.ssafy.triptogether.member.data.request.ProfileUpdateRequest;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.review.domain.Review;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
@@ -35,7 +35,6 @@ public class Member extends BaseEntity {
     @Column(name = "pin_num")
     private String pinNum;
 
-    @NotBlank
     @Column(name = "nickname")
     private String nickname;
 

@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ssafy.twinklebank.account.data.AccountResponse;
+import com.ssafy.twinklebank.account.data.response.AccountResponse;
 import com.ssafy.twinklebank.account.repository.AccountRepository;
 
 @ExtendWith(MockitoExtension.class)

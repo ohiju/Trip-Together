@@ -8,9 +8,9 @@ import java.util.List;
 
 @Builder
 public record PlanDetail(
-        @NotNull @JsonProperty("daily_estimated_budget")
-        Double dailyEstimatedBudget,
-        @NotNull @JsonProperty("attractions")
-        List<AttractionDetail> attractionDetails
+    @NotNull @JsonProperty("daily_estimated_budget")
+    Double dailyEstimatedBudget,
+    @NotNull @JsonProperty("attractions")
+    List<AttractionDetail> attractionDetails
 ) {
 }

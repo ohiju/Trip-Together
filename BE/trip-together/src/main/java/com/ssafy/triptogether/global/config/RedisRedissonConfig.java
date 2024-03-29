@@ -9,18 +9,18 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RedisRedissonConfig {
-	private static final String REDISSON_HOST_PREFIX = "redis://";
-	@Value("${spring.data.redis.host}")
-	private String redisHost;
-	@Value("${spring.data.redis.port}")
-	private int redisPort;
+    private static final String REDISSON_HOST_PREFIX = "redis://";
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
 
-	@Bean
-	public RedissonClient redissonClient() {
-		RedissonClient redissonClient = null;
-		Config config = new Config();
-		config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
-		redissonClient = Redisson.create(config);
-		return redissonClient;
-	}
+    @Bean
+    public RedissonClient redissonClient() {
+        RedissonClient redissonClient = null;
+        Config config = new Config();
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
+        redissonClient = Redisson.create(config);
+        return redissonClient;
+    }
 }
