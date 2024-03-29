@@ -1,8 +1,8 @@
 package com.ssafy.twinklebank.global.config;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.ssafy.twinklebank.auth.filter.JwtAuthenticationFilter;
+import com.ssafy.twinklebank.auth.provider.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,10 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.ssafy.twinklebank.auth.filter.JwtAuthenticationFilter;
-import com.ssafy.twinklebank.auth.provider.JwtTokenProvider;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -38,6 +36,7 @@ public class SecurityConfig {
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리 정책 설정 : STATELESS
 			.authorizeHttpRequests(authorize ->
 				authorize
+					.requestMatchers("/", "/join").permitAll() // 메인, 회원가입 페이지 접근 시에는 jwt filter를 타지 않음
 					.requestMatchers("/member/v1/oauth/authorize", "/member/v1/oauth/token", "/member/v1/members/join").permitAll() // code 발급시에는 jwt filter를 타지 않음
 					.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

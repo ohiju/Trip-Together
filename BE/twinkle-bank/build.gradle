@@ -33,6 +33,8 @@ dependencies {
 	implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+    /* Template */
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	/* QueryDSL */
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
