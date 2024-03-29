@@ -103,7 +103,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
         FlashMob flashMob = FlashMob.builder()
             .attraction(attraction)
             .title(flashmobCreateRequest.title())
-            .startAt(LocalDateTime.parse(flashmobCreateRequest.startTime()))
+            .startAt(flashmobCreateRequest.startTime())
             .maxMemberCount(flashmobCreateRequest.maxUsers())
             .build();
         flashMobRepository.save(flashMob);
