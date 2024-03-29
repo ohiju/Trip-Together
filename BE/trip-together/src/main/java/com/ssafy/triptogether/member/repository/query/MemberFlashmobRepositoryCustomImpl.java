@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static com.ssafy.triptogether.flashmob.domain.QFlashMob.flashMob;
 import static com.ssafy.triptogether.member.domain.QMember.member;
-import static com.ssafy.triptogether.member.domain.QMemberFlashMob.memberFlashMob;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.memberFlashMob;
 
 @RequiredArgsConstructor
 public class MemberFlashmobRepositoryCustomImpl implements MemberFlashmobRepositoryCustom {
