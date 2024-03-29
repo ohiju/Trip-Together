@@ -5,7 +5,9 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
+import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
+import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadDetail;
@@ -207,6 +209,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		List<SettlementsLoadDetail> settlementsLoadDetails = settlements.stream()
 			.map(settlement -> SettlementsLoadDetail.builder()
 				.settlementId(settlement.getId())
+				.currencyCode(settlement.getCurrencyCode())
 				.isDone(settlement.getIsDone())
 				.isReceiver(settlement.getRequesterId() == memberId)
 				.receiverId(settlement.getRequesterId())
@@ -219,6 +222,30 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			).toList();
 		return SettlementsLoadResponse.builder()
 			.settlementsLoadDetails(settlementsLoadDetails)
+			.build();
+	}
+
+	@FlashMobMemberVerify
+	@Override
+	public AttendeeReceiptsResponse receiptsLoad(long memberId, long flashmobId, long settlementId) {
+		MemberSettlement memberSettlement = FlashMobUtils.findByMemberIdAndSettlementId(
+			memberSettlementRepository, memberId, settlementId);
+		Receipt receipt = receiptRepository.findById(memberSettlement.getId())
+			.orElseThrow(
+				() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
+			);
+		List<AttendeesReceiptDetail> attendeesReceiptDetails = receipt.getReceiptHistories()
+			.stream()
+			.map(
+				receiptHistory -> AttendeesReceiptDetail.builder()
+					.price(receiptHistory.price())
+					.businessName(receiptHistory.businessName())
+					.createdAt(receiptHistory.createdAt())
+					.build()
+			).toList();
+		return AttendeeReceiptsResponse.builder()
+			.price(memberSettlement.getPrice())
+			.attendeesReceiptDetails(attendeesReceiptDetails)
 			.build();
 	}
 }
