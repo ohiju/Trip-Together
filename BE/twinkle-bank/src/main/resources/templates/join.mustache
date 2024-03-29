@@ -6,29 +6,29 @@
 </head>
 <body>
 <h1>회원가입</h1>
-<form action="/member/v1/members/join" method="post">
+<form action="http://localhost:8080/api/join" method="post">
     <div class="form-group">
         <label for="username">아이디</label>
-        <input type="text" id="username" placeholder="아이디를 입력하세요.">
+        <input type="text" name="username" id="username" placeholder="아이디를 입력하세요.">
     </div>
     <div class="form-group">
         <label for="password">패스워드</label>
-        <input type="password" id="password" placeholder="패스워드를 입력하세요.">
+        <input type="password" name="password" id="password" placeholder="패스워드를 입력하세요.">
     </div>
     <div class="form-group">
         <label for="name">이름</label>
-        <input type="text" id="name" placeholder="이름을 입력하세요.">
+        <input type="text" name="name" id="name" placeholder="이름을 입력하세요.">
     </div>
     <div class="form-group">
-        <label for="gender">성별</label>
-        <input type="radio" id="gender" placeholder="성별을 선택하세요.">
+        <input type="radio" name="gender" value="MALE" id="male"><label for="male">남성</label>
+        <input type="radio" name="gender" value="FEMALE" id="female"><label for="female">여성</label>
     </div>
     <div class="form-group">
-        <label for="birth">아이디</label>
-        <input type="date" id="birth" placeholder="아이디를 입력하세요.">
+        <label for="birth">생년월일</label>
+        <input type="date" name="birth" id="birth" placeholder="생년월일을 입력하세요.">
     </div>
-    <input type="submit" value="가입하기">
-    <input type="reset" value="취소하기">
+    <button type="submit">가입하기</button>
+    <a href="/">뒤로가기</a>
 </form>
 </body>
 </html>
