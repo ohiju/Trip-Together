@@ -1,17 +1,5 @@
 package com.ssafy.triptogether.tripaccount.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
@@ -25,20 +13,19 @@ import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.service.TripAccountLoadService;
 import com.ssafy.triptogether.tripaccount.service.TripAccountSaveService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/account/v1/trip-account")
 @RequiredArgsConstructor
 public class TripAccountController {
-	// Service
 	private final TripAccountLoadService tripAccountLoadService;
 	private final TripAccountSaveService tripAccountSaveService;
 

@@ -5,10 +5,15 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.util.List;
 
-@Builder
 public record DailyPlan(
     Double dailyEstimatedBudget,
     LocalDate date,
     List<DailyPlanAttraction> dailyPlanAttractions
 ) {
+    @Builder
+    public DailyPlan {
+        if (dailyEstimatedBudget == null) {
+            dailyEstimatedBudget = 0.0;
+        }
+    }
 }
