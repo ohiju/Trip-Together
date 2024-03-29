@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum Type {
     DEPOSIT("충전"),
     REFUND("환불"),
+    SEND("송금"),
     WITHDRAW("출금");
 
     private final String message;

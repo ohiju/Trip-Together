@@ -3,7 +3,6 @@ package com.ssafy.triptogether.plan.data.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
-@Builder
 public record ReviewResponse(
     @JsonProperty("review_id") Long reviewId,
     @JsonProperty("writer_id") Long writerId,
@@ -12,4 +11,13 @@ public record ReviewResponse(
     Integer rating,
     String content
 ) {
+    @Builder
+    public ReviewResponse {
+        if (writerProfileImageUrl == null) {
+            writerProfileImageUrl = "";
+        }
+        if (writerNickname == null) {
+            writerNickname = "";
+        }
+    }
 }

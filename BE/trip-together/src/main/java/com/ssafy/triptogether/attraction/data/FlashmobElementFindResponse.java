@@ -16,4 +16,12 @@ public record FlashmobElementFindResponse(
     @JsonProperty("attraction_name") String attractionName,
     RoomStatus status // null | "WAIT" | "ATTEND"
 ) {
+    public FlashmobElementFindResponse {
+        if (masterImageUrl == null) {
+            masterImageUrl = "";
+        }
+        if (flashmobCurrentCount == null) {
+            flashmobCurrentCount = 0L;
+        }
+    }
 }
