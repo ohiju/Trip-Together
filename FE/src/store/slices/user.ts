@@ -55,10 +55,17 @@ export const userSlice = createSlice({
         ...action.payload,
       };
     },
+    putUser: (state, action: PayloadAction<member>) => {
+      state.member = action.payload;
+      state.user = {
+        ...state.user,
+        ...action.payload,
+      };
+    },
   },
 });
 
-export const {setLogin, setUser, setPin, setMember, setPutData} =
+export const {setLogin, setUser, setPin, setMember, setPutData, putUser} =
   userSlice.actions;
 
 export default userSlice.reducer;

@@ -17,8 +17,8 @@ import {
 
 const SocialLogin = () => {
   // 입력
-  const [userId, setUserId] = useState('newuser');
-  const [password, setPassword] = useState('passwordsss');
+  const [userId, setUserId] = useState('xorb269');
+  const [password, setPassword] = useState('1234');
   const handleUserId = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setUserId(e.nativeEvent.text);
   };

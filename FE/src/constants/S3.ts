@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 
 const awsS3config = {
   region: 'ap-northeast-2',
-  bucket: 'arn:aws:s3:::triptogether',
+  bucket: 'triptogether',
 };
 
 const s3 = new AWS.S3({

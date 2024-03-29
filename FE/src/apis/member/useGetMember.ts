@@ -39,8 +39,6 @@ const useGetMember = () => {
     const result = await axios
       .request(await getMemberConfig(params))
       .then((res: AxiosResponse<GetMemberResponse>) => {
-        console.log(res.data);
-
         dispatch(setMember(res.data.data));
       })
       .catch((err: AxiosError) => {

@@ -53,6 +53,10 @@ const PinAuth = () => {
     }
   }, [pin]);
 
+  useEffect(() => {
+    console.log(pin);
+  }, [pin]);
+
   return (
     <Wrapper>
       <TitleView>

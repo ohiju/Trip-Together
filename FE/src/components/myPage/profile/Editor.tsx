@@ -56,7 +56,7 @@ const Editor = ({member}: EditorProps) => {
         console.log('ImagePicker 에러: ', response.errorMessage);
       } else if (response.assets && response.assets[0]) {
         setImgConfig(response.assets[0]);
-        dispatch(setPutData({image_url: response.assets[0]}));
+        dispatch(setPutData({imgConfig: response.assets[0]}));
       }
     });
   };

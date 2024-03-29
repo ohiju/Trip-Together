@@ -6,12 +6,18 @@ import {RootState} from '../../store';
 import {useAppSelector} from '../../store/hooks';
 import usePutMember, {PutMemberData} from '../member/usePutMember';
 
+interface S3UploadData {
+  fileData: string;
+  Key: string;
+  ContentType: string | undefined;
+}
+
 const useS3Upload = () => {
   const putMember = usePutMember();
   const {imgConfig, nickname, description} = useAppSelector(
     (state: RootState) => state.user.putData,
   );
-  const {username} = useAppSelector((state: RootState) => state.user.user);
+  const member = useAppSelector((state: RootState) => state.user.member);
   if (!imgConfig) return;
 
   const readFileAsync = async (filepath: string) => {
@@ -22,18 +28,14 @@ const useS3Upload = () => {
     }
   };
 
-  const uploadToS3 = async (
-    fileData: string,
-    Key: string,
-    ContentType: string | undefined,
-  ) => {
+  const uploadToS3 = async (s3Data: S3UploadData) => {
     try {
       const params = {
-        Bucket: awsS3config.bucket,
-        Key,
-        Body: Buffer.from(fileData, 'base64'),
+        Bucket: `${awsS3config.bucket}/profileImg`,
+        Key: s3Data.Key,
+        Body: Buffer.from(s3Data.fileData, 'base64'),
         ACL: 'public-read',
-        ContentType,
+        ContentType: s3Data.ContentType,
       };
 
       const result = await new Promise(
@@ -44,7 +46,6 @@ const useS3Upload = () => {
               if (err) {
                 reject(err);
               } else {
-                console.log(`File uploaded successfully. ${data.Location}`);
                 resolve(data.Location);
               }
             },
@@ -62,15 +63,28 @@ const useS3Upload = () => {
     try {
       if (!imgConfig.uri) throw new Error('uri 가 없습니다.');
       const fileData = await readFileAsync(imgConfig.uri);
-      const image_url = await uploadToS3(fileData, username, imgConfig.type);
+
+      const s3Data: S3UploadData = {
+        fileData: fileData,
+        Key: member.member_id.toString(),
+        ContentType: imgConfig.type,
+      };
+      const location = await uploadToS3(s3Data);
+
+      const regex =
+        /https:\/\/triptogether\.s3\.ap-northeast-2\.amazonaws\.com\/(.+)/;
+      const match = location.match(regex);
+      const image_url = match ? match[1] : '';
+
       const data: PutMemberData = {
         image_url,
-        nickname,
-        description,
+        nickname: nickname ? nickname : member.nickname,
+        description: description ? description : member.description,
       };
       await putMember(data);
-    } catch (error) {
-      throw new Error(`Error in s3Upload: ${error}`);
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Error in s3Upload: ${err}`);
     }
   };
 

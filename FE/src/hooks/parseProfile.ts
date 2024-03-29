@@ -7,13 +7,13 @@ interface Profile {
   nickname?: string;
   username?: string;
   birth?: string;
-  gender?: 'F' | 'M';
+  gender?: 'FEMALE' | 'MALE';
   created_at?: string;
 }
 
 const parseProfile = (profile: Profile) => {
   const image_url = profile.image_url
-    ? {uri: `${IMAGE_BASE_URL}/${profile.image_url}`}
+    ? {uri: `${IMAGE_BASE_URL}${profile.image_url}`}
     : imagePath.basicProfile;
   const description = profile.description
     ? profile.description
@@ -23,7 +23,7 @@ const parseProfile = (profile: Profile) => {
   const birth = profile.birth
     ? new Date(profile.birth).toLocaleDateString('ko-KR')
     : 'default';
-  const gender = profile.gender === 'F' ? '여성' : '남성';
+  const gender = profile.gender === 'FEMALE' ? '여성' : '남성';
   const created_at = profile.created_at
     ? new Date(profile.created_at).toLocaleDateString('ko-KR')
     : 'default';
