@@ -16,7 +16,7 @@ import static com.querydsl.core.types.ExpressionUtils.count;
 import static com.ssafy.triptogether.attraction.domain.QAttraction.attraction;
 import static com.ssafy.triptogether.flashmob.domain.QFlashMob.flashMob;
 import static com.ssafy.triptogether.member.domain.QMember.member;
-import static com.ssafy.triptogether.member.domain.QMemberFlashMob.memberFlashMob;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.memberFlashMob;
 
 @RequiredArgsConstructor
 public class FlashMobRepositoryCustomImpl implements FlashMobRepositoryCustom {
