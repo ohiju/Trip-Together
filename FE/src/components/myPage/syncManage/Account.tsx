@@ -24,7 +24,7 @@ const Account = ({account}: AccountProps) => {
   return (
     <Wrapper>
       <LeftView>
-        <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
+        <BankLogo source={imagePath.banklogo} resizeMode="contain" />
         <BankInfoView>
           <TitleView>
             <TitleText>{account.name}</TitleText>

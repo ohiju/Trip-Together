@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {MapStyleElement, Marker} from 'react-native-maps';
 
 const MyLocationMap = ({center}: any) => {
   return (
@@ -27,7 +27,7 @@ const MyLocationMap = ({center}: any) => {
 };
 export default MyLocationMap;
 
-const mapStyle = [
+const mapStyle: MapStyleElement[] = [
   {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
   {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
   {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},

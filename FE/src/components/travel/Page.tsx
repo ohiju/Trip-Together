@@ -1,6 +1,7 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import {ViewStyle} from 'react-native';
+import styled from 'styled-components/native';
+import {imagePath} from '../../assets/images/imagePath';
 
 interface IPage {
   item: {num: number; color: string};
@@ -39,11 +40,11 @@ const DarkOverlay = styled.View`
 `;
 
 const imageMap: {[key: number]: any} = {
-  1: require('../../assets/images/commercials/europe.jpg'),
-  2: require('../../assets/images/commercials/europe2.jpg'),
-  3: require('../../assets/images/commercials/europe3.jpg'),
-  4: require('../../assets/images/commercials/europe4.jpg'),
-  5: require('../../assets/images/commercials/europe5.jpg'),
+  1: imagePath.europe,
+  2: imagePath.europe2,
+  3: imagePath.europe3,
+  4: imagePath.europe4,
+  5: imagePath.europe5,
 };
 
 const Page = ({item, style}: IPage) => {

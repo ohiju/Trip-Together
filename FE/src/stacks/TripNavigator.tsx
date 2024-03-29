@@ -1,22 +1,22 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Travel from '../pages/travel/Travel';
-import {TravelStackParams} from '../interfaces/router/TravelStackParams';
-import Search from '../pages/travel/Search';
+import Camera from '../components/common/Camera';
+import {TravelStackParams} from '../interfaces/router/TripStackParams';
+import PlaceDetail from '../pages/common/PlaceDetail';
+import PlaceInfoList from '../pages/common/PlaceInfoList';
 import Calendar from '../pages/travel/Calendar';
-import TripTitle from '../pages/travel/TripTitle';
 import GoogleMap from '../pages/travel/Map';
 import PlanDetail from '../pages/travel/PlanDetail';
-import PlaceInfoList from '../pages/common/PlaceInfoList';
-import PlaceDetail from '../pages/common/PlaceDetail';
-import Camera from '../components/common/Camera';
+import Search from '../pages/travel/Search';
+import Travel from '../pages/travel/Travel';
+import TripTitle from '../pages/travel/TripTitle';
 
-const TravelStack = () => {
-  const Stack = createNativeStackNavigator<TravelStackParams>();
+const TravelStack = createNativeStackNavigator<TravelStackParams>();
 
+const TravelNavigator = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <TravelStack.Navigator>
+      <TravelStack.Screen
         name="travel_main"
         component={Travel}
         options={{
@@ -24,22 +24,22 @@ const TravelStack = () => {
           headerRight: Camera,
         }}
       />
-      <Stack.Group>
-        <Stack.Screen
+      <TravelStack.Group>
+        <TravelStack.Screen
           name="planning"
           component={Search}
           options={{
             title: '',
           }}
         />
-        <Stack.Screen
+        <TravelStack.Screen
           name="calendar"
           component={Calendar}
           options={{
             title: '',
           }}
         />
-        <Stack.Screen
+        <TravelStack.Screen
           name="TripTitle"
           component={TripTitle}
           options={{
@@ -47,39 +47,39 @@ const TravelStack = () => {
             headerTitleAlign: 'center',
           }}
         />
-      </Stack.Group>
-      <Stack.Group>
-        <Stack.Screen
+      </TravelStack.Group>
+      <TravelStack.Group>
+        <TravelStack.Screen
           name="map"
           component={GoogleMap}
           options={{
             title: '',
           }}
         />
-        <Stack.Screen
+        <TravelStack.Screen
           name="plandetail"
           component={PlanDetail}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        <TravelStack.Screen
           name="placeinfo"
           component={PlaceInfoList}
           options={{
             title: '',
           }}
         />
-        <Stack.Screen
+        <TravelStack.Screen
           name="placedetail"
           component={PlaceDetail}
           options={{
             title: '',
           }}
         />
-      </Stack.Group>
-    </Stack.Navigator>
+      </TravelStack.Group>
+    </TravelStack.Navigator>
   );
 };
 
-export default TravelStack;
+export default TravelNavigator;
