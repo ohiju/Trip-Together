@@ -73,4 +73,13 @@ public class FlashMobController {
         return ApiResponse.emptyResponse(OK,
             isAccepted ? SUCCESS_APPLY_ACCEPT : SUCCESS_APPLY_DENY);
     }
+
+    @DeleteMapping("/{flashmob_id}/exit")
+    public ResponseEntity<ApiResponse<Void>> exitFlashmob(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId
+    ) {
+        flashMobSaveService.exitFlashmob(new SecurityMember(), flashmobId);
+        return ApiResponse.emptyResponse(OK, SUCCESS_FLASHMOB_QUIT);
+    }
 }

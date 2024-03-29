@@ -36,6 +36,7 @@ public enum ErrorCode {
     // FLASHMOB
     UNDEFINED_FLASHMOB(404, "번개를 찾을 수 없습니다."),
     UNDEFINED_MEMBER_FLASHMOB(404, "사용자의 번개 참여내역을 찾을 수 없습니다."),
+    FLASHMOB_MEMBER_NOT_FOUND(404, "번개에 참여한 사용자를 찾을 수 없습니다."),
     MEMBER_NOT_MASTER(403, "방장이 아닙니다."),
     BAD_STATUS_REQUEST(400, "가능한 상태 입력이 아닙니다."),
     // AUTH
