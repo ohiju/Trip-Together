@@ -79,7 +79,7 @@ public class FlashMobController {
         @AuthenticationPrincipal SecurityMember securityMember,
         @PathVariable("flashmob_id") long flashmobId
     ) {
-        flashMobSaveService.exitFlashmob(securityMember, flashmobId);
-        return null;
+        flashMobSaveService.exitFlashmob(new SecurityMember(), flashmobId);
+        return ApiResponse.emptyResponse(OK, SUCCESS_FLASHMOB_QUIT);
     }
 }

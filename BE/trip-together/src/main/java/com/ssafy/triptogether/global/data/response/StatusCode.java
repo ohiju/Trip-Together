@@ -29,6 +29,7 @@ public enum StatusCode {
 	SUCCESS_FLASHMOB_CANCEL(204, "번개 신청 취소 성공"),
 	SUCCESS_APPLY_ACCEPT(200, "번개 신청 수락"),
 	SUCCESS_APPLY_DENY(200, "번개 신청 거절"),
+	SUCCESS_FLASHMOB_QUIT(204, "번개 나가기 완료"),
 	// TRIP_ACCOUNT
 	SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
 	SUCCESS_RATE_LOAD(200, "요청 통화 환율 조회 성공"),

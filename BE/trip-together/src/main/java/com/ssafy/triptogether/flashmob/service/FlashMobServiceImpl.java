@@ -97,6 +97,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
         return false;
     }
 
+    @Transactional
     @Override
     public void exitFlashmob(SecurityMember securityMember, long flashmobId) {
         long memberCnt = memberFlashMobRepository.countMemberFlashMobsByFlashMob_Id(flashmobId);
@@ -105,12 +106,16 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
             return;
         }
 
-        boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, securityMember.getId());
-        if (isMaster) {
-            MemberFlashMob memberFlashMob = memberFlashMobRepository.findAMemberFlashMob(flashmobId);
+        MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(
+            memberFlashMobRepository, flashmobId, securityMember.getId());
+        if (memberFlashMob.getIsMaster()) {
+            MemberFlashMob nextMaster = MemberFlashmobUtils.findByFlashmobIdNotInMemberId(
+                memberFlashMobRepository, flashmobId,securityMember.getId());
             // 다른 멤버 찾아서 방장으로 바꿈
+            nextMaster.memberToMaster();
         }
         // 멤버를 repo.delete
+        memberFlashMobRepository.delete(memberFlashMob);
     }
 
     @Override
