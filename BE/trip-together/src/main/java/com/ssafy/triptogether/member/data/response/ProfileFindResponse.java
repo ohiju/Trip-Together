@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.member.data;
+package com.ssafy.triptogether.member.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.triptogether.member.domain.Gender;
