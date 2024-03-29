@@ -8,7 +8,8 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 
 /**
  * QMember is a Querydsl query type for Member

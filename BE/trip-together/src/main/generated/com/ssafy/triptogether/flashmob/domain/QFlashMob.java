@@ -33,7 +33,7 @@ public class QFlashMob extends EntityPathBase<FlashMob> {
 
     public final NumberPath<Integer> maxMemberCount = createNumber("maxMemberCount", Integer.class);
 
-    public final ListPath<com.ssafy.triptogether.member.domain.MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob> memberFlashMobs = this.<com.ssafy.triptogether.member.domain.MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob>createList("memberFlashMobs", com.ssafy.triptogether.member.domain.MemberFlashMob.class, com.ssafy.triptogether.member.domain.QMemberFlashMob.class, PathInits.DIRECT2);
+    public final ListPath<MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob> memberFlashMobs = this.<MemberFlashMob, com.ssafy.triptogether.member.domain.QMemberFlashMob>createList("memberFlashMobs", MemberFlashMob.class, com.ssafy.triptogether.member.domain.QMemberFlashMob.class, PathInits.DIRECT2);
 
     public final ListPath<Settlement, QSettlement> settlements = this.<Settlement, QSettlement>createList("settlements", Settlement.class, QSettlement.class, PathInits.DIRECT2);
 

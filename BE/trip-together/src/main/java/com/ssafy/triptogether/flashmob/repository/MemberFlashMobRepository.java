@@ -1,6 +1,6 @@
-package com.ssafy.triptogether.member.repository;
+package com.ssafy.triptogether.flashmob.repository;
 
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.repository.query.MemberFlashmobRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
