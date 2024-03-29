@@ -16,4 +16,15 @@ public record ProfileFindResponse(
     @JsonProperty("created_at") LocalDateTime createdAt,
     String username
 ) {
+    public ProfileFindResponse {
+        if (imageUrl == null) {
+            imageUrl = "";
+        }
+        if (nickname == null) {
+            nickname = "";
+        }
+        if (description == null) {
+            description = "";
+        }
+    }
 }
