@@ -2,6 +2,7 @@ package com.ssafy.triptogether.flashmob.service;
 
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
+import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 
 public interface FlashMobSaveService {
     void sendAttendanceRequest(long flashmobId, long memberId);
@@ -13,4 +14,6 @@ public interface FlashMobSaveService {
     boolean applyFlashmob(long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId);
 
     void exitFlashmob(SecurityMember securityMember, long flashmobId);
+
+	void settlementSave(long memberId, long flashmobId, SettlementSaveRequest settlementSaveRequest);
 }

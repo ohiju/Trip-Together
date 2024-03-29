@@ -2,7 +2,6 @@ package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.member.domain.MemberSettlement;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
