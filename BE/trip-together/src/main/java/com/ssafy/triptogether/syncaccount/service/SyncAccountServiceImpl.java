@@ -220,11 +220,6 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 	@Transactional
 	@Override
 	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
-		log.debug("syncaccountserviceimple: request accout uuid " + request.accountUuid());
-		// SyncAccount syncAccount = syncAccountRepository.findByUuid(request.accountUuid())
-		// 	.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won : 계좌를 찾을 수 없음", SYNC_ACCOUNT_NOT_FOUND));
-
-		// String accoutUuid = syncAccount.getUuid();
 
 		TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
 			.accountUuid(request.accountUuid())
@@ -236,17 +231,10 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 
 	@Override
 	public void verify1won(Long memberId, String memberUuid, Verify1wonRequest request) {
-		SyncAccount syncAccount = syncAccountRepository.findByMemberIdAndIsMain(memberId, true)
-			.orElseThrow(() -> new NotFoundException("SyncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND));
-
-		if (!request.accountUuid().equals(syncAccount.getUuid())) {
-			throw new BadRequestException("syncAccountServiceImpl : transfer1won ", SYNC_ACCOUNT_NOT_FOUND);
-		}
-		String accoutUuid = syncAccount.getUuid();
 
 		TwinkleBankVerify1wonRequest twinkleBankVerify1wonRequest = TwinkleBankVerify1wonRequest.builder()
 			.clientId(TWINKLE_CLIENT_ID)
-			.accountUuid(accoutUuid)
+			.accountUuid(request.accountUuid())
 			.code(request.code())
 			.build();
 		twinkleBankAuth.verify1won(twinkleBankVerify1wonRequest, memberUuid);
