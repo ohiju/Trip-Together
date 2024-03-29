@@ -1,7 +1,6 @@
 package com.ssafy.triptogether.tripaccount.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
