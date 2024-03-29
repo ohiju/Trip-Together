@@ -2,13 +2,11 @@ package com.ssafy.triptogether.attraction.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.triptogether.plan.data.response.ReviewResponse;
-
 import lombok.Builder;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@Builder
 public record AttractionDetailFindResponse(
     @JsonProperty("attraction_id") Long attractionId,
     @JsonProperty("avg_price") Double avgPrice,
@@ -19,4 +17,10 @@ public record AttractionDetailFindResponse(
     String longitude,
     List<ReviewResponse> reviews
 ) {
+    @Builder
+    public AttractionDetailFindResponse {
+        if (avgPrice == null) {
+            avgPrice = 0.0;
+        }
+    }
 }
