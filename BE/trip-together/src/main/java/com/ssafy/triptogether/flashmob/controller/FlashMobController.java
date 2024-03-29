@@ -4,6 +4,7 @@ import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
+import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
@@ -124,6 +125,21 @@ public class FlashMobController {
 
         return ApiResponse.toResponseEntity(
             OK, SUCCESS_RECEIPTS_LOAD, attendeeReceiptsResponse
+        );
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/settlements/{settlement_id}")
+    public ResponseEntity<ApiResponse<AttendeesStatusResponse>> attendeesStatusLoad(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        AttendeesStatusResponse attendeesStatusResponse = flashMobLoadService.attendeesStatusLoad(memberId, flashmobId,
+            settlementId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_ATTENDEES_STATUS_LOAD, attendeesStatusResponse
         );
     }
 }

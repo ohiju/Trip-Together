@@ -8,7 +8,7 @@ import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
-import com.ssafy.triptogether.flashmob.repository.MemberSettlementRepository;
+import com.ssafy.triptogether.flashmob.repository.RequesterSettlementRepository;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 
 import lombok.AccessLevel;
@@ -37,7 +37,7 @@ public class FlashMobUtils {
 			);
 	}
 
-	public static MemberSettlement findByMemberIdAndSettlementId(MemberSettlementRepository repository, long memberId,
+	public static MemberSettlement findByMemberIdAndSettlementId(RequesterSettlementRepository repository, long memberId,
 		long settlementId) {
 		return repository.findByMemberIdAndSettlementId(memberId, settlementId)
 			.orElseThrow(
