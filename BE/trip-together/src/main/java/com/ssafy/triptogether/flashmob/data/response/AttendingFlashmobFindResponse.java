@@ -17,4 +17,12 @@ public record AttendingFlashmobFindResponse(
     @JsonProperty("attraction_name") String attractionName,
     RoomStatus status
 ) {
+    public AttendingFlashmobFindResponse {
+        if (masterImageUrl == null) {
+            masterImageUrl = "";
+        }
+        if (currentCount == null) {
+            currentCount = 0L;
+        }
+    }
 }
