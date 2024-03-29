@@ -6,7 +6,12 @@ import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.utils.SecurityUtil;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.triptogether.member.data.*;
+import com.ssafy.triptogether.member.data.request.PinSaveRequest;
+import com.ssafy.triptogether.member.data.request.PinUpdateRequest;
+import com.ssafy.triptogether.member.data.request.ProfileUpdateRequest;
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
+import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
+import com.ssafy.triptogether.member.data.response.ReissueResponse;
 import com.ssafy.triptogether.member.service.MemberLoadService;
 import com.ssafy.triptogether.member.service.MemberSaveService;
 import jakarta.servlet.http.Cookie;
@@ -32,13 +37,13 @@ public class MemberController {
     private final CookieProvider cookieProvider;
 
     @PatchMapping
-    public ResponseEntity<ApiResponse<Void>> updateProfile(
+    public ResponseEntity<ApiResponse<ProfileUpdateResponse>> updateProfile(
         @AuthenticationPrincipal SecurityMember securityMember,
         @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest
     ) {
         long memberId = securityMember.getId();
-        memberSaveService.updateProfile(memberId, profileUpdateRequest);
-        return ApiResponse.emptyResponse(OK, SUCCESS_PROFILE_UPDATE);
+        ProfileUpdateResponse response = memberSaveService.updateProfile(memberId, profileUpdateRequest);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_PROFILE_UPDATE, response);
     }
 
     @GetMapping("/{member_id}")
