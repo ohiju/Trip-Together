@@ -1,6 +1,6 @@
 package com.ssafy.triptogether.member.repository.query;
 
-import com.ssafy.triptogether.member.data.ProfileFindResponse;
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
 
 import java.util.Optional;
 
