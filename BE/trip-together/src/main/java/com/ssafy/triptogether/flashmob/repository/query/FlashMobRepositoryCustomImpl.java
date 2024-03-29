@@ -5,7 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.triptogether.attraction.data.FlashmobElementFindResponse;
+import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.member.domain.RoomStatus;
 import lombok.RequiredArgsConstructor;

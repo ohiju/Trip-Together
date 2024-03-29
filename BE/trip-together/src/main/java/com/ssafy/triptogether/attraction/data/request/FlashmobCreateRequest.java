@@ -1,9 +1,6 @@
-package com.ssafy.triptogether.attraction.data;
-
-import java.time.LocalDateTime;
+package com.ssafy.triptogether.attraction.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.constraints.NotNull;
 
 public record FlashmobCreateRequest(
