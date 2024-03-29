@@ -36,7 +36,7 @@ public class SecurityConfig {
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리 정책 설정 : STATELESS
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.requestMatchers("/", "/join").permitAll() // 메인, 회원가입 페이지 접근 시에는 jwt filter를 타지 않음
+					.requestMatchers("/", "/join", "/account-register").permitAll() // 메인, 회원가입 페이지 접근 시에는 jwt filter를 타지 않음
 					.requestMatchers("/member/v1/oauth/authorize", "/member/v1/oauth/token", "/member/v1/members/join").permitAll() // code 발급시에는 jwt filter를 타지 않음
 					.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
