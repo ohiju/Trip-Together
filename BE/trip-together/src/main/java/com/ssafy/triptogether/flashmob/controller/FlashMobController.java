@@ -4,6 +4,7 @@ import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
 import com.ssafy.triptogether.flashmob.service.FlashMobSaveService;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
@@ -94,6 +95,19 @@ public class FlashMobController {
         long memberId = securityMember.getId();
         flashMobSaveService.settlementSave(memberId, flashmobId, settlementSaveRequest);
 
-        return ApiResponse.emptyResponse(OK, SUCCESS_SETTLEMENT_SAVE);
+        return ApiResponse.emptyResponse(CREATED, SUCCESS_SETTLEMENT_SAVE);
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/settlements")
+    public ResponseEntity<ApiResponse<SettlementsLoadResponse>> settlementsLoad(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId
+    ) {
+        long memberId = securityMember.getId();
+        SettlementsLoadResponse settlementsLoadResponse = flashMobLoadService.settlementsLoad(memberId, flashmobId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_SETTLEMENTS_LOAD, settlementsLoadResponse
+        );
     }
 }
