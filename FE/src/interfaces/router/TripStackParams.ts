@@ -9,7 +9,7 @@ interface TravelStackParams extends ParamListBase {
   map: undefined;
   plandetail: undefined;
   placeinfo: {theme: string};
-  placedetail: undefined;
+  placedetail: {theme: string};
 }
 
 export type {TravelStackParams};
