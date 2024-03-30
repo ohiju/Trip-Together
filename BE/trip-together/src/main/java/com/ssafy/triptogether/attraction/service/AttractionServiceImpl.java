@@ -149,7 +149,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 	public AttractionFlashmobListFindResponse findAttractionFlashmobList(
 		long memberId, double latitude, double longitude, double latitudeDelta, double longitudeDelta
 	) {
-		double distance = new MysqlNativeSqlCreator().getDistance(latitude, longitude, latitudeDelta / 2, longitudeDelta / 2);
+		double distance = new MysqlNativeSqlCreator().getDistance(0, 0, latitudeDelta / 2, longitudeDelta / 2);
 		List<AttractionFlashmobListItemResponse> elements = attractionRepository.findAllAttractionFlashmobByConditions(latitude, longitude, distance);
 		return AttractionFlashmobListFindResponse.builder().elements(elements).build();
 	}

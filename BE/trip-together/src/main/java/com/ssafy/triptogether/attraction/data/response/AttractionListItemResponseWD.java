@@ -16,7 +16,7 @@ public record AttractionListItemResponseWD(
 	Double avgRating,
 	@JsonProperty("avg_price")
 	Double avgPrice,
-	String latitude,
 	String longitude,
+	String latitude,
 	Double distance
 ) { }
