@@ -10,16 +10,14 @@ interface ImagePath {
   adh01: ImageSourcePropType;
   bag: ImageSourcePropType;
   bag2: ImageSourcePropType;
-  banklogo: ImageSourcePropType;
-  basicprofile: ImageSourcePropType;
   camera: ImageSourcePropType;
   chat: ImageSourcePropType;
-  curexchange: ImageSourcePropType;
   down: ImageSourcePropType;
   drag: ImageSourcePropType;
   euround: ImageSourcePropType;
   exchange: ImageSourcePropType;
-  france: ImageSourcePropType;
+  exchangecur: ImageSourcePropType;
+  francesquare: ImageSourcePropType;
   godown: ImageSourcePropType;
   goup: ImageSourcePropType;
   insurance: ImageSourcePropType;
@@ -27,10 +25,12 @@ interface ImagePath {
   leftarrow: ImageSourcePropType;
   lightning: ImageSourcePropType;
   logo: ImageSourcePropType;
+  logobank: ImageSourcePropType;
   money: ImageSourcePropType;
   pay: ImageSourcePropType;
   plane: ImageSourcePropType;
   planning: ImageSourcePropType;
+  profiledefault: ImageSourcePropType;
   profits: ImageSourcePropType;
   qrcode: ImageSourcePropType;
   remit: ImageSourcePropType;
@@ -56,16 +56,16 @@ export const imagePath: ImagePath = {
   adh01: require('./adh01.png'),
   bag: require('./bag.jpg'),
   bag2: require('./bag2.png'),
-  banklogo: require('./banklogo.png'),
-  basicprofile: require('./basicprofile.png'),
+  logobank: require('./logobank.png'),
+  profiledefault: require('./profiledefault.png'),
   camera: require('./camera.png'),
   chat: require('./chat.png'),
-  curexchange: require('./curexchange.png'),
+  exchangecur: require('./exchangecur.png'),
   down: require('./down.png'),
   drag: require('./drag.png'),
   euround: require('./euround.png'),
   exchange: require('./exchange.png'),
-  france: require('./france.png'),
+  francesquare: require('./francesquare.png'),
   godown: require('./godown.png'),
   goup: require('./goup.png'),
   insurance: require('./insurance.png'),

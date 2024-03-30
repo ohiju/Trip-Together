@@ -3,7 +3,7 @@ import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {imagePath} from '../../assets/images/imagePath';
-import {ChatMainStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
+import {ChatStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
 
 const Wrapper = styled(TouchableOpacity)`
   height: 100px;
@@ -35,7 +35,7 @@ const ChatTitle = styled.Text`
 const ChatMember = styled.Text``;
 
 const InChat = ({item}: any) => {
-  const navigation = useNavigation<NavigationProp<ChatMainStackParams>>();
+  const navigation = useNavigation<NavigationProp<ChatStackParams>>();
 
   const handlePressChat = () => {
     navigation.navigate('chatroom');
@@ -43,7 +43,7 @@ const InChat = ({item}: any) => {
 
   return (
     <Wrapper onPress={handlePressChat}>
-      <Image source={imagePath.basicprofile} />
+      <Image source={imagePath.profiledefault} />
       <ChatInfo>
         <ChatHost>Daniel</ChatHost>
         <ChatTitle>{item.title}</ChatTitle>
