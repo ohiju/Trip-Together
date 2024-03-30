@@ -14,7 +14,7 @@ interface Profile {
 const parseProfile = (profile: Profile) => {
   const image_url = profile.image_url
     ? {uri: `${IMAGE_BASE_URL}/${profile.image_url}`}
-    : imagePath.basicprofile;
+    : imagePath.profiledefault;
   const description = profile.description
     ? profile.description
     : '자기소개를 입력하고 마음에 맞는 동행을 구해보세요!';

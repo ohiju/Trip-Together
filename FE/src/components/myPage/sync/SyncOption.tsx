@@ -20,7 +20,7 @@ const SyncOption = ({account}: SyncOptionProps) => {
   return (
     <Wrapper>
       <OptionView>
-        <BankLogo source={imagePath.banklogo} resizeMode="contain" />
+        <BankLogo source={imagePath.logobank} resizeMode="contain" />
         <Option>{account.account_num}</Option>
       </OptionView>
       <BalanceView>

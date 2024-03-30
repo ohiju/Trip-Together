@@ -41,7 +41,7 @@ const Plans = () => {
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
-            <PlanImage source={imagePath.france} />
+            <PlanImage source={imagePath.francesquare} />
             <CityName>{currentPlan.start_region}</CityName>
           </PlanDescriptionBox>
           <PlanDescriptionBox>

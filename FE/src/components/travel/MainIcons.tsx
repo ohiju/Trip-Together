@@ -103,7 +103,7 @@ const MainIcons = ({item, style}: IPage) => {
             }}
             style={styles.iconContainer}>
             <Image
-              source={imagePath.curexchange}
+              source={imagePath.exchangecur}
               style={{width: 40, height: 40}}
             />
           </TouchableOpacity>

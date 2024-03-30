@@ -76,7 +76,7 @@ const AttractionDetailsPage = () => {
 
   const renderReviewItem = ({item}: {item: any}) => (
     <ReviewItem>
-      <ProfileImage source={imagePath.basicprofile} />
+      <ProfileImage source={imagePath.profiledefault} />
       <ReviewDetails>
         <ReviewWriter>{item.writer_nickname}</ReviewWriter>
         <ReviewRating>Rating: {item.rating}</ReviewRating>
