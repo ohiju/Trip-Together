@@ -43,7 +43,7 @@ const SocialLogin = () => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo source={imagePath.banklogo} resizeMode="contain" />
+        <Logo source={imagePath.logobank} resizeMode="contain" />
         <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>
