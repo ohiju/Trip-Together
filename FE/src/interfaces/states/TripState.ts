@@ -21,6 +21,16 @@ interface TripState {
     total_estimated_budget: number;
     total_budget: number;
     status: string;
+    places: {
+      address: string;
+      attraction_id: number;
+      avg_price: number;
+      avg_rating: number;
+      latitude: string;
+      longitude: string;
+      name: string;
+      thumbnail_image_url: string;
+    }[];
     daily_plans: {
       attractions: attraction[];
       order: number;

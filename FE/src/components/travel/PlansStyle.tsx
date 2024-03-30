@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {TouchableOpacity} from 'react-native';
+import {bg_main, font_dark, font_lightgray} from '../../constants/colors';
 
 const PlanView = styled(TouchableOpacity)`
   background-color: white;
@@ -102,6 +103,34 @@ const MoneyText = styled.Text`
   font-weight: 900;
 `;
 
+const Wrapper = styled.Pressable`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed black;
+  border-radius: 10px;
+  background: ${bg_main};
+`;
+
+const AddWalletView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 3px;
+`;
+
+const AddWallet = styled.Text`
+  color: ${font_dark};
+  font-size: 20px;
+  margin-left: 6px;
+`;
+
+const PlaceholderView = styled.Text``;
+
+const Placeholder = styled.Text`
+  color: ${font_lightgray};
+  font-size: 10px;
+`;
+
 export {
   PlanView,
   PlanTitle,
@@ -120,4 +149,9 @@ export {
   MoneyImage,
   MoneyUnit,
   MoneyText,
+  Wrapper,
+  AddWalletView,
+  AddWallet,
+  PlaceholderView,
+  Placeholder,
 };

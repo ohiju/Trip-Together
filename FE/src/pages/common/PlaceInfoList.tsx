@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import Places from '../../assets/data/place';
+// import Places from '../../assets/data/place';
 import {
   NavigationProp,
   useNavigation,
@@ -23,19 +23,22 @@ import {
 } from './PlaceInfoListStyle';
 import AppButton from '../../components/common/AppButton';
 import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {useAppSelector} from '../../store/hooks';
 
 interface RouteParams {
   theme?: string;
+  places?: any;
 }
 
 const PlaceInfoList = () => {
   const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
+  const places = useAppSelector(state => state.trip.tripInfo.places);
 
-  const handlePress = () => {
+  const handlePress = (id: number) => {
     if (theme === 'trip') {
-      navigation.navigate('placedetail', {theme});
+      navigation.navigate('placedetail', {theme, id});
     } else if (theme === 'flashmob') {
       navigation.navigate('flashplace', {theme});
     }
@@ -50,7 +53,7 @@ const PlaceInfoList = () => {
   };
 
   const renderItem = ({item}: any) => (
-    <ItemContainer onPress={handlePress}>
+    <ItemContainer onPress={() => handlePress(item.attraction_id)}>
       <ThumbnailContainer>
         <Thumbnail
           source={require('../../assets/images/sagradafamilia.png')}
@@ -91,7 +94,7 @@ const PlaceInfoList = () => {
 
   return (
     <FlatList
-      data={Places}
+      data={places}
       renderItem={renderItem}
       keyExtractor={item => item.attraction_id.toString()}
     />

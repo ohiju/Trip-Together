@@ -27,9 +27,9 @@ import {
 import AppButton from './AppButton';
 import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
 
-const PlaceInfo = ({theme}: {theme: string}) => {
+const PlaceInfo = ({theme, place}: any) => {
   const [rating] = useState(4.9);
-  // 라우팅
+
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const onSwipeTop = () => {
     if (theme === 'trip') {
@@ -61,15 +61,13 @@ const PlaceInfo = ({theme}: {theme: string}) => {
               />
             </PlaceImageView>
             <PlaceInfoView>
-              <PlaceName>La Sagrada Familia</PlaceName>
-              <Address>
-                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
-              </Address>
+              <PlaceName>{place.name}</PlaceName>
+              <Address>{place.address}</Address>
               {theme === 'trip' ? (
                 <Description>
-                  <Rating>{rating}</Rating>
-                  <StarRatingDisplay rating={rating} starSize={20} />
-                  <Price>₩123,398</Price>
+                  <Rating>{place.avg_rating}</Rating>
+                  <StarRatingDisplay rating={place.avg_rating} starSize={20} />
+                  <Price>{place.avg_price}</Price>
                 </Description>
               ) : (
                 <DetailsRow>

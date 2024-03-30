@@ -151,6 +151,22 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
   const bottomList = useAppSelector((state: RootState) => state.bag.bagInfo);
   const dispatch = useAppDispatch();
 
+  const singleDayTotalPrice = topList.reduce((total, attraction) => {
+    return total + parseFloat(attraction.avg_price);
+  }, 0);
+
+  const allDaysTotalPrice = useAppSelector((state: RootState) => {
+    return state.trip.tripInfo.daily_plans.reduce((total, day) => {
+      const singleDayTotalPrice = day.attractions.reduce(
+        (dayTotal, attraction) => {
+          return dayTotal + parseFloat(attraction.avg_price);
+        },
+        0,
+      );
+      return total + singleDayTotalPrice;
+    }, 0);
+  });
+
   const handleRowPress = useCallback((row, action) => {
     if (action === 'up') {
       dispatch(addDailyPlan({order: today, attraction: row}));
@@ -223,9 +239,9 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
       </FirstHalf>
       <Middle>
         <MiddleTitle>일 예산</MiddleTitle>
-        <MiddlePrice>₩123</MiddlePrice>
+        <MiddlePrice>₩{singleDayTotalPrice}</MiddlePrice>
         <MiddleTitle>총 예산</MiddleTitle>
-        <MiddlePrice>₩123</MiddlePrice>
+        <MiddlePrice>₩{allDaysTotalPrice}</MiddlePrice>
       </Middle>
       <SecondHalf>
         <List

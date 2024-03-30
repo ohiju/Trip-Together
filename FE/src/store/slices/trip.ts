@@ -1,6 +1,17 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {TripState} from '../../interfaces/states/TripState';
 
+interface PlaceProp {
+  address: string;
+  attraction_id: number;
+  avg_price: number;
+  avg_rating: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  thumbnail_image_url: string;
+}
+
 interface attractionProp {
   attraction_id: number;
   thumbnail_image_url: string;
@@ -39,9 +50,10 @@ const initialState: TripState = {
     start_at: '',
     end_at: '',
     title: '',
-    total_estimated_budget: 123123,
+    total_estimated_budget: 0,
     total_budget: 0,
-    status: 'done',
+    status: 'before',
+    places: [],
     daily_plans: [],
   },
 };
@@ -56,6 +68,13 @@ export const tripSlice = createSlice({
       state.tripInfo.start_latitude = action.payload.latitude;
       state.tripInfo.start_longitude = action.payload.longitude;
       state.tripInfo.city_name = action.payload.city_name;
+    },
+    setLocation: (
+      state,
+      action: PayloadAction<{latitude: string; longitude: string}>,
+    ) => {
+      state.tripInfo.start_latitude = action.payload.latitude;
+      state.tripInfo.start_longitude = action.payload.longitude;
     },
     setDate: (
       state,
@@ -94,6 +113,9 @@ export const tripSlice = createSlice({
           item => item.attraction_id !== attraction_id,
         );
     },
+    setPlaces: (state, action: PayloadAction<PlaceProp[]>) => {
+      state.tripInfo.places = action.payload;
+    },
   },
 });
 
@@ -103,6 +125,8 @@ export const {
   setTripTitle,
   addDailyPlan,
   deleteDailyPlan,
+  setPlaces,
+  setLocation,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

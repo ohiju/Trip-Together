@@ -30,9 +30,16 @@ const Search = () => {
 
   const handleSearchChange = async (text: string) => {
     setSearchText(text);
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/regions?name=${text}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       const regions = response.data.data;
       setSearchResults(regions.regions);

@@ -13,6 +13,8 @@ const PlanDetail = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
   const trip = useAppSelector(state => state.trip.tripInfo);
+  const token =
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
 
   const handleMapPress = () => {
     navigation.navigate('map');
@@ -29,7 +31,9 @@ const PlanDetail = () => {
     };
     try {
       await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
-        headers: {},
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');

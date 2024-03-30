@@ -1,33 +1,89 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {Text, FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {bg_light, font_dark} from '../../constants/colors';
-import {useAppSelector} from '../../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import axios from 'axios';
+import {setPlaces} from '../../store/slices/trip';
+import {setLocation} from '../../store/slices/trip';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
 
 const KeywordSearch = () => {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const searchInputRef = useRef(null);
 
+  const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
+  const dispatch = useAppDispatch();
   const trip = useAppSelector(state => state.trip.tripInfo);
 
   const handleSearchChange = async (text: string) => {
     setSearchText(text);
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}`,
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}&category=`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       const regions = response.data.data;
-      setSearchResults(regions.regions);
+      console.log(regions);
+      setSearchResults(regions);
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
   };
 
-  useEffect(() => {
-    searchInputRef.current.focus();
-  }, []);
+  const handleButtonPress = async (text: string) => {
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    try {
+      const response = await axios.get(
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=&category=${text}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const regions = response.data.data;
+      console.log(regions);
+      setSearchResults(regions);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+  const handlePressLocation = async (item: any) => {
+    const payload = {latitude: item.latitude, longitude: item.longitude};
+    dispatch(setLocation(payload));
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    try {
+      const response = await axios.get(
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+          item.latitude
+        }&longitude=${
+          item.longitude
+        }&latitude_delta=${0.622}&longitude_delta=${0.421}&category=`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const res = response.data.data;
+      dispatch(setPlaces(res));
+      navigation.navigate('map');
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
 
   return (
     <Container>
@@ -41,19 +97,19 @@ const KeywordSearch = () => {
 
       {/* Icon Bar */}
       <IconContainer>
-        <IconInputs>
+        <IconInputs onPress={() => handleButtonPress('명소')}>
           <IconImage source={require('../../assets/images/location.png')} />
           <IconText>명소</IconText>
         </IconInputs>
-        <IconInputs>
+        <IconInputs onPress={() => handleButtonPress('축제')}>
           <IconImage source={require('../../assets/images/confetti.png')} />
           <IconText>축제</IconText>
         </IconInputs>
-        <IconInputs>
+        <IconInputs onPress={() => handleButtonPress('식당')}>
           <IconImage source={require('../../assets/images/restaurant.png')} />
           <IconText>음식</IconText>
         </IconInputs>
-        <IconInputs>
+        <IconInputs onPress={() => handleButtonPress('숙소')}>
           <IconImage source={require('../../assets/images/home.png')} />
           <IconText>숙박</IconText>
         </IconInputs>
@@ -63,8 +119,8 @@ const KeywordSearch = () => {
       <FlatList
         data={searchResults}
         renderItem={({item}) => (
-          <ResultItem>
-            <Text>{item.city_name}</Text>
+          <ResultItem onPress={() => handlePressLocation(item)}>
+            <Text>{item.name}</Text>
           </ResultItem>
         )}
         keyExtractor={(item, index) => index.toString()}

@@ -39,23 +39,36 @@ import {
 import AppButton from '../../components/common/AppButton';
 import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
 import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import axios from 'axios';
 
 interface RouteParams {
   theme?: string;
+  id?: number;
+}
+
+interface AttractionProp {
+  attraction_id: number;
+  avg_price: number;
+  start_at: string;
+  end_at: string;
+  attraction_image_urls: string[];
+  latitude: string;
+  longitude: string;
+  reviews: string[];
 }
 
 const AttractionDetailsPage = () => {
   const [show, setShow] = useState(true);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-
-  const attraction = PlaceDetail[0];
-  const attraction_id = PlaceDetail[0].attraction_id;
-  const PlaceBag = useAppSelector(state => state.bag.bagInfo);
-  const dispatch = useAppDispatch();
+  const [attraction, setAttraction] = useState<AttractionProp>(PlaceDetail[0]);
 
   const route = useRoute();
-  const {theme}: RouteParams = route.params || {};
+  const {theme, id}: RouteParams = route.params || {};
   const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
+
+  const attraction_id = id;
+  const PlaceBag = useAppSelector(state => state.bag.bagInfo);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     PlaceBag.forEach(item => {
@@ -64,6 +77,29 @@ const AttractionDetailsPage = () => {
       }
     });
   }, [PlaceBag, attraction_id]);
+
+  useEffect(() => {
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setAttraction(response.data.data);
+      } catch (error) {
+        //
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const images = Array.from({length: 5}, (_, index) => ({
     id: index.toString(),
@@ -78,9 +114,9 @@ const AttractionDetailsPage = () => {
     <ReviewItem>
       <ProfileImage source={require('../../assets/images/basicProfile.png')} />
       <ReviewDetails>
-        <ReviewWriter>{item.writer_nickname}</ReviewWriter>
+        {/* <ReviewWriter>{item.writer_nickname}</ReviewWriter>
         <ReviewRating>Rating: {item.rating}</ReviewRating>
-        <ReviewContent>{item.content}</ReviewContent>
+        <ReviewContent>{item.content}</ReviewContent> */}
       </ReviewDetails>
     </ReviewItem>
   );
@@ -101,16 +137,8 @@ const AttractionDetailsPage = () => {
     );
   };
 
-  const handleAddItem = () => {
-    const data = {
-      attraction_id: 14,
-      thumbnail_image_url: '',
-      name: 'La Sagrada Familia',
-      address: '',
-      avg_rating: 2.4,
-      avg_price: 123,
-    };
-    dispatch(addItemToBag(data));
+  const handleAddItem = (item: any) => {
+    dispatch(addItemToBag(item));
   };
 
   const keyExtractor = (item: any, index: number) => index.toString();
@@ -141,7 +169,7 @@ const AttractionDetailsPage = () => {
               </Address>
             </Header>
             {theme === 'trip' && (
-              <Bag onPress={handleAddItem}>
+              <Bag onPress={() => handleAddItem(item)}>
                 {show ? (
                   <BagImage
                     source={require('../../assets/images/shopping.jpg')}
