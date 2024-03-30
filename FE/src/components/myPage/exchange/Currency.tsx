@@ -26,7 +26,10 @@ const Currency = ({currency}: CurrencyProps) => {
   return (
     <Wrapper onPress={handleToNext}>
       <NationView>
-        <NationImage source={imagePath[nation]} resizeMode="contain" />
+        <NationImage
+          source={imagePath[`${nation.toLowerCase()}round`]}
+          resizeMode="contain"
+        />
         <NationText>{nation_kr}</NationText>
       </NationView>
       <UnitView>

@@ -9,3 +9,7 @@ logging:
     org.hibernate.SQL: debug
 jwt:
   secret: ${JWT_SECRET_KEY}
+server:
+  servlet:
+    encoding:
+      force-response: true

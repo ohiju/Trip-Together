@@ -11,7 +11,7 @@ public interface AttractionLoadService {
 
 	RegionsLoadResponse regionsLoad(String name);
 
-	List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude, double latitudeDelta,
+	List<AttractionListItemResponseWD> findAttractionsClick(double latitude, double longitude, double latitudeDelta,
 		double longitudeDelta, String category);
 
 	List<AttractionListItemResponse> findAttractionsSearch(double latitude, double longitude, String keyword);

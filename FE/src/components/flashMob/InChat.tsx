@@ -1,7 +1,8 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {imagePath} from '../../assets/images/imagePath';
 import {ChatMainStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
 
 const Wrapper = styled(TouchableOpacity)`
@@ -42,7 +43,7 @@ const InChat = ({item}: any) => {
 
   return (
     <Wrapper onPress={handlePressChat}>
-      <Image source={require('../../assets/images/basicProfile.png')} />
+      <Image source={imagePath.basicprofile} />
       <ChatInfo>
         <ChatHost>Daniel</ChatHost>
         <ChatTitle>{item.title}</ChatTitle>

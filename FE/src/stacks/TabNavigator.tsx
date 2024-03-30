@@ -10,7 +10,7 @@ import {TabParams} from '../interfaces/router/TabParams';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 import MyPageNavigator from './MyPageStack';
-import TravelStack from './TravelStack';
+import TravelStack from './TripNavigator';
 import FlashMobStack from './FlashMobStack';
 
 const Tab = createBottomTabNavigator<TabParams>();

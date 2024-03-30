@@ -1,28 +1,29 @@
-import React from 'react';
-import {FlatList} from 'react-native';
-import Places from '../../assets/data/place';
 import {
   NavigationProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import React from 'react';
+import {FlatList} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {
-  ItemContainer,
-  Thumbnail,
-  DetailsContainer,
-  StarContainer,
-  Name,
-  Address,
-  Rating,
-  Price,
-  ThumbnailContainer,
-  DetailsRow,
-  ButtonContainer,
-} from './PlaceInfoListStyle';
+import Places from '../../assets/data/place';
+import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
-import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
+import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import {
+  Address,
+  ButtonContainer,
+  DetailsContainer,
+  DetailsRow,
+  ItemContainer,
+  Name,
+  Price,
+  Rating,
+  StarContainer,
+  Thumbnail,
+  ThumbnailContainer,
+} from './PlaceInfoListStyle';
 
 interface RouteParams {
   theme?: string;
@@ -52,10 +53,7 @@ const PlaceInfoList = () => {
   const renderItem = ({item}: any) => (
     <ItemContainer onPress={handlePress}>
       <ThumbnailContainer>
-        <Thumbnail
-          source={require('../../assets/images/sagradafamilia.png')}
-          resizeMode="contain"
-        />
+        <Thumbnail source={imagePath.sagradafamilla} resizeMode="contain" />
       </ThumbnailContainer>
       <DetailsContainer>
         <Name>{item.name}</Name>
