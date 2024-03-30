@@ -63,8 +63,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				attraction.address,
 				attraction.avgRating,
 				attraction.avgPrice,
-				attraction.longitude,
-				attraction.latitude
+				attraction.latitude,
+				attraction.longitude
 			))
 			.from(attraction)
 			.where(attraction.name.like("%"+keyword+"%"))
