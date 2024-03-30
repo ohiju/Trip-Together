@@ -33,7 +33,7 @@ const PlaceInfo = ({theme}: {theme: string}) => {
     if (theme === 'trip') {
       navigation.navigate('placeinfo', {theme});
     } else if (theme === 'flashmob') {
-      navigation.navigate('FlashPlaces');
+      navigation.navigate('FlashPlaces', {theme});
     }
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);

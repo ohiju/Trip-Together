@@ -1,32 +1,35 @@
-import React, {useState} from 'react';
-import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Picker} from '@react-native-picker/picker';
 import {
-  Wrapper,
-  Box,
-  InputLabel,
-  InputField,
-  DateTimePickerText,
-  PickerContainer,
-  StyledPicker,
-  SideBox,
-} from './MakeFlashStyle';
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import React, {useState} from 'react';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import AppButton from '../../components/common/AppButton';
+import DismissKeyboardView from '../../components/common/DismissKeyboardView';
+import {BottomButton} from '../../constants/AppButton';
+import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStackParams';
 import {useAppDispatch} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
-import {NavigationProp, useFocusEffect} from '@react-navigation/native';
-import AppButton from '../../components/common/AppButton';
-import {BottomButton} from '../../constants/AppButton';
-import DismissKeyboardView from '../../components/common/DismissKeyboardView';
-import {useNavigation} from '@react-navigation/native';
-import {FlashMainStackParams} from '../../interfaces/router/flashMob/FlashMainStackParams';
+import {
+  Box,
+  DateTimePickerText,
+  InputField,
+  InputLabel,
+  PickerContainer,
+  SideBox,
+  StyledPicker,
+  Wrapper,
+} from './MakeFlashStyle';
 
-const MakeFlash = () => {
+const FlashCreate = () => {
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(false);
   const [numParticipants, setNumParticipants] = useState('');
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<FlashMainStackParams>>();
+  const navigation = useNavigation<NavigationProp<FlashMobStackParams>>();
 
   useFocusEffect(() => {
     dispatch(setDisplay(false));
@@ -46,7 +49,7 @@ const MakeFlash = () => {
   };
 
   const handleSearchSubmit = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList');
   };
 
   return (
@@ -107,4 +110,4 @@ const MakeFlash = () => {
   );
 };
 
-export default MakeFlash;
+export default FlashCreate;

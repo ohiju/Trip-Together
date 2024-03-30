@@ -10,7 +10,7 @@ import Places from '../../assets/data/place';
 import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
-import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import {TabParams} from '../../interfaces/router/TabParams';
 import {
   Address,
   ButtonContainer,
@@ -30,7 +30,7 @@ interface RouteParams {
 }
 
 const PlaceInfoList = () => {
-  const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
+  const navigation = useNavigation<NavigationProp<TabParams>>();
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
 
@@ -43,11 +43,10 @@ const PlaceInfoList = () => {
   };
 
   const handlePressMake = () => {
-    navigation.navigate('makeflash');
+    navigation.navigate('FlashCreate');
   };
-
   const handlePressAllFlash = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList');
   };
 
   const renderItem = ({item}: any) => (

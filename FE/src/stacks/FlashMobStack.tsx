@@ -4,11 +4,11 @@ import ToChat from '../components/flashMob/ChatButton';
 import {FlashMobStackParams} from '../interfaces/router/flashMob/FlashMobStackParams';
 import PlaceDetail from '../pages/common/PlaceDetail';
 import PlaceInfoList from '../pages/common/PlaceInfoList';
-import AllFlash from '../pages/flashMob/AllFlash';
 import ChatMain from '../pages/flashMob/ChatMain';
 import ChatRoom from '../pages/flashMob/ChatRoom';
+import FlashCreate from '../pages/flashMob/FlashCreate';
+import FlashList from '../pages/flashMob/FlashList';
 import FlashMain from '../pages/flashMob/FlashMain';
-import MakeFlash from '../pages/flashMob/MakeFlash';
 import MoneyGet from '../pages/flashMob/MoneyGet';
 import MoneyGive from '../pages/flashMob/MoneyGive';
 import MoneyList from '../pages/flashMob/MoneyList';
@@ -26,8 +26,8 @@ const FlashMobNavigator = () => {
       <FlashMobStack.Group screenOptions={{title: '', headerRight: ToChat}}>
         <FlashMobStack.Screen name="FlashPlaces" component={PlaceInfoList} />
         <FlashMobStack.Screen name="FlashPlace" component={PlaceDetail} />
-        <FlashMobStack.Screen name="FlashCreate" component={MakeFlash} />
-        <FlashMobStack.Screen name="FlashList" component={AllFlash} />
+        <FlashMobStack.Screen name="FlashCreate" component={FlashCreate} />
+        <FlashMobStack.Screen name="FlashList" component={FlashList} />
       </FlashMobStack.Group>
       <FlashMobStack.Group
         screenOptions={{title: '채팅', headerTitleAlign: 'center'}}>
