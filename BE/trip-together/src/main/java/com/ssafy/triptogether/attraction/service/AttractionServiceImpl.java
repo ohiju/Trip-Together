@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -120,7 +119,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
     }
 
     @Override
-    public List<AttractionListItemResponse> findAttractionsClick(
+    public List<AttractionListItemResponseWD> findAttractionsClick(
         double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
         double distance = new MysqlNativeSqlCreator().getDistance(
             latitude,
