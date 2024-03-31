@@ -10,6 +10,8 @@ import PlaceDetail from '../pages/common/PlaceDetail';
 import Search from '../pages/travel/Search';
 import Travel from '../pages/travel/Travel';
 import TripTitle from '../pages/travel/TripTitle';
+import KeywordSearch from '../pages/travel/KeywordSearch';
+import AllTrip from '../pages/travel/AllTrip';
 
 const TravelStack = createNativeStackNavigator<TravelStackParams>();
 
@@ -22,6 +24,13 @@ const TravelNavigator = () => {
         options={{
           title: '여행',
           headerRight: Camera,
+        }}
+      />
+      <TravelStack.Screen
+        name="AllTrip"
+        component={AllTrip}
+        options={{
+          title: '',
         }}
       />
       <TravelStack.Group>
@@ -52,6 +61,13 @@ const TravelNavigator = () => {
         <TravelStack.Screen
           name="map"
           component={GoogleMap}
+          options={{
+            title: '',
+          }}
+        />
+        <TravelStack.Screen
+          name="keyword"
+          component={KeywordSearch}
           options={{
             title: '',
           }}

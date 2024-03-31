@@ -2,32 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {BagState, BagItem} from '../../interfaces/states/BagState';
 
 const initialState: BagState = {
-  bagInfo: [
-    {
-      attraction_id: 11,
-      thumbnail_image_url: '',
-      name: 'La Sagrada Familia',
-      address: '',
-      avg_rating: 4.4,
-      avg_price: 123,
-    },
-    {
-      attraction_id: 12,
-      thumbnail_image_url: '',
-      name: 'La Sagrada Familia',
-      address: '',
-      avg_rating: 3.4,
-      avg_price: 123,
-    },
-    {
-      attraction_id: 13,
-      thumbnail_image_url: '',
-      name: 'La Sagrada Familia',
-      address: '',
-      avg_rating: 2.4,
-      avg_price: 123,
-    },
-  ],
+  bagInfo: [],
 };
 
 export const bagSlice = createSlice({

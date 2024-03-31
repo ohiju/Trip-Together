@@ -1,19 +1,32 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import axios, {AxiosError} from 'axios';
 import React, {useState} from 'react';
 import {Alert, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
 import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
-import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
-import {RootState} from '../../store';
 import {useAppSelector} from '../../store/hooks';
+import {useAppDispatch} from '../../store/hooks';
+import {resetTripInfo} from '../../store/slices/trip';
+import {setDisplay} from '../../store/slices/tabState';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
-  const trip = useAppSelector((state: RootState) => state.trip.tripInfo);
+  const dispatch = useAppDispatch();
+  const trip = useAppSelector(state => state.trip.tripInfo);
+  const token =
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+
+  useFocusEffect(() => {
+    dispatch(setDisplay(false));
+  });
 
   const handleMapPress = () => {
     navigation.navigate('map');
@@ -29,9 +42,16 @@ const PlanDetail = () => {
       daily_plans: trip.daily_plans,
     };
     try {
-      await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
-        headers: {},
-      });
+      await axios.patch(
+        `https://j10a309.p.ssafy.io/api/plan/v1/plans/${trip.plan_id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      dispatch(resetTripInfo());
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {

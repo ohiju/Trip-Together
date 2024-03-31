@@ -38,8 +38,8 @@ const FlashMain = () => {
   return (
     <Wrapper>
       <Container>
-        {myPosition ? <MyLocationMap center={myPosition} /> : <Loading />}
-        <PlaceInfo theme="FlashPlaces" />
+        {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
+        {/* <PlaceInfo theme="flashmob" /> */}
       </Container>
     </Wrapper>
   );
