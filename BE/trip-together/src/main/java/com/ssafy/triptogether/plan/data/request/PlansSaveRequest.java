@@ -16,7 +16,7 @@ public record PlansSaveRequest(
     LocalDate startAt,
     @NotNull @JsonProperty("end_at")
     LocalDate endAt,
-    @NotBlank @JsonProperty("title")
+    @NotNull @JsonProperty("title")
     String title,
     @NotNull @JsonProperty("total_estimated_budget")
     Double estimatedBudget,
