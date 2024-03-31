@@ -6,6 +6,12 @@ spring:
     mongodb:
       uri: mongodb://${TEST_TRIP_MONGODB_USERNAME}:${TEST_TRIP_MONGODB_PASSWORD}@localhost:${TEST_TRIP_MONGODB_BINDING_PORT}/?authSource=admin
       database: ${TEST_TRIP_MONGODB_DATABASE}
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: ${RABBITMQ_DEFAULT_USER}
+      password: ${RABBITMQ_DEFAULT_PASS}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,8 +25,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-  mvc:
-    servlet:
-      path: /api
+#  mvc:
+#    servlet:
+#      path: /api
 jwt:
   secret: ${JWT_SECRET_KEY}
