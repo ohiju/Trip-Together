@@ -1,7 +1,13 @@
 package com.ssafy.triptogether.flashmob.repository;
 
-import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface MemberSettlementRepository extends JpaRepository<MemberSettlement, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
+
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
+
+@NoRepositoryBean
+public interface MemberSettlementRepository<T extends MemberSettlement> extends JpaRepository<T, Long> {
+	List<MemberSettlement> findByMemberId(long memberId);
 }

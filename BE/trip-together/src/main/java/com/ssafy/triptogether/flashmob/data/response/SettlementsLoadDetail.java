@@ -1,6 +1,7 @@
 package com.ssafy.triptogether.flashmob.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 
 import lombok.Builder;
 
@@ -10,6 +11,8 @@ public record SettlementsLoadDetail(
 	Long settlementId,
 	@JsonProperty("total_price")
 	Double totalPrice,
+	@JsonProperty("currency_code")
+	CurrencyCode currencyCode,
 	@JsonProperty("is_done")
 	Boolean isDone,
 	@JsonProperty("receiver_id")

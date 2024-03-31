@@ -3,6 +3,8 @@ package com.ssafy.triptogether.flashmob.controller;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
+import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
+import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
@@ -108,6 +110,36 @@ public class FlashMobController {
 
         return ApiResponse.toResponseEntity(
             OK, SUCCESS_SETTLEMENTS_LOAD, settlementsLoadResponse
+        );
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/settlements/{settlement_id}/receipt")
+    public ResponseEntity<ApiResponse<AttendeeReceiptsResponse>> receiptsLoad(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        AttendeeReceiptsResponse attendeeReceiptsResponse = flashMobLoadService.receiptsLoad(memberId, flashmobId,
+            settlementId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_RECEIPTS_LOAD, attendeeReceiptsResponse
+        );
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/settlements/{settlement_id}")
+    public ResponseEntity<ApiResponse<AttendeesStatusResponse>> attendeesStatusLoad(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        AttendeesStatusResponse attendeesStatusResponse = flashMobLoadService.attendeesStatusLoad(memberId, flashmobId,
+            settlementId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_ATTENDEES_STATUS_LOAD, attendeesStatusResponse
         );
     }
 }

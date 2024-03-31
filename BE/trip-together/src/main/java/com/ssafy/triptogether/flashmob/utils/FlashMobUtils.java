@@ -5,8 +5,10 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.RequesterSettlementRepository;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 
 import lombok.AccessLevel;
@@ -29,9 +31,17 @@ public class FlashMobUtils {
 
 	public static MemberFlashMob findByFlashMobIdAndMemberId(MemberFlashMobRepository repository, long flashmobId,
 		long memberId) {
-        return repository.findMemberFlashmobByFlashmobIdAndMemberId(flashmobId, memberId)
+		return repository.findMemberFlashmobByFlashmobIdAndMemberId(flashmobId, memberId)
 			.orElseThrow(
 				() -> new NotFoundException("FindByFlashMobIdAndMemberId", FLASHMOB_MEMBER_NOT_FOUND)
+			);
+	}
+
+	public static MemberSettlement findByMemberIdAndSettlementId(RequesterSettlementRepository repository, long memberId,
+		long settlementId) {
+		return repository.findByMemberIdAndSettlementId(memberId, settlementId)
+			.orElseThrow(
+				() -> new NotFoundException("FindByMemberIdAndSettlementId", SETTLEMENT_MEMBER_NOT_FOUND)
 			);
 	}
 }
