@@ -8,6 +8,7 @@ interface ImagePath {
   europe4: ImageSourcePropType;
   europe5: ImageSourcePropType;
   adh01: ImageSourcePropType;
+  attend: ImageSourcePropType;
   bag: ImageSourcePropType;
   bag2: ImageSourcePropType;
   camera: ImageSourcePropType;
@@ -37,6 +38,7 @@ interface ImagePath {
   review: ImageSourcePropType;
   rightarrow: ImageSourcePropType;
   sagradafamilla: ImageSourcePropType;
+  settlement: ImageSourcePropType;
   shopping: ImageSourcePropType;
   shopping2: ImageSourcePropType;
   sync: ImageSourcePropType;
@@ -54,6 +56,7 @@ export const imagePath: ImagePath = {
   europe4: require('./commercials/europe4.jpg'),
   europe5: require('./commercials/europe5.jpg'),
   adh01: require('./adh01.png'),
+  attend: require('./attend.png'),
   bag: require('./bag.jpg'),
   bag2: require('./bag2.png'),
   logobank: require('./logobank.png'),
@@ -83,6 +86,7 @@ export const imagePath: ImagePath = {
   review: require('./review.jpg'),
   rightarrow: require('./rightarrow.png'),
   sagradafamilla: require('./sagradafamilia.png'),
+  settlement: require('./settlement.png'),
   shopping: require('./shopping.png'),
   shopping2: require('./shopping2.jpg'),
   sync: require('./sync.png'),
