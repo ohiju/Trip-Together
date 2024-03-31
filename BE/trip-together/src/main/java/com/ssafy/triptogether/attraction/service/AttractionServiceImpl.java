@@ -51,6 +51,8 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 			.startAt(attraction.getStartAt())
 			.endAt(attraction.getEndAt())
 			.attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
+			.attractionName(attraction.getName())
+			.attractionAddress(attraction.getAddress())
 			.latitude(attraction.getLatitude())
 			.longitude(attraction.getLongitude())
 			.reviews(reviewResponses)
