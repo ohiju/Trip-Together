@@ -85,7 +85,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
             ))
             .from(plan)
             .where(plan.member.id.eq(memberId))
-            .orderBy(plan.startAt.desc())
+            .orderBy(plan.startAt.asc())
             .fetch();
     }
 }
