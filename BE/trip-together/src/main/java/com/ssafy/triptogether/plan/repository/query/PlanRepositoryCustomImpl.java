@@ -87,7 +87,8 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                     .then(Status.BEFORE.getMessage())
                     .when(plan.startAt.before(currentDate))
                     .then(Status.AFTER.getMessage())
-                    .otherwise(Status.IN_PROGRESS.getMessage())
+                    .otherwise(Status.IN_PROGRESS.getMessage()),
+                plan.region.nation
             ))
             .from(plan)
             .where(plan.member.id.eq(memberId))
