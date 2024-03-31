@@ -24,10 +24,9 @@ import lombok.experimental.SuperBuilder;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 @Getter
-@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_settlement")
-public abstract class MemberSettlement {
+public abstract class MemberSettlement extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_settlement_id")
