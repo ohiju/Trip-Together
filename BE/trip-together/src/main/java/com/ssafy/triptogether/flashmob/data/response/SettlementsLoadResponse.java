@@ -8,7 +8,9 @@ import lombok.Builder;
 
 @Builder
 public record SettlementsLoadResponse(
-	@JsonProperty("settlements")
-	List<SettlementsLoadDetail> settlementsLoadDetails
+	@JsonProperty("requester_settlements")
+	List<RequesterSettlementsLoadDetail> requesterSettlementsLoadDetails,
+	@JsonProperty("participant_settlements")
+	List<ParticipantSettlementsLoadDetail> participantSettlementsLoadDetails
 ) {
 }
