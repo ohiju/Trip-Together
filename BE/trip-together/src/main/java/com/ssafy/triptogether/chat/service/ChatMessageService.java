@@ -21,6 +21,21 @@ public class ChatMessageService {
 	@Value("${rabbitmq.routing.key}")
 	private String routingKey;
 
+	public void handle(ChatMessage chatMessage) {
+		switch (chatMessage.status()) {
+			case JOIN -> handleJoin(chatMessage);
+			case SETTLEMENT -> handleSettlement(chatMessage);
+		}
+	}
+
+	private void handleJoin(ChatMessage chatMessage) {
+		//TODO: 새로운 연결해서 추가된 사용자에게 할당해주기
+	}
+
+	private void handleSettlement(ChatMessage chatMessage) {
+		//TODO: 정산하기 service 메소드 받아오기
+	}
+
 	/**
 	 * Queue로 메시지를 발행
 	 *

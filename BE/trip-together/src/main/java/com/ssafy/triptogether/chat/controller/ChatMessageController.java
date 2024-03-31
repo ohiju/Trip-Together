@@ -9,19 +9,20 @@ import com.ssafy.triptogether.chat.data.ChatMessage;
 import com.ssafy.triptogether.chat.service.ChatMessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Controller
-@Slf4j
 public class ChatMessageController {
 
 	private final ChatMessageService chatMessageService;
 	private final SimpMessageSendingOperations messageTemplate;
 
-	@MessageMapping("/hello")
-	public void hello(@Payload ChatMessage chatMessage) {
+	//TODO: 메시지 큐를 채팅에 참여중인 사용자에게 각각 할당하고, 불러와서 관리하기
+
+	@MessageMapping
+	public void publish(@Payload ChatMessage chatMessage) {
 		chatMessageService.publish(chatMessage);
+		chatMessageService.handle(chatMessage);
 		messageTemplate.convertAndSend("/topic/" + chatMessage.flashmobId(), chatMessage);
 	}
 }
