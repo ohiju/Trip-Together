@@ -1,14 +1,15 @@
 package com.ssafy.triptogether.plan.domain.document;
 
-import lombok.Builder;
-
-import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Builder;
+
 public record DailyPlan(
-    Double dailyEstimatedBudget,
-    LocalDate date,
-    List<DailyPlanAttraction> dailyPlanAttractions
+	@JsonProperty("daily_estimated_budget") Double dailyEstimatedBudget,
+	Integer order,
+	@JsonProperty("daily_plan_attractions") List<DailyPlanAttraction> dailyPlanAttractions
 ) {
     @Builder
     public DailyPlan {

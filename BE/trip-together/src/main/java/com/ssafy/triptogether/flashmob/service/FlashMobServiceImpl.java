@@ -2,50 +2,45 @@ package com.ssafy.triptogether.flashmob.service;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
-import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
-import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 import com.ssafy.triptogether.flashmob.domain.ParticipantSettlement;
-import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
 import com.ssafy.triptogether.flashmob.domain.Settlement;
 import com.ssafy.triptogether.flashmob.domain.document.Receipt;
 import com.ssafy.triptogether.flashmob.domain.document.ReceiptHistory;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
-import com.ssafy.triptogether.flashmob.repository.MemberSettlementRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.flashmob.repository.ParticipantSettlementRepository;
-import com.ssafy.triptogether.flashmob.repository.RequesterSettlementRepository;
 import com.ssafy.triptogether.flashmob.repository.ReceiptRepository;
+import com.ssafy.triptogether.flashmob.repository.RequesterSettlementRepository;
 import com.ssafy.triptogether.flashmob.repository.SettlementRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.domain.RoomStatus;
-import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberFlashmobUtils;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -160,11 +155,11 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		Member requester = MemberUtils.findByMemberId(memberRepository, memberId);
 		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
 		Settlement settlement = makeSettlement(settlementSaveRequest, flashMob);
-		RequesterSettlement requesterSettlement = (RequesterSettlement)RequesterSettlement.builder()
-			.member(requester)
-			.settlement(settlement)
-			.build();
-		requesterSettlementRepository.save(requesterSettlement);
+		// RequesterSettlement requesterSettlement = (RequesterSettlement)RequesterSettlement.builder()
+		// 	.member(requester)
+		// 	.settlement(settlement)
+		// 	.build();
+		// requesterSettlementRepository.save(requesterSettlement);
 
 		settlementSaveRequest.attendeesDetails()
 			.forEach(attendeesDetail -> {
@@ -226,69 +221,72 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	@FlashMobMemberVerify
 	@Override
 	public SettlementsLoadResponse settlementsLoad(long memberId, long flashmobId) {
-		List<MemberSettlement> requesterSettlements = requesterSettlementRepository.findByMemberId(memberId);
-		List<Settlement> settlements = settlementRepository.findByFlashMobId(flashmobId);
-		List<SettlementsLoadDetail> settlementsLoadDetails = settlements.stream()
-			.filter(settlement ->
-				settlement.getRequesterId().equals(memberId) ||
-					settlement.getMemberSettlements().stream().anyMatch(memberSettlement ->
-						memberSettlement.getMember().getId().equals(memberId)))
-			.map(settlement -> SettlementsLoadDetail.builder()
-				.settlementId(settlement.getId())
-				.currencyCode(settlement.getCurrencyCode())
-				.isDone(settlement.getIsDone())
-				.isReceiver(settlement.getRequesterId().equals(memberId))
-				.receiverId(settlement.getRequesterId())
-				.totalPrice(settlement.getTotalPrice())
-				.receiverImageUrl(
-					MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getImageUrl())
-				.receiverNickname(
-					MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getNickname())
-				.build()
-			).toList();
-		return SettlementsLoadResponse.builder()
-			.settlementsLoadDetails(settlementsLoadDetails)
-			.build();
+		// List<MemberSettlement> requesterSettlements = requesterSettlementRepository.findByMemberId(memberId);
+		// List<Settlement> settlements = settlementRepository.findByFlashMobId(flashmobId);
+		// List<SettlementsLoadDetail> settlementsLoadDetails = settlements.stream()
+		// 	.filter(settlement ->
+		// 		settlement.getRequesterId().equals(memberId) ||
+		// 			settlement.getMemberSettlements().stream().anyMatch(memberSettlement ->
+		// 				memberSettlement.getMember().getId().equals(memberId)))
+		// 	.map(settlement -> SettlementsLoadDetail.builder()
+		// 		.settlementId(settlement.getId())
+		// 		.currencyCode(settlement.getCurrencyCode())
+		// 		.isDone(settlement.getIsDone())
+		// 		.isReceiver(settlement.getRequesterId().equals(memberId))
+		// 		.receiverId(settlement.getRequesterId())
+		// 		.totalPrice(settlement.getTotalPrice())
+		// 		.receiverImageUrl(
+		// 			MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getImageUrl())
+		// 		.receiverNickname(
+		// 			MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getNickname())
+		// 		.build()
+		// 	).toList();
+		// return SettlementsLoadResponse.builder()
+		// 	.settlementsLoadDetails(settlementsLoadDetails)
+		// 	.build();
+		return null;
 	}
 
 	@FlashMobMemberVerify
 	@Override
 	public AttendeeReceiptsResponse receiptsLoad(long memberId, long flashmobId, long settlementId) {
-		MemberSettlement memberSettlement = FlashMobUtils.findByMemberIdAndSettlementId(
-			requesterSettlementRepository, memberId, settlementId);
-		Receipt receipt = receiptRepository.findById(memberSettlement.getId())
-			.orElseThrow(
-				() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
-			);
-		List<AttendeesReceiptDetail> attendeesReceiptDetails = receipt.getReceiptHistories()
-			.stream()
-			.map(
-				receiptHistory -> AttendeesReceiptDetail.builder()
-					.price(receiptHistory.price())
-					.businessName(receiptHistory.businessName())
-					.createdAt(receiptHistory.createdAt())
-					.build()
-			).toList();
-		return AttendeeReceiptsResponse.builder()
-			.price(memberSettlement.getPrice())
-			.attendeesReceiptDetails(attendeesReceiptDetails)
-			.build();
+		// MemberSettlement memberSettlement = FlashMobUtils.findByMemberIdAndSettlementId(
+		// 	requesterSettlementRepository, memberId, settlementId);
+		// Receipt receipt = receiptRepository.findById(memberSettlement.getId())
+		// 	.orElseThrow(
+		// 		() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
+		// 	);
+		// List<AttendeesReceiptDetail> attendeesReceiptDetails = receipt.getReceiptHistories()
+		// 	.stream()
+		// 	.map(
+		// 		receiptHistory -> AttendeesReceiptDetail.builder()
+		// 			.price(receiptHistory.price())
+		// 			.businessName(receiptHistory.businessName())
+		// 			.createdAt(receiptHistory.createdAt())
+		// 			.build()
+		// 	).toList();
+		// return AttendeeReceiptsResponse.builder()
+		// 	.price(memberSettlement.getPrice())
+		// 	.attendeesReceiptDetails(attendeesReceiptDetails)
+		// 	.build();
+		return null;
 	}
 
 	@FlashMobMemberVerify
 	@Override
 	public AttendeesStatusResponse attendeesStatusLoad(long memberId, long flashmobId, long settlementId) {
-		Settlement settlement = settlementRepository.findById(settlementId)
-			.orElseThrow(
-				() -> new NotFoundException("AttendeesStatusLoad", SETTLEMENT_NOT_FOUND)
-			);
-		if (!settlement.getRequesterId().equals(memberId)) {
-			throw new ForbiddenException("AttendeesStatusLoad", FORBIDDEN_ACCESS_MEMBER);
-		}
-		List<AttendeesStatusDetail> attendeesStatusDetails = requesterSettlementRepository.memberSettlementStatusLoad(
-			settlementId);
-		return AttendeesStatusResponse.builder()
-			.attendeesStatusDetails(attendeesStatusDetails)
-			.build();
+		// Settlement settlement = settlementRepository.findById(settlementId)
+		// 	.orElseThrow(
+		// 		() -> new NotFoundException("AttendeesStatusLoad", SETTLEMENT_NOT_FOUND)
+		// 	);
+		// if (!settlement.getRequesterId().equals(memberId)) {
+		// 	throw new ForbiddenException("AttendeesStatusLoad", FORBIDDEN_ACCESS_MEMBER);
+		// }
+		// List<AttendeesStatusDetail> attendeesStatusDetails = requesterSettlementRepository.memberSettlementStatusLoad(
+		// 	settlementId);
+		// return AttendeesStatusResponse.builder()
+		// 	.attendeesStatusDetails(attendeesStatusDetails)
+		// 	.build();
+		return null;
 	}
 }

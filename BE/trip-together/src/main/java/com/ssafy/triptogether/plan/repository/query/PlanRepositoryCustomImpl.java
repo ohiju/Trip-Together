@@ -57,6 +57,8 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                     plan.region.nation,
                     plan.region.id,
                     plan.region.cityName,
+                    plan.region.latitude,
+                    plan.region.longitude,
                     plan.startAt,
                     plan.endAt,
                     plan.title,
