@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/plan/v1/plans")
 @RequiredArgsConstructor
 public class PlanController {
-    // Service
     private final PlanSaveService planSaveService;
     private final PlanLoadService planLoadService;
 
@@ -47,8 +46,7 @@ public class PlanController {
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid PlansSaveRequest plansSaveRequest
 	) {
-		// long memberId = securityMember.getId();
-		long memberId = 1L;
+		long memberId = securityMember.getId();
 		planSaveService.plansSave(memberId, plansSaveRequest);
 
         return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
