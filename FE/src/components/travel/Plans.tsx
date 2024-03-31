@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {imagePath} from '../../assets/images/imagePath';
 import plans from '../../assets/data/alltrips';
+import {imagePath} from '../../assets/images/imagePath';
 import {
+  ButtonImage,
+  CityName,
   DdayText,
   DurationText,
-  ButtonImage,
   MoneyImage,
   MoneyText,
   MoneyUnit,
@@ -16,7 +17,6 @@ import {
   PlanSlideButton,
   PlanTitle,
   PlanView,
-  CityName,
 } from './PlansStyle';
 
 const Plans = () => {
@@ -37,11 +37,11 @@ const Plans = () => {
       <PlanTitle>{currentPlan.title}</PlanTitle>
       <PlanCenter>
         <PlanSlideButton onPress={handleLeftButtonClick}>
-          <ButtonImage source={require('../../assets/images/left-arrow.png')} />
+          <ButtonImage source={imagePath.leftarrow} />
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
-            <PlanImage source={imagePath.France} />
+            <PlanImage source={imagePath.francesquare} />
             <CityName>{currentPlan.start_region}</CityName>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
@@ -50,13 +50,11 @@ const Plans = () => {
           </PlanDescriptionBox>
         </PlanDescription>
         <PlanSlideButton onPress={handleRightButtonClick}>
-          <ButtonImage
-            source={require('../../assets/images/right-arrow.png')}
-          />
+          <ButtonImage source={imagePath.rightarrow} />
         </PlanSlideButton>
       </PlanCenter>
       <PlanMoney>
-        <MoneyImage source={require('../../assets/images/profits.png')} />
+        <MoneyImage source={imagePath.profits} />
         <MoneyUnit>₩</MoneyUnit>
         <MoneyText>{currentPlan.total_budget.toLocaleString()}</MoneyText>
       </PlanMoney>

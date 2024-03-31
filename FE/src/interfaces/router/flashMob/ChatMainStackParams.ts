@@ -1,7 +1,11 @@
 import {ParamListBase} from '@react-navigation/native';
 
-interface ChatMainStackParams extends ParamListBase {
-  chatroom: undefined;
+interface ChatStackParams extends ParamListBase {
+  ChatMain: undefined;
+  ChatRoom: undefined;
+  Settlement: undefined;
+  Remittance: undefined;
+  Transaction: undefined;
 }
 
-export type {ChatMainStackParams};
+export type {ChatStackParams};

@@ -9,39 +9,41 @@ interface ImagePath {
   europe5: ImageSourcePropType;
   adh01: ImageSourcePropType;
   bag: ImageSourcePropType;
-  bankLogo: ImageSourcePropType;
-  basicProfile: ImageSourcePropType;
+  bag2: ImageSourcePropType;
   camera: ImageSourcePropType;
-  CurExchange: ImageSourcePropType;
+  chat: ImageSourcePropType;
   down: ImageSourcePropType;
   drag: ImageSourcePropType;
-  EU: ImageSourcePropType;
+  euround: ImageSourcePropType;
   exchange: ImageSourcePropType;
-  France: ImageSourcePropType;
+  exchangecur: ImageSourcePropType;
+  francesquare: ImageSourcePropType;
   godown: ImageSourcePropType;
   goup: ImageSourcePropType;
   insurance: ImageSourcePropType;
-  KR: ImageSourcePropType;
-  leftArrow: ImageSourcePropType;
+  krround: ImageSourcePropType;
+  leftarrow: ImageSourcePropType;
   lightning: ImageSourcePropType;
   logo: ImageSourcePropType;
+  logobank: ImageSourcePropType;
   money: ImageSourcePropType;
-  myPage: ImageSourcePropType;
   pay: ImageSourcePropType;
   plane: ImageSourcePropType;
   planning: ImageSourcePropType;
+  profiledefault: ImageSourcePropType;
   profits: ImageSourcePropType;
   qrcode: ImageSourcePropType;
   remit: ImageSourcePropType;
   review: ImageSourcePropType;
-  rightArrow: ImageSourcePropType;
+  rightarrow: ImageSourcePropType;
   sagradafamilla: ImageSourcePropType;
   shopping: ImageSourcePropType;
+  shopping2: ImageSourcePropType;
   sync: ImageSourcePropType;
   toggledown: ImageSourcePropType;
   trash: ImageSourcePropType;
   trip: ImageSourcePropType;
-  UK: ImageSourcePropType;
+  ukround: ImageSourcePropType;
   up: ImageSourcePropType;
 }
 
@@ -52,25 +54,26 @@ export const imagePath: ImagePath = {
   europe4: require('./commercials/europe4.jpg'),
   europe5: require('./commercials/europe5.jpg'),
   adh01: require('./adh01.png'),
-  bag: require('./bag.png'),
-  bankLogo: require('./bankLogo.png'),
-  basicProfile: require('./basicProfile.png'),
+  bag: require('./bag.jpg'),
+  bag2: require('./bag2.png'),
+  logobank: require('./logobank.png'),
+  profiledefault: require('./profiledefault.png'),
   camera: require('./camera.png'),
-  CurExchange: require('./CurExchange.png'),
+  chat: require('./chat.png'),
+  exchangecur: require('./exchangecur.png'),
   down: require('./down.png'),
   drag: require('./drag.png'),
-  EU: require('./EU_round.png'),
+  euround: require('./euround.png'),
   exchange: require('./exchange.png'),
-  France: require('./France.png'),
+  francesquare: require('./francesquare.png'),
   godown: require('./godown.png'),
   goup: require('./goup.png'),
   insurance: require('./insurance.png'),
-  KR: require('./KR_round.png'),
-  leftArrow: require('./left-arrow.png'),
+  krround: require('./krround.png'),
+  leftarrow: require('./leftarrow.png'),
   lightning: require('./lightning.png'),
   logo: require('./logo.png'),
   money: require('./money.png'),
-  myPage: require('./myPage.png'),
   pay: require('./pay.png'),
   plane: require('./plane.png'),
   planning: require('./planning.png'),
@@ -78,13 +81,14 @@ export const imagePath: ImagePath = {
   qrcode: require('./qrcode.png'),
   remit: require('./remit.png'),
   review: require('./review.jpg'),
-  rightArrow: require('./right-arrow.png'),
+  rightarrow: require('./rightarrow.png'),
   sagradafamilla: require('./sagradafamilia.png'),
   shopping: require('./shopping.png'),
+  shopping2: require('./shopping2.jpg'),
   sync: require('./sync.png'),
   toggledown: require('./toggledown.png'),
   trash: require('./trash.png'),
   trip: require('./trip.png'),
-  UK: require('./UK_round.png'),
+  ukround: require('./ukround.png'),
   up: require('./up.png'),
 };

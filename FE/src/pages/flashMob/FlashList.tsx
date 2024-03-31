@@ -1,25 +1,25 @@
-import React from 'react';
-import {FlatList} from 'react-native';
 import {
   NavigationProp,
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import {setDisplay} from '../../store/slices/tabState';
-import {useAppDispatch} from '../../store/hooks';
+import React from 'react';
+import {FlatList} from 'react-native';
 import chatrooms from '../../assets/data/chatrooms';
-import {
-  Container,
-  Title,
-  ChatRoomItem,
-  ProfileImage,
-  ChatRoomDetails,
-  ChatRoomTitle,
-  MeetingInfo,
-} from './AllFlashStyle';
 import {FlashMainStackParams} from '../../interfaces/router/flashMob/FlashMainStackParams';
+import {useAppDispatch} from '../../store/hooks';
+import {setDisplay} from '../../store/slices/tabState';
+import {
+  ChatRoomDetails,
+  ChatRoomItem,
+  ChatRoomTitle,
+  Container,
+  MeetingInfo,
+  ProfileImage,
+  Title,
+} from './AllFlashStyle';
 
-const AllFlash = () => {
+const FlashList = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<FlashMainStackParams>>();
 
@@ -28,7 +28,7 @@ const AllFlash = () => {
   });
 
   const handlePressChat = () => {
-    navigation.navigate('chatroom');
+    navigation.navigate('ChatRoom');
   };
 
   const renderItem = ({item}: any) => (
@@ -61,4 +61,4 @@ const AllFlash = () => {
   );
 };
 
-export default AllFlash;
+export default FlashList;

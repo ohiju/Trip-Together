@@ -1,44 +1,44 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
-import {PlaceDetail} from '../../assets/data/placedetail';
-import {
-  Container,
-  ImageBackground,
-  DetailsContainer,
-  Title,
-  Info,
-  Bag,
-  ReviewsContainer,
-  ButtonContainer,
-  ReviewItem,
-  ReviewImage,
-  ProfileImage,
-  ReviewDetails,
-  ReviewWriter,
-  ReviewRating,
-  HeaderContainer,
-  ReviewContent,
-  NavigationButtons,
-  NavButton,
-  HeadersContainer,
-  BagImage,
-  Address,
-  Header,
-  StarInfo,
-  Line,
-} from './PlaceDetailStyle';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {useAppSelector} from '../../store/hooks';
-import {useAppDispatch} from '../../store/hooks';
-import {addItemToBag} from '../../store/slices/bag';
 import {
   NavigationProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, TouchableOpacity} from 'react-native';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {PlaceDetail} from '../../assets/data/placedetail';
+import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
-import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
 import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {addItemToBag} from '../../store/slices/bag';
+import {
+  Address,
+  Bag,
+  BagImage,
+  ButtonContainer,
+  Container,
+  DetailsContainer,
+  Header,
+  HeaderContainer,
+  HeadersContainer,
+  ImageBackground,
+  Info,
+  Line,
+  NavButton,
+  NavigationButtons,
+  ProfileImage,
+  ReviewContent,
+  ReviewDetails,
+  ReviewImage,
+  ReviewItem,
+  ReviewRating,
+  ReviewWriter,
+  ReviewsContainer,
+  StarInfo,
+  Title,
+} from './PlaceDetailStyle';
 
 interface RouteParams {
   theme?: string;
@@ -67,7 +67,7 @@ const AttractionDetailsPage = () => {
 
   const images = Array.from({length: 5}, (_, index) => ({
     id: index.toString(),
-    source: require('../../assets/images/review.jpg'),
+    source: imagePath.review,
   }));
 
   const renderImageItem = ({item}: {item: any}) => (
@@ -76,7 +76,7 @@ const AttractionDetailsPage = () => {
 
   const renderReviewItem = ({item}: {item: any}) => (
     <ReviewItem>
-      <ProfileImage source={require('../../assets/images/basicProfile.png')} />
+      <ProfileImage source={imagePath.profiledefault} />
       <ReviewDetails>
         <ReviewWriter>{item.writer_nickname}</ReviewWriter>
         <ReviewRating>Rating: {item.rating}</ReviewRating>
@@ -129,7 +129,7 @@ const AttractionDetailsPage = () => {
       renderItem={({item}) => (
         <Container>
           <ImageBackground
-            source={require('../../assets/images/sagradafamilia.png')}
+            source={imagePath.sagradafamilla}
             resizeMode="cover"
           />
           <HeadersContainer>
@@ -143,10 +143,7 @@ const AttractionDetailsPage = () => {
             {theme === 'trip' && (
               <Bag onPress={handleAddItem}>
                 {show ? (
-                  <BagImage
-                    source={require('../../assets/images/shopping.jpg')}
-                    resizeMode="cover"
-                  />
+                  <BagImage source={imagePath.shopping2} resizeMode="cover" />
                 ) : (
                   <></>
                 )}

@@ -1,8 +1,9 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {ChatMainStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
+import {imagePath} from '../../assets/images/imagePath';
+import {ChatStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
 
 const Wrapper = styled(TouchableOpacity)`
   height: 100px;
@@ -34,7 +35,7 @@ const ChatTitle = styled.Text`
 const ChatMember = styled.Text``;
 
 const InChat = ({item}: any) => {
-  const navigation = useNavigation<NavigationProp<ChatMainStackParams>>();
+  const navigation = useNavigation<NavigationProp<ChatStackParams>>();
 
   const handlePressChat = () => {
     navigation.navigate('chatroom');
@@ -42,7 +43,7 @@ const InChat = ({item}: any) => {
 
   return (
     <Wrapper onPress={handlePressChat}>
-      <Image source={require('../../assets/images/basicProfile.png')} />
+      <Image source={imagePath.profiledefault} />
       <ChatInfo>
         <ChatHost>Daniel</ChatHost>
         <ChatTitle>{item.title}</ChatTitle>

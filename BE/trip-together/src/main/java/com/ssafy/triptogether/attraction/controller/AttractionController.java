@@ -37,14 +37,14 @@ public class AttractionController {
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
     @GetMapping("/attractions/click")
-    public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick (
+    public ResponseEntity<ApiResponse<List<AttractionListItemResponseWD>>> getAttractionsClick (
         @RequestParam double latitude,
         @RequestParam double longitude,
         @RequestParam("latitude_delta") double latitudeDelta,
         @RequestParam("longitude_delta") double longitudeDelta,
         @RequestParam String category
     ) {
-        List<AttractionListItemResponse> attractionListItemResponseList =
+        List<AttractionListItemResponseWD> attractionListItemResponseList =
             attractionLoadService.findAttractionsClick(
                 latitude,
                 longitude,

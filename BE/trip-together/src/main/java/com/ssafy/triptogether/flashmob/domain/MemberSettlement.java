@@ -1,33 +1,35 @@
 package com.ssafy.triptogether.flashmob.domain;
 
-import com.ssafy.triptogether.flashmob.domain.Settlement;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.member.domain.Member;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_settlement")
-public class MemberSettlement extends BaseEntity {
+public abstract class MemberSettlement extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_settlement_id")
     private Long id;
-
-    @NotNull
-    @Column(name = "has_sent")
-    private Boolean hasSent;
-
-    @NotNull
-    @Column(name = "price")
-    private Double price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -37,10 +39,8 @@ public class MemberSettlement extends BaseEntity {
     @JoinColumn(name = "settlement_id")
     private Settlement settlement;
 
-    @Builder
-    public MemberSettlement(Boolean hasSent, Double price, Member member, Settlement settlement) {
-        this.hasSent = hasSent;
-        this.price = price;
+	// @Builder
+    public MemberSettlement(Member member, Settlement settlement) {
         setMember(member);
         setSettlement(settlement);
     }

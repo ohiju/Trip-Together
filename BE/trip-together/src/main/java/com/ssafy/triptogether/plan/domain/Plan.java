@@ -1,20 +1,31 @@
 package com.ssafy.triptogether.plan.domain;
 
+import java.time.LocalDate;
+
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -54,7 +65,7 @@ public class Plan extends BaseEntity {
     @Builder
     public Plan(String title, Double estimatedBudget, LocalDate startAt, LocalDate endAt, Member member, Region region) {
         this.title = title;
-        this.estimatedBudget = estimatedBudget;
+        this.estimatedBudget = estimatedBudget == null ? 0.0 : estimatedBudget;
         this.startAt = startAt;
         this.endAt = endAt;
         setMember(member);

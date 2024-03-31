@@ -2,7 +2,7 @@ import {imagePath} from '../assets/images/imagePath';
 import {cardHistory} from '../interfaces/states/CardHistoryState';
 
 const parseCardHistory = (history: cardHistory) => {
-  const image_url = imagePath[history.nation];
+  const image_url = imagePath[`${history.nation.toLowerCase()}round`];
   const nation_kr = history.nation_kr;
   let sign = '';
   if (history.type !== '충전') {

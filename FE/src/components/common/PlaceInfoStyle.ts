@@ -1,21 +1,10 @@
-import {Shadow} from 'react-native-shadow-2';
 import styled from 'styled-components/native';
-import {
-  bg_light,
-  bg_lightgray,
-  bg_main,
-  font_dark,
-} from '../../constants/colors';
+import {bg_light, bg_lightgray, font_dark} from '../../constants/colors';
 
 const Wrapper = styled.View`
   width: 100%;
-  background: ${bg_main};
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-`;
-
-const StyledShadow = styled(Shadow)`
-  align-self: stretch;
 `;
 
 const PlaceBox = styled.View`
@@ -23,15 +12,14 @@ const PlaceBox = styled.View`
   background: ${bg_light};
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-  padding-top: 20px;
-  height: 150px;
+  padding: 20px 0 10px 0;
   width: 100%;
 `;
 
 const PlaceView = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: 10px 15px;
+  padding: 0 15px;
 `;
 
 const DragBar = styled.View`
@@ -44,18 +32,17 @@ const DragBar = styled.View`
 `;
 
 const PlaceImageView = styled.View`
-  height: 80px;
-  width: 80px;
+  width: 25%;
   aspect-ratio: 1/1;
   align-items: center;
   justify-content: center;
-  border-radius: 40px;
+  border-radius: 100px;
   overflow: hidden;
 `;
 
 const PlaceImage = styled.Image`
-  width: 110px;
-  height: 110px;
+  width: 100%;
+  height: 100%;
 `;
 
 const PlaceInfoView = styled.View`
@@ -67,10 +54,12 @@ const PlaceName = styled.Text`
   color: ${font_dark};
   font-weight: 600;
   font-size: 18px;
+  margin-bottom: 3px;
 `;
 
 const Address = styled.Text`
   font-size: 14px;
+  margin-bottom: 3px;
 `;
 
 const Description = styled.View`
@@ -82,7 +71,7 @@ const Description = styled.View`
 
 const Rating = styled.Text`
   font-size: 15px;
-  margin-right: 5px;
+  margin-right: 20px;
   color: green;
 `;
 
@@ -92,31 +81,36 @@ const Price = styled.Text`
 `;
 
 const ButtonContainer = styled.View`
+  flex: 1;
   flex-direction: row;
-  width: 50%;
+  gap: 5px;
+`;
+
+const ButtonView = styled.View`
+  flex: 1;
 `;
 
 const DetailsRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 62%;
+  width: 100%;
 `;
 
 export {
+  Address,
+  ButtonContainer,
+  ButtonView,
   Description,
+  DetailsRow,
   DragBar,
-  PlaceName,
   PlaceBox,
   PlaceImage,
   PlaceImageView,
-  PlaceView,
-  StyledShadow,
   PlaceInfoView,
-  Address,
-  Wrapper,
-  Rating,
+  PlaceName,
+  PlaceView,
   Price,
-  ButtonContainer,
-  DetailsRow,
+  Rating,
+  Wrapper,
 };

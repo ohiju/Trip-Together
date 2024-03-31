@@ -1,11 +1,12 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {SafeAreaView} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {imagePath} from '../../assets/images/imagePath';
+import PlaceInfo from '../../components/common/PlaceInfo';
 import GoogleMap from '../../components/travel/GoogleMap';
 import SearchPlace from '../../components/travel/SearchPlace';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import {Container, PlanImage, PlanIcon} from './MapStyle';
-import PlaceInfo from '../../components/common/PlaceInfo';
+import {Container, PlanIcon, PlanImage} from './MapStyle';
 
 const Map = () => {
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
@@ -20,7 +21,7 @@ const Map = () => {
         <GoogleMap />
         <SearchPlace />
         <PlanIcon onPress={handlePlanPress}>
-          <PlanImage source={require('../../assets/images/planning.png')} />
+          <PlanImage source={imagePath.planning} />
         </PlanIcon>
         <PlaceInfo theme="trip" />
       </Container>
