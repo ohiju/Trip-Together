@@ -41,6 +41,8 @@ dependencies {
     /* MessageQueue */
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    /* DNS setting for mac */
+    implementation 'io.projectreactor.netty:reactor-netty:1.1.17'
     /* Database */
     implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'

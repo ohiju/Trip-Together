@@ -2,8 +2,8 @@ package com.ssafy.triptogether.global.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -44,7 +44,7 @@ public class RabbitMqConfig {
 	 */
 	@Bean
 	public Queue queue() {
-		return new Queue(queueName);
+		return new Queue(queueName, true);
 	}
 
 	/**
@@ -53,8 +53,8 @@ public class RabbitMqConfig {
 	 * @return TopicExchange 빈 객체
 	 */
 	@Bean
-	public DirectExchange exchange() {
-		return new DirectExchange(exchangeName);
+	public TopicExchange exchange() {
+		return new TopicExchange(exchangeName);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class RabbitMqConfig {
 	 * @return Binding 빈 객체
 	 */
 	@Bean
-	public Binding binding(Queue queue, DirectExchange exchange) {
+	public Binding binding(Queue queue, TopicExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(routingKey);
 	}
 
@@ -87,13 +87,11 @@ public class RabbitMqConfig {
 	/**
 	 * RabbitTemplate 을 생성하여 반환
 	 *
-	 * @param connectionFactory RabbitMQ 와의 연결을 위한 ConnectionFactory 객체
 	 * @return RabbitTemplate 객체
 	 */
 	@Bean
-	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		// JSON 형식의 메시지를 직렬화하고 역직렬할 수 있도록 설정
+	public RabbitTemplate rabbitTemplate() {
+		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
 		rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
 		return rabbitTemplate;
 	}

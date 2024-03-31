@@ -30,8 +30,8 @@ jwt:
   secret: ${JWT_SECRET_KEY}
 rabbitmq:
   queue:
-    name: trip.queue
+    name: chat.queue
   exchange:
-    name: trip.exchange
+    name: chat.exchange
   routing:
-    key: trip.key
+    key: chat.routing.key

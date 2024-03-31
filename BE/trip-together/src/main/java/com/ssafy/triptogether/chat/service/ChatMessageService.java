@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class ChatMessageService {
+
 	private final RabbitTemplate rabbitTemplate;
 	@Value("${rabbitmq.exchange.name}")
 	private String exchangeName;
@@ -38,5 +39,6 @@ public class ChatMessageService {
 	@RabbitListener(queues = "${rabbitmq.queue.name}")
 	public void subscribe(ChatMessage chatMessage) {
 		log.info("Received message: {}", chatMessage.toString());
+		rabbitTemplate.convertAndSend(exchangeName, routingKey, chatMessage);
 	}
 }
