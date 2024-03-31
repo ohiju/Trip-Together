@@ -15,6 +15,7 @@ import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlansResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.document.DailyPlan;
@@ -26,8 +27,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.DAILY_PLAN_NOT_FOUND;
@@ -50,8 +53,14 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     }
 
     @Override
-    public List<DailyPlanListResponse> findPlans(long memberId) {
-        return planRepository.findPlansByMemberId(memberId);
+    public DailyPlansResponse findPlans(long memberId) {
+        List<DailyPlanListResponse> list = planRepository.findPlansByMemberId(memberId);
+        LocalDate now = LocalDate.now();
+        // 현재 진행중 or 진행 할 플랜 아이디
+        Optional<Long> comingUpPlanId = list.stream().filter(plan -> plan.endAt().isAfter(now)).map(DailyPlanListResponse::planId).findFirst();
+        // 위의 아이디가 없다 (앞으로의 계획이 없다) -> 가장 최근의 지나간 플랜 아이디 --그마저도 없다-> null
+        return DailyPlansResponse.builder()
+            .comingUpPlanId(comingUpPlanId.orElse(list.size()==0?null:list.get(list.size()-1).planId())).build();
     }
 
     /**
