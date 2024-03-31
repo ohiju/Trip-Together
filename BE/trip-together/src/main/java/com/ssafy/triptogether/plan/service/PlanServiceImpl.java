@@ -245,6 +245,8 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
 
         // set daily plans to plan detail & return
         return PlanDetailFindResponse.builder()
+            .planId(planDetail.planId())
+            .nation(planDetail.nation())
             .startRegion(planDetail.startRegion())
             .startAt(planDetail.startAt())
             .endAt(planDetail.endAt())
