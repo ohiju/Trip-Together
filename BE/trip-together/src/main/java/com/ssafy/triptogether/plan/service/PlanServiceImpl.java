@@ -85,7 +85,9 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         }
 
         Plan plan = planSave(plansSaveRequest, startRegion, member);
-        planAttractionSave(plansSaveRequest.planDetails(), plan);
+        if (plansSaveRequest.planDetails() != null) {
+            planAttractionSave(plansSaveRequest.planDetails(), plan);
+        }
     }
 
     /**
@@ -194,7 +196,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
             DailyPlan dailyPlan = DailyPlan.builder()
                 .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
                 .dailyPlanAttractions(dailyPlanAttractions)
-                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .order(planDetail.order())
                 .build();
             dailyPlans.add(dailyPlan);
         });
@@ -233,7 +235,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
             DailyPlan dailyPlan = DailyPlan.builder()
                 .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
                 .dailyPlanAttractions(dailyPlanAttractions)
-                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .order(planDetail.order())
                 .build();
             dailyPlans.add(dailyPlan);
         });
@@ -248,8 +250,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     @Override
     public PlanDetailFindResponse findPlanDetail(long planId) {
         // find daily plans & plan detail
-        DailyPlans dailyPlans = dailyPlansRepository.findByPlanId(planId)
-            .orElseThrow(() -> new NotFoundException("PlanDetailFind", DAILY_PLAN_NOT_FOUND));
+        Optional<DailyPlans> dailyPlans = dailyPlansRepository.findByPlanId(planId);
         DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
             .orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
 
@@ -259,11 +260,13 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
             .nation(planDetail.nation())
             .startRegionId(planDetail.startRegionId())
             .startRegion(planDetail.startRegion())
+            .startRegionLatitude(planDetail.startRegionLatitude())
+            .startRegionLongitude(planDetail.startRegionLongitude())
             .startAt(planDetail.startAt())
             .endAt(planDetail.endAt())
             .title(planDetail.title())
             .totalEstimatedBudget(planDetail.totalEstimatedBudget())
-            .dailyPlans(dailyPlans.getDailyPlans())
+            .dailyPlans(dailyPlans.map(DailyPlans::getDailyPlans).orElse(null))
             .build();
     }
 }

@@ -1,23 +1,21 @@
 package com.ssafy.triptogether.plan.data.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.Builder;
 
 @Builder
 public record AttractionDetail(
-    @NotNull @JsonProperty("attraction_id")
+    @JsonProperty("attraction_id")
     Long attractionId,
-    @NotNull @JsonProperty("attraction_name")
+    @JsonProperty("attraction_name")
     String attractionName,
-    @NotNull @JsonProperty("avg_rating")
+    @JsonProperty("avg_rating")
     Integer avgRating,
-    @NotNull @JsonProperty("avg_price")
+    @JsonProperty("avg_price")
     Double avgPrice,
-    @NotNull @JsonProperty("thumbnail_image_url")
+    @JsonProperty("thumbnail_image_url")
     String thumbnailImageUrl,
-    @NotNull
     String address
 ) {
 }
