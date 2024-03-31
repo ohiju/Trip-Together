@@ -12,22 +12,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_settlement")
-public class MemberSettlement extends BaseEntity {
+public abstract class MemberSettlement extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_settlement_id")
     private Long id;
-
-    @NotNull
-    @Column(name = "has_sent")
-    private Boolean hasSent;
-
-    @NotNull
-    @Column(name = "price")
-    private Double price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -38,9 +32,7 @@ public class MemberSettlement extends BaseEntity {
     private Settlement settlement;
 
     @Builder
-    public MemberSettlement(Boolean hasSent, Double price, Member member, Settlement settlement) {
-        this.hasSent = hasSent;
-        this.price = price;
+    public MemberSettlement(Member member, Settlement settlement) {
         setMember(member);
         setSettlement(settlement);
     }

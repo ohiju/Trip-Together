@@ -24,10 +24,6 @@ public class Settlement extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "requester_id")
-    private Long requesterId;
-
-    @NotNull
     @Column(name = "total_price")
     private Double totalPrice;
 
@@ -39,6 +35,10 @@ public class Settlement extends BaseEntity {
     @Column(name = "currency_code")
     private CurrencyCode currencyCode;
 
+    @NotNull
+    @Column(name = "is_done")
+    private Boolean isDone;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flash_mob_id")
     private FlashMob flashMob;
@@ -48,11 +48,11 @@ public class Settlement extends BaseEntity {
     private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
     @Builder
-    public Settlement(Long requesterId, Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
-        this.requesterId = requesterId;
+    public Settlement(Double totalPrice, Integer attendanceCount, CurrencyCode currencyCode, FlashMob flashMob) {
         this.totalPrice = totalPrice;
         this.attendanceCount = attendanceCount;
         this.currencyCode = currencyCode;
+        this.isDone = false;
         setFlashMob(flashMob);
     }
 
