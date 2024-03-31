@@ -83,9 +83,9 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                 plan.estimatedBudget,
                 plan.realBudget,
                 new CaseBuilder()
-                    .when(plan.endAt.before(currentDate))
+                    .when(plan.endAt.after(currentDate))
                     .then(Status.BEFORE.getMessage())
-                    .when(plan.startAt.after(currentDate))
+                    .when(plan.startAt.before(currentDate))
                     .then(Status.AFTER.getMessage())
                     .otherwise(Status.IN_PROGRESS.getMessage())
             ))
