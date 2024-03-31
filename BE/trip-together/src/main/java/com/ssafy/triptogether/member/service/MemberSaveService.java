@@ -10,13 +10,13 @@ import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
 import com.ssafy.triptogether.member.domain.Member;
 
 public interface MemberSaveService {
-    ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest);
+	ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest);
 
-    void savePin(long memberId, PinSaveRequest pinSaveRequest);
+	void savePin(long memberId, PinSaveRequest pinSaveRequest);
 
-    void updatePin(long memberId, PinVerifyRequest pinVerifyRequest, PinUpdateRequest pinUpdateRequest);
+	void updatePin(long memberId, PinVerifyRequest pinVerifyRequest, PinUpdateRequest pinUpdateRequest);
 
-    void logout(SecurityMember securityMember, String accessToken);
+	void logout(SecurityMember securityMember, String accessToken);
 
-    Member saveMember(TwinkleMemberInfoResponse twinkleMemberInfoResponse);
+	Member saveMember(TwinkleMemberInfoResponse twinkleMemberInfoResponse);
 }

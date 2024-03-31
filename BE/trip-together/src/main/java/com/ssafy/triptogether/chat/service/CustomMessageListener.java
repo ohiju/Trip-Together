@@ -1,4 +1,4 @@
-package com.ssafy.triptogether.chat.listener;
+package com.ssafy.triptogether.chat.service;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;

@@ -18,81 +18,81 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
-    private final JPAQueryFactory queryFactory;
+	private final JPAQueryFactory queryFactory;
 
-    @Override
-    public boolean existOverlappingPlan(Member member, LocalDate startAt, LocalDate endAt) {
-        return queryFactory
-            .selectOne()
-            .from(plan)
-            .where(plan.member.eq(member)
-                .and(plan.startAt.after(endAt)
-                    .or(plan.endAt.before(startAt))
-                    .not()
-                )
-            )
-            .fetchFirst() != null;
-    }
+	@Override
+	public boolean existOverlappingPlan(Member member, LocalDate startAt, LocalDate endAt) {
+		return queryFactory
+			.selectOne()
+			.from(plan)
+			.where(plan.member.eq(member)
+				.and(plan.startAt.after(endAt)
+					.or(plan.endAt.before(startAt))
+					.not()
+				)
+			)
+			.fetchFirst() != null;
+	}
 
-    @Override
-    public boolean existOverlappingPlanModify(long planId, Member member, LocalDate startAt, LocalDate endAt) {
-        return queryFactory
-            .selectOne()
-            .from(plan)
-            .where(plan.member.eq(member)
-                .and(plan.startAt.after(endAt)
-                    .or(plan.endAt.before(startAt))
-                    .not()
-                )
-                .and(plan.id.ne(planId))
-            )
-            .fetchFirst() != null;
-    }
+	@Override
+	public boolean existOverlappingPlanModify(long planId, Member member, LocalDate startAt, LocalDate endAt) {
+		return queryFactory
+			.selectOne()
+			.from(plan)
+			.where(plan.member.eq(member)
+				.and(plan.startAt.after(endAt)
+					.or(plan.endAt.before(startAt))
+					.not()
+				)
+				.and(plan.id.ne(planId))
+			)
+			.fetchFirst() != null;
+	}
 
-    @Override
-    public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
-        return Optional.ofNullable(
-            queryFactory.select(Projections.constructor(DailyPlanResponse.class,
-                    plan.id,
-                    plan.region.nation,
-                    plan.region.id,
-                    plan.region.cityName,
-                    plan.region.latitude,
-                    plan.region.longitude,
-                    plan.startAt,
-                    plan.endAt,
-                    plan.title,
-                    plan.estimatedBudget
-                ))
-                .from(plan)
-                .where(plan.id.eq(planId))
-                .fetchOne()
-        );
-    }
+	@Override
+	public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
+		return Optional.ofNullable(
+			queryFactory.select(Projections.constructor(DailyPlanResponse.class,
+					plan.id,
+					plan.region.nation,
+					plan.region.id,
+					plan.region.cityName,
+					plan.region.latitude,
+					plan.region.longitude,
+					plan.startAt,
+					plan.endAt,
+					plan.title,
+					plan.estimatedBudget
+				))
+				.from(plan)
+				.where(plan.id.eq(planId))
+				.fetchOne()
+		);
+	}
 
-    @Override
-    public List<DailyPlanListResponse> findPlansByMemberId(long memberId) {
-        LocalDate currentDate = LocalDate.now();
+	@Override
+	public List<DailyPlanListResponse> findPlansByMemberId(long memberId) {
+		LocalDate currentDate = LocalDate.now();
 
-        return queryFactory.select(Projections.constructor(DailyPlanListResponse.class,
-                plan.id,
-                plan.region.cityName,
-                plan.startAt,
-                plan.endAt,
-                plan.title,
-                plan.estimatedBudget,
-                plan.realBudget,
-                new CaseBuilder()
-                    .when(plan.endAt.after(currentDate))
-                    .then(Status.BEFORE.getMessage())
-                    .when(plan.startAt.before(currentDate))
-                    .then(Status.AFTER.getMessage())
-                    .otherwise(Status.IN_PROGRESS.getMessage()),
-                plan.region.nation
-            ))
-            .from(plan)
-            .where(plan.member.id.eq(memberId))
-            .orderBy(plan.startAt.asc())
-            .fetch();
-    }
+		return queryFactory.select(Projections.constructor(DailyPlanListResponse.class,
+				plan.id,
+				plan.region.cityName,
+				plan.startAt,
+				plan.endAt,
+				plan.title,
+				plan.estimatedBudget,
+				plan.realBudget,
+				new CaseBuilder()
+					.when(plan.endAt.after(currentDate))
+					.then(Status.BEFORE.getMessage())
+					.when(plan.startAt.before(currentDate))
+					.then(Status.AFTER.getMessage())
+					.otherwise(Status.IN_PROGRESS.getMessage()),
+				plan.region.nation
+			))
+			.from(plan)
+			.where(plan.member.id.eq(memberId))
+			.orderBy(plan.startAt.asc())
+			.fetch();
+	}
 }

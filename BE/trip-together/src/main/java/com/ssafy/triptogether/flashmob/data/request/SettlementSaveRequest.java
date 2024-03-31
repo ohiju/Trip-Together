@@ -1,6 +1,5 @@
 package com.ssafy.triptogether.flashmob.data.request;
 
-
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

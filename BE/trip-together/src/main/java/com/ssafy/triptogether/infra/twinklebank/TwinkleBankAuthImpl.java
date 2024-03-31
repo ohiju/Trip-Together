@@ -1,5 +1,23 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
@@ -11,20 +29,6 @@ import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleTokenRespon
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.*;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
@@ -42,6 +46,20 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 
 	@Value("${app.clientId}")
 	private String TWINKLE_CLIENT_ID;
+
+	private static String getRefreshToken(ResponseEntity<ApiResponse> response) {
+		String refreshToken = "";
+		List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
+		if (cookies != null) {
+			for (String cookie : cookies) {
+				if (cookie.startsWith("refreshToken=")) {
+					refreshToken = cookie.split(";")[0].split("=")[1];
+					System.out.println("Refresh Token: " + refreshToken);
+				}
+			}
+		}
+		return refreshToken;
+	}
 
 	@Override
 	public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
@@ -142,19 +160,5 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		System.out.println(response.getBody().getData());
 		TwinkleTokenResponse res = objectMapper.convertValue(response.getBody().getData(), TwinkleTokenResponse.class);
 		return res.accessToken();
-	}
-
-	private static String getRefreshToken(ResponseEntity<ApiResponse> response) {
-		String refreshToken = "";
-		List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
-		if (cookies != null) {
-			for (String cookie : cookies) {
-				if (cookie.startsWith("refreshToken=")) {
-					refreshToken = cookie.split(";")[0].split("=")[1];
-					System.out.println("Refresh Token: " + refreshToken);
-				}
-			}
-		}
-		return refreshToken;
 	}
 }

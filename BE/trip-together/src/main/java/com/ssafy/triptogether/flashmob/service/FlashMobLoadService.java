@@ -1,13 +1,12 @@
 package com.ssafy.triptogether.flashmob.service;
 
-import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 
 public interface FlashMobLoadService {
-    AttendingFlashmobListFindResponse findAttendingFlashmobList(long memberId);
+	AttendingFlashmobListFindResponse findAttendingFlashmobList(long memberId);
 
 	SettlementsLoadResponse settlementsLoad(long memberId, long flashmobId);
 

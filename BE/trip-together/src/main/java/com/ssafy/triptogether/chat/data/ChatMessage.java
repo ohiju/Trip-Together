@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Builder;
-
-@Builder
 public record ChatMessage(
 	@JsonProperty("flashmob_id") Long flashmobId,
 	@JsonProperty("sender_id") Long senderId,

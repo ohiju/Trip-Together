@@ -1,5 +1,11 @@
 package com.ssafy.triptogether.attraction.repository.query;
 
+import static com.querydsl.core.types.ExpressionUtils.*;
+import static com.ssafy.triptogether.attraction.domain.QAttraction.*;
+import static com.ssafy.triptogether.flashmob.domain.QFlashMob.*;
+
+import java.util.List;
+
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -9,13 +15,8 @@ import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListIte
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponseWD;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
+
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
-import static com.querydsl.core.types.ExpressionUtils.count;
-import static com.ssafy.triptogether.attraction.domain.QAttraction.attraction;
-import static com.ssafy.triptogether.flashmob.domain.QFlashMob.flashMob;
 
 @RequiredArgsConstructor
 public class AttractionRepositoryCustomImpl implements AttractionRepositoryCustom {
@@ -23,8 +24,9 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<AttractionListItemResponseWD> findAttractionClick(double latitude, double longitude, double distance, String category) {
-		category = (category==null)?"":category;
+	public List<AttractionListItemResponseWD> findAttractionClick(double latitude, double longitude, double distance,
+		String category) {
+		category = (category == null) ? "" : category;
 		return queryFactory.select(Projections.constructor(AttractionListItemResponseWD.class,
 				attraction.id,
 				attraction.thumbnailImageUrl,
@@ -43,12 +45,12 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 			))
 			.from(attraction)
 			.where(new MysqlNativeSqlCreator().createCalcDistanceSQL(
-						latitude,
-						longitude,
-						attraction.latitude,
-						attraction.longitude
-					).loe(distance)
-				.and(attraction.name.like("%"+category+"%")))
+					latitude,
+					longitude,
+					attraction.latitude,
+					attraction.longitude
+				).loe(distance)
+				.and(attraction.name.like("%" + category + "%")))
 			// .orderBy(attraction.avgRating.desc())
 			.orderBy(Expressions.numberTemplate(Double.class, "distance").asc())
 			.fetch();
@@ -67,7 +69,7 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				attraction.longitude
 			))
 			.from(attraction)
-			.where(attraction.name.like("%"+keyword+"%"))
+			.where(attraction.name.like("%" + keyword + "%"))
 			.orderBy(new MysqlNativeSqlCreator().createCalcDistanceSQL(
 				latitude,
 				longitude,
@@ -79,7 +81,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 	}
 
 	@Override
-	public List<AttractionFlashmobListItemResponse> findAllAttractionFlashmobByConditions(double latitude, double longitude, double distance) {
+	public List<AttractionFlashmobListItemResponse> findAllAttractionFlashmobByConditions(double latitude,
+		double longitude, double distance) {
 		return queryFactory.select(Projections.constructor(AttractionFlashmobListItemResponse.class,
 				attraction.id,
 				attraction.thumbnailImageUrl,

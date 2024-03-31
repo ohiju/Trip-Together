@@ -9,9 +9,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    stream:
-      username: ${RABBITMQ_DEFAULT_USER}
-      password: ${RABBITMQ_DEFAULT_PASS}
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

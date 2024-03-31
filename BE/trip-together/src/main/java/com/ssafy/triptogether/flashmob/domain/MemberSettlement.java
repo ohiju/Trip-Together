@@ -26,32 +26,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_settlement")
 public abstract class MemberSettlement extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_settlement_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "member_settlement_id")
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "settlement_id")
-    private Settlement settlement;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "settlement_id")
+	private Settlement settlement;
 
 	// @Builder
-    public MemberSettlement(Member member, Settlement settlement) {
-        setMember(member);
-        setSettlement(settlement);
-    }
+	public MemberSettlement(Member member, Settlement settlement) {
+		setMember(member);
+		setSettlement(settlement);
+	}
 
-    public void setSettlement(Settlement settlement) {
-        this.settlement = settlement;
-        settlement.getMemberSettlements().add(this);
-    }
+	public void setSettlement(Settlement settlement) {
+		this.settlement = settlement;
+		settlement.getMemberSettlements().add(this);
+	}
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getMemberSettlements().add(this);
-    }
+	public void setMember(Member member) {
+		this.member = member;
+		member.getMemberSettlements().add(this);
+	}
 }

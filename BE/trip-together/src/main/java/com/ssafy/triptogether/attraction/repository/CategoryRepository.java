@@ -1,7 +1,8 @@
 package com.ssafy.triptogether.attraction.repository;
 
-import com.ssafy.triptogether.attraction.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ssafy.triptogether.attraction.domain.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 }
