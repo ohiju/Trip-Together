@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import {bg_light} from '../../constants/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {imagePath} from '../../assets/images/imagePath';
+import getToken from '../../hooks/getToken';
 
 interface PlanDataProps {
   plan_id: number;
@@ -76,17 +77,16 @@ const PlaceImage = styled.Image`
 
 const AllTrip = () => {
   const [plansData, setPlansData] = useState<PlanDataProps[]>([]);
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
-
   useEffect(() => {
     const fetchData = async () => {
+      const {access_token} = await getToken();
+
       try {
         const response = await axios.get(
           'https://j10a309.p.ssafy.io/api/plan/v1/plans',
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${access_token}`,
             },
           },
         );
@@ -108,15 +108,14 @@ const AllTrip = () => {
   };
 
   const onPressTrash = async (id: number) => {
+    const {access_token} = await getToken();
+
     try {
-      const response = await axios.delete(
-        `https://j10a309.p.ssafy.io/api/plan/v1/plans/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await axios.delete(`https://j10a309.p.ssafy.io/api/plan/v1/plans/${id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
         },
-      );
+      });
       setPlansData(prevPlansData =>
         prevPlansData.filter(plan => plan.plan_id !== id),
       );

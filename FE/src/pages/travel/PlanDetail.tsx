@@ -14,6 +14,7 @@ import {useAppSelector} from '../../store/hooks';
 import {useAppDispatch} from '../../store/hooks';
 import {resetTripInfo} from '../../store/slices/trip';
 import {setDisplay} from '../../store/slices/tabState';
+import getToken from '../../hooks/getToken';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -21,8 +22,6 @@ const PlanDetail = () => {
   const navigation = useNavigation<NavigationProp<PlanDetailParams>>();
   const dispatch = useAppDispatch();
   const trip = useAppSelector(state => state.trip.tripInfo);
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
 
   useFocusEffect(() => {
     dispatch(setDisplay(false));
@@ -33,6 +32,8 @@ const PlanDetail = () => {
   };
 
   const handleFinishPress = async () => {
+    const {access_token} = await getToken();
+
     const data = {
       start_region_id: trip.start_region,
       start_at: new Date(trip.start_at),
@@ -47,7 +48,7 @@ const PlanDetail = () => {
         data,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );

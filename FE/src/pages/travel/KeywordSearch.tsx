@@ -8,6 +8,7 @@ import {setPlaces} from '../../store/slices/trip';
 import {setLocation} from '../../store/slices/trip';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
+import getToken from '../../hooks/getToken';
 
 const KeywordSearch = () => {
   const [searchText, setSearchText] = useState('');
@@ -20,14 +21,14 @@ const KeywordSearch = () => {
 
   const handleSearchChange = async (text: string) => {
     setSearchText(text);
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    const {access_token} = await getToken();
+
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}&category=`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );
@@ -39,14 +40,14 @@ const KeywordSearch = () => {
   };
 
   const handleButtonPress = async (text: string) => {
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    const {access_token} = await getToken();
+
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=&category=${text}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );
@@ -60,8 +61,7 @@ const KeywordSearch = () => {
   const handlePressLocation = async (item: any) => {
     const payload = {latitude: item.latitude, longitude: item.longitude};
     dispatch(setLocation(payload));
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    const {access_token} = await getToken();
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
@@ -71,7 +71,7 @@ const KeywordSearch = () => {
         }&latitude_delta=${0.622}&longitude_delta=${0.421}&category=`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );

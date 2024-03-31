@@ -37,6 +37,7 @@ import {
   Title,
 } from './PlaceDetailStyle';
 import axios from 'axios';
+import getToken from '../../hooks/getToken';
 
 interface RouteParams {
   theme?: string;
@@ -78,16 +79,15 @@ const AttractionDetailsPage = () => {
   }, [PlaceBag, attraction_id]);
 
   useEffect(() => {
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
-
     const fetchData = async () => {
+      const {access_token} = await getToken();
+
       try {
         const response = await axios.get(
           `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${access_token}`,
             },
           },
         );

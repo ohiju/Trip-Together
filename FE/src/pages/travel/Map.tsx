@@ -11,17 +11,17 @@ import axios from 'axios';
 import {useAppDispatch} from '../../store/hooks';
 import {setPlaces} from '../../store/slices/trip';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import getToken from '../../hooks/getToken';
 
 const Map = () => {
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const trip = useAppSelector(state => state.trip.tripInfo);
 
   const dispatch = useAppDispatch();
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
 
   useEffect(() => {
     const fetchAttractions = async () => {
+      const {access_token} = await getToken();
       try {
         const response = await axios.get(
           `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
@@ -31,7 +31,7 @@ const Map = () => {
           }&latitude_delta=${1.2}&longitude_delta=${1.1}&category=`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${access_token}`,
             },
           },
         );

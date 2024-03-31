@@ -16,17 +16,19 @@ import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {setTripTitle} from '../../store/slices/trip';
 import axios, {AxiosError} from 'axios';
 import {setPlaces} from '../../store/slices/trip';
+import getToken from '../../hooks/getToken';
 
 const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState('오희주님의 프랑스 여행 계획');
+  const username = useAppSelector(state => state.user.user.username);
+  const [title, setTitle] = useState(`${username}님의 프랑스 여행 계획`);
   const trip = useAppSelector(state => state.trip.tripInfo);
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
   let finishPressSuccess = false;
 
   const handleSubmit = async () => {
+    const {access_token} = await getToken();
+
     dispatch(setTripTitle(title));
     await handleFinishPress();
     if (!finishPressSuccess) {
@@ -41,7 +43,7 @@ const TripTitle = () => {
         }&latitude_delta=${1.2}&longitude_delta=${1.1}&category=`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );
@@ -54,6 +56,8 @@ const TripTitle = () => {
   };
 
   const handleFinishPress = async () => {
+    const {access_token} = await getToken();
+
     const data = {
       start_region_id: trip.start_region,
       start_at: new Date(trip.start_at),
@@ -65,7 +69,7 @@ const TripTitle = () => {
     try {
       await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${access_token}`,
         },
       });
       finishPressSuccess = true;
@@ -83,7 +87,7 @@ const TripTitle = () => {
       <Wrapper>
         <TitleContainer>
           <TitleInput
-            placeholder="오희주님의 프랑스 여행 계획"
+            placeholder={`${username}님의 프랑스 여행 계획`}
             value={title}
             onChangeText={setTitle}
           />

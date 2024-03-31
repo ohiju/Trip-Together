@@ -66,7 +66,7 @@ const TravelNavigator = () => {
           }}
         />
         <TravelStack.Screen
-          name="keyword"
+          name="KeywordSearch"
           component={KeywordSearch}
           options={{
             title: '',

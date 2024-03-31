@@ -33,6 +33,7 @@ import {
 import {TravelStackParams} from '../../interfaces/router/TripStackParams';
 import {setModify} from '../../store/slices/trip';
 import {useAppDispatch} from '../../store/hooks';
+import getToken from '../../hooks/getToken';
 
 interface plansDataProps {
   plan_id: number;
@@ -53,14 +54,14 @@ const Plans = () => {
   const navigation = useNavigation<NavigationProp<TravelStackParams>>();
 
   const fetchData = async () => {
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    const {access_token} = await getToken();
+
     try {
       const response = await axios.get(
         'https://j10a309.p.ssafy.io/api/plan/v1/plans',
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );

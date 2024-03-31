@@ -9,6 +9,7 @@ import {StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import {setDisplay} from '../../store/slices/tabState';
 import axios from 'axios';
 import {setStartRegion} from '../../store/slices/trip';
+import getToken from '../../hooks/getToken';
 
 interface CityResult {
   region_id: number;
@@ -30,14 +31,14 @@ const Search = () => {
 
   const handleSearchChange = async (text: string) => {
     setSearchText(text);
-    const token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+    const {access_token} = await getToken();
+
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/regions?name=${text}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );
