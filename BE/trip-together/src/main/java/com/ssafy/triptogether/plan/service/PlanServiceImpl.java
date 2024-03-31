@@ -61,7 +61,8 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         Optional<Long> comingUpPlanId = list.stream().filter(plan -> plan.endAt().isAfter(now)).map(DailyPlanListResponse::planId).findFirst();
         // 위의 아이디가 없다 (앞으로의 계획이 없다) -> 가장 최근의 지나간 플랜 아이디 --그마저도 없다-> null
         return DailyPlansResponse.builder()
-            .comingUpPlanId(comingUpPlanId.orElse(list.size()==0?null:list.get(list.size()-1).planId())).build();
+            .comingUpPlanId(comingUpPlanId.orElse(list.size()==0?null:list.get(list.size()-1).planId()))
+            .plans(list).build();
     }
 
     /**
