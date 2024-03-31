@@ -21,12 +21,12 @@ public class AccountViewController {
     }
 
     @PostMapping("/account-register")
-    public void registerAccount(
+    public String registerAccount(
         AccountSaveRequest accountSaveRequest,
         @AuthenticationPrincipal SecurityMember securityMember
     ) {
-//        long memberId = securityMember.getId();
-        long memberId = 1L;
+        long memberId = securityMember.getId();
         accountSaveService.saveAccount(memberId, accountSaveRequest);
+        return "redirect:/api/";
     }
 }

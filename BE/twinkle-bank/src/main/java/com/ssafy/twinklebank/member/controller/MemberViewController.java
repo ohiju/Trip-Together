@@ -19,7 +19,8 @@ public class MemberViewController {
     }
 
     @PostMapping("/join")
-    public void joinMember(MemberJoinRequest memberJoinRequest) {
+    public String joinMember(MemberJoinRequest memberJoinRequest) {
         memberSaveService.join(memberJoinRequest);
+        return "redirect:/api/";
     }
 }
