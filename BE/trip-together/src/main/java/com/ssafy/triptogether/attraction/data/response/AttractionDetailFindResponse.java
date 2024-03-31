@@ -15,6 +15,7 @@ public record AttractionDetailFindResponse(
     @JsonProperty("attraction_image_urls") List<String> attractionImageUrls,
     @JsonProperty("attraction_name") String attractionName,
     @JsonProperty("attraction_address") String attractionAddress,
+    @JsonProperty("avg_rating") Double avgRating,
     String latitude,
     String longitude,
     List<ReviewResponse> reviews
