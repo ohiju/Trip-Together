@@ -1,9 +1,9 @@
 package com.ssafy.triptogether.plan.data.response;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.triptogether.attraction.domain.Nation;
-
-import java.time.LocalDate;
 
 public record DailyPlanListResponse(
     @JsonProperty("plan_id") Long planId,
@@ -13,6 +13,7 @@ public record DailyPlanListResponse(
     String title,
     @JsonProperty("total_estimated_budget") Double totalEstimatedBudget,
     @JsonProperty("total_budget") Double totalBudget,
-    String status
+	String status,
+	Nation nation
 ) {
 }
