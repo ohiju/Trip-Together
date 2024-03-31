@@ -4,8 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components/native';
 import {bg_light} from '../../constants/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {imagePath} from '../../assets/images/imagePath';
 import getToken from '../../hooks/getToken';
+import getFlag from '../../hooks/getFlag';
 
 interface PlanDataProps {
   plan_id: number;
@@ -16,6 +16,7 @@ interface PlanDataProps {
   total_estimated_budget: number;
   total_budget: number;
   status: string;
+  nation: string;
 }
 
 const Container = styled.View`
@@ -126,7 +127,7 @@ const AllTrip = () => {
 
   const renderItem = ({item}: {item: PlanDataProps}) => (
     <PlanItemContainer>
-      <PlanImage source={imagePath.France} />
+      <PlanImage source={getFlag(item.nation)} />
       <Title>{item.start_region}</Title>
       <DdayText>
         {item.status === 'before'

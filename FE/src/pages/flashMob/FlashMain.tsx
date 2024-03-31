@@ -8,6 +8,7 @@ import {position} from '../../interfaces/states/position';
 import {useAppDispatch} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
 import {Container, Wrapper} from './FlashMainStyle';
+import Places from '../../assets/data/place';
 
 const FlashMain = () => {
   const [myPosition, setMyPosition] = useState<position | null>(null);
@@ -39,7 +40,7 @@ const FlashMain = () => {
     <Wrapper>
       <Container>
         {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
-        {/* <PlaceInfo theme="flashmob" /> */}
+        <PlaceInfo theme="flashmob" place={Places} />
       </Container>
     </Wrapper>
   );

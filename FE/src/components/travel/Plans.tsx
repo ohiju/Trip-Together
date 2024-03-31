@@ -34,6 +34,7 @@ import {TravelStackParams} from '../../interfaces/router/TripStackParams';
 import {setModify} from '../../store/slices/trip';
 import {useAppDispatch} from '../../store/hooks';
 import getToken from '../../hooks/getToken';
+import getFlag from '../../hooks/getFlag';
 
 interface plansDataProps {
   plan_id: number;
@@ -44,6 +45,7 @@ interface plansDataProps {
   total_estimated_budget: number;
   total_budget: number;
   status: string;
+  nation: string;
 }
 
 const Plans = () => {
@@ -151,7 +153,7 @@ const Plans = () => {
         </PlanSlideButton>
         <PlanDescription>
           <PlanDescriptionBox>
-            <PlanImage source={imagePath.francesquare} />
+            <PlanImage source={getFlag(currentPlan.nation)} />
             <CityName>{currentPlan.start_region}</CityName>
           </PlanDescriptionBox>
           <PlanDescriptionBox>
