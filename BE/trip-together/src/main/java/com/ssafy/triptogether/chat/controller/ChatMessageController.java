@@ -12,6 +12,7 @@ import com.ssafy.triptogether.chat.service.ChatMessageService;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @RestController
