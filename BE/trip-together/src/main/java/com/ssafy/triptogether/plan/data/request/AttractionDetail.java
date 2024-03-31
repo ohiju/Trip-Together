@@ -15,9 +15,9 @@ public record AttractionDetail(
     Integer avgRating,
     @NotNull @JsonProperty("avg_price")
     Double avgPrice,
-    @NotBlank @JsonProperty("thumbnail_image_url")
+    @NotNull @JsonProperty("thumbnail_image_url")
     String thumbnailImageUrl,
-    @NotBlank
+    @NotNull
     String address
 ) {
 }
