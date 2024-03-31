@@ -9,6 +9,7 @@ const PlanView = styled(TouchableOpacity)`
   align-items: center;
   justify-content: space-around;
   border-radius: 10px;
+  padding: 5px;
 `;
 
 const PlanTitle = styled.Text`
@@ -103,8 +104,9 @@ const MoneyText = styled.Text`
   font-weight: 900;
 `;
 
-const Wrapper = styled.Pressable`
-  flex: 1;
+const Wrapper = styled(TouchableOpacity)`
+  height: 90%;
+  width: 90%;
   align-items: center;
   justify-content: center;
   border: 1px dashed black;

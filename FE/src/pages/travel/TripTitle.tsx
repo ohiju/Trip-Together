@@ -24,10 +24,14 @@ const TripTitle = () => {
   const trip = useAppSelector(state => state.trip.tripInfo);
   const token =
     'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+  let finishPressSuccess = false;
 
   const handleSubmit = async () => {
     dispatch(setTripTitle(title));
-    handleFinishPress();
+    await handleFinishPress();
+    if (!finishPressSuccess) {
+      return;
+    }
     try {
       const response = await axios.get(
         `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
@@ -54,7 +58,7 @@ const TripTitle = () => {
       start_region_id: trip.start_region,
       start_at: new Date(trip.start_at),
       end_at: new Date(trip.end_at),
-      title: trip.title,
+      title: title,
       total_estimated_budget: trip.total_estimated_budget,
       daily_plans: trip.daily_plans,
     };
@@ -64,11 +68,14 @@ const TripTitle = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      finishPressSuccess = true;
+      console.log('success');
     } catch (err) {
       const errorResponse = (err as AxiosError).response;
       if (errorResponse) {
         Alert.alert('알림', (errorResponse as any).data.message);
       }
+      navigation.navigate('travel_main');
     }
   };
 

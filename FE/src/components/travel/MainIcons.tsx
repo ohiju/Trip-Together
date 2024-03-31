@@ -69,7 +69,7 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('planning');
+              navigation.navigate('AllTrip');
             }}
             style={styles.iconContainer}>
             <Image

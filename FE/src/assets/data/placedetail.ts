@@ -1,6 +1,8 @@
 const PlaceDetail = [
   {
-    attraction_id: 14,
+    attraction_name: 'La Sagrada Familia',
+    attraction_address: 'spain',
+    attraction_id: 11111111,
     avg_price: 123,
     start_at: '09:00',
     end_at: '18:00',

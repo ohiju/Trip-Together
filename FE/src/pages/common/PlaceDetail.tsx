@@ -47,6 +47,8 @@ interface RouteParams {
 }
 
 interface AttractionProp {
+  attraction_name: string;
+  attraction_address: string;
   attraction_id: number;
   avg_price: number;
   start_at: string;
@@ -92,6 +94,7 @@ const AttractionDetailsPage = () => {
             },
           },
         );
+        console.log(response.data.data);
         setAttraction(response.data.data);
       } catch (error) {
         //
@@ -99,7 +102,7 @@ const AttractionDetailsPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const images = Array.from({length: 5}, (_, index) => ({
     id: index.toString(),
@@ -162,11 +165,8 @@ const AttractionDetailsPage = () => {
           />
           <HeadersContainer>
             <Header>
-              <Title>La Sagrada Familia</Title>
-              <Address>
-                {' '}
-                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
-              </Address>
+              <Title>{item.attraction_name}</Title>
+              <Address>{item.attraction_address}</Address>
             </Header>
             {theme === 'trip' && (
               <Bag onPress={() => handleAddItem(item)}>
@@ -201,7 +201,7 @@ const AttractionDetailsPage = () => {
             <Title>정보</Title>
             <Line />
             <StarInfo>
-              <Info>평점: 4.9</Info>
+              <Info>평점: {4.9}</Info>
               <StarRatingDisplay rating={4.9} starSize={18} />
             </StarInfo>
             <Info>평균 가격: {item.avg_price}</Info>

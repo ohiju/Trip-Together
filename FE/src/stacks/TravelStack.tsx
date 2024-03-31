@@ -11,6 +11,7 @@ import PlaceInfoList from '../pages/common/PlaceInfoList';
 import PlaceDetail from '../pages/common/PlaceDetail';
 import Camera from '../components/common/Camera';
 import KeywordSearch from '../pages/travel/KeywordSearch';
+import AllTrip from '../pages/travel/AllTrip';
 
 const TravelStack = () => {
   const Stack = createNativeStackNavigator<TravelStackParams>();
@@ -23,6 +24,13 @@ const TravelStack = () => {
         options={{
           title: '여행',
           headerRight: Camera,
+        }}
+      />
+      <Stack.Screen
+        name="AllTrip"
+        component={AllTrip}
+        options={{
+          title: '',
         }}
       />
       <Stack.Group>

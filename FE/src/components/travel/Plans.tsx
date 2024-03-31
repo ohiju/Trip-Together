@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {imagePath} from '../../assets/images/imagePath';
 import {WithLocalSvg} from 'react-native-svg/css';
 import {iconPath} from '../../assets/icons/iconPath';
@@ -25,6 +25,14 @@ import {
   Wrapper,
 } from './PlansStyle';
 import axios from 'axios';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import {TravelStackParams} from '../../interfaces/router/TravelStackParams';
+import {setModify} from '../../store/slices/trip';
+import {useAppDispatch} from '../../store/hooks';
 
 interface plansDataProps {
   plan_id: number;
@@ -41,28 +49,34 @@ const Plans = () => {
   const [now, setNow] = useState(0);
   const [plansData, setPlansData] = useState<plansDataProps[]>([]);
 
-  useEffect(() => {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<TravelStackParams>>();
+
+  const fetchData = async () => {
     const token =
       'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          'https://j10a309.p.ssafy.io/api/plan/v1/plans',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+    try {
+      const response = await axios.get(
+        'https://j10a309.p.ssafy.io/api/plan/v1/plans',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        setPlansData(response.data.data);
-      } catch (error) {
-        // console.error('Error fetching plans:', error);
+        },
+      );
+      if (response.data.data.plans !== null) {
+        setPlansData(response.data.data.plans);
       }
-    };
+    } catch (error) {
+      // console.error('Error fetching plans:', error);
+    }
+  };
 
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, []),
+  );
 
   const handleLeftButtonClick = () => {
     setNow(prevNow => (prevNow === 0 ? plansData.length - 1 : prevNow - 1)); // Loop to the last plan if at the first plan
@@ -70,6 +84,32 @@ const Plans = () => {
 
   const handleRightButtonClick = () => {
     setNow(prevNow => (prevNow === plansData.length - 1 ? 0 : prevNow + 1)); // Loop to the first plan if at the last plan
+  };
+
+  const handlePressTrip = () => {
+    navigation.navigate('planning');
+  };
+
+  const handleModifyPlan = async () => {
+    const token =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiY3JlYXRlZCI6MTcxMTYxMzc3MzMzMywiZXhwaXJlc0luIjoyNTkyMDAwMDAwLCJhdXRoIjoiQVVUSE9SSVRZIiwiZXhwIjoxNzE0MjA1NzczLCJpZCI6Mn0.X62ICtdzH9UzvGlkwWp1-_YxO-q0LqredwS48rXHjc4';
+
+    try {
+      const response = await axios.get(
+        `https://j10a309.p.ssafy.io/api/plan/v1/plans/${plansData[now]?.plan_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log(response.data);
+      dispatch(setModify(response.data.data));
+    } catch (error) {
+      // console.error('Error fetching plans:', error);
+    }
+
+    navigation.navigate('plandetail');
   };
 
   const currentPlan = plansData[now];
@@ -88,20 +128,22 @@ const Plans = () => {
 
   if (plansData.length === 0) {
     return (
-      <Wrapper>
-        <AddWalletView>
-          <WithLocalSvg width={20} height={20} asset={iconPath.plus} />
-          <AddWallet>계획 생성하기</AddWallet>
-        </AddWalletView>
-        <PlaceholderView>
-          <Placeholder>여행을 떠나보세요!</Placeholder>
-        </PlaceholderView>
-      </Wrapper>
+      <PlanView>
+        <Wrapper onPress={handlePressTrip}>
+          <AddWalletView>
+            <WithLocalSvg width={20} height={20} asset={iconPath.plus} />
+            <AddWallet>계획 생성하기</AddWallet>
+          </AddWalletView>
+          <PlaceholderView>
+            <Placeholder>여행을 떠나보세요!</Placeholder>
+          </PlaceholderView>
+        </Wrapper>
+      </PlanView>
     );
   }
 
   return (
-    <PlanView>
+    <PlanView onPress={handleModifyPlan}>
       <PlanTitle>{currentPlan.title}</PlanTitle>
       <PlanCenter>
         <PlanSlideButton onPress={handleLeftButtonClick}>

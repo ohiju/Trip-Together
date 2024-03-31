@@ -92,7 +92,7 @@ function Row(props: any) {
         resizeMode="cover"
       />
       <InfoContainer>
-        <Name>{data.name}</Name>
+        <Name>{data.attraction_name}</Name>
         {/* <Address>{data.address}</Address> */}
         <RatingContainer>
           <Rating>{`${data.avg_rating}`}</Rating>
