@@ -11,7 +11,6 @@ spring:
     port: 5672
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASS}
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:${TEST_TRIP_MYSQL_BINDING_PORT}/${TEST_TRIP_MYSQL_DATABASE}
@@ -29,3 +28,10 @@ spring:
 #      path: /api
 jwt:
   secret: ${JWT_SECRET_KEY}
+rabbitmq:
+  queue:
+    name: trip.queue
+  exchange:
+    name: trip.exchange
+  routing:
+    key: trip.key
