@@ -1,39 +1,30 @@
 package com.ssafy.triptogether.attraction.service;
 
-import com.ssafy.triptogether.attraction.data.FlashmobCreateRequest;
-import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
-import com.ssafy.triptogether.attraction.data.FlashmobElementFindResponse;
-import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
-import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
-import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
-import com.ssafy.triptogether.attraction.data.response.RegionLoadDetail;
-import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
+import com.ssafy.triptogether.attraction.data.request.FlashmobCreateRequest;
+import com.ssafy.triptogether.attraction.data.request.FlashmobUpdateRequest;
+import com.ssafy.triptogether.attraction.data.response.*;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.AttractionImage;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
-import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
-import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
+import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.domain.RoomStatus;
-import com.ssafy.triptogether.member.repository.MemberFlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.response.ReviewResponse;
 import com.ssafy.triptogether.review.repository.ReviewRepository;
 import com.ssafy.triptogether.review.utils.ReviewUtils;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -60,6 +51,9 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 			.startAt(attraction.getStartAt())
 			.endAt(attraction.getEndAt())
 			.attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
+			.attractionName(attraction.getName())
+			.attractionAddress(attraction.getAddress())
+			.avgRating(attraction.getAvgRating())
 			.latitude(attraction.getLatitude())
 			.longitude(attraction.getLongitude())
 			.reviews(reviewResponses)
@@ -111,7 +105,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
         FlashMob flashMob = FlashMob.builder()
             .attraction(attraction)
             .title(flashmobCreateRequest.title())
-            .startAt(LocalDateTime.parse(flashmobCreateRequest.startTime()))
+            .startAt(flashmobCreateRequest.startTime())
             .maxMemberCount(flashmobCreateRequest.maxUsers())
             .build();
         flashMobRepository.save(flashMob);
@@ -128,11 +122,11 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
     }
 
     @Override
-    public List<AttractionListItemResponse> findAttractionsClick(
+    public List<AttractionListItemResponseWD> findAttractionsClick(
         double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
         double distance = new MysqlNativeSqlCreator().getDistance(
-            latitude,
-            longitude,
+            0,
+            0,
             latitudeDelta/ 2,
             longitudeDelta / 2
         );
@@ -153,4 +147,13 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
             keyword
         );
     }
+
+	@Override
+	public AttractionFlashmobListFindResponse findAttractionFlashmobList(
+		long memberId, double latitude, double longitude, double latitudeDelta, double longitudeDelta
+	) {
+		double distance = new MysqlNativeSqlCreator().getDistance(0, 0, latitudeDelta / 2, longitudeDelta / 2);
+		List<AttractionFlashmobListItemResponse> elements = attractionRepository.findAllAttractionFlashmobByConditions(latitude, longitude, distance);
+		return AttractionFlashmobListFindResponse.builder().elements(elements).build();
+	}
 }

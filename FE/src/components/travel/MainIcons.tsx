@@ -1,16 +1,16 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import {
-  ViewStyle,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {bg_light} from '../../constants/colors';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {TravelStackParams} from '../../interfaces/router/TravelStackParams';
+import React from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
+import styled from 'styled-components/native';
+import {imagePath} from '../../assets/images/imagePath';
+import {bg_light} from '../../constants/colors';
+import {TravelStackParams} from '../../interfaces/router/TripStackParams';
 
 interface IPage {
   item: {num: number; color: string};
@@ -59,10 +59,7 @@ const MainIcons = ({item, style}: IPage) => {
               navigation.navigate('planning');
             }}
             style={styles.iconContainer}>
-            <Image
-              source={require('../../assets/images/trip.png')}
-              style={{width: 40, height: 40}}
-            />
+            <Image source={imagePath.trip} style={{width: 40, height: 40}} />
           </TouchableOpacity>
           <IconText>여행</IconText>
         </IconBox>
@@ -83,7 +80,7 @@ const MainIcons = ({item, style}: IPage) => {
             }}
             style={styles.iconContainer}>
             <Image
-              source={require('../../assets/images/insurance.png')}
+              source={imagePath.insurance}
               style={{width: 40, height: 40}}
             />
           </TouchableOpacity>
@@ -106,7 +103,7 @@ const MainIcons = ({item, style}: IPage) => {
             }}
             style={styles.iconContainer}>
             <Image
-              source={require('../../assets/images/CurExchange.png')}
+              source={imagePath.exchangecur}
               style={{width: 40, height: 40}}
             />
           </TouchableOpacity>
@@ -129,7 +126,7 @@ const MainIcons = ({item, style}: IPage) => {
             }}
             style={styles.iconContainer}>
             <Image
-              source={require('../../assets/images/shopping.png')}
+              source={imagePath.shopping}
               style={{width: 40, height: 40}}
             />
           </TouchableOpacity>

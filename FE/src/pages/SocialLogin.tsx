@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
-import useSocialLogin from '../apis/bank/useSocialLogin';
+import useSocialLogin, {SocialLoginData} from '../apis/bank/useSocialLogin';
 import {iconPath} from '../assets/icons/iconPath';
 import {imagePath} from '../assets/images/imagePath';
 import AppButton from '../components/common/AppButton';
@@ -17,8 +17,8 @@ import {
 
 const SocialLogin = () => {
   // 입력
-  const [userId, setUserId] = useState('username');
-  const [password, setPassword] = useState('passwordsss');
+  const [userId, setUserId] = useState('xorb269');
+  const [password, setPassword] = useState('1234');
   const handleUserId = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setUserId(e.nativeEvent.text);
   };
@@ -30,12 +30,20 @@ const SocialLogin = () => {
 
   // 로그인
   const socialLogin = useSocialLogin();
-  const handlePressLogin = () => {};
+  const handlePressLogin = () => {
+    const data: SocialLoginData = {
+      client_id: 'test',
+      redirect_url: 'https://j10a309.p.ssafy.io',
+      user_id: userId,
+      password,
+    };
+    socialLogin(data);
+  };
 
   return (
     <Wrapper>
       <LogoView>
-        <Logo source={imagePath.bankLogo} resizeMode="contain" />
+        <Logo source={imagePath.logobank} resizeMode="contain" />
         <LogoText>FlashBank</LogoText>
       </LogoView>
       <InputView>

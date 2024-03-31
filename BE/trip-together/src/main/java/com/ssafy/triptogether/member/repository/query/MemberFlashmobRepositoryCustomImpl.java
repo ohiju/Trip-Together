@@ -1,14 +1,15 @@
 package com.ssafy.triptogether.member.repository.query;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.triptogether.flashmob.domain.QFlashMob.flashMob;
 import static com.ssafy.triptogether.member.domain.QMember.member;
-import static com.ssafy.triptogether.member.domain.QMemberFlashMob.memberFlashMob;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.memberFlashMob;
 
 @RequiredArgsConstructor
 public class MemberFlashmobRepositoryCustomImpl implements MemberFlashmobRepositoryCustom {
@@ -37,5 +38,16 @@ public class MemberFlashmobRepositoryCustomImpl implements MemberFlashmobReposit
                 .and(memberFlashMob.isMaster.eq(true)))
             .fetchFirst();
         return fetchOne != null;
+    }
+
+    @Override
+    public Optional<MemberFlashMob> findMemberFlashmobByFlashmobIdNotInMemberId(long flashmobId, long memberId) {
+        return Optional.ofNullable(
+            queryFactory.select(memberFlashMob)
+                .from(memberFlashMob)
+                .where(memberFlashMob.flashMob.id.eq(flashmobId)
+                    .and(memberFlashMob.member.id.notIn(List.of(memberId))))
+                .fetchFirst()
+        );
     }
 }

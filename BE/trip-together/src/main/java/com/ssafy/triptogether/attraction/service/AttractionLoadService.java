@@ -1,11 +1,8 @@
 package com.ssafy.triptogether.attraction.service;
 
-import java.util.List;
+import com.ssafy.triptogether.attraction.data.response.*;
 
-import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
-import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
-import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
+import java.util.List;
 
 public interface AttractionLoadService {
 	AttractionDetailFindResponse findAttractionDetail(long attractionId);
@@ -14,8 +11,10 @@ public interface AttractionLoadService {
 
 	RegionsLoadResponse regionsLoad(String name);
 
-	List<AttractionListItemResponse> findAttractionsClick(double latitude, double longitude, double latitudeDelta,
+	List<AttractionListItemResponseWD> findAttractionsClick(double latitude, double longitude, double latitudeDelta,
 		double longitudeDelta, String category);
 
 	List<AttractionListItemResponse> findAttractionsSearch(double latitude, double longitude, String keyword);
+
+	AttractionFlashmobListFindResponse findAttractionFlashmobList(long memberId, double latitude, double longitude, double latitudeDelta, double longitudeDelta);
 }

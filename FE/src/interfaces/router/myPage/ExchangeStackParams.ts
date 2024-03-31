@@ -1,6 +1,6 @@
 import {ParamListBase} from '@react-navigation/native';
-import {bankAccount} from '../../../assets/data/bankAccount';
 import {currency} from '../../../constants/currencies';
+import {bankAccount} from '../../bankAccount';
 
 interface ExchangeStackParams extends ParamListBase {
   ExchangeSearch: undefined;

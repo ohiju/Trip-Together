@@ -1,13 +1,18 @@
 import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {Alert} from 'react-native';
 import getToken from '../../hooks/getToken';
-import {syncAccount} from '../../interfaces/states/UserState';
+import {syncAccount} from '../../interfaces/states/AccountState';
 import {useAppDispatch} from '../../store/hooks';
-import {setSyncAccounts} from '../../store/slices/user';
+import {setSyncAccounts} from '../../store/slices/account';
 import useAxois from '../useAxois';
 
 interface GetSyncAccountsResponse {
-  sync_accounts: syncAccount[];
+  status: number;
+  message: string;
+  data: {
+    sync_accounts: syncAccount[];
+  };
 }
 
 const useGetSyncAccounts = () => {
@@ -32,10 +37,10 @@ const useGetSyncAccounts = () => {
     const result = await axios
       .request(await getSyncAccountsConfig())
       .then((res: AxiosResponse<GetSyncAccountsResponse>) => {
-        dispatch(setSyncAccounts(res.data.sync_accounts));
+        dispatch(setSyncAccounts(res.data.data.sync_accounts));
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;

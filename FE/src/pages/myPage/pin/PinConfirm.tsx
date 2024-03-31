@@ -1,9 +1,4 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   Alert,
@@ -11,6 +6,7 @@ import {
   TextInputChangeEventData,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import usePostPin, {PostPinData} from '../../../apis/member/usePostPin';
 import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
@@ -23,9 +19,11 @@ import ShakeMessage from '../../../components/common/ShakeMessage';
 import {BottomButton} from '../../../constants/AppButton';
 import usePinConfirmation from '../../../hooks/usePinConfirm';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
+import {useAppDispatch} from '../../../store/hooks';
 import {Input, InputView, MessageView, Wrapper} from './PinRegistStyle';
 
 const PinConfirm = () => {
+  const dispatch = useAppDispatch();
   // 유효성 검사
   const [confirm, setConfirm] = useState('');
   const [isOk, setIsOk] = useState<boolean>(false);
@@ -47,10 +45,13 @@ const PinConfirm = () => {
   };
 
   // 라우팅
-  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
+  const postPin = usePostPin();
   const registPin = () => {
-    // 핀 등록 API
-    navigation.navigate('MyMain');
+    const data: PostPinData = {
+      pin_num: pin,
+      pin_num_check: confirm,
+    };
+    postPin(data);
   };
   const handleRegist = () => {
     Alert.alert('핀 번호를 등록하시겠습니까?', '', [

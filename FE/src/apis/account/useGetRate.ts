@@ -1,6 +1,9 @@
 import {TRIP_API_URL} from '@env';
 import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {Alert} from 'react-native';
 import getToken from '../../hooks/getToken';
+import {useAppDispatch} from '../../store/hooks';
+import {setRate} from '../../store/slices/account';
 import useAxois from '../useAxois';
 
 interface GetRateParams {
@@ -8,14 +11,20 @@ interface GetRateParams {
 }
 
 interface GetRateResponse {
-  rate: number;
+  status: number;
+  message: string;
+  data: {
+    rate: number;
+  };
 }
 
 const useGetRate = () => {
   const axios = useAxois();
+  const dispatch = useAppDispatch();
 
   const getRateConfig = async (params: GetRateParams) => {
     const {access_token} = await getToken();
+
     const axiosConfig: RawAxiosRequestConfig = {
       url: `${TRIP_API_URL}/api/account/v1/trip-account/rate`,
       method: 'get',
@@ -32,10 +41,10 @@ const useGetRate = () => {
     const result = await axios
       .request(await getRateConfig(params))
       .then((res: AxiosResponse<GetRateResponse>) => {
-        return res.data.rate;
+        dispatch(setRate(res.data.data.rate));
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;
@@ -44,4 +53,5 @@ const useGetRate = () => {
   return getRate;
 };
 
+export type {GetRateParams};
 export default useGetRate;

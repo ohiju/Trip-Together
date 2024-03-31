@@ -1,6 +1,6 @@
 import React from 'react';
-import {bankAccount} from '../../../assets/data/bankAccount';
 import {imagePath} from '../../../assets/images/imagePath';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {
   Balance,
   BalanceView,
@@ -20,7 +20,7 @@ const SyncOption = ({account}: SyncOptionProps) => {
   return (
     <Wrapper>
       <OptionView>
-        <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
+        <BankLogo source={imagePath.logobank} resizeMode="contain" />
         <Option>{account.account_num}</Option>
       </OptionView>
       <BalanceView>

@@ -3,15 +3,16 @@ import axios, {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import {Alert} from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {user} from '../../interfaces/states/UserState';
+import {token} from '../../interfaces/states/tokenState';
 import {useAppDispatch} from '../../store/hooks';
-import {setUser} from '../../store/slices/user';
+import {setLogin, setUser} from '../../store/slices/user';
 
 interface LoginResponse {
-  user: user;
-  token: {
-    access_token: string;
-    created_at: number;
-    expires_in: number;
+  status: number;
+  message: string;
+  data: {
+    user: user;
+    token: token;
   };
 }
 
@@ -20,8 +21,8 @@ const useLogin = () => {
 
   const loginConfig = (code: string) => {
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/member/v1/oauth/token`,
-      method: 'get',
+      url: `${TRIP_API_URL}/api/member/v1/auth/token`,
+      method: 'GET',
       params: {
         code,
       },
@@ -34,14 +35,30 @@ const useLogin = () => {
     const result = await axios
       .request(loginConfig(code))
       .then(async (res: AxiosResponse<LoginResponse>) => {
-        await EncryptedStorage.setItem('token', JSON.stringify(res.data.token));
-        dispatch(setUser(res.data.user));
+        // refresh_token
+        const cookies = res.headers['set-cookie'];
+        if (!cookies) throw new Error('쿠키가 없습니다');
+        const refreshTokenCookie = cookies.find(cookie =>
+          /refreshToken=/.test(cookie),
+        );
+        if (!refreshTokenCookie) throw new Error('리프레시 토큰이 없습니다');
+        const refreshToken = refreshTokenCookie.split(';')[0].split('=')[1];
+        await EncryptedStorage.setItem('refreshToken', refreshToken);
+        // acess_token
+        if (!res.data.data.token) throw new Error('액세스 토큰이 없습니다');
+        console.log(res.data.data.token.access_token);
+
+        await EncryptedStorage.setItem(
+          'token',
+          JSON.stringify(res.data.data.token),
+        );
+        // user
+        if (!res.data.data.token) throw new Error('유저 정보가 없습니다.');
+        dispatch(setUser(res.data.data.user));
+        dispatch(setLogin(true));
       })
       .catch((err: AxiosError) => {
-        const statusList = [400, 500];
-        if (err.status && statusList.includes(err.status)) {
-          Alert.alert(err.message);
-        }
+        Alert.alert(err.message);
       });
 
     return result;

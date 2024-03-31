@@ -1,7 +1,7 @@
 import {TRIP_API_URL} from '@env';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AxiosError, RawAxiosRequestConfig} from 'axios';
-import {ToastAndroid} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 import getToken from '../../hooks/getToken';
 import {MyPageStackParams} from '../../interfaces/router/myPage/MyPageStackParams';
 import {useAppDispatch} from '../../store/hooks';
@@ -42,7 +42,7 @@ const usePostPin = () => {
         ToastAndroid.show('핀 번호가 등록되었습니다.', ToastAndroid.SHORT);
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        Alert.alert(err.message);
       });
 
     return result;
@@ -51,4 +51,5 @@ const usePostPin = () => {
   return postPin;
 };
 
+export type {PostPinData};
 export default usePostPin;
