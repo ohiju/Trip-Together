@@ -5,15 +5,16 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.triptogether.chat.data.ChatMessage;
 import com.ssafy.triptogether.chat.service.ChatMessageService;
+import com.ssafy.triptogether.global.data.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ChatMessageController {
 
 	private final RabbitTemplate rabbitTemplate;
