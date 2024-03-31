@@ -1,5 +1,16 @@
 package com.ssafy.triptogether.plan.service;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
@@ -23,18 +34,8 @@ import com.ssafy.triptogether.plan.domain.document.DailyPlanAttraction;
 import com.ssafy.triptogether.plan.domain.document.DailyPlans;
 import com.ssafy.triptogether.plan.repository.DailyPlansRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
-
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.DAILY_PLAN_NOT_FOUND;
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -256,6 +257,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         return PlanDetailFindResponse.builder()
             .planId(planDetail.planId())
             .nation(planDetail.nation())
+            .startRegionId(planDetail.startRegionId())
             .startRegion(planDetail.startRegion())
             .startAt(planDetail.startAt())
             .endAt(planDetail.endAt())
