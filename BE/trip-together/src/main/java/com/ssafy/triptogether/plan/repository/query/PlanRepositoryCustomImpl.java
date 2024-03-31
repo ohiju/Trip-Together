@@ -52,6 +52,8 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
         return Optional.ofNullable(
             queryFactory.select(Projections.constructor(DailyPlanResponse.class,
+                    plan.id,
+                    plan.region.nation,
                     plan.region.cityName,
                     plan.startAt,
                     plan.endAt,
