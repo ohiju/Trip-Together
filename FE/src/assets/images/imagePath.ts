@@ -19,6 +19,8 @@ interface ImagePath {
   exchange: ImageSourcePropType;
   exchangecur: ImageSourcePropType;
   francesquare: ImageSourcePropType;
+  uksquare: ImageSourcePropType;
+  spainsquare: ImageSourcePropType;
   godown: ImageSourcePropType;
   goup: ImageSourcePropType;
   insurance: ImageSourcePropType;
@@ -69,6 +71,8 @@ export const imagePath: ImagePath = {
   euround: require('./euround.png'),
   exchange: require('./exchange.png'),
   francesquare: require('./francesquare.png'),
+  uksquare: require('./uksquare.png'),
+  spainsquare: require('./spainsquare.png'),
   godown: require('./godown.png'),
   goup: require('./goup.png'),
   insurance: require('./insurance.png'),

@@ -24,19 +24,22 @@ import {
   Thumbnail,
   ThumbnailContainer,
 } from './PlaceInfoListStyle';
+import {useAppSelector} from '../../store/hooks';
 
 interface RouteParams {
   theme?: string;
+  id?: any;
 }
 
 const PlaceInfoList = () => {
   const navigation = useNavigation<NavigationProp<TabParams>>();
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
+  const places = useAppSelector(state => state.trip.tripInfo.places);
 
-  const handlePress = () => {
+  const handlePress = (id: number) => {
     if (theme === 'trip') {
-      navigation.navigate('placedetail', {theme});
+      navigation.navigate('placedetail', {theme, id});
     } else if (theme === 'flashmob') {
       navigation.navigate('flashplace', {theme});
     }
@@ -50,7 +53,7 @@ const PlaceInfoList = () => {
   };
 
   const renderItem = ({item}: any) => (
-    <ItemContainer onPress={handlePress}>
+    <ItemContainer onPress={() => handlePress(item.attraction_id)}>
       <ThumbnailContainer>
         <Thumbnail source={imagePath.sagradafamilla} resizeMode="contain" />
       </ThumbnailContainer>
@@ -88,7 +91,7 @@ const PlaceInfoList = () => {
 
   return (
     <FlatList
-      data={Places}
+      data={places}
       renderItem={renderItem}
       keyExtractor={item => item.attraction_id.toString()}
     />
