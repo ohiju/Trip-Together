@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.triptogether.chat.ChatRoom;
+import com.ssafy.triptogether.chat.data.ChatRoom;
 import com.ssafy.triptogether.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,8 @@ public class ChatController {
 
 	private final ChatService chatService;
 
-	//RoomName으로 채팅방 생성
 	@PostMapping
-	public ChatRoom createRoom(@RequestParam("RoomName") String RoomName) {
-		return chatService.createChatRoom(RoomName);
+	public ChatRoom createRoom(@RequestParam("flashmob_id") long flashmobId) {
+		return chatService.createChatRoom(flashmobId);
 	}
-
 }

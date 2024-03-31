@@ -6,8 +6,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.triptogether.chat.ChatMessage;
-import com.ssafy.triptogether.chat.ChatRoom;
+import com.ssafy.triptogether.chat.data.ChatMessage;
+import com.ssafy.triptogether.chat.data.ChatRoom;
 import com.ssafy.triptogether.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,25 +20,23 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
 	private final ChatService chatService;
 	private final ObjectMapper objectMapper;
-	private String roomId;
+	private Long flashmobId;
 	private ChatRoom chatRoom;
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
+		//
 		String payload = message.getPayload();
-
-		//메시지를 ChatMessage 객체로 변환
 		ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
 
-		//UUID 가져오기
-		roomId = chatMessage.getRoomId();
+		// get flashmob id
+		flashmobId = chatMessage.flashmobId();
 
-		//CharRoom 찾기
-		chatRoom = chatService.findChatRoom(roomId);
+		// find chat room
+		chatRoom = chatService.findChatRoom(flashmobId);
 
-		//로직 실행
-		chatService.handleMessage(chatRoom, chatMessage,session);
+		// send messages
+		chatService.handle(chatRoom, chatMessage, session);
 	}
 
 }
