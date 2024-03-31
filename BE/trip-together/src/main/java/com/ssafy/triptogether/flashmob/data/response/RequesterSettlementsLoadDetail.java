@@ -6,7 +6,7 @@ import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import lombok.Builder;
 
 @Builder
-public record SettlementsLoadDetail(
+public record RequesterSettlementsLoadDetail(
 	@JsonProperty("settlement_id")
 	Long settlementId,
 	@JsonProperty("total_price")
@@ -20,8 +20,6 @@ public record SettlementsLoadDetail(
 	@JsonProperty("receiver_nickname")
 	String receiverNickname,
 	@JsonProperty("receiver_image_url")
-	String receiverImageUrl,
-	@JsonProperty("is_receiver")
-	Boolean isReceiver
+	String receiverImageUrl
 ) {
 }

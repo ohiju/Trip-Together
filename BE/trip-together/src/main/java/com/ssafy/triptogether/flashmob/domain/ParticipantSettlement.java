@@ -7,8 +7,12 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
+@SuperBuilder
 @DiscriminatorValue("PARTICIPANT")
 public class ParticipantSettlement extends MemberSettlement {
 
@@ -20,7 +24,6 @@ public class ParticipantSettlement extends MemberSettlement {
 	@Column(name = "price")
 	private Double price;
 
-	@Builder
 	public ParticipantSettlement(Member member, Settlement settlement, Boolean hasSent, Double price) {
 		super(member, settlement);
 		this.hasSent = hasSent;
