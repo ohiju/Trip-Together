@@ -40,7 +40,7 @@ const FlashMain = () => {
     <SafeAreaView style={{flex: 1}}>
       <Container>
         {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
-        <PlaceInfo theme="flashmob" />
+        {/* <PlaceInfo theme="flashmob" /> */}
       </Container>
     </SafeAreaView>
   );
