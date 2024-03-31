@@ -10,17 +10,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
+import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
+import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.ParticipantSettlementsLoadDetail;
+import com.ssafy.triptogether.flashmob.data.response.RequesterSettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 import com.ssafy.triptogether.flashmob.domain.ParticipantSettlement;
+import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
 import com.ssafy.triptogether.flashmob.domain.Settlement;
 import com.ssafy.triptogether.flashmob.domain.document.Receipt;
 import com.ssafy.triptogether.flashmob.domain.document.ReceiptHistory;
@@ -34,6 +39,7 @@ import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.domain.RoomStatus;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -155,11 +161,11 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		Member requester = MemberUtils.findByMemberId(memberRepository, memberId);
 		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
 		Settlement settlement = makeSettlement(settlementSaveRequest, flashMob);
-		// RequesterSettlement requesterSettlement = (RequesterSettlement)RequesterSettlement.builder()
-		// 	.member(requester)
-		// 	.settlement(settlement)
-		// 	.build();
-		// requesterSettlementRepository.save(requesterSettlement);
+		RequesterSettlement requesterSettlement = RequesterSettlement.builder()
+			.member(requester)
+			.settlement(settlement)
+			.build();
+		requesterSettlementRepository.save(requesterSettlement);
 
 		settlementSaveRequest.attendeesDetails()
 			.forEach(attendeesDetail -> {
@@ -221,72 +227,62 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	@FlashMobMemberVerify
 	@Override
 	public SettlementsLoadResponse settlementsLoad(long memberId, long flashmobId) {
-		// List<MemberSettlement> requesterSettlements = requesterSettlementRepository.findByMemberId(memberId);
-		// List<Settlement> settlements = settlementRepository.findByFlashMobId(flashmobId);
-		// List<SettlementsLoadDetail> settlementsLoadDetails = settlements.stream()
-		// 	.filter(settlement ->
-		// 		settlement.getRequesterId().equals(memberId) ||
-		// 			settlement.getMemberSettlements().stream().anyMatch(memberSettlement ->
-		// 				memberSettlement.getMember().getId().equals(memberId)))
-		// 	.map(settlement -> SettlementsLoadDetail.builder()
-		// 		.settlementId(settlement.getId())
-		// 		.currencyCode(settlement.getCurrencyCode())
-		// 		.isDone(settlement.getIsDone())
-		// 		.isReceiver(settlement.getRequesterId().equals(memberId))
-		// 		.receiverId(settlement.getRequesterId())
-		// 		.totalPrice(settlement.getTotalPrice())
-		// 		.receiverImageUrl(
-		// 			MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getImageUrl())
-		// 		.receiverNickname(
-		// 			MemberUtils.findByMemberId(memberRepository, settlement.getRequesterId()).getNickname())
-		// 		.build()
-		// 	).toList();
-		// return SettlementsLoadResponse.builder()
-		// 	.settlementsLoadDetails(settlementsLoadDetails)
-		// 	.build();
-		return null;
+		List<RequesterSettlementsLoadDetail> byRequester = settlementRepository.findByRequester(memberId);
+		List<ParticipantSettlementsLoadDetail> byParticipant = settlementRepository.findByParticipant(memberId);
+		return SettlementsLoadResponse.builder()
+			.requesterSettlementsLoadDetails(byRequester)
+			.participantSettlementsLoadDetails(byParticipant)
+			.build();
 	}
 
+	/**
+	 * 정산 내역 상세 조회
+	 * @param memberId 요청자 member_id
+	 * @param flashmobId 플래시몹 flashmob_id
+	 * @param settlementId 정산 settlement_id
+	 * @return 정산 내역 상세
+	 */
 	@FlashMobMemberVerify
 	@Override
 	public AttendeeReceiptsResponse receiptsLoad(long memberId, long flashmobId, long settlementId) {
-		// MemberSettlement memberSettlement = FlashMobUtils.findByMemberIdAndSettlementId(
-		// 	requesterSettlementRepository, memberId, settlementId);
-		// Receipt receipt = receiptRepository.findById(memberSettlement.getId())
-		// 	.orElseThrow(
-		// 		() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
-		// 	);
-		// List<AttendeesReceiptDetail> attendeesReceiptDetails = receipt.getReceiptHistories()
-		// 	.stream()
-		// 	.map(
-		// 		receiptHistory -> AttendeesReceiptDetail.builder()
-		// 			.price(receiptHistory.price())
-		// 			.businessName(receiptHistory.businessName())
-		// 			.createdAt(receiptHistory.createdAt())
-		// 			.build()
-		// 	).toList();
-		// return AttendeeReceiptsResponse.builder()
-		// 	.price(memberSettlement.getPrice())
-		// 	.attendeesReceiptDetails(attendeesReceiptDetails)
-		// 	.build();
-		return null;
+		ParticipantSettlement participantSettlement = participantSettlementRepository.findByMemberIdAndSettlementId(memberId,
+				settlementId)
+			.orElseThrow(
+				() -> new NotFoundException("ReceiptsLoad", SETTLEMENT_MEMBER_NOT_FOUND)
+			);
+		Receipt receipt = receiptRepository.findById(participantSettlement.getId())
+			.orElseThrow(
+				() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
+			);
+		List<AttendeesReceiptDetail> attendeesReceiptDetails = receipt.getReceiptHistories()
+			.stream()
+			.map(
+				receiptHistory -> AttendeesReceiptDetail.builder()
+					.price(receiptHistory.price())
+					.businessName(receiptHistory.businessName())
+					.createdAt(receiptHistory.createdAt())
+					.build()
+			).toList();
+		return AttendeeReceiptsResponse.builder()
+			.price(participantSettlement.getPrice())
+			.attendeesReceiptDetails(attendeesReceiptDetails)
+			.build();
 	}
 
+	/**
+	 * 정산 현황 조회
+	 * @param memberId 요청자 member_id
+	 * @param flashmobId 플래시몹 flashmob_id
+	 * @param settlementId 정산요청 settlement_id
+	 * @return 정산 현황
+	 */
 	@FlashMobMemberVerify
 	@Override
 	public AttendeesStatusResponse attendeesStatusLoad(long memberId, long flashmobId, long settlementId) {
-		// Settlement settlement = settlementRepository.findById(settlementId)
-		// 	.orElseThrow(
-		// 		() -> new NotFoundException("AttendeesStatusLoad", SETTLEMENT_NOT_FOUND)
-		// 	);
-		// if (!settlement.getRequesterId().equals(memberId)) {
-		// 	throw new ForbiddenException("AttendeesStatusLoad", FORBIDDEN_ACCESS_MEMBER);
-		// }
-		// List<AttendeesStatusDetail> attendeesStatusDetails = requesterSettlementRepository.memberSettlementStatusLoad(
-		// 	settlementId);
-		// return AttendeesStatusResponse.builder()
-		// 	.attendeesStatusDetails(attendeesStatusDetails)
-		// 	.build();
-		return null;
+		List<AttendeesStatusDetail> attendeesStatusDetails = requesterSettlementRepository.checkParticipantsStatus(
+			memberId, settlementId);
+		return AttendeesStatusResponse.builder()
+			.attendeesStatusDetails(attendeesStatusDetails)
+			.build();
 	}
 }
