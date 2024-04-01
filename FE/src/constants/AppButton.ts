@@ -1,5 +1,6 @@
 import {AppButtonStyle} from '../interfaces/props/AppButton';
 import {
+  bg_danger,
   bg_light,
   bg_main,
   font_light,
@@ -69,6 +70,18 @@ const MakeFlashButton: AppButtonStyle = {
   },
 };
 
+const MakeDeleteButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    padding: '8px 0',
+    bg1: bg_danger,
+  },
+  font: {
+    color: font_light,
+    size: '13px',
+  },
+};
+
 const JoinFlashButton: AppButtonStyle = {
   button: {
     width: '100%',
@@ -118,4 +131,5 @@ export {
   profileEditButton,
   remittanceButton,
   socialLoginButton,
+  MakeDeleteButton,
 };

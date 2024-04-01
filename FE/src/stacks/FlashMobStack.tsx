@@ -28,7 +28,16 @@ const FlashMobNavigator = () => {
         options={{title: '번개 모임', headerRight: ToChat}}
       />
       <FlashMobStack.Group screenOptions={{title: '', headerRight: ToChat}}>
-        <FlashMobStack.Screen name="FlashPlaces" component={PlaceInfoList} />
+        <FlashMobStack.Screen
+          name="FlashPlaces"
+          component={PlaceInfoList}
+          options={{
+            title: '내 프로필',
+            fullScreenGestureEnabled: true,
+            customAnimationOnGesture: true,
+            animation: 'slide_from_bottom',
+          }}
+        />
         <FlashMobStack.Screen name="FlashPlace" component={PlaceDetail} />
         <FlashMobStack.Screen name="FlashCreate" component={FlashCreate} />
         <FlashMobStack.Screen name="FlashList" component={FlashList} />
