@@ -33,7 +33,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 	@Override
 	public void send(ChatMessage chatMessage) {
-		// TODO: 이 방이 맞는지, 이 멤버가 맞는지 검사
 		rabbitTemplate.convertAndSend(exchangeName, "room." + chatMessage.flashmobId(), chatMessage);
 	}
 
