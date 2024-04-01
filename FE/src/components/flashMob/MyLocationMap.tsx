@@ -2,26 +2,37 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import MapView, {MapStyleElement, Marker} from 'react-native-maps';
 
-const MyLocationMap = ({center}: any) => {
+const MyLocationMap = ({myPosition, places}: any) => {
   return (
     <MapView
       style={styles.mapStyle}
       initialRegion={{
-        latitude: center.latitude, // Barcelona latitude
-        longitude: center.longitude, // Barcelona longitude
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: myPosition.latitude,
+        longitude: myPosition.longitude,
+        latitudeDelta: 0.0822,
+        longitudeDelta: 0.0921,
       }}
       customMapStyle={mapStyle}>
       <Marker
-        draggable
         coordinate={{
-          latitude: center.latitude, // Barcelona latitude
-          longitude: center.longitude, // Barcelona longitude
+          latitude: myPosition.latitude,
+          longitude: myPosition.longitude,
         }}
-        title={'Test Marker'}
-        description={'This is a description of the marker'}
+        title="My Position"
+        pinColor="blue"
       />
+      {places.map((place: any, index: number) => {
+        return (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: parseFloat(place.latitude),
+              longitude: parseFloat(place.longitude),
+            }}
+            title={place.name}
+          />
+        );
+      })}
     </MapView>
   );
 };

@@ -11,8 +11,8 @@ interface FlashMobStackParams
   FlashMain: undefined;
   FlashPlaces: {theme: string};
   FlashPlace: undefined;
-  FlashCreate: undefined;
-  FlashList: undefined;
+  FlashCreate: {id: number};
+  // FlashList: undefined;
 }
 
 export type {FlashMobStackParams};

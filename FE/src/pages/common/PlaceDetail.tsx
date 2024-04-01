@@ -144,11 +144,11 @@ const AttractionDetailsPage = () => {
   const keyExtractor = (item: any, index: number) => index.toString();
 
   const handlePressMake = () => {
-    navigation.navigate('makeflash');
+    navigation.navigate('FlashCreate', {id});
   };
 
   const handlePressAllFlash = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList', {id});
   };
 
   return (
