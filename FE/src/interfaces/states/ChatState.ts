@@ -1,3 +1,4 @@
+import {receipt} from '../router/flashMob/SettlementStackParams';
 import {member} from './UserState';
 
 interface flashmob {
@@ -25,13 +26,61 @@ interface message {
   status: status;
 }
 
+interface flashmobInfo {
+  members: member[];
+  currency_code: string;
+}
+
+interface settlement {
+  settlement_id: number;
+  total_price: number;
+  currency_code: string;
+  is_done: boolean;
+  receiver_id: number;
+  receiver_nickname: string;
+  receiver_image_url: string;
+}
+
+interface settlements {
+  requester_settlements: settlement[];
+  participant_settlements: settlement[];
+}
+
+interface receiptDetail {
+  price: number;
+  receipts: receipt[];
+}
+
+interface attendee {
+  member_id: number;
+  member_nickname: string;
+  member_image_url: string;
+  price: number;
+  has_sent: boolean;
+}
+
+interface settlementDetail {
+  attendees: attendee[];
+}
+
 interface ChatState {
   flashmobs: flashmob[];
   messages: message[];
-  flashmob: {
-    members: member[];
-    currency_code: string;
-  };
+  flashmob: flashmobInfo;
+  settlements: settlements;
+  receipt: receiptDetail;
+  settlement: settlementDetail;
 }
 
-export type {ChatState, flashmob, message, status};
+export type {
+  ChatState,
+  attendee,
+  flashmob,
+  flashmobInfo,
+  message,
+  receiptDetail,
+  settlement,
+  settlementDetail,
+  settlements,
+  status,
+};

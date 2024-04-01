@@ -1,3 +1,4 @@
+import {IMAGE_BASE_URL} from '@env';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
@@ -37,6 +38,10 @@ const Receipt = ({attendee}: ReceiptProps) => {
   const member = members.find(
     item => attendee.member_id === item.member_id,
   ) as memberType;
+  const image_url = member.image_url
+    ? {uri: `${IMAGE_BASE_URL}/${member.image_url}`}
+    : imagePath.profiledefault;
+  const nickname = member.nickname ? member.nickname : member.username;
   const {currency, attendees} =
     useRoute<RouteProp<SettlementStackParams, 'SettlementConfirm'>>().params;
   const unit = String.fromCharCode(currency.unit);
@@ -48,12 +53,12 @@ const Receipt = ({attendee}: ReceiptProps) => {
     <Wrapper>
       <CardView>
         <ProfileView>
-          <ProfileImg source={imagePath.profiledefault} />
-          <Nickname>{member.nickname}</Nickname>
+          <ProfileImg source={image_url} />
+          <Nickname>{nickname}</Nickname>
           <TotalView>
             <TotalText>총 사용 금액</TotalText>
             <TotalAmmount>
-              {unit} {attendee.member_price.toString()}
+              {unit} {attendee.member_price.toLocaleString('ko-KR')}
             </TotalAmmount>
           </TotalView>
         </ProfileView>
@@ -65,7 +70,7 @@ const Receipt = ({attendee}: ReceiptProps) => {
                 <DateTime>{receipt.created_at}</DateTime>
               </HistoryLeftView>
               <Ammount>
-                {unit} {receipt.price.toString()}
+                {unit} {receipt.price.toLocaleString('ko-KR')}
               </Ammount>
             </History>
           ))}

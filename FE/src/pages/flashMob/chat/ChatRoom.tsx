@@ -10,6 +10,8 @@ const ChatRoom = () => {
   const [opened, setOpened] = useState(false);
   const messages = useAppSelector((state: RootState) => state.chat.messages);
 
+  // AsyncStorage Message 조회
+
   return (
     <Wrapper>
       <GroupedMessages messages={messages} />

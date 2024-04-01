@@ -52,6 +52,10 @@ const Settlement = () => {
       : imagePath.profiledefault;
     return result;
   };
+  const nickname = (memberNickname: string, memberUsername: string) => {
+    const result = memberNickname ? memberNickname : memberUsername;
+    return result;
+  };
   const currency = currencies.find(
     item => item.currency_code === currency_code,
   );
@@ -153,7 +157,7 @@ const Settlement = () => {
           {members.map(member => (
             <MemberView key={member.member_id}>
               <ProfileImg source={imageUrl(member.image_url)} />
-              <Nickname>{member.nickname}</Nickname>
+              <Nickname>{nickname(member.nickname, member.username)}</Nickname>
               <CheckBox onPress={() => handleCheck(member.member_id)}>
                 <WithLocalSvg
                   width={30}

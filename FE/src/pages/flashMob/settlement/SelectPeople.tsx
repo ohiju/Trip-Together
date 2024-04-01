@@ -66,6 +66,10 @@ const SelectPeople = () => {
       : imagePath.profiledefault;
     return result;
   };
+  const nickanme = (memberNickname: string, memberUsername: string) => {
+    const result = memberNickname ? memberNickname : memberUsername;
+    return result;
+  };
 
   // 금액 배분
   const [message, setMessage] = useState('');
@@ -231,7 +235,7 @@ const SelectPeople = () => {
               source={imageUrl(member.image_url)}
               resizeMode="cover"
             />
-            <Nickname>{member.nickname}</Nickname>
+            <Nickname>{nickanme(member.nickname, member.username)}</Nickname>
             <AmmountView>
               <Unit>{unit}</Unit>
               <Ammount

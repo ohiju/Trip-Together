@@ -26,7 +26,7 @@ const ChatMain = () => {
   // API
   const getFlashMobs = useGetFlashMobs();
   useEffect(() => {
-    // getFlashMobs();
+    getFlashMobs();
   }, []);
 
   return (
