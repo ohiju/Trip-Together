@@ -16,4 +16,6 @@ public interface FlashMobSaveService {
     void exitFlashmob(SecurityMember securityMember, long flashmobId);
 
 	void settlementSave(long memberId, long flashmobId, SettlementSaveRequest settlementSaveRequest);
+
+	void settlementSend(long memberId, long flashmobId, long settlementId);
 }

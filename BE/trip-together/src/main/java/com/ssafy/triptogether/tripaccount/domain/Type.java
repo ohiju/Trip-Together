@@ -4,9 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum Type {
-    DEPOSIT("충전"),
+    EXCHANGE("환전"),
+    DEPOSIT("입금"),
     REFUND("환불"),
     SEND("송금"),
+
     WITHDRAW("출금");
 
     private final String message;

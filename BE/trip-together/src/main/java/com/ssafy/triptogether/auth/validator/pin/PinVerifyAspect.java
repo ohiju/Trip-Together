@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 @Aspect
 public class PinVerifyAspect {
     private final MemberRepository memberRepository;
@@ -33,12 +32,6 @@ public class PinVerifyAspect {
 
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
         // Todo: inputPin 을 암호화한 후 member 의 PIN 과 비교
-        String encodedPinNum = passwordEncoder.encode(pinVerifyRequest.pinNum());
-        log.info("origin: {}", member.getPinNum());
-        log.info("check: {}", encodedPinNum);
-        log.info("result: {}", member.getPinNum().equals(encodedPinNum));
-        log.info("result: {}", passwordEncoder.matches(pinVerifyRequest.pinNum(), member.getPinNum()));
-        // Todo: 일치하지 않는다면 예외 처리
         if (!passwordEncoder.matches(pinVerifyRequest.pinNum(), member.getPinNum())) {
             throw new UnAuthorizedException("PinVerify", ErrorCode.PIN_NOT_AUTHENTICATED);
         }
