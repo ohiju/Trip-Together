@@ -21,26 +21,37 @@ import {
 import {BottomButton} from '../../../constants/AppButton';
 import {useExchangeOptions} from '../../../constants/AppSelectOptions';
 import {bankAccount} from '../../../interfaces/bankAccount';
-import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
+import {
+  ExchangeInputProps,
+  ExchangeStackParams,
+} from '../../../interfaces/router/myPage/ExchangeStackParams';
 import {Wrapper} from './ExchangeSelectSyncStyle';
 
 const ExchangeSelectSync = () => {
-  const getBankAccounts = useGetBankAccounts();
   const exchangeOptions = useExchangeOptions();
   const [account, setAccount] = useState<bankAccount | null>(null);
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<ExchangeStackParams>>();
-  const {currency} =
+  const {from_currency, to_currency, type, tripAccount} =
     useRoute<RouteProp<ExchangeStackParams, 'ExchangeSelectSync'>>().params;
   const handleToNext = () => {
     if (!account) {
       Alert.alert('계좌를 선택해주세요.');
       return;
     }
-    navigation.navigate('ExchangeInput', {account, currency});
+    const props: ExchangeInputProps = {
+      from_currency,
+      to_currency,
+      account,
+      type,
+      tripAccount,
+    };
+    navigation.navigate('ExchangeInput', props);
   };
 
+  // API 은행 계좌 목록 조회
+  const getBankAccounts = useGetBankAccounts();
   useFocusEffect(() => {
     getBankAccounts();
   });

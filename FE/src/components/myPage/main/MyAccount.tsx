@@ -17,6 +17,7 @@ interface MyAccountProps {
 const MyAccount = ({myAccount}: MyAccountProps) => {
   const {nation, nation_kr, balance} = myAccount;
   const unit = String.fromCharCode(myAccount.unit);
+  console.log(myAccount);
 
   return (
     <Wrapper>

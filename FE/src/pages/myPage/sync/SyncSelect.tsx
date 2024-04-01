@@ -70,6 +70,7 @@ const SyncSelect = () => {
     ]);
   };
 
+  // API
   useEffect(() => {
     getBankAccounts();
   }, []);

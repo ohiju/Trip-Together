@@ -1,6 +1,12 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {DeleteSyncAccountData} from '../../../apis/account/useDeleteSyncAccount';
 import {imagePath} from '../../../assets/images/imagePath';
 import {bg_danger, bg_danger_lignt} from '../../../constants/colors';
+import {
+  PinAuthProps,
+  RootStackParams,
+} from '../../../interfaces/router/RootStackParams';
 import {syncAccount} from '../../../interfaces/states/AccountState';
 import {
   BankInfoView,
@@ -21,6 +27,20 @@ interface AccountProps {
 }
 
 const Account = ({account}: AccountProps) => {
+  // 라우팅
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
+  const handleToPinAuth = () => {
+    const pinData: DeleteSyncAccountData = {
+      pin_num: '',
+      account_uuid: account.account_uuid,
+    };
+    const props: PinAuthProps = {
+      pinData,
+      api: 'deleteSyncAccount',
+    };
+    navigation.navigate('PinAuth', props);
+  };
+
   return (
     <Wrapper>
       <LeftView>
@@ -38,6 +58,7 @@ const Account = ({account}: AccountProps) => {
         </BankInfoView>
       </LeftView>
       <BtnView
+        onPress={handleToPinAuth}
         style={({pressed}) => ({
           backgroundColor: pressed ? bg_danger_lignt : bg_danger,
         })}>
