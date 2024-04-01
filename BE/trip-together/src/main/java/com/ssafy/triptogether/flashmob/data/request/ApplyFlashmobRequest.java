@@ -7,4 +7,5 @@ import jakarta.validation.constraints.NotNull;
 public record ApplyFlashmobRequest(
 	@NotNull
 	RoomStatus status
-) { }
+) {
+}

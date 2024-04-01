@@ -11,10 +11,10 @@ public record DailyPlan(
 	Integer order,
 	@JsonProperty("attractions") List<DailyPlanAttraction> dailyPlanAttractions
 ) {
-    @Builder
-    public DailyPlan {
-        if (dailyEstimatedBudget == null) {
-            dailyEstimatedBudget = 0.0;
-        }
-    }
+	@Builder
+	public DailyPlan {
+		if (dailyEstimatedBudget == null) {
+			dailyEstimatedBudget = 0.0;
+		}
+	}
 }

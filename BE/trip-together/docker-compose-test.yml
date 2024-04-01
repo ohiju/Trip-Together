@@ -33,3 +33,18 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${TEST_TRIP_MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${TEST_TRIP_MONGODB_PASSWORD}
     restart: unless-stopped
+
+  test_trip_rabbitmq_container:
+    container_name: test_trip_rabbitmq_container
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "61613:61613"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}

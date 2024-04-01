@@ -124,23 +124,13 @@ const initialState: ChatState = {
     members: [
       {
         member_id: 1,
-        username: '오희주',
         nickname: 'OhHeeJuice',
         image_url: '',
-        description: '',
-        gender: 'MALE',
-        birth: '1998-05-23',
-        created_at: '2024-03-29T11:42',
       },
       {
         member_id: 3,
-        username: '김태규',
         nickname: 'KTaeGyu',
         image_url: 'profileImg/sample.jpg',
-        description: '노는게 제일 좋아',
-        gender: 'MALE',
-        birth: '1996-10-31',
-        created_at: '2024-03-28T21:42',
       },
     ],
     currency_code: 'GBP',

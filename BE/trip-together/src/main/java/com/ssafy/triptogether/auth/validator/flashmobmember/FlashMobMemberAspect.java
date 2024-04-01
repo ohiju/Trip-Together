@@ -20,8 +20,8 @@ public class FlashMobMemberAspect {
 	@Before("@annotation(FlashMobMemberVerify)")
 	public void flashMobMemberVerifyAdvice(JoinPoint joinPoint) throws Throwable {
 		Object[] args = joinPoint.getArgs();
-		Long memberId = (Long) args[0];
-		Long flashMobId = (Long) args[1];
+		Long memberId = (Long)args[0];
+		Long flashMobId = (Long)args[1];
 
 		memberFlashMobRepository.findMemberFlashmobByFlashmobIdAndMemberId(flashMobId, memberId)
 			.orElseThrow(

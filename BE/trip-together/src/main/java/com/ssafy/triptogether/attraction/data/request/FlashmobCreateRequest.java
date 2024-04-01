@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotNull;
 
 public record FlashmobCreateRequest(
@@ -14,4 +15,5 @@ public record FlashmobCreateRequest(
 	LocalDateTime startTime,
 	@NotNull @JsonProperty("max_users")
 	Integer maxUsers
-) { }
+) {
+}

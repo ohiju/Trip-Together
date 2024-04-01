@@ -83,7 +83,7 @@ const SelectHistory = () => {
       size: 10,
       sort: 'DESC',
     };
-    // getCardHistory(params);
+    getCardHistory(params);
   }, []);
 
   // 인피니티 스크롤

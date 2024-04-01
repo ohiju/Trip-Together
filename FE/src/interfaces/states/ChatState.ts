@@ -1,5 +1,4 @@
 import {receipt} from '../router/flashMob/SettlementStackParams';
-import {member} from './UserState';
 
 interface flashmob {
   flashmob_id: number;
@@ -27,7 +26,7 @@ interface message {
 }
 
 interface flashmobInfo {
-  members: member[];
+  members: {member_id: number; image_url: string; nickname: string}[];
   currency_code: string;
 }
 

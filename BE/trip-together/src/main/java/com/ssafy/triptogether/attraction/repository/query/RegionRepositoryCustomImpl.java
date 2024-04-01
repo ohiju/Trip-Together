@@ -7,7 +7,6 @@ import java.util.List;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.attraction.data.response.RegionLoadDetail;
-import com.ssafy.triptogether.attraction.domain.QRegion;
 
 import lombok.RequiredArgsConstructor;
 

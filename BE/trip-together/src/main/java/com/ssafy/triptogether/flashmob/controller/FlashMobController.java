@@ -24,7 +24,7 @@ import static com.ssafy.triptogether.global.data.response.StatusCode.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/flashmob/v1")
+@RequestMapping("/api/flashmob/v1")
 @RequiredArgsConstructor
 public class FlashMobController {
 
