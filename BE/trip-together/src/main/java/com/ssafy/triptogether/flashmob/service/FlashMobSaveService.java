@@ -18,4 +18,6 @@ public interface FlashMobSaveService {
 	void settlementSave(long memberId, long flashmobId, SettlementSaveRequest settlementSaveRequest);
 
 	void settlementSend(long memberId, long flashmobId, long settlementId);
+
+	void settlementDelete(long memberId, long flashmobId, long settlementId);
 }
