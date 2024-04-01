@@ -11,6 +11,7 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
+import com.ssafy.triptogether.chat.util.ChatMessageUtil;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
