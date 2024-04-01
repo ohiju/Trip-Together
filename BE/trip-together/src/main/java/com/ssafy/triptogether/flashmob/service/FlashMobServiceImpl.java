@@ -20,6 +20,8 @@ import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMemberDetail;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
 import com.ssafy.triptogether.flashmob.data.response.ParticipantSettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.RequesterSettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
@@ -381,6 +383,15 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			memberId, settlementId);
 		return AttendeesStatusResponse.builder()
 			.attendeesStatusDetails(attendeesStatusDetails)
+			.build();
+	}
+
+	@FlashMobMemberVerify
+	@Override
+	public FlashMobMembersLoadResponse flashmobMembersLoad(long memberId, long flashmobId) {
+		List<FlashMobMemberDetail> allMemberInFlashMob = flashMobRepository.findAllMemberInFlashMob(flashmobId);
+		return FlashMobMembersLoadResponse.builder()
+			.flashMobMemberDetails(allMemberInFlashMob)
 			.build();
 	}
 }
