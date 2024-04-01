@@ -121,8 +121,10 @@ const Plans = () => {
   const startDate = new Date(currentPlan?.start_at);
   const endDate = new Date(currentPlan?.end_at);
   const durationInDays =
-    Math.floor(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    Math.abs(
+      Math.floor(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+      ),
     ) + 1;
 
   const myDate = new Date();
