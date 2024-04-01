@@ -56,7 +56,7 @@ public class SettlementRepositoryCustomImpl implements SettlementRepositoryCusto
 		return settlements.stream().map(settlementCheck -> {
 			RequesterSettlement foundRequesterSettlement = queryFactory
 				.selectFrom(requesterSettlement)
-				.where(requesterSettlement.settlement.eq(settlement))
+				.where(requesterSettlement.settlement.id.eq(settlementCheck.getId()))
 				.join(requesterSettlement.member, member).fetchJoin()
 				.fetchOne();
 

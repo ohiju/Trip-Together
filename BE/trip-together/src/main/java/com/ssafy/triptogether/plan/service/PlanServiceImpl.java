@@ -70,10 +70,11 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
      *
      * @param memberId         요청자의 member_id
      * @param plansSaveRequest 요청자의 여행 계획
+     * @return planId           저장된 plan의 id
      */
     @Transactional
     @Override
-    public void plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
+    public long plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
         Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
 
@@ -89,6 +90,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         if (plansSaveRequest.planDetails() != null) {
             planAttractionSave(plansSaveRequest.planDetails(), plan);
         }
+        return plan.getId();
     }
 
     /**

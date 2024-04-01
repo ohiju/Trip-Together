@@ -1,7 +1,11 @@
 import {ParamListBase} from '@react-navigation/native';
 import {ChatStackParams} from './ChatMainStackParams';
+import {SettlementStackParams} from './SettlementStackParams';
 
-interface FlashMobStackParams extends ParamListBase, ChatStackParams {
+interface FlashMobStackParams
+  extends ParamListBase,
+    ChatStackParams,
+    SettlementStackParams {
   FlashMain: undefined;
   FlashPlaces: {theme: string};
   FlashPlace: undefined;
