@@ -156,13 +156,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 
 	@Override
 	public void reissueBank(String memberUuid) {
-		System.out.println("reissue bank~~");
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members/reissue")
 			.queryParam("client_id", TWINKLE_CLIENT_ID)
 			.toUriString();
-		System.out.println(url);
 		String refreshToken = redisTemplate.opsForValue().get("refresh:" + memberUuid);
-		System.out.println(refreshToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("cookie", "refreshToken="+ refreshToken);
@@ -187,7 +184,6 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 			if (newRefreshToken == null || newRefreshToken.isEmpty()) {
 				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_REFRESH_TOKEN);
 			}
-
 			// 다시 저장
 			saveToken("access:" + memberUuid, newAccessToken, TWINKLE_ACCESS_TOKEN_EXPIRE_TIME);
 			saveToken("refresh:" + memberUuid, newRefreshToken, TWINKLE_REFRESH_TOKEN_EXPIRE_TIME);
