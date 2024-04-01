@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.flashmob.service;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
@@ -17,7 +18,7 @@ public interface FlashMobSaveService {
 
 	void settlementSave(long memberId, long flashmobId, SettlementSaveRequest settlementSaveRequest);
 
-	void settlementSend(long memberId, long flashmobId, long settlementId);
+	void settlementSend(long memberId, long flashmobId, long settlementId, PinVerifyRequest pinVerifyRequest);
 
 	void settlementDelete(long memberId, long flashmobId, long settlementId);
 }

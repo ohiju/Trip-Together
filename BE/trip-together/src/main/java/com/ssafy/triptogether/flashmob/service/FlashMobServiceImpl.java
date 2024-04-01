@@ -7,8 +7,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
+import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
@@ -201,12 +203,13 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	 * @param memberId 송금자 member_id
 	 * @param flashmobId 플래시몹 flashmob_id
 	 * @param settlementId 정산 요청 settlement_id
+	 * @param pinVerifyRequest PIN 인증 요청
 	 */
 	@FlashMobMemberVerify
 	@DistributedLock(key = "'settlement:' + #flashmobId + ':' + #settlementId")
 	@Transactional
 	@Override
-	public void settlementSend(long memberId, long flashmobId, long settlementId) {
+	public void settlementSend(long memberId, long flashmobId, long settlementId, PinVerifyRequest pinVerifyRequest) {
 		Member participantMember = MemberUtils.findByMemberId(memberRepository, memberId);
 		Settlement settlement = settlementRepository.findById(settlementId)
 			.orElseThrow(
@@ -219,9 +222,8 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId, settlementId);
-		TripAccount participantTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
-			memberId, currency.getId());
-		participantTripAccount.withdrawBalance(participantSettlement.getPrice());
+		TripAccount participantTripAccount = participantWithdraw(memberId, pinVerifyRequest, currency,
+			participantSettlement);
 		participantSettlement.settlementSend();
 
 		Member requesterMember = requesterSettlementRepository.requesterFindBySettlementId(settlementId);
@@ -254,6 +256,14 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		if (participantSettlementRepository.checkSettlementIsDone(settlementId)) {
 			settlement.updateIsDone();
 		}
+	}
+
+	@PinVerify
+	private TripAccount participantWithdraw(long memberId, PinVerifyRequest pinVerifyRequest, Currency currency, ParticipantSettlement participantSettlement) {
+		TripAccount participantTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
+			memberId, currency.getId());
+		participantTripAccount.withdrawBalance(participantSettlement.getPrice());
+		return participantTripAccount;
 	}
 
 	/**
