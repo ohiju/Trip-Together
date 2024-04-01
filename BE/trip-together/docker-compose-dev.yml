@@ -68,3 +68,19 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${DEV_TRIP_MONGODB_PASSWORD}
       DEV_TRIP_MONGODB_BINDING_PORT: ${DEV_TRIP_MONGODB_BINDING_PORT}
     restart: no
+
+  test_trip_rabbitmq_container:
+    container_name: test_trip_rabbitmq_container
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - ${DEV_TRIP_RABBITMQ_ETC_PATH}:/etc/rabbitmq/
+      - ${DEV_TRIP_RABBITMQ_DATA_PATH}:/var/lib/rabbitmq/
+      - ${DEV_TRIP_RABBITMQ_LOGS_PATH}:/var/log/rabbitmq/
+    ports:
+      - ${DEV_TRIP_RABBITMQ_PORT}:5672
+      - ${DEV_TRIP_WEBSOCKET_PORT}:15672
+      - ${DEV_TRIP_STOMP_PORT}:61613
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    restart: on-failure
