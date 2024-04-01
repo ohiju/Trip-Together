@@ -2,6 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
   ChatState,
   flashmob,
+  flashmobInfo,
   receiptDetail,
   settlementDetail,
   settlements,
@@ -84,18 +85,7 @@ const initialState: ChatState = {
     },
   ],
   flashmob: {
-    members: [
-      {
-        member_id: 1,
-        nickname: 'OhHeeJuice',
-        image_url: '',
-      },
-      {
-        member_id: 3,
-        nickname: 'KTaeGyu',
-        image_url: 'profileImg/sample.jpg',
-      },
-    ],
+    members: [],
   },
   settlements: {
     requester_settlements: [
@@ -181,6 +171,9 @@ const chatSlice = createSlice({
     setFlashMobs: (state, action: PayloadAction<flashmob[]>) => {
       state.flashmobs = action.payload;
     },
+    setFlashMob: (state, action: PayloadAction<flashmobInfo>) => {
+      state.flashmob = action.payload;
+    },
     setSettlements: (state, action: PayloadAction<settlements>) => {
       state.settlements = action.payload;
     },
@@ -193,6 +186,11 @@ const chatSlice = createSlice({
   },
 });
 
-export const {setFlashMobs, setSettlements, setReceipt, setSettlement} =
-  chatSlice.actions;
+export const {
+  setFlashMobs,
+  setFlashMob,
+  setSettlements,
+  setReceipt,
+  setSettlement,
+} = chatSlice.actions;
 export default chatSlice.reducer;

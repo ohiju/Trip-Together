@@ -25,8 +25,14 @@ interface message {
   status: status;
 }
 
+interface member {
+  member_id: number;
+  image_url: string;
+  nickname: string;
+}
+
 interface flashmobInfo {
-  members: {member_id: number; image_url: string; nickname: string}[];
+  members: member[];
 }
 
 interface settlement {
@@ -75,6 +81,7 @@ export type {
   attendee,
   flashmob,
   flashmobInfo,
+  member,
   message,
   receiptDetail,
   settlement,

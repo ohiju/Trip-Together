@@ -3,8 +3,8 @@ import {
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import React, {useEffect} from 'react';
-import useGetTripAccounts from '../../apis/account/useGetTripAccounts';
+import React from 'react';
+import {Alert} from 'react-native';
 import {imagePath} from '../../assets/images/imagePath';
 import currencies, {currency, kr_currency} from '../../constants/currencies';
 import groupByTwo from '../../hooks/groupByTow';
@@ -35,12 +35,9 @@ const WalletManage = () => {
     (state: RootState) => state.account.trip_accounts,
   );
   const groups = groupByTwo(tripAccounts);
-
-  // 지갑 목록 조회
-  const getTripAccounts = useGetTripAccounts();
-  useEffect(() => {
-    getTripAccounts();
-  }, []);
+  const syncAccounts = useAppSelector(
+    (state: RootState) => state.account.sync_accounts,
+  );
 
   // 탭바
   const dispatch = useAppDispatch();
@@ -51,6 +48,10 @@ const WalletManage = () => {
   // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const handleToRefund = (nation: string) => {
+    if (!syncAccounts.length) {
+      Alert.alert('연동된 계좌가 없습니다.');
+      return;
+    }
     const from_currency = currencies.find(
       item => item.nation === nation,
     ) as currency;
