@@ -33,7 +33,7 @@ public class PlanController {
     private final PlanLoadService planLoadService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<DailyPlansResponse >> findPlans(
+	public ResponseEntity<ApiResponse<DailyPlansResponse>> findPlans(
 		@AuthenticationPrincipal SecurityMember securityMember
 	) {
 		long memberId = securityMember.getId();
@@ -42,14 +42,14 @@ public class PlanController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> plansSave(
+	public ResponseEntity<ApiResponse<Long>> plansSave(
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid PlansSaveRequest plansSaveRequest
 	) {
 		long memberId = securityMember.getId();
-		planSaveService.plansSave(memberId, plansSaveRequest);
+		long planId = planSaveService.plansSave(memberId, plansSaveRequest);
 
-        return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
+		return ApiResponse.toResponseEntity(CREATED, SUCCESS_PLANS_SAVE, planId);
     }
 
 	@DeleteMapping("/{plan_id}")
@@ -70,7 +70,7 @@ public class PlanController {
 	) {
 		long memberId = securityMember.getId();
 		planSaveService.planModify(memberId, planId, plansSaveRequest);
-		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_SAVE);
+		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_MODIFY);
 	}
 
 	@GetMapping("/{plan_id}")
