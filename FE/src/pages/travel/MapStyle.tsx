@@ -10,7 +10,7 @@ const Container = styled.View`
   right: 0px;
   bottom: 0px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const SliderContainer = styled.View`

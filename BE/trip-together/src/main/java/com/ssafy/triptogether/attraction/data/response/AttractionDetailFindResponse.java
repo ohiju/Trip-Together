@@ -12,6 +12,7 @@ public record AttractionDetailFindResponse(
     @JsonProperty("avg_price") Double avgPrice,
     @JsonProperty("start_at") LocalTime startAt,
     @JsonProperty("end_at") LocalTime endAt,
+    @JsonProperty("attraction_thumbnail_image_url") String attractionThumbnailImageUrl,
     @JsonProperty("attraction_image_urls") List<String> attractionImageUrls,
     @JsonProperty("attraction_name") String attractionName,
     @JsonProperty("attraction_address") String attractionAddress,

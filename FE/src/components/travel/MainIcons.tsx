@@ -64,13 +64,19 @@ const MainIcons = ({item, style}: IPage) => {
           <IconText>여행</IconText>
         </IconBox>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            // Handle onPress
-          }}
-          style={styles.iconContainer}>
-          <Text>1</Text>
-        </TouchableOpacity>
+        <IconBox>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AllTrip');
+            }}
+            style={styles.iconContainer}>
+            <Image
+              source={require('../../assets/images/writing.png')}
+              style={{width: 40, height: 40}}
+            />
+          </TouchableOpacity>
+          <IconText>계획</IconText>
+        </IconBox>
       )}
       {item.num === 1 ? (
         <IconBox>

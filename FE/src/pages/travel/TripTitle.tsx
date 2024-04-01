@@ -11,18 +11,75 @@ import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams
 import AppButton from '../../components/common/AppButton';
 import {BottomButton} from '../../constants/AppButton';
 import DismissKeyboardView from '../../components/common/DismissKeyboardView';
-import {StyleSheet} from 'react-native';
-import {useAppDispatch} from '../../store/hooks';
+import {Alert, StyleSheet} from 'react-native';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {setTripTitle} from '../../store/slices/trip';
+import axios, {AxiosError} from 'axios';
+import {setPlaces} from '../../store/slices/trip';
+import getToken from '../../hooks/getToken';
 
 const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState('오희주님의 프랑스 여행 계획');
+  const username = useAppSelector(state => state.user.user.username);
+  const [title, setTitle] = useState(`${username}님의 프랑스 여행 계획`);
+  const trip = useAppSelector(state => state.trip.tripInfo);
+  let finishPressSuccess = false;
 
-  const handleSubmit = () => {
-    navigation.navigate('map', {title});
+  const handleSubmit = async () => {
+    const {access_token} = await getToken();
+
     dispatch(setTripTitle(title));
+    await handleFinishPress();
+    if (!finishPressSuccess) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+          trip.start_latitude
+        }&longitude=${
+          trip.start_longitude
+        }&latitude_delta=${1.2}&longitude_delta=${1.1}&category=`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      );
+      const res = response.data.data;
+      dispatch(setPlaces(res));
+      navigation.navigate('map', {title});
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+  const handleFinishPress = async () => {
+    const {access_token} = await getToken();
+
+    const data = {
+      start_region_id: trip.start_region,
+      start_at: new Date(trip.start_at),
+      end_at: new Date(trip.end_at),
+      title: title,
+      total_estimated_budget: trip.total_estimated_budget,
+      daily_plans: trip.daily_plans,
+    };
+    try {
+      await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      finishPressSuccess = true;
+    } catch (err) {
+      const errorResponse = (err as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', (errorResponse as any).data.message);
+      }
+      navigation.navigate('travel_main');
+    }
   };
 
   return (
@@ -30,7 +87,7 @@ const TripTitle = () => {
       <Wrapper>
         <TitleContainer>
           <TitleInput
-            placeholder="오희주님의 프랑스 여행 계획"
+            placeholder={`${username}님의 프랑스 여행 계획`}
             value={title}
             onChangeText={setTitle}
           />
