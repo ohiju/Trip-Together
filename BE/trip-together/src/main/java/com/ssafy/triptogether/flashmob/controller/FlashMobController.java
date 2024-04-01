@@ -7,10 +7,12 @@ import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
 import com.ssafy.triptogether.flashmob.service.FlashMobSaveService;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
+import com.ssafy.triptogether.global.data.response.StatusCode;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,20 @@ public class FlashMobController {
         long memberId = securityMember.getId();
         flashMobSaveService.cancelFlashmob(flashmobId, memberId);
         return ApiResponse.emptyResponse(NO_CONTENT, SUCCESS_FLASHMOB_CANCEL);
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/members")
+    public ResponseEntity<ApiResponse<FlashMobMembersLoadResponse>> flashmobMembersLoad(
+        @PathVariable("flashmob_id") long flashmobId,
+        @AuthenticationPrincipal SecurityMember securityMember
+    ) {
+        long memberId = securityMember.getId();
+        FlashMobMembersLoadResponse flashMobMembersLoadResponse = flashMobLoadService.flashmobMembersLoad(memberId,
+            flashmobId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_FLASHMOB_MEMBER_LOAD, flashMobMembersLoadResponse
+        );
     }
 
     @PatchMapping("/flashmobs/{flashmob_id}/{member_id}")
