@@ -1,5 +1,11 @@
 package com.ssafy.triptogether.plan.repository.query;
 
+import static com.ssafy.triptogether.plan.domain.QPlan.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,13 +13,8 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
 import com.ssafy.triptogether.plan.domain.Status;
+
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static com.ssafy.triptogether.plan.domain.QPlan.plan;
 
 @RequiredArgsConstructor
 public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
@@ -52,7 +53,12 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     public Optional<DailyPlanResponse> findDetailPlanById(long planId) {
         return Optional.ofNullable(
             queryFactory.select(Projections.constructor(DailyPlanResponse.class,
+                    plan.id,
+                    plan.region.nation,
+                    plan.region.id,
                     plan.region.cityName,
+                    plan.region.latitude,
+                    plan.region.longitude,
                     plan.startAt,
                     plan.endAt,
                     plan.title,
@@ -77,15 +83,16 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
                 plan.estimatedBudget,
                 plan.realBudget,
                 new CaseBuilder()
-                    .when(plan.endAt.before(currentDate))
-                    .then(Status.BEFORE.getMessage())
-                    .when(plan.startAt.after(currentDate))
+                    .when(plan.endAt.lt(currentDate))
                     .then(Status.AFTER.getMessage())
-                    .otherwise(Status.IN_PROGRESS.getMessage())
+                    .when(plan.startAt.gt(currentDate))
+                    .then(Status.BEFORE.getMessage())
+                    .otherwise(Status.IN_PROGRESS.getMessage()),
+                plan.region.nation
             ))
             .from(plan)
             .where(plan.member.id.eq(memberId))
-            .orderBy(plan.startAt.desc())
+            .orderBy(plan.startAt.asc())
             .fetch();
     }
 }

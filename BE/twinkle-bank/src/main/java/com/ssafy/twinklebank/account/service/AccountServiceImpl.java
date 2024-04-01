@@ -1,12 +1,8 @@
 package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.aop.DistributedLock;
-import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
+import com.ssafy.twinklebank.account.data.request.*;
 import com.ssafy.twinklebank.account.data.response.AccountResponse;
-import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
@@ -21,15 +17,17 @@ import com.ssafy.twinklebank.auth.provider.CodeProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.twinklebank.member.domain.Member;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
-
+import com.ssafy.twinklebank.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
@@ -61,6 +59,27 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
             throw new ForbiddenException("getBalance", FORBIDDEN, memberId);
         }
         return account.getBalance();
+    }
+
+    @Transactional
+    @Override
+    public void saveAccount(long memberId, AccountSaveRequest accountSaveRequest) {
+        // find member
+        Member member = MemberUtils.loadMemberById(memberRepository, memberId);
+
+        // create uuid & account num
+        String uuid = UUID.randomUUID().toString();
+        String accountNum = RandomStringUtils.randomNumeric(11);
+
+        // create account & save
+        Account account = Account.builder()
+            .member(member)
+            .uuid(uuid)
+            .balance(0.0)
+            .name(accountSaveRequest.name())
+            .accountNum(accountNum)
+            .build();
+        accountRepository.save(account);
     }
 
     @Transactional

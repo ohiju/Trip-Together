@@ -12,7 +12,12 @@ import com.ssafy.triptogether.global.exception.exceptions.category.ValidationExc
 import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankLogoutRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
-import com.ssafy.triptogether.member.data.*;
+import com.ssafy.triptogether.member.data.request.PinSaveRequest;
+import com.ssafy.triptogether.member.data.request.PinUpdateRequest;
+import com.ssafy.triptogether.member.data.request.ProfileUpdateRequest;
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
+import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
+import com.ssafy.triptogether.member.data.response.ReissueResponse;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
@@ -51,12 +56,20 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
     @Transactional
     @Override
-    public void updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
+    public ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
         // find member
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
         // update member
         member.update(profileUpdateRequest);
+
+        // create response & return
+        return ProfileUpdateResponse.builder()
+            .memberId(member.getId())
+            .imageUrl(member.getImageUrl())
+            .nickname(member.getNickname())
+            .description(member.getDescription())
+            .build();
     }
 
     @Transactional
@@ -132,7 +145,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         Member member = Member.builder()
             .username(twinkleMemberInfoResponse.name())
             .uuid(twinkleMemberInfoResponse.memberUuid())
-            .nickname("")
+            .nickname(twinkleMemberInfoResponse.name())
             .gender(twinkleMemberInfoResponse.gender())
             .birth(twinkleMemberInfoResponse.birth())
             .build();

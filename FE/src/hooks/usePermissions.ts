@@ -57,7 +57,6 @@ function usePermissions() {
           if (result === RESULTS.DENIED || result === RESULTS.GRANTED) {
             return request(PERMISSIONS.ANDROID.CAMERA);
           } else {
-            console.log(result);
             throw new Error('카메라 지원 안 함');
           }
         })

@@ -1,12 +1,13 @@
 import {
   NavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Alert} from 'react-native';
-import {bankAccount} from '../../../assets/data/bankAccount';
+import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
 import AppButton from '../../../components/common/AppButton';
 import AppSelect from '../../../components/common/AppSelect';
 import {
@@ -19,12 +20,14 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {useExchangeOptions} from '../../../constants/AppSelectOptions';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
 import {Wrapper} from './ExchangeSelectSyncStyle';
 
 const ExchangeSelectSync = () => {
-  const [account, setAccount] = useState<bankAccount | null>(null);
+  const getBankAccounts = useGetBankAccounts();
   const exchangeOptions = useExchangeOptions();
+  const [account, setAccount] = useState<bankAccount | null>(null);
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<ExchangeStackParams>>();
@@ -37,6 +40,10 @@ const ExchangeSelectSync = () => {
     }
     navigation.navigate('ExchangeInput', {account, currency});
   };
+
+  useFocusEffect(() => {
+    getBankAccounts();
+  });
 
   return (
     <Wrapper>

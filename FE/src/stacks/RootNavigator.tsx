@@ -4,14 +4,18 @@ import {RootStackParams} from '../interfaces/router/RootStackParams';
 import Login from '../pages/Login';
 import PinAuth from '../pages/PinAuth';
 import SocialLogin from '../pages/SocialLogin';
+import {RootState} from '../store';
+import {useAppSelector} from '../store/hooks';
 import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
+  const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
+
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      {true ? (
+      {isLogin ? (
         <>
           <Stack.Screen name="Main" component={TabNavigator} />
           <Stack.Screen

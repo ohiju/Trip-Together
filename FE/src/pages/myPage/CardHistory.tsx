@@ -11,6 +11,8 @@ const CardHistory = () => {
   );
   const groupedHistories = groupByDate(histories);
 
+  // API
+
   return (
     <Wrapper>
       {groupedHistories.map(([date, groupedHistory]) => (

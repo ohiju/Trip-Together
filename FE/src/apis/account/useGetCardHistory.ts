@@ -60,4 +60,5 @@ const useGetCardHistory = () => {
   return getCardHistory;
 };
 
+export type {GetCardHistoryParams};
 export default useGetCardHistory;

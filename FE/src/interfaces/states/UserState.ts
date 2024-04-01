@@ -1,16 +1,4 @@
-interface syncAccount {
-  account_uuid: string;
-  account_num: string;
-  name: string;
-  is_main: 0 | 1;
-}
-
-interface tripAccount {
-  nation: string;
-  nation_kr: string;
-  unit: number;
-  balance: number;
-}
+import {Asset} from 'react-native-image-picker';
 
 interface user {
   member_id: number;
@@ -21,10 +9,28 @@ interface user {
   is_pin: boolean;
 }
 
-interface UserState {
-  user: user;
-  sync_accounts: syncAccount[];
-  trip_accounts: tripAccount[];
+interface member {
+  member_id: number;
+  image_url: string;
+  nickname: string;
+  description: string;
+  gender: 'FEMALE' | 'MALE';
+  birth: string;
+  created_at: string;
+  username: string;
 }
 
-export type {UserState, syncAccount, tripAccount, user};
+interface putData {
+  imgConfig?: Asset;
+  nickname?: string;
+  description?: string;
+}
+
+interface UserState {
+  isLogin: boolean;
+  user: user;
+  member: member;
+  putData: putData;
+}
+
+export type {UserState, member, putData, user};

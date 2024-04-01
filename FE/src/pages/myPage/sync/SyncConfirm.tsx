@@ -1,16 +1,9 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  ToastAndroid,
-} from 'react-native';
+import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import useOneVerify, {OneVerifyData} from '../../../apis/account/useOneVerify';
+import {PostSyncAccountData} from '../../../apis/account/usePostSyncAccount';
 import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
@@ -23,7 +16,6 @@ import {
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {font_danger, font_lightgray} from '../../../constants/colors';
-import {RootStackParams} from '../../../interfaces/router/RootStackParams';
 import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
 import {
   AgainBtn,
@@ -37,7 +29,7 @@ import {
 } from './SyncConfirmStyle';
 
 const SyncConfirm = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParams>>();
+  const oneVerify = useOneVerify();
 
   // 입력 관리
   const [code, setCode] = useState('');
@@ -45,17 +37,20 @@ const SyncConfirm = () => {
     setCode(e.nativeEvent.text);
   };
 
-  // 라우팅
-  const {account_uuid, is_main} =
+  // API
+  const {selected} =
     useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>().params;
-  const confirmSender = () => {
-    // 1원 검증 API
-    const data = {account_uuid, is_main};
-    navigation.navigate('PinAuth', {
-      data,
-      api: () => navigation.navigate('SyncComplete'),
-    });
-    ToastAndroid.show('계좌 인증 성공!', ToastAndroid.LONG);
+  const pressConfirm = () => {
+    const data: OneVerifyData = {
+      account_uuid: selected.account_uuid,
+      code,
+    };
+    const pinData: PostSyncAccountData = {
+      pin_num: '',
+      is_main: 0,
+      account_uuid: selected.account_uuid,
+    };
+    oneVerify(data, pinData);
   };
 
   return (
@@ -102,7 +97,7 @@ const SyncConfirm = () => {
         style={BottomButton}
         text="확인"
         disabled={code.trim() === ''}
-        onPress={confirmSender}
+        onPress={pressConfirm}
       />
     </Wrapper>
   );

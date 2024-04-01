@@ -34,6 +34,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    /* WebSocket */
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.4'
     /* Database */
     implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'

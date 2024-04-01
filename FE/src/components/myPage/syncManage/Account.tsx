@@ -1,7 +1,7 @@
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
 import {bg_danger, bg_danger_lignt} from '../../../constants/colors';
-import {syncAccount} from '../../../interfaces/states/UserState';
+import {syncAccount} from '../../../interfaces/states/AccountState';
 import {
   BankInfoView,
   BankLogo,
@@ -24,7 +24,7 @@ const Account = ({account}: AccountProps) => {
   return (
     <Wrapper>
       <LeftView>
-        <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
+        <BankLogo source={imagePath.logobank} resizeMode="contain" />
         <BankInfoView>
           <TitleView>
             <TitleText>{account.name}</TitleText>

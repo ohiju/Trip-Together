@@ -1,5 +1,16 @@
 package com.ssafy.triptogether.plan.service;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ssafy.triptogether.attraction.domain.Region;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
@@ -15,6 +26,7 @@ import com.ssafy.triptogether.plan.data.request.PlanDetail;
 import com.ssafy.triptogether.plan.data.request.PlansSaveRequest;
 import com.ssafy.triptogether.plan.data.response.DailyPlanListResponse;
 import com.ssafy.triptogether.plan.data.response.DailyPlanResponse;
+import com.ssafy.triptogether.plan.data.response.DailyPlansResponse;
 import com.ssafy.triptogether.plan.data.response.PlanDetailFindResponse;
 import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.plan.domain.document.DailyPlan;
@@ -22,16 +34,8 @@ import com.ssafy.triptogether.plan.domain.document.DailyPlanAttraction;
 import com.ssafy.triptogether.plan.domain.document.DailyPlans;
 import com.ssafy.triptogether.plan.repository.DailyPlansRepository;
 import com.ssafy.triptogether.plan.repository.PlanRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.DAILY_PLAN_NOT_FOUND;
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.PLAN_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,8 +54,15 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     }
 
     @Override
-    public List<DailyPlanListResponse> findPlans(long memberId) {
-        return planRepository.findPlansByMemberId(memberId);
+    public DailyPlansResponse findPlans(long memberId) {
+        List<DailyPlanListResponse> list = planRepository.findPlansByMemberId(memberId);
+        LocalDate now = LocalDate.now();
+        // 현재 진행중 or 진행 할 플랜 아이디
+        Optional<Long> comingUpPlanId = list.stream().filter(plan -> plan.endAt().isAfter(now)).map(DailyPlanListResponse::planId).findFirst();
+        // 위의 아이디가 없다 (앞으로의 계획이 없다) -> 가장 최근의 지나간 플랜 아이디 --그마저도 없다-> null
+        return DailyPlansResponse.builder()
+            .comingUpPlanId(comingUpPlanId.orElse(list.size()==0?null:list.get(list.size()-1).planId()))
+            .plans(list).build();
     }
 
     /**
@@ -59,10 +70,11 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
      *
      * @param memberId         요청자의 member_id
      * @param plansSaveRequest 요청자의 여행 계획
+     * @return planId           저장된 plan의 id
      */
     @Transactional
     @Override
-    public void plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
+    public long plansSave(Long memberId, PlansSaveRequest plansSaveRequest) {
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
         Region startRegion = AttractionUtils.findByRegionId(regionRepository, plansSaveRequest.startRegionId());
 
@@ -75,7 +87,10 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
         }
 
         Plan plan = planSave(plansSaveRequest, startRegion, member);
-        planAttractionSave(plansSaveRequest.planDetails(), plan);
+        if (plansSaveRequest.planDetails() != null) {
+            planAttractionSave(plansSaveRequest.planDetails(), plan);
+        }
+        return plan.getId();
     }
 
     /**
@@ -184,7 +199,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
             DailyPlan dailyPlan = DailyPlan.builder()
                 .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
                 .dailyPlanAttractions(dailyPlanAttractions)
-                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .order(planDetail.order())
                 .build();
             dailyPlans.add(dailyPlan);
         });
@@ -223,7 +238,7 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
             DailyPlan dailyPlan = DailyPlan.builder()
                 .dailyEstimatedBudget(planDetail.dailyEstimatedBudget())
                 .dailyPlanAttractions(dailyPlanAttractions)
-                .date(plan.getStartAt().plusDays(dailyPlanIdx))
+                .order(planDetail.order())
                 .build();
             dailyPlans.add(dailyPlan);
         });
@@ -238,19 +253,23 @@ public class PlanServiceImpl implements PlanSaveService, PlanLoadService {
     @Override
     public PlanDetailFindResponse findPlanDetail(long planId) {
         // find daily plans & plan detail
-        DailyPlans dailyPlans = dailyPlansRepository.findByPlanId(planId)
-            .orElseThrow(() -> new NotFoundException("PlanDetailFind", DAILY_PLAN_NOT_FOUND));
+        Optional<DailyPlans> dailyPlans = dailyPlansRepository.findByPlanId(planId);
         DailyPlanResponse planDetail = planRepository.findDetailPlanById(planId)
             .orElseThrow(() -> new NotFoundException("PlanDetailFind", PLAN_NOT_FOUND));
 
         // set daily plans to plan detail & return
         return PlanDetailFindResponse.builder()
+            .planId(planDetail.planId())
+            .nation(planDetail.nation())
+            .startRegionId(planDetail.startRegionId())
             .startRegion(planDetail.startRegion())
+            .startRegionLatitude(planDetail.startRegionLatitude())
+            .startRegionLongitude(planDetail.startRegionLongitude())
             .startAt(planDetail.startAt())
             .endAt(planDetail.endAt())
             .title(planDetail.title())
             .totalEstimatedBudget(planDetail.totalEstimatedBudget())
-            .dailyPlans(dailyPlans.getDailyPlans())
+            .dailyPlans(dailyPlans.map(DailyPlans::getDailyPlans).orElse(null))
             .build();
     }
 }

@@ -1,59 +1,62 @@
-import React from 'react';
-import {FlatList} from 'react-native';
-import Places from '../../assets/data/place';
 import {
   NavigationProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {PlaceStackParams} from '../../interfaces/router/PlaceStackParams';
+import React from 'react';
+import {FlatList} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {
-  ItemContainer,
-  Thumbnail,
-  DetailsContainer,
-  StarContainer,
-  Name,
-  Address,
-  Rating,
-  Price,
-  ThumbnailContainer,
-  DetailsRow,
-  ButtonContainer,
-} from './PlaceInfoListStyle';
+import Places from '../../assets/data/place';
+import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
-import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
+import {TabParams} from '../../interfaces/router/TabParams';
+import {
+  Address,
+  ButtonContainer,
+  DetailsContainer,
+  DetailsRow,
+  ItemContainer,
+  Name,
+  Price,
+  Rating,
+  StarContainer,
+  Thumbnail,
+  ThumbnailContainer,
+} from './PlaceInfoListStyle';
+import {useAppSelector} from '../../store/hooks';
 
 interface RouteParams {
   theme?: string;
+  id?: any;
 }
 
 const PlaceInfoList = () => {
-  const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
+  const navigation = useNavigation<NavigationProp<TabParams>>();
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
+  const places = useAppSelector(state => state.trip.tripInfo.places);
 
-  const handlePress = () => {
+  const handlePress = (id: number) => {
     if (theme === 'trip') {
-      navigation.navigate('placedetail', {theme});
+      navigation.navigate('placedetail', {theme, id});
     } else if (theme === 'flashmob') {
       navigation.navigate('flashplace', {theme});
     }
   };
 
   const handlePressMake = () => {
-    navigation.navigate('makeflash');
+    navigation.navigate('FlashCreate');
   };
-
   const handlePressAllFlash = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList');
   };
 
   const renderItem = ({item}: any) => (
-    <ItemContainer onPress={handlePress}>
+    <ItemContainer onPress={() => handlePress(item.attraction_id)}>
       <ThumbnailContainer>
         <Thumbnail
-          source={require('../../assets/images/sagradafamilia.png')}
+          source={{uri: item.thumbnail_image_url}}
           resizeMode="contain"
         />
       </ThumbnailContainer>
@@ -91,7 +94,7 @@ const PlaceInfoList = () => {
 
   return (
     <FlatList
-      data={Places}
+      data={places}
       renderItem={renderItem}
       keyExtractor={item => item.attraction_id.toString()}
     />

@@ -1,10 +1,10 @@
 package com.ssafy.triptogether.flashmob.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
+import com.ssafy.triptogether.attraction.data.request.FlashmobUpdateRequest;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.global.domain.BaseEntity;
-import com.ssafy.triptogether.member.domain.MemberFlashMob;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

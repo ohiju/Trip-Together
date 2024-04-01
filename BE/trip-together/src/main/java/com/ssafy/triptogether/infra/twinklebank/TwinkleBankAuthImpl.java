@@ -81,7 +81,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 
 			return tokenMap;
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new ExternalServerException("getTwinkleBankToken", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	public void transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wontransfer")
 			.toUriString();
-		String accessToken = redisTemplate.opsForValue().get("refresh:" + memberUuid);
+		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
 
 		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
 		// if (accessToken == null){ // 만료되었거나, 발급받지 않았거나
@@ -100,7 +100,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		headers.set("Authorization", accessToken);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TwinkleBankTransfer1wonRequest> entity = new HttpEntity<>(twinkleBankTransfer1wonRequest, headers);
-
+		log.debug("transfer1won bank accesstoken " + headers.get("Authorization"));
 		try {
 			ResponseEntity<ApiResponse> response = restTemplate.exchange(
 				url,
@@ -109,7 +109,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new ExternalServerException("transfer1won", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new ExternalServerException("verify1won", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 

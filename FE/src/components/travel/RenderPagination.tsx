@@ -1,18 +1,19 @@
 import React from 'react';
-import {Modal, FlatList, TouchableWithoutFeedback} from 'react-native';
+import {FlatList, Modal, TouchableWithoutFeedback} from 'react-native';
+import {imagePath} from '../../assets/images/imagePath';
 import {
-  PaginationStyle,
-  PaginationContainer,
-  NavContainer,
-  PaginationText,
-  DownImage,
   CenteredView,
-  ModalView,
+  DownImage,
   Item,
   ItemText,
+  ModalView,
   NavButton,
+  NavContainer,
   NavText1,
   NavText2,
+  PaginationContainer,
+  PaginationStyle,
+  PaginationText,
 } from './RenderPaginationStyle';
 
 interface PaginationProps {
@@ -49,7 +50,7 @@ const RenderPagination = ({
       </NavContainer>
       <PaginationContainer onPress={() => setModalVisible(!modalVisible)}>
         <PaginationText>{currentPage + 1} 일차</PaginationText>
-        <DownImage source={require('../../assets/images/toggledown.png')} />
+        <DownImage source={imagePath.toggledown} />
       </PaginationContainer>
       <NavContainer>
         <NavButton onPress={handleFinishPress}>

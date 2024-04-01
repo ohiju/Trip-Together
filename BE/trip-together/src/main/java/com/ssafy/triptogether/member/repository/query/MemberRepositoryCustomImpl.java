@@ -2,7 +2,7 @@ package com.ssafy.triptogether.member.repository.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.triptogether.member.data.ProfileFindResponse;
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

@@ -1,12 +1,12 @@
 package com.ssafy.triptogether.plan.data.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 @Builder
 public record PlansSaveRequest(
@@ -16,11 +16,11 @@ public record PlansSaveRequest(
     LocalDate startAt,
     @NotNull @JsonProperty("end_at")
     LocalDate endAt,
-    @NotBlank @JsonProperty("title")
+    @NotNull @JsonProperty("title")
     String title,
-    @NotNull @JsonProperty("total_estimated_budget")
+    @JsonProperty("total_estimated_budget")
     Double estimatedBudget,
-    @NotNull @JsonProperty("daily_plans")
+    @JsonProperty("daily_plans")
     List<PlanDetail> planDetails
 ) {
 }

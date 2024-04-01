@@ -1,29 +1,34 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {Animated, StyleSheet, Platform, Easing, Dimensions} from 'react-native';
+import {Animated, Dimensions, Easing, Platform, StyleSheet} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {imagePath} from '../../assets/images/imagePath';
+import {RootState} from '../../store';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {addItemToBag, deleteItemFromBag} from '../../store/slices/bag';
 import {
-  DragBar,
+  addDailyPlan,
+  deleteDailyPlan,
+  setTotalBudget,
+} from '../../store/slices/trip';
+import {
+  Button,
   Container,
+  DragBar,
   FirstHalf,
-  SecondHalf,
-  List,
   Image,
   InfoContainer,
-  Name,
-  RatingContainer,
-  Rating,
-  Price,
+  List,
   Middle,
-  MiddleTitle,
   MiddlePrice,
+  MiddleTitle,
+  Name,
   PlaceImage,
-  Button,
+  Price,
+  Rating,
+  RatingContainer,
+  SecondHalf,
 } from './PlanDayStyle';
-import {RootState} from '../../store';
-import {useAppSelector} from '../../store/hooks';
-import {useAppDispatch} from '../../store/hooks';
-import {deleteItemFromBag, addItemToBag} from '../../store/slices/bag';
-import {addDailyPlan, deleteDailyPlan} from '../../store/slices/trip';
+import getCurrency from '../../hooks/getCurrency';
 
 const window = Dimensions.get('window');
 
@@ -83,16 +88,10 @@ function Row(props: any) {
 
   return (
     <Animated.View style={[styles.row, style]}>
-      <PlaceImage
-        source={require('../../assets/images/drag.png')}
-        resizeMode="cover"
-      />
-      <Image
-        source={require('../../assets/images/sagradafamilia.png')}
-        resizeMode="cover"
-      />
+      <PlaceImage source={imagePath.drag} resizeMode="cover" />
+      <Image source={{uri: data.thumbnail_image_url}} resizeMode="cover" />
       <InfoContainer>
-        <Name>{data.name}</Name>
+        <Name>{data.attraction_name}</Name>
         {/* <Address>{data.address}</Address> */}
         <RatingContainer>
           <Rating>{`${data.avg_rating}`}</Rating>
@@ -102,32 +101,20 @@ function Row(props: any) {
       </InfoContainer>
       {UporDown === 'up' ? (
         <Button onPress={() => onPressDown(data)}>
-          <PlaceImage
-            source={require('../../assets/images/godown.png')}
-            resizeMode="cover"
-          />
+          <PlaceImage source={imagePath.godown} resizeMode="cover" />
         </Button>
       ) : (
         <Button onPress={() => onPressUp(data)}>
-          <PlaceImage
-            source={require('../../assets/images/goup.png')}
-            resizeMode="cover"
-          />
+          <PlaceImage source={imagePath.goup} resizeMode="cover" />
         </Button>
       )}
       {UporDown === 'up' ? (
         <Button onPress={() => onPressTrash(data)}>
-          <PlaceImage
-            source={require('../../assets/images/trash.png')}
-            resizeMode="cover"
-          />
+          <PlaceImage source={imagePath.trash} resizeMode="cover" />
         </Button>
       ) : (
         <Button onPress={() => onPressTrash(data)}>
-          <PlaceImage
-            source={require('../../assets/images/trash.png')}
-            resizeMode="cover"
-          />
+          <PlaceImage source={imagePath.trash} resizeMode="cover" />
         </Button>
       )}
     </Animated.View>
@@ -150,6 +137,27 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
   const today = dailyPlan.order;
   const bottomList = useAppSelector((state: RootState) => state.bag.bagInfo);
   const dispatch = useAppDispatch();
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
+
+  const singleDayTotalPrice = topList.reduce((total, attraction) => {
+    return total + parseFloat(attraction.avg_price);
+  }, 0);
+
+  const allDaysTotalPrice = useAppSelector((state: RootState) => {
+    return state.trip.tripInfo.daily_plans.reduce((total, day) => {
+      const singleDayTotalPrice = day.attractions.reduce(
+        (dayTotal, attraction) => {
+          return dayTotal + parseFloat(attraction.avg_price);
+        },
+        0,
+      );
+      return total + singleDayTotalPrice;
+    }, 0);
+  });
+
+  useEffect(() => {
+    dispatch(setTotalBudget(allDaysTotalPrice));
+  }, [allDaysTotalPrice, dispatch]);
 
   const handleRowPress = useCallback((row, action) => {
     if (action === 'up') {
@@ -223,9 +231,15 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
       </FirstHalf>
       <Middle>
         <MiddleTitle>일 예산</MiddleTitle>
-        <MiddlePrice>₩123</MiddlePrice>
+        <MiddlePrice>
+          {getCurrency(nation)}
+          {singleDayTotalPrice}
+        </MiddlePrice>
         <MiddleTitle>총 예산</MiddleTitle>
-        <MiddlePrice>₩123</MiddlePrice>
+        <MiddlePrice>
+          {getCurrency(nation)}
+          {singleDayTotalPrice}
+        </MiddlePrice>
       </Middle>
       <SecondHalf>
         <List

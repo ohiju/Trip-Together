@@ -1,5 +1,8 @@
 package com.ssafy.triptogether.tripaccount.service;
 
+import com.ssafy.triptogether.attraction.domain.Attraction;
+import com.ssafy.triptogether.attraction.repository.AttractionRepository;
+import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
@@ -12,12 +15,17 @@ import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.tripaccount.concurrency.DistributedLock;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentReceiverDetail;
+import com.ssafy.triptogether.tripaccount.data.request.AccountHistorySaveRequest;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentSenderDetail;
 import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
+import com.ssafy.triptogether.tripaccount.data.request.TripAccountPaymentRequest;
 import com.ssafy.triptogether.tripaccount.data.response.*;
 import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
 import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
+import com.ssafy.triptogether.tripaccount.domain.Type;
 import com.ssafy.triptogether.tripaccount.repository.AccountHistoryRepository;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
@@ -42,6 +50,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	private final TripAccountRepository tripAccountRepository;
 	private final AccountHistoryRepository accountHistoryRepository;
 	private final MemberRepository memberRepository;
+	private final AttractionRepository attractionRepository;
 	// Client
 	private final CurrencyRateClient currencyRateClient;
 	private final TwinkleBankClient twinkleBankClient;
@@ -161,7 +170,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	@DistributedLock(key = "'exchange:' + #memberId + ':' + #tripAccountExchangeRequest.fromCurrencyCode()")
 	@Transactional
 	@Override
-	public void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
+	public AccountHistorySaveRequest tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
 		TripAccountExchangeRequest tripAccountExchangeRequest) {
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
@@ -178,7 +187,19 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.build();
 			tripAccountRepository.save(tripAccount);
 			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
-			return;
+			AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+				.paymentReceiverDetail(PaymentReceiverDetail.builder()
+					.tripAccount(tripAccount)
+					.type(Type.DEPOSIT)
+					.businessNum("19991224")
+					.businessName("Trip-Together")
+					.address("역삼동")
+					.quantity(tripAccountExchangeRequest.toQuantity())
+					.build()
+				)
+				.paymentSenderDetail(null)
+				.build();
+			return accountHistorySaveRequest;
 		}
 
 		Currency currency = getCurrency(tripAccountExchangeRequest.fromCurrencyCode());
@@ -188,6 +209,53 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
 		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentReceiverDetail(null)
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.tripAccount(tripAccount)
+				.type(Type.REFUND)
+				.businessNum("19991224")
+				.businessName("Trip-Together")
+				.address("역삼동")
+				.quantity(tripAccountExchangeRequest.fromQuantity())
+				.build())
+			.build();
+		return accountHistorySaveRequest;
+	}
+
+	/**
+	 * 바코드 결제
+	 * @param memberId 요청자 member_id
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param tripAccountPaymentRequest 결제 요청 정보
+	 */
+	@PinVerify
+	@DistributedLock(key = "'pay:' + #memberId + ':' + #tripAccountPaymentRequest.attractionBusinessNum()")
+	@Transactional
+	@Override
+	public AccountHistorySaveRequest tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
+		TripAccountPaymentRequest tripAccountPaymentRequest) {
+		Attraction attraction = AttractionUtils.findByBusinessNum(attractionRepository,
+			tripAccountPaymentRequest.attractionBusinessNum());
+		Currency currency = getCurrency(attraction.getRegion().getNation().getMessage());
+		TripAccount tripAccount = tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
+			.orElseThrow(
+				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
+			);
+		tripAccount.withdrawBalance(tripAccountPaymentRequest.quantity());
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.type(Type.WITHDRAW)
+				.address(attraction.getAddress())
+				.businessNum(attraction.getBusinessNum())
+				.businessName(attraction.getName())
+				.quantity(tripAccountPaymentRequest.quantity())
+				.tripAccount(tripAccount)
+				.build()
+			)
+			.paymentReceiverDetail(null)
+			.build();
+		return accountHistorySaveRequest;
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
@@ -204,8 +272,8 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
 			.type("deposit")
-			.address("멀티 캠퍼스")
-			.businessName("trip-together")
+			.address("역삼동")
+			.businessName("Trip-Together")
 			.build();
 		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
 	}
@@ -216,8 +284,8 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
 			.type("withdraw")
-			.address("멀티 캠퍼스")
-			.businessName("trip-together")
+			.address("역삼동")
+			.businessName("Trip-Together")
 			.build();
 		twinkleBankClient.bankAccountWithdraw(twinkleBankAccountExchangeRequest);
 	}

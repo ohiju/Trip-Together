@@ -36,8 +36,13 @@ public enum ErrorCode {
     // FLASHMOB
     UNDEFINED_FLASHMOB(404, "번개를 찾을 수 없습니다."),
     UNDEFINED_MEMBER_FLASHMOB(404, "사용자의 번개 참여내역을 찾을 수 없습니다."),
+    FLASHMOB_MEMBER_NOT_FOUND(404, "번개에 참여한 사용자를 찾을 수 없습니다."),
     MEMBER_NOT_MASTER(403, "방장이 아닙니다."),
     BAD_STATUS_REQUEST(400, "가능한 상태 입력이 아닙니다."),
+    FLASHMOB_MEMBER_FORBIDDEN(403, "해당 플래시몹의 구성원이 아닙니다"),
+    SETTLEMENT_MEMBER_NOT_FOUND(404, "사용자의 정산 내역을 찾을 수 없습니다"),
+    RECEIPT_NOT_FOUND(400, "영수증이 없습니다."),
+    SETTLEMENT_NOT_FOUND(400, "정산 요청을 찾을 수 없습니다."),
     // AUTH
     UNDEFINED_ACCESS_TOKEN(400, "ACCESS TOKEN 존재하지 않습니다."),
     UNDEFINED_REFRESH_TOKEN(400, "REFRESH TOKEN 존재하지 않습니다."),
