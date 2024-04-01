@@ -19,8 +19,8 @@ const ThumbnailContainer = styled.View`
 `;
 
 const Thumbnail = styled.Image`
-  width: 110px;
-  height: 110px;
+  width: 150px;
+  height: 150px;
   margin-right: 10px;
 `;
 

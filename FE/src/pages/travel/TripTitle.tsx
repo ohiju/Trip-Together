@@ -13,7 +13,7 @@ import {BottomButton} from '../../constants/AppButton';
 import DismissKeyboardView from '../../components/common/DismissKeyboardView';
 import {Alert, StyleSheet} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {setTripTitle} from '../../store/slices/trip';
+import {setPlanId, setTripTitle} from '../../store/slices/trip';
 import axios, {AxiosError} from 'axios';
 import {setPlaces} from '../../store/slices/trip';
 import getToken from '../../hooks/getToken';
@@ -22,7 +22,8 @@ const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
   const dispatch = useAppDispatch();
   const username = useAppSelector(state => state.user.user.username);
-  const [title, setTitle] = useState(`${username}님의 프랑스 여행 계획`);
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
+  const [title, setTitle] = useState(`${username}님의 ${nation} 여행 계획`);
   const trip = useAppSelector(state => state.trip.tripInfo);
   let finishPressSuccess = false;
 
@@ -67,11 +68,16 @@ const TripTitle = () => {
       daily_plans: trip.daily_plans,
     };
     try {
-      await axios.post(`https://j10a309.p.ssafy.io/api/plan/v1/plans`, data, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
+      const response = await axios.post(
+        `https://j10a309.p.ssafy.io/api/plan/v1/plans`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
         },
-      });
+      );
+      dispatch(setPlanId(response.data.data));
       finishPressSuccess = true;
     } catch (err) {
       const errorResponse = (err as AxiosError).response;
@@ -87,7 +93,7 @@ const TripTitle = () => {
       <Wrapper>
         <TitleContainer>
           <TitleInput
-            placeholder={`${username}님의 프랑스 여행 계획`}
+            placeholder={`${username}님의 ${nation} 여행 계획`}
             value={title}
             onChangeText={setTitle}
           />
