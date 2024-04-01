@@ -42,6 +42,18 @@ public class MemberSettlementRepositoryCustomImpl implements MemberSettlementRep
 	}
 
 	@Override
+	public Settlement settlementFindByRequesterIdAndSettlementId(long memberId, long settlementId) {
+		return Optional.ofNullable(queryFactory.select(settlement)
+				.from(requesterSettlement)
+				.where(requesterSettlement.settlement.id.eq(settlementId)
+					.and(requesterSettlement.member.id.eq(memberId)))
+				.fetchOne())
+			.orElseThrow(
+				() -> new NotFoundException("RequesterSettlementLoad", SETTLEMENT_MEMBER_NOT_FOUND)
+			);
+	}
+
+	@Override
 	public Member requesterFindBySettlementId(long settlementId) {
 		return queryFactory.select(member)
 			.from(requesterSettlement)

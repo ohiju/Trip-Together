@@ -253,6 +253,21 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		}
 	}
 
+	/**
+	 * 정산 요청 취소
+	 * @param memberId 요청자 memberId
+	 * @param flashmobId 플래시몹 flashmob_id
+	 * @param settlementId 정산 요청 settlement_id
+	 */
+	@FlashMobMemberVerify
+	@Transactional
+	@Override
+	public void settlementDelete(long memberId, long flashmobId, long settlementId) {
+		Settlement settlement = requesterSettlementRepository.settlementFindByRequesterIdAndSettlementId(memberId,
+			settlementId);
+		settlementRepository.delete(settlement);
+	}
+
 	private void makeReceipt(SettlementSaveAttendeesDetail attendeesDetail, MemberSettlement participantSettlement) {
 		List<ReceiptHistory> receiptHistories = attendeesDetail.receiptDetails()
 			.stream().map(attendeesReceiptDetail ->

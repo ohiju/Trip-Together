@@ -35,6 +35,7 @@ public enum StatusCode {
 	SUCCESS_RECEIPTS_LOAD(200, "영수증 목록 조회 완료"),
 	SUCCESS_ATTENDEES_STATUS_LOAD(200, "정산 현황 조회 완료"),
 	SUCCESS_SETTLEMENT_SEND(200, "정산 요청 송금 완료"),
+	SUCCESS_SETTLEMENT_DELETE(204, "정산 요청 취소 완료"),
 	// TRIP_ACCOUNT
 	SUCCESS_CURRENCY_LOAD(200, "환전 가능 통화 목록 조회 성공"),
 	SUCCESS_RATE_LOAD(200, "요청 통화 환율 조회 성공"),
