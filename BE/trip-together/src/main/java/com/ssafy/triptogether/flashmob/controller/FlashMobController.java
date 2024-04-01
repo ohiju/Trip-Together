@@ -156,4 +156,18 @@ public class FlashMobController {
             OK, SUCCESS_SETTLEMENT_SEND
         );
     }
+
+    @DeleteMapping("/flashmobs/{flashmob_id}/settlements/{settlement_id}")
+    public ResponseEntity<ApiResponse<Void>> settlementDelete(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        flashMobSaveService.settlementDelete(memberId, flashmobId, settlementId);
+
+        return ApiResponse.emptyResponse(
+            NO_CONTENT, SUCCESS_SETTLEMENT_DELETE
+        );
+    }
 }
