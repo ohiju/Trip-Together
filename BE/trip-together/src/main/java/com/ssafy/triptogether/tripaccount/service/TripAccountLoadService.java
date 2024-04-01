@@ -15,5 +15,5 @@ public interface TripAccountLoadService {
 
     TripAccountsLoadResponse tripAccountsLoad(long memberId);
 
-    Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable);
+    Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable, CurrencyCode currencyCode);
 }
