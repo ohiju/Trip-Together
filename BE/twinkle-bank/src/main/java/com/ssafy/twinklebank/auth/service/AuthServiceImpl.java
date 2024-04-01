@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private Application verifyClientAndRedirectUrl(CodeRequest request) {
 		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 		if (!application.getRedirectUrl().equals(request.redirectUrl())) {
-			throw new UnAuthorizedException("authController : ", WRONG_CLIENT_ID);
+			throw new UnAuthorizedException("authController : ", WRONG_REDIRECT_URL);
 		}
 		return application;
 	}

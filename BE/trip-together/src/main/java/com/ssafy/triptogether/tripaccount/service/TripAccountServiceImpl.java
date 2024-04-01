@@ -271,7 +271,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.toQuantity())
-			.type("deposit")
+			.type(Type.DEPOSIT)
 			.address("역삼동")
 			.businessName("Trip-Together")
 			.build();
@@ -283,7 +283,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.uuid(memberUuid)
 			.accountUuid(tripAccountExchangeRequest.accountUuid())
 			.price(tripAccountExchangeRequest.fromQuantity())
-			.type("withdraw")
+			.type(Type.WITHDRAW)
 			.address("역삼동")
 			.businessName("Trip-Together")
 			.build();
