@@ -34,4 +34,4 @@ rabbitmq:
   exchange:
     name: chat.exchange
   routing:
-    key: chat.routing.key
+    key: room.*

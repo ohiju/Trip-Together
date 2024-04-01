@@ -60,13 +60,11 @@ public class RabbitMqConfig {
 	/**
 	 * 주어진 큐와 익스체인지를 바인딩하고 라우팅 키를 사용하여 Binding 빈을 생성
 	 *
-	 * @param queue    바인딩할 Queue
-	 * @param exchange 바인딩할 TopicExchange
 	 * @return Binding 빈 객체
 	 */
 	@Bean
-	public Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+	public Binding binding() {
+		return BindingBuilder.bind(queue()).to(exchange()).with(routingKey);
 	}
 
 	/**
@@ -93,6 +91,7 @@ public class RabbitMqConfig {
 	public RabbitTemplate rabbitTemplate() {
 		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
 		rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+		rabbitTemplate.setRoutingKey(queueName);
 		return rabbitTemplate;
 	}
 
