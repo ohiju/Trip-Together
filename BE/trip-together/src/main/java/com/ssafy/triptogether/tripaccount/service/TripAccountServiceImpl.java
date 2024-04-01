@@ -118,12 +118,13 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 	 * 지갑 전체 거래 내역 조회
 	 * @param memberId 요청자의 member_id
 	 * @param pageable 페이징 기준
+	 * @param currencyCode 통화코드 쿼리
 	 * @return 페이징에 따른 거래 내역
 	 */
 	@Override
-	public Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable) {
+	public Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable, CurrencyCode currencyCode) {
 		Page<AccountHistory> accountHistories = accountHistoryRepository.findAccountHistoriesLoadDetailByMemberId(
-			memberId, pageable);
+			memberId, pageable, currencyCode);
 
 		List<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = accountHistories.getContent().stream()
 			.map(accountHistory -> AccountHistoriesLoadDetail.builder()
