@@ -84,6 +84,9 @@ const TravelNavigator = () => {
           component={PlaceInfoList}
           options={{
             title: '',
+            fullScreenGestureEnabled: true,
+            customAnimationOnGesture: true,
+            animation: 'slide_from_bottom',
           }}
         />
         <TravelStack.Screen

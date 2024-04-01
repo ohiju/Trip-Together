@@ -32,7 +32,7 @@ const FlashMobNavigator = () => {
           name="FlashPlaces"
           component={PlaceInfoList}
           options={{
-            title: '내 프로필',
+            title: '',
             fullScreenGestureEnabled: true,
             customAnimationOnGesture: true,
             animation: 'slide_from_bottom',
