@@ -80,7 +80,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         Account account = Account.builder()
             .member(member)
             .uuid(uuid)
-            .balance(500.0)
+            .balance(5000000.0)
             .name(accountSaveRequest.name())
             .accountNum(accountNum)
             .build();
