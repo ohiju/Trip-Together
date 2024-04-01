@@ -37,8 +37,9 @@ public class PinVerifyAspect {
         log.info("origin: {}", member.getPinNum());
         log.info("check: {}", encodedPinNum);
         log.info("result: {}", member.getPinNum().equals(encodedPinNum));
+        log.info("result: {}", passwordEncoder.matches(pinVerifyRequest.pinNum(), member.getPinNum()));
         // Todo: 일치하지 않는다면 예외 처리
-        if (!Objects.equals(member.getPinNum(), encodedPinNum)) {
+        if (!passwordEncoder.matches(pinVerifyRequest.pinNum(), member.getPinNum())) {
             throw new UnAuthorizedException("PinVerify", ErrorCode.PIN_NOT_AUTHENTICATED);
         }
     }
