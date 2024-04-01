@@ -19,4 +19,5 @@ public record AttractionListItemResponseWD(
 	String longitude,
 	String latitude,
 	Double distance
-) { }
+) {
+}

@@ -1,31 +1,42 @@
 package com.ssafy.triptogether.attraction.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ssafy.triptogether.attraction.data.request.FlashmobCreateRequest;
 import com.ssafy.triptogether.attraction.data.request.FlashmobUpdateRequest;
-import com.ssafy.triptogether.attraction.data.response.*;
+import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
+import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListFindResponse;
+import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListItemResponse;
+import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
+import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponseWD;
+import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
+import com.ssafy.triptogether.attraction.data.response.FlashmobListFindResponse;
+import com.ssafy.triptogether.attraction.data.response.FlashmobUpdateResponse;
+import com.ssafy.triptogether.attraction.data.response.RegionLoadDetail;
+import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.AttractionImage;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
 import com.ssafy.triptogether.attraction.repository.RegionRepository;
 import com.ssafy.triptogether.attraction.utils.AttractionUtils;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 import com.ssafy.triptogether.member.domain.Member;
-import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.member.domain.RoomStatus;
-import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.response.ReviewResponse;
 import com.ssafy.triptogether.review.repository.ReviewRepository;
 import com.ssafy.triptogether.review.utils.ReviewUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,8 +46,8 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 	private final ReviewRepository reviewRepository;
 	private final FlashMobRepository flashMobRepository;
 	private final RegionRepository regionRepository;
-    private final MemberRepository memberRepository;
-    private final MemberFlashMobRepository memberFlashMobRepository;
+	private final MemberRepository memberRepository;
+	private final MemberFlashMobRepository memberFlashMobRepository;
 
 	@Override
 	public AttractionDetailFindResponse findAttractionDetail(long attractionId) {
@@ -88,73 +99,74 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 			.build();
 	}
 
-    @Transactional
-    @Override
-    public FlashmobUpdateResponse updateFlashmob(long flashmobId, FlashmobUpdateRequest flashmobUpdateRequest) {
-        FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
-        flashMob.update(flashmobUpdateRequest);
-        return FlashmobUpdateResponse.builder().flashmobId(flashmobId).build();
-    }
+	@Transactional
+	@Override
+	public FlashmobUpdateResponse updateFlashmob(long flashmobId, FlashmobUpdateRequest flashmobUpdateRequest) {
+		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
+		flashMob.update(flashmobUpdateRequest);
+		return FlashmobUpdateResponse.builder().flashmobId(flashmobId).build();
+	}
 
-    // TODO: 채팅방(소켓) 생성
-    @Transactional
-    @Override
-    public long createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest) {
-        Attraction attraction = AttractionUtils.findByAttractionId(attractionRepository, attractionId);
-        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+	// TODO: 채팅방(소켓) 생성
+	@Transactional
+	@Override
+	public long createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest) {
+		Attraction attraction = AttractionUtils.findByAttractionId(attractionRepository, attractionId);
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
-        FlashMob flashMob = FlashMob.builder()
-            .attraction(attraction)
-            .title(flashmobCreateRequest.title())
-            .startAt(flashmobCreateRequest.startTime())
-            .maxMemberCount(flashmobCreateRequest.maxUsers())
-            .build();
-        flashMobRepository.save(flashMob);
+		FlashMob flashMob = FlashMob.builder()
+			.attraction(attraction)
+			.title(flashmobCreateRequest.title())
+			.startAt(flashmobCreateRequest.startTime())
+			.maxMemberCount(flashmobCreateRequest.maxUsers())
+			.build();
+		flashMobRepository.save(flashMob);
 
-        MemberFlashMob memberFlashMob = MemberFlashMob.builder()
-            .flashMob(flashMob)
-            .member(member)
-            .isMaster(true)
-            .roomStatus(RoomStatus.ATTEND)
-            .build();
-        memberFlashMobRepository.save(memberFlashMob);
+		MemberFlashMob memberFlashMob = MemberFlashMob.builder()
+			.flashMob(flashMob)
+			.member(member)
+			.isMaster(true)
+			.roomStatus(RoomStatus.ATTEND)
+			.build();
+		memberFlashMobRepository.save(memberFlashMob);
 
 		return flashMob.getId();
-    }
+	}
 
-    @Override
-    public List<AttractionListItemResponseWD> findAttractionsClick(
-        double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
-        double distance = new MysqlNativeSqlCreator().getDistance(
-            0,
-            0,
-            latitudeDelta/ 2,
-            longitudeDelta / 2
-        );
-        return attractionRepository.findAttractionClick(
-            latitude,
-            longitude,
-            distance,
-            category
-        );
-    }
+	@Override
+	public List<AttractionListItemResponseWD> findAttractionsClick(
+		double latitude, double longitude, double latitudeDelta, double longitudeDelta, String category) {
+		double distance = new MysqlNativeSqlCreator().getDistance(
+			0,
+			0,
+			latitudeDelta / 2,
+			longitudeDelta / 2
+		);
+		return attractionRepository.findAttractionClick(
+			latitude,
+			longitude,
+			distance,
+			category
+		);
+	}
 
-    @Override
-    public List<AttractionListItemResponse> findAttractionsSearch(
-        double latitude, double longitude, String keyword) {
-        return attractionRepository.findAttractionSearch(
-            latitude,
-            longitude,
-            keyword
-        );
-    }
+	@Override
+	public List<AttractionListItemResponse> findAttractionsSearch(
+		double latitude, double longitude, String keyword) {
+		return attractionRepository.findAttractionSearch(
+			latitude,
+			longitude,
+			keyword
+		);
+	}
 
 	@Override
 	public AttractionFlashmobListFindResponse findAttractionFlashmobList(
 		long memberId, double latitude, double longitude, double latitudeDelta, double longitudeDelta
 	) {
 		double distance = new MysqlNativeSqlCreator().getDistance(0, 0, latitudeDelta / 2, longitudeDelta / 2);
-		List<AttractionFlashmobListItemResponse> elements = attractionRepository.findAllAttractionFlashmobByConditions(latitude, longitude, distance);
+		List<AttractionFlashmobListItemResponse> elements = attractionRepository.findAllAttractionFlashmobByConditions(
+			latitude, longitude, distance);
 		return AttractionFlashmobListFindResponse.builder().elements(elements).build();
 	}
 }

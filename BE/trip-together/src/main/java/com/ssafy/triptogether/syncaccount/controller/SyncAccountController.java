@@ -1,5 +1,18 @@
 package com.ssafy.triptogether.syncaccount.controller;
 
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
@@ -17,15 +30,8 @@ import com.ssafy.triptogether.syncaccount.service.SyncAccountSaveService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import static com.ssafy.triptogether.global.data.response.StatusCode.*;
-
 @RestController
-@RequestMapping("/account/v1/sync-account")
+@RequestMapping("/api/account/v1/sync-account")
 @RequiredArgsConstructor
 public class SyncAccountController {
 	// Service

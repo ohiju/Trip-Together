@@ -1,11 +1,11 @@
 package com.ssafy.triptogether.syncaccount.repository.query;
 
-import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
-
 import java.util.List;
 
-public interface SyncAccountRepositoryCustom {
-    List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId);
+import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 
-    Boolean memberSyncAccountExist(long memberId);
+public interface SyncAccountRepositoryCustom {
+	List<SyncAccountsDetail> memberSyncAccountsLoad(long memberId);
+
+	Boolean memberSyncAccountExist(long memberId);
 }

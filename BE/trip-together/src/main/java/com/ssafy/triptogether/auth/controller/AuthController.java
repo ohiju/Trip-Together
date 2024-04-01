@@ -1,12 +1,5 @@
 package com.ssafy.triptogether.auth.controller;
 
-import com.ssafy.triptogether.auth.data.response.TokenResponse;
-import com.ssafy.triptogether.auth.service.AuthServiceImpl;
-import com.ssafy.triptogether.global.data.response.ApiResponse;
-
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.triptogether.auth.data.response.TokenResponse;
+import com.ssafy.triptogether.auth.service.AuthServiceImpl;
+import com.ssafy.triptogether.global.data.response.ApiResponse;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("/member/v1/auth")
+@RequestMapping("/api/member/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

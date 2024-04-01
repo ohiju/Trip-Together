@@ -1,5 +1,13 @@
 package com.ssafy.triptogether.flashmob.repository.query;
 
+import static com.querydsl.core.types.ExpressionUtils.*;
+import static com.ssafy.triptogether.attraction.domain.QAttraction.*;
+import static com.ssafy.triptogether.flashmob.domain.QFlashMob.*;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.*;
+import static com.ssafy.triptogether.member.domain.QMember.*;
+
+import java.util.List;
+
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
