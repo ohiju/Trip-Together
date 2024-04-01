@@ -4,7 +4,7 @@ import com.ssafy.twinklebank.account.data.request.*;
 import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
 
 public interface AccountSaveService {
-    void saveAccount(long memberId, AccountSaveRequest accountSaveRequest);
+    void saveAccount(AccountSaveRequest accountSaveRequest);
     AddAccountResponse addLinkedAccount(String clientId, AddAccountRequest addAccountRequest);
 
     void deleteLinkedAccount(String clientId, long memberId, AccountDeleteRequest accountDeleteRequest);
