@@ -145,7 +145,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         Member member = Member.builder()
             .username(twinkleMemberInfoResponse.name())
             .uuid(twinkleMemberInfoResponse.memberUuid())
-            .nickname("")
+            .nickname(twinkleMemberInfoResponse.name())
             .gender(twinkleMemberInfoResponse.gender())
             .birth(twinkleMemberInfoResponse.birth())
             .build();
