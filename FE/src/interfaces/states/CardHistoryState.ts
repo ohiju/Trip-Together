@@ -6,14 +6,15 @@ interface cardHistory {
   type: '충전' | '환불' | '출금';
   usage: string;
   quantity: number;
+  created_at: string;
   balance: number;
-  created_at: Date;
 }
 
 interface pageable {
   pageNumber: number;
   pageSize: number;
   last: boolean;
+  first: boolean;
 }
 
 interface CardHistoryState {

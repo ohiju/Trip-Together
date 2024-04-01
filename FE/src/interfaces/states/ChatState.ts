@@ -27,7 +27,6 @@ interface message {
 
 interface flashmobInfo {
   members: {member_id: number; image_url: string; nickname: string}[];
-  currency_code: string;
 }
 
 interface settlement {

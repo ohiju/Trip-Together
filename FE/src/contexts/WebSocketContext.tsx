@@ -18,19 +18,19 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
       const socket = new WebSocket(TRIP_WS_URL);
 
       socket.onopen = () => {
-        console.log('opened!');
+        console.log('onopen');
       };
 
       socket.onmessage = e => {
-        console.log(e.data);
+        console.log('onmessage', e.data);
       };
 
       socket.onerror = e => {
-        console.log(e.message);
+        console.log('onerror', e.message);
       };
 
       socket.onclose = e => {
-        console.log(e.code, e.reason);
+        console.log('onclose', e.code, e.reason);
       };
 
       setWebSocket(socket);
