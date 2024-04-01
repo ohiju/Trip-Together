@@ -32,4 +32,8 @@ public class ParticipantSettlement extends MemberSettlement {
 		this.hasSent = hasSent;
 		this.price = price;
 	}
+
+	public void settlementSend() {
+		this.hasSent = true;
+	}
 }

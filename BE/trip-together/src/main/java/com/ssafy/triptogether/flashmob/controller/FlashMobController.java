@@ -142,4 +142,18 @@ public class FlashMobController {
             OK, SUCCESS_ATTENDEES_STATUS_LOAD, attendeesStatusResponse
         );
     }
+
+    @PostMapping("/flashmobs/{flashmob_id}/settlemetns/{settlement_id}")
+    public ResponseEntity<ApiResponse<Void>> settlementSend(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId);
+
+        return ApiResponse.emptyResponse(
+            OK, SUCCESS_SETTLEMENT_SEND
+        );
+    }
 }

@@ -45,6 +45,17 @@ import com.ssafy.triptogether.member.domain.RoomStatus;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.utils.MemberFlashmobUtils;
 import com.ssafy.triptogether.member.utils.MemberUtils;
+import com.ssafy.triptogether.tripaccount.concurrency.DistributedLock;
+import com.ssafy.triptogether.tripaccount.data.request.AccountHistorySaveRequest;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentReceiverDetail;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentSenderDetail;
+import com.ssafy.triptogether.tripaccount.domain.Currency;
+import com.ssafy.triptogether.tripaccount.domain.TripAccount;
+import com.ssafy.triptogether.tripaccount.domain.Type;
+import com.ssafy.triptogether.tripaccount.provider.AccountHistoryProvider;
+import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
+import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
+import com.ssafy.triptogether.tripaccount.utils.TripAccountUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,7 +63,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @Service
 public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadService {
-
+	// Repository
 	private final FlashMobRepository flashMobRepository;
 	private final MemberFlashMobRepository memberFlashMobRepository;
 	private final MemberRepository memberRepository;
@@ -60,6 +71,10 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	private final RequesterSettlementRepository requesterSettlementRepository;
 	private final ParticipantSettlementRepository participantSettlementRepository;
 	private final ReceiptRepository receiptRepository;
+	private final TripAccountRepository tripAccountRepository;
+	private final CurrencyRepository currencyRepository;
+	// Provider
+	private final AccountHistoryProvider accountHistoryProvider;
 
 	@Transactional
 	@Override
@@ -181,6 +196,63 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			});
 	}
 
+	/**
+	 * 정산 요청 송금
+	 * @param memberId 송금자 member_id
+	 * @param flashmobId 플래시몹 flashmob_id
+	 * @param settlementId 정산 요청 settlement_id
+	 */
+	@FlashMobMemberVerify
+	@DistributedLock(key = "'settlement:' + #flashmobId + ':' + #settlementId")
+	@Transactional
+	@Override
+	public void settlementSend(long memberId, long flashmobId, long settlementId) {
+		Member participantMember = MemberUtils.findByMemberId(memberRepository, memberId);
+		Settlement settlement = settlementRepository.findById(settlementId)
+			.orElseThrow(
+				() -> new NotFoundException("SettlementSend", SETTLEMENT_NOT_FOUND)
+			);
+		Currency currency = TripAccountUtils.findByCurrencyCode(currencyRepository, settlement.getCurrencyCode());
+
+		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
+			memberId, settlementId);
+		TripAccount participantTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
+			memberId, currency.getId());
+		participantTripAccount.withdrawBalance(participantSettlement.getPrice());
+		participantSettlement.settlementSend();
+
+		Member requesterMember = requesterSettlementRepository.requesterFindBySettlementId(settlementId);
+		TripAccount requesterTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
+			requesterMember.getId(), settlementId);
+		requesterTripAccount.depositBalance(participantSettlement.getPrice());
+
+		PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
+			.tripAccount(requesterTripAccount)
+			.address("역삼동")
+			.businessName(participantMember.getNickname())
+			.businessNum(participantMember.getUuid())
+			.quantity(participantSettlement.getPrice())
+			.type(Type.DEPOSIT)
+			.build();
+		PaymentSenderDetail paymentSenderDetail = PaymentSenderDetail.builder()
+			.tripAccount(participantTripAccount)
+			.address("역삼동")
+			.businessName(requesterMember.getNickname())
+			.businessNum(requesterMember.getUuid())
+			.quantity(participantSettlement.getPrice())
+			.type(Type.WITHDRAW)
+			.build();
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentReceiverDetail(paymentReceiverDetail)
+			.paymentSenderDetail(paymentSenderDetail)
+			.build();
+		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+
+		if (participantSettlementRepository.checkSettlementIsDone(settlementId)) {
+			settlement.updateIsDone();
+		}
+	}
+
 	private void makeReceipt(SettlementSaveAttendeesDetail attendeesDetail, MemberSettlement participantSettlement) {
 		List<ReceiptHistory> receiptHistories = attendeesDetail.receiptDetails()
 			.stream().map(attendeesReceiptDetail ->
@@ -245,11 +317,9 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	@FlashMobMemberVerify
 	@Override
 	public AttendeeReceiptsResponse receiptsLoad(long memberId, long flashmobId, long settlementId) {
-		ParticipantSettlement participantSettlement = participantSettlementRepository.findByMemberIdAndSettlementId(memberId,
-				settlementId)
-			.orElseThrow(
-				() -> new NotFoundException("ReceiptsLoad", SETTLEMENT_MEMBER_NOT_FOUND)
-			);
+		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
+			memberId,
+			settlementId);
 		Receipt receipt = receiptRepository.findById(participantSettlement.getId())
 			.orElseThrow(
 				() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
