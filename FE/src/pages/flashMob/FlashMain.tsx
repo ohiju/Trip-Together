@@ -40,7 +40,7 @@ const FlashMain = () => {
     <Wrapper>
       <Container>
         {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
-        <PlaceInfo theme="flashmob" place={Places} />
+        <PlaceInfo theme="flashmob" place={Places[0]} />
       </Container>
     </Wrapper>
   );

@@ -22,6 +22,7 @@ interface ModifyProp {
   daily_plans: dailyplanProp[];
   start_region_latitude: string;
   start_region_longitude: string;
+  title: string;
 }
 
 interface CityResult {
@@ -152,12 +153,18 @@ export const tripSlice = createSlice({
       state.tripInfo.plan_id = action.payload.plan_id;
       state.tripInfo.start_region = action.payload.start_region_id;
       state.tripInfo.nation = action.payload.nation;
+      state.tripInfo.start_at = action.payload.start_at;
+      state.tripInfo.end_at = action.payload.end_at;
+      state.tripInfo.title = action.payload.title;
       state.tripInfo.start_latitude = action.payload.start_region_latitude;
       state.tripInfo.start_longitude = action.payload.start_region_longitude;
       state.tripInfo.daily_plans = action.payload.daily_plans;
     },
     resetTripInfo: state => {
       state.tripInfo = initialState.tripInfo;
+    },
+    setTotalBudget: (state, action: PayloadAction<number>) => {
+      state.tripInfo.total_estimated_budget = action.payload;
     },
   },
 });
@@ -173,6 +180,7 @@ export const {
   setPlanId,
   setModify,
   resetTripInfo,
+  setTotalBudget,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

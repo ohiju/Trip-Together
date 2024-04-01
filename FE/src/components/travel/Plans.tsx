@@ -35,6 +35,7 @@ import {setModify} from '../../store/slices/trip';
 import {useAppDispatch} from '../../store/hooks';
 import getToken from '../../hooks/getToken';
 import getFlag from '../../hooks/getFlag';
+import getCurrency from '../../hooks/getCurrency';
 
 interface plansDataProps {
   plan_id: number;
@@ -106,6 +107,7 @@ const Plans = () => {
           },
         },
       );
+      console.log(response.data.data);
       dispatch(setModify(response.data.data));
     } catch (error) {
       // console.error('Error fetching plans:', error);
@@ -119,8 +121,10 @@ const Plans = () => {
   const startDate = new Date(currentPlan?.start_at);
   const endDate = new Date(currentPlan?.end_at);
   const durationInDays =
-    Math.floor(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    Math.abs(
+      Math.floor(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+      ),
     ) + 1;
 
   const myDate = new Date();
@@ -175,7 +179,7 @@ const Plans = () => {
       </PlanCenter>
       <PlanMoney>
         <MoneyImage source={imagePath.profits} />
-        <MoneyUnit>₩</MoneyUnit>
+        <MoneyUnit>{getCurrency(currentPlan.nation)}</MoneyUnit>
         <MoneyText>
           {currentPlan.total_estimated_budget.toLocaleString()}
         </MoneyText>
