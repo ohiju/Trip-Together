@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/plan/v1/plans")
+@RequestMapping("/api/plan/v1/plans")
 @RequiredArgsConstructor
 public class PlanController {
 	private final PlanSaveService planSaveService;

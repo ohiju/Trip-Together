@@ -1,5 +1,7 @@
 package com.ssafy.triptogether.chat.service;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.triptogether.chat.data.ChatMessage;
@@ -13,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
 
-	private final FlashMobSaveService flashMobSaveService;
+	private final RabbitTemplate rabbitTemplate;
+
+	@Value("${rabbitmq.exchange.name}")
+	private String exchangeName;
 
 	@Override
 	public void handle(ChatMessage chatMessage) {
@@ -26,16 +31,18 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 		}
 	}
 
+	@Override
+	public void send(ChatMessage chatMessage) {
+		// TODO: 이 방이 맞는지, 이 멤버가 맞는지 검사
+		rabbitTemplate.convertAndSend(exchangeName, "room." + chatMessage.flashmobId(), chatMessage);
+	}
+
 	private void handleJoin(ChatMessage chatMessage) {
 		log.info("Join Message: {}", chatMessage.toString());
-		//TODO: sendAttendanceRequest API 대체하기
-		flashMobSaveService.sendAttendanceRequest(chatMessage.flashmobId(), chatMessage.senderId());
 	}
 
 	private void handleAttend(ChatMessage chatMessage) {
 		log.info("Attend Message: {}", chatMessage.toString());
-		// TODO: applyFlashmob API 대체하기
-		// flashMobSaveService.applyFlashmob(chatMessage.flashmobId(), chatMessage.senderId());
 	}
 
 	private void handleMessage(ChatMessage chatMessage) {
@@ -44,9 +51,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 	private void handleSettlement(ChatMessage chatMessage) {
 		log.info("Settlement Message: {}", chatMessage.toString());
-		// TODO: settlementSave API 대체하기
-		// flashMobSaveService.settlementSave(chatMessage.flashmobId(), chatMessage.senderId(), request);
 	}
 
-	// TODO: MessageType.Transfer 추가
 }

@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/account/v1/sync-account")
+@RequestMapping("/api/account/v1/sync-account")
 @RequiredArgsConstructor
 public class SyncAccountController {
 	// Service

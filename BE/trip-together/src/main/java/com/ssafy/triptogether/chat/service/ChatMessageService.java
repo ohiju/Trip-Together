@@ -4,4 +4,6 @@ import com.ssafy.triptogether.chat.data.ChatMessage;
 
 public interface ChatMessageService {
 	void handle(ChatMessage chatMessage);
+
+	void send(ChatMessage chatMessage);
 }

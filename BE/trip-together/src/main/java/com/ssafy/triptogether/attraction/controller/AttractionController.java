@@ -34,7 +34,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/attraction/v1")
+@RequestMapping("/api/attraction/v1")
 @RequiredArgsConstructor
 public class AttractionController {
 

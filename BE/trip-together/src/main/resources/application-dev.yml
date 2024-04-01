@@ -14,9 +14,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  mvc:
-    servlet:
-      path: /api
+#  mvc:
+#    servlet:
+#      path: /api
 
 EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
 jwt:

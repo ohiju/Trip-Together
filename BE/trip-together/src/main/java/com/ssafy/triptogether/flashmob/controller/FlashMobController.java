@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/flashmob/v1")
+@RequestMapping("/api/flashmob/v1")
 @RequiredArgsConstructor
 public class FlashMobController {
 

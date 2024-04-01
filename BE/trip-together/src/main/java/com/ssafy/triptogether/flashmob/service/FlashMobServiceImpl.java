@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
+import com.ssafy.triptogether.chat.util.ChatMessageUtil;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
@@ -54,6 +55,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	private final RequesterSettlementRepository requesterSettlementRepository;
 	private final ParticipantSettlementRepository participantSettlementRepository;
 	private final ReceiptRepository receiptRepository;
+	private final ChatMessageUtil chatMessageUtil;
 
 	@Transactional
 	@Override
@@ -74,6 +76,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 		// send chat message
 		// TODO: 해당 채팅방에 참가요청에 대한 채팅 메시지 전송
+		chatMessageUtil.sendJoinMsg(flashmobId, memberId, member.getNickname(), member.getImageUrl());
 	}
 
 	@Transactional
@@ -112,6 +115,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			flashmobId, memberId);
 		if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
 			memberFlashMob.applyAcceptance();
+			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(), memberFlashMob.getMember().getImageUrl());
 			return true; // 수락되었을 시에만 true 반환
 		} else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
 			memberFlashMob.applyDenial();
@@ -173,6 +177,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 				participantSettlementRepository.save(participantSettlement);
 				makeReceipt(attendeesDetail, participantSettlement);
 			});
+		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(), settlement.toString());
 	}
 
 	private void makeReceipt(SettlementSaveAttendeesDetail attendeesDetail, MemberSettlement participantSettlement) {

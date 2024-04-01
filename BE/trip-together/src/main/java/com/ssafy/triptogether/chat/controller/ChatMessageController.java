@@ -18,14 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class ChatMessageController {
 
-	private final RabbitTemplate rabbitTemplate;
 	private final ChatMessageService chatMessageService;
-	@Value("${rabbitmq.exchange.name}")
-	private String exchangeName;
 
-	@MessageMapping("chat.message.{flashmob_id}")
-	public void publish(ChatMessage chatMessage, @DestinationVariable("flashmob_id") long flashmobId) {
-		rabbitTemplate.convertAndSend(exchangeName, "room." + flashmobId, chatMessage);
+	@MessageMapping("chat.message")
+	public void publish(ChatMessage chatMessage) {
+		chatMessageService.send(chatMessage);
 	}
 
 	@RabbitListener(queues = "${rabbitmq.queue.name}")
