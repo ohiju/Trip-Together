@@ -22,7 +22,7 @@ public class KoreanWordProvider {
 	ClassPathResource resource = new ClassPathResource("koreanWords.xlsx");
 	private final KoreanCodeRepository repository;
 
-	@PostConstruct
+	// @PostConstruct
 	public void init() throws Exception {
 		try {
 			System.out.println("> file.encoding = " + System.getProperty("file.encoding"));
