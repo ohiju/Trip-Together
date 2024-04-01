@@ -60,4 +60,7 @@ public class Settlement extends BaseEntity {
         this.flashMob = flashMob;
         flashMob.getSettlements().add(this);
     }
+    public void updateIsDone() {
+        this.isDone = true;
+    }
 }
