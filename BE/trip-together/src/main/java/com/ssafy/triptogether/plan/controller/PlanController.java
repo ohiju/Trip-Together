@@ -29,8 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/plan/v1/plans")
 @RequiredArgsConstructor
 public class PlanController {
-	private final PlanSaveService planSaveService;
-	private final PlanLoadService planLoadService;
+    private final PlanSaveService planSaveService;
+    private final PlanLoadService planLoadService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<DailyPlansResponse>> findPlans(
@@ -42,15 +42,15 @@ public class PlanController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> plansSave(
+	public ResponseEntity<ApiResponse<Long>> plansSave(
 		@AuthenticationPrincipal SecurityMember securityMember,
 		@RequestBody @Valid PlansSaveRequest plansSaveRequest
 	) {
 		long memberId = securityMember.getId();
-		planSaveService.plansSave(memberId, plansSaveRequest);
+		long planId = planSaveService.plansSave(memberId, plansSaveRequest);
 
-		return ApiResponse.emptyResponse(CREATED, SUCCESS_PLANS_SAVE);
-	}
+		return ApiResponse.toResponseEntity(CREATED, SUCCESS_PLANS_SAVE, planId);
+    }
 
 	@DeleteMapping("/{plan_id}")
 	public ResponseEntity<ApiResponse<Void>> planDelete(
@@ -70,7 +70,7 @@ public class PlanController {
 	) {
 		long memberId = securityMember.getId();
 		planSaveService.planModify(memberId, planId, plansSaveRequest);
-		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_SAVE);
+		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_MODIFY);
 	}
 
 	@GetMapping("/{plan_id}")

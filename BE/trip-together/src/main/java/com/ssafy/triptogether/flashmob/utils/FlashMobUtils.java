@@ -7,8 +7,10 @@ import java.util.List;
 import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.domain.FlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
+import com.ssafy.triptogether.flashmob.repository.MemberSettlementRepository;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 
 import lombok.AccessLevel;
@@ -34,13 +36,4 @@ public class FlashMobUtils {
 				() -> new NotFoundException("FindByFlashMobIdAndMemberId", FLASHMOB_MEMBER_NOT_FOUND)
 			);
 	}
-
-	// public static MemberSettlement findByMemberIdAndSettlementId(RequesterSettlementRepository repository, long memberId,
-	// long settlementId) {
-	// return repository.findByMemberIdAndSettlementId(memberId, settlementId)
-	// 	.orElseThrow(
-	// 		() -> new NotFoundException("FindByMemberIdAndSettlementId", SETTLEMENT_MEMBER_NOT_FOUND)
-	// 	);
-	// 	return null;
-	// }
 }

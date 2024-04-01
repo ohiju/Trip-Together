@@ -61,6 +61,7 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 			.avgPrice(attraction.getAvgPrice())
 			.startAt(attraction.getStartAt())
 			.endAt(attraction.getEndAt())
+			.attractionThumbnailImageUrl(attraction.getThumbnailImageUrl())
 			.attractionImageUrls(attraction.getAttractionImages().stream().map(AttractionImage::getImageUrl).toList())
 			.attractionName(attraction.getName())
 			.attractionAddress(attraction.getAddress())

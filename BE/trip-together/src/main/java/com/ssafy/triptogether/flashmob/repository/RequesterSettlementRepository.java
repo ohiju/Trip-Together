@@ -1,7 +1,14 @@
 package com.ssafy.triptogether.flashmob.repository;
 
-import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
+import java.util.List;
 
-public interface RequesterSettlementRepository extends MemberSettlementRepository<RequesterSettlement> {
+import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
+import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
+import com.ssafy.triptogether.flashmob.repository.query.MemberSettlementRepositoryCustom;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RequesterSettlementRepository extends MemberSettlementRepository<RequesterSettlement>,
+	MemberSettlementRepositoryCustom {
 
 }

@@ -3,6 +3,7 @@ package com.ssafy.twinklebank.account.service;
 import com.ssafy.twinklebank.account.aop.DistributedLock;
 import com.ssafy.twinklebank.account.data.request.*;
 import com.ssafy.twinklebank.account.data.response.AccountResponse;
+import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
@@ -23,6 +24,7 @@ import com.ssafy.twinklebank.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 	private final MemberRepository memberRepository;
 	private final CodeProvider codeProvider;
 	private final StringRedisTemplate redisTemplate;
+    private final PasswordEncoder passwordEncoder;
 
 	private final long CODE_EXPIRE_TIME = 10 * 60 * 1000L; // 10분
 
@@ -63,9 +66,11 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     @Transactional
     @Override
-    public void saveAccount(long memberId, AccountSaveRequest accountSaveRequest) {
+    public void saveAccount(AccountSaveRequest accountSaveRequest) {
         // find member
-        Member member = MemberUtils.loadMemberById(memberRepository, memberId);
+        Member member = MemberUtils.loadMemberByUserNameAndPassword(
+            memberRepository, passwordEncoder, accountSaveRequest.username(), accountSaveRequest.password()
+        );
 
         // create uuid & account num
         String uuid = UUID.randomUUID().toString();
@@ -75,7 +80,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         Account account = Account.builder()
             .member(member)
             .uuid(uuid)
-            .balance(0.0)
+            .balance(5000000.0)
             .name(accountSaveRequest.name())
             .accountNum(accountNum)
             .build();
@@ -84,7 +89,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     @Transactional
     @Override
-    public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
+    public AddAccountResponse addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
         // Account Not Found
         Account account = findAccountByUuid(addAccountRequest.accountUuid());
 
@@ -96,7 +101,12 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
             .build();
 
         withdrawalAgreementRepository.save(withdrawalAgreement);
-    }
+		return AddAccountResponse.builder()
+			.accountName(account.getName())
+			.accountUuid(account.getUuid())
+			.accountNum(account.getAccountNum())
+			.build();
+	}
 
     @Transactional
     @Override
@@ -176,7 +186,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 			);
 
 		// 1원 인증 코드
-		String code = codeProvider.generateKoreanCode(4);
+		String code = codeProvider.generateKoreanCode(2);
 
 		DepositWithdrawRequest depositWithdrawRequest = DepositWithdrawRequest.builder()
 			.accountUuid(request.accountUuid())

@@ -39,9 +39,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private final StringRedisTemplate redisTemplate;
 	private final ApplicationRepository applicationRepository;
 	private final CodeProvider codeProvider;
-
-	// TODO: 인증 코드 유효시간 줄이기
-	private final long CODE_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 5분
+	private final long CODE_EXPIRE_TIME = 10 * 60 * 1000L; // 10분
 
 	public Map<String, String> getCode(CodeRequest request) {
 		// 	은행 서버는 등록된 `client_id`의 `redirect_url`가 맞는지 검증한다.
@@ -69,7 +67,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private Application verifyClientAndRedirectUrl(CodeRequest request) {
 		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 		if (!application.getRedirectUrl().equals(request.redirectUrl())) {
-			throw new UnAuthorizedException("authController : ", WRONG_CLIENT_ID);
+			throw new UnAuthorizedException("authController : ", WRONG_REDIRECT_URL);
 		}
 		return application;
 	}
@@ -88,18 +86,18 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 
 	public Map<String, String> getToken(String code, String clientId, String redirectUrl, TokenRequest request) {
 		// code가 맞는지 확인
-		String memberUuid = redisTemplate.opsForValue().get("memberUuid:"+code);
-		if (memberUuid == null){ // 맞는 코드가 없으면
+		String memberUuid = redisTemplate.opsForValue().get("memberUuid:" + code);
+		if (memberUuid == null) { // 맞는 코드가 없으면
 			throw new UnAuthorizedException("authServiceImpl : getToken ", UNAUTHORIZED_CODE);
 		}
 
 		// 은행인지 확인
 		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, clientId);
-		if (!redirectUrl.equals(application.getRedirectUrl())){
+		if (!redirectUrl.equals(application.getRedirectUrl())) {
 			throw new UnAuthorizedException("authServiceImpl : getToken ", WRONG_REDIRECT_URL);
 		}
 
-		if (!request.secretKey().equals(application.getSecretKey())){
+		if (!request.secretKey().equals(application.getSecretKey())) {
 			throw new UnAuthorizedException("authServiceImpl : getToken ", WRONG_SECRET_KEY);
 		}
 

@@ -4,14 +4,18 @@ import ToChat from '../components/flashMob/ChatButton';
 import {FlashMobStackParams} from '../interfaces/router/flashMob/FlashMobStackParams';
 import PlaceDetail from '../pages/common/PlaceDetail';
 import PlaceInfoList from '../pages/common/PlaceInfoList';
-import ChatMain from '../pages/flashMob/ChatMain';
-import ChatRoom from '../pages/flashMob/ChatRoom';
 import FlashCreate from '../pages/flashMob/FlashCreate';
 import FlashList from '../pages/flashMob/FlashList';
 import FlashMain from '../pages/flashMob/FlashMain';
-import MoneyGet from '../pages/flashMob/MoneyGet';
-import MoneyGive from '../pages/flashMob/MoneyGive';
-import MoneyList from '../pages/flashMob/MoneyList';
+import ChatMain from '../pages/flashMob/chat/ChatMain';
+import ChatRoom from '../pages/flashMob/chat/ChatRoom';
+import SelectHistory from '../pages/flashMob/settlement/SelectHistory';
+import SelectPeople from '../pages/flashMob/settlement/SelectPeople';
+import Settlement from '../pages/flashMob/settlement/Settlement';
+import SettlementConfirm from '../pages/flashMob/settlement/SettlementConfirm';
+import CurSitu from '../pages/flashMob/tranHistory/CurSitu';
+import Receipt from '../pages/flashMob/tranHistory/Receipt';
+import TranHistory from '../pages/flashMob/tranHistory/TranHistory';
 
 const FlashMobStack = createNativeStackNavigator<FlashMobStackParams>();
 
@@ -29,24 +33,37 @@ const FlashMobNavigator = () => {
         <FlashMobStack.Screen name="FlashCreate" component={FlashCreate} />
         <FlashMobStack.Screen name="FlashList" component={FlashList} />
       </FlashMobStack.Group>
+
       <FlashMobStack.Group
         screenOptions={{title: '채팅', headerTitleAlign: 'center'}}>
         <FlashMobStack.Screen name="ChatMain" component={ChatMain} />
         <FlashMobStack.Screen name="ChatRoom" component={ChatRoom} />
+      </FlashMobStack.Group>
+      <FlashMobStack.Group
+        screenOptions={{title: '정산하기', headerTitleAlign: 'center'}}>
+        <FlashMobStack.Screen name="Settlement" component={Settlement} />
+        <FlashMobStack.Screen name="SelectHistory" component={SelectHistory} />
+        <FlashMobStack.Screen name="SelectPeople" component={SelectPeople} />
         <FlashMobStack.Screen
-          name="Settlement"
-          component={MoneyGet}
-          options={{title: '정산'}}
+          name="SettlementConfirm"
+          component={SettlementConfirm}
+        />
+      </FlashMobStack.Group>
+      <FlashMobStack.Group screenOptions={{headerTitleAlign: 'center'}}>
+        <FlashMobStack.Screen
+          name="TranHistory"
+          component={TranHistory}
+          options={{title: '정산내역'}}
         />
         <FlashMobStack.Screen
-          name="Remittance"
-          component={MoneyGive}
-          options={{title: '송금'}}
+          name="Receipt"
+          component={Receipt}
+          options={{title: '영수증 보기'}}
         />
         <FlashMobStack.Screen
-          name="Transaction"
-          component={MoneyList}
-          options={{title: '내역'}}
+          name="CurSitu"
+          component={CurSitu}
+          options={{title: '정산현황'}}
         />
       </FlashMobStack.Group>
     </FlashMobStack.Navigator>

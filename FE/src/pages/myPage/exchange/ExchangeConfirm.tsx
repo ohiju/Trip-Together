@@ -33,8 +33,8 @@ const ExchangeConfirm = () => {
       account_uuid: account.account_uuid,
       to_currency_code: currency.currency_code,
       from_currency_code: kr_currency.currency_code,
-      to_quantity: parseInt(ammount, 10) * rate,
-      from_quantity: parseInt(ammount, 10),
+      to_quantity: parseInt(ammount, 10),
+      from_quantity: parseInt(ammount, 10) * rate,
     };
     const props: PinAuthProps = {
       pinData,

@@ -29,33 +29,47 @@ import {
   NavButton,
   NavigationButtons,
   ProfileImage,
-  ReviewContent,
   ReviewDetails,
   ReviewImage,
   ReviewItem,
-  ReviewRating,
-  ReviewWriter,
   ReviewsContainer,
   StarInfo,
   Title,
 } from './PlaceDetailStyle';
+import axios from 'axios';
+import getToken from '../../hooks/getToken';
 
 interface RouteParams {
   theme?: string;
+  id?: number;
+}
+
+interface AttractionProp {
+  attraction_name: string;
+  attraction_address: string;
+  attraction_id: number;
+  avg_price: number;
+  start_at: string;
+  end_at: string;
+  attraction_image_urls: string[];
+  latitude: string;
+  longitude: string;
+  reviews: string[];
+  thumbnail_image_url: string;
 }
 
 const AttractionDetailsPage = () => {
   const [show, setShow] = useState(true);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-
-  const attraction = PlaceDetail[0];
-  const attraction_id = PlaceDetail[0].attraction_id;
-  const PlaceBag = useAppSelector(state => state.bag.bagInfo);
-  const dispatch = useAppDispatch();
+  const [attraction, setAttraction] = useState<AttractionProp>(PlaceDetail[0]);
 
   const route = useRoute();
-  const {theme}: RouteParams = route.params || {};
+  const {theme, id}: RouteParams = route.params || {};
   const navigation = useNavigation<NavigationProp<PlaceStackParams>>();
+
+  const attraction_id = id;
+  const PlaceBag = useAppSelector(state => state.bag.bagInfo);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     PlaceBag.forEach(item => {
@@ -64,6 +78,28 @@ const AttractionDetailsPage = () => {
       }
     });
   }, [PlaceBag, attraction_id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const {access_token} = await getToken();
+
+      try {
+        const response = await axios.get(
+          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          },
+        );
+        setAttraction(response.data.data);
+      } catch (error) {
+        //
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const images = Array.from({length: 5}, (_, index) => ({
     id: index.toString(),
@@ -78,9 +114,9 @@ const AttractionDetailsPage = () => {
     <ReviewItem>
       <ProfileImage source={imagePath.profiledefault} />
       <ReviewDetails>
-        <ReviewWriter>{item.writer_nickname}</ReviewWriter>
+        {/* <ReviewWriter>{item.writer_nickname}</ReviewWriter>
         <ReviewRating>Rating: {item.rating}</ReviewRating>
-        <ReviewContent>{item.content}</ReviewContent>
+        <ReviewContent>{item.content}</ReviewContent> */}
       </ReviewDetails>
     </ReviewItem>
   );
@@ -101,26 +137,18 @@ const AttractionDetailsPage = () => {
     );
   };
 
-  const handleAddItem = () => {
-    const data = {
-      attraction_id: 14,
-      thumbnail_image_url: '',
-      name: 'La Sagrada Familia',
-      address: '',
-      avg_rating: 2.4,
-      avg_price: 123,
-    };
-    dispatch(addItemToBag(data));
+  const handleAddItem = (item: any) => {
+    dispatch(addItemToBag(item));
   };
 
   const keyExtractor = (item: any, index: number) => index.toString();
 
   const handlePressMake = () => {
-    navigation.navigate('makeflash');
+    navigation.navigate('FlashCreate', {id});
   };
 
   const handlePressAllFlash = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList', {id});
   };
 
   return (
@@ -129,19 +157,16 @@ const AttractionDetailsPage = () => {
       renderItem={({item}) => (
         <Container>
           <ImageBackground
-            source={imagePath.sagradafamilla}
+            source={{uri: item.thumbnail_image_url}}
             resizeMode="cover"
           />
           <HeadersContainer>
             <Header>
-              <Title>La Sagrada Familia</Title>
-              <Address>
-                {' '}
-                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
-              </Address>
+              <Title>{item.attraction_name}</Title>
+              <Address>{item.attraction_address}</Address>
             </Header>
             {theme === 'trip' && (
-              <Bag onPress={handleAddItem}>
+              <Bag onPress={() => handleAddItem(item)}>
                 {show ? (
                   <BagImage source={imagePath.shopping2} resizeMode="cover" />
                 ) : (
@@ -170,7 +195,7 @@ const AttractionDetailsPage = () => {
             <Title>정보</Title>
             <Line />
             <StarInfo>
-              <Info>평점: 4.9</Info>
+              <Info>평점: {4.9}</Info>
               <StarRatingDisplay rating={4.9} starSize={18} />
             </StarInfo>
             <Info>평균 가격: {item.avg_price}</Info>

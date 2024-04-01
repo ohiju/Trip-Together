@@ -38,12 +38,6 @@ public class MemberController {
 	private final ApplicationRepository applicationRepository;
 	private final CookieProvider cookieProvider;
 
-//	@PostMapping("/join")
-//	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody @Valid MemberJoinRequest request) {
-//		Map<String, String> memberResponse = memberSaveService.join(request);
-//		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_JOIN, memberResponse);
-//	}
-
 	@PostMapping("/logout")
 	public ResponseEntity<ApiResponse<Void>> logout(
 			@AuthenticationPrincipal SecurityMember securityMember,

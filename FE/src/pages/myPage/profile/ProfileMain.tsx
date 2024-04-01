@@ -1,9 +1,5 @@
-import {
-  NavigationProp,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
-import React from 'react';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import useGetMember from '../../../apis/member/useGetMember';
 import AppButton from '../../../components/common/AppButton';
 import HistoryButtons from '../../../components/myPage/profile/HistoryButtons';
@@ -13,11 +9,12 @@ import {profileEditButton} from '../../../constants/AppButton';
 import useSwipeBottom from '../../../hooks/useSwipeBottom';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {RootState} from '../../../store';
-import {useAppSelector} from '../../../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {ProfileView, Wrapper} from './ProfileMainStyle';
 
 const ProfileMain = () => {
   const getMember = useGetMember();
+  const dispatch = useAppDispatch();
   const {member_id} = useAppSelector((state: RootState) => state.user.user);
 
   // 라우팅
@@ -30,9 +27,10 @@ const ProfileMain = () => {
     navigation.navigate('ProfileEdit');
   };
 
-  useFocusEffect(() => {
+  // API
+  useEffect(() => {
     getMember({member_id});
-  });
+  }, []);
 
   return (
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>

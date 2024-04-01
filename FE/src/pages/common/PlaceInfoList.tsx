@@ -10,7 +10,6 @@ import Places from '../../assets/data/place';
 import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
-import {TabParams} from '../../interfaces/router/TabParams';
 import {
   Address,
   ButtonContainer,
@@ -24,35 +23,41 @@ import {
   Thumbnail,
   ThumbnailContainer,
 } from './PlaceInfoListStyle';
+import {useAppSelector} from '../../store/hooks';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
 
 interface RouteParams {
   theme?: string;
 }
 
 const PlaceInfoList = () => {
-  const navigation = useNavigation<NavigationProp<TabParams>>();
+  const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
+  const places = useAppSelector(state => state.trip.tripInfo.places);
 
-  const handlePress = () => {
+  const handlePress = (id: number) => {
     if (theme === 'trip') {
-      navigation.navigate('placedetail', {theme});
+      navigation.navigate('placedetail', {theme, id});
     } else if (theme === 'flashmob') {
-      navigation.navigate('flashplace', {theme});
+      navigation.navigate('FlashPlace', {theme, id});
     }
   };
 
-  const handlePressMake = () => {
-    navigation.navigate('FlashCreate');
+  const handlePressMake = (id: number) => {
+    navigation.navigate('FlashCreate', {id});
   };
-  const handlePressAllFlash = () => {
-    navigation.navigate('FlashList');
+  const handlePressAllFlash = (id: number) => {
+    navigation.navigate('FlashList', {id});
   };
 
   const renderItem = ({item}: any) => (
-    <ItemContainer onPress={handlePress}>
+    <ItemContainer onPress={() => handlePress(item.attraction_id)}>
       <ThumbnailContainer>
-        <Thumbnail source={imagePath.sagradafamilla} resizeMode="contain" />
+        <Thumbnail
+          source={{uri: item.thumbnail_image_url}}
+          resizeMode="contain"
+        />
       </ThumbnailContainer>
       <DetailsContainer>
         <Name>{item.name}</Name>
@@ -72,12 +77,12 @@ const PlaceInfoList = () => {
               <AppButton
                 text="모임 생성"
                 style={MakeFlashButton}
-                onPress={handlePressMake}
+                onPress={() => handlePressMake(item.attraction_id)}
               />
               <AppButton
                 text="모임 검색"
                 style={JoinFlashButton}
-                onPress={handlePressAllFlash}
+                onPress={() => handlePressAllFlash(item.attraction_id)}
               />
             </ButtonContainer>
           </DetailsRow>
@@ -88,7 +93,7 @@ const PlaceInfoList = () => {
 
   return (
     <FlatList
-      data={Places}
+      data={places}
       renderItem={renderItem}
       keyExtractor={item => item.attraction_id.toString()}
     />

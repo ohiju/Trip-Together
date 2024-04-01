@@ -74,11 +74,12 @@ public class TripAccountController {
 	@GetMapping("/account-histories")
 	public ResponseEntity<ApiResponse<Page<AccountHistoriesLoadDetail>>> accountHistoriesLoad(
 		@AuthenticationPrincipal SecurityMember securityMember,
-		Pageable pageable
+		Pageable pageable,
+		@RequestParam(required = false, name = "currency_code") CurrencyCode currencyCode
 	) {
 		long memberId = securityMember.getId();
 		Page<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = tripAccountLoadService.accountHistoriesLoad(
-			memberId, pageable);
+			memberId, pageable, currencyCode);
 
 		return ApiResponse.toResponseEntity(
 			HttpStatus.OK, StatusCode.SUCCESS_ACCOUNT_HISTORIES_LOAD, accountHistoriesLoadDetails

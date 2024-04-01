@@ -1,11 +1,10 @@
 import {
   NavigationProp,
   RouteProp,
-  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import useGetRate, {GetRateParams} from '../../../apis/account/useGetRate';
 import AppButton from '../../../components/common/AppButton';
@@ -43,12 +42,12 @@ const ExchangeInput = () => {
     navigation.navigate('ExchangeConfirm', {account, currency, ammount, rate});
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     const params: GetRateParams = {
       currency_code: currency.currency_code,
     };
     getRate(params);
-  });
+  }, []);
 
   return (
     <Wrapper>

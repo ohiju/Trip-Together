@@ -41,8 +41,8 @@ const PlaceImageView = styled.View`
 `;
 
 const PlaceImage = styled.Image`
-  width: 100%;
-  height: 100%;
+  width: 160px;
+  height: 160px;
 `;
 
 const PlaceInfoView = styled.View`
@@ -88,6 +88,7 @@ const ButtonContainer = styled.View`
 
 const ButtonView = styled.View`
   flex: 1;
+  flex-direction: row;
 `;
 
 const DetailsRow = styled.View`
