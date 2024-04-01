@@ -90,6 +90,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		memberFlashMob.checkDenial();
 	}
 
+	@Transactional
 	@Override
 	public void cancelFlashmob(long flashmobId, long memberId) {
 		// find member flashmob
