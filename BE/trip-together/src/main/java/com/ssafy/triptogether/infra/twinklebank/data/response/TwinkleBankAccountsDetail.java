@@ -12,6 +12,8 @@ public record TwinkleBankAccountsDetail(
     @JsonProperty("balance")
     Double balance,
     @JsonProperty("name")
-    String name
+    String name,
+    @JsonProperty("is_connected")
+    Boolean isConnected
 ) {
 }

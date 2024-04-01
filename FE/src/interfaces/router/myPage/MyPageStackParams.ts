@@ -11,8 +11,6 @@ interface MyPageStackParams
     SyncStackParams,
     ProfileStackParams {
   MyMain: undefined;
-  Pin: undefined;
-  Exchange: undefined;
   WalletManage: undefined;
   CardManage: undefined;
   SyncManage: undefined;

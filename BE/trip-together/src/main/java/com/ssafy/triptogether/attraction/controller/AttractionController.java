@@ -1,12 +1,8 @@
 package com.ssafy.triptogether.attraction.controller;
 
-import com.ssafy.triptogether.attraction.data.FlashmobCreateRequest;
-import com.ssafy.triptogether.attraction.data.FlashmobListFindResponse;
-import com.ssafy.triptogether.attraction.data.FlashmobUpdateRequest;
-import com.ssafy.triptogether.attraction.data.FlashmobUpdateResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
-import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
+import com.ssafy.triptogether.attraction.data.request.FlashmobCreateRequest;
+import com.ssafy.triptogether.attraction.data.request.FlashmobUpdateRequest;
+import com.ssafy.triptogether.attraction.data.response.*;
 import com.ssafy.triptogether.attraction.service.AttractionLoadService;
 import com.ssafy.triptogether.attraction.service.AttractionSaveService;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
@@ -41,14 +37,14 @@ public class AttractionController {
 
     // TODO: 제대로 된 값을 반환하는 지 데이터 생성 후 테스트
     @GetMapping("/attractions/click")
-    public ResponseEntity<ApiResponse<List<AttractionListItemResponse>>> getAttractionsClick (
+    public ResponseEntity<ApiResponse<List<AttractionListItemResponseWD>>> getAttractionsClick (
         @RequestParam double latitude,
         @RequestParam double longitude,
         @RequestParam("latitude_delta") double latitudeDelta,
         @RequestParam("longitude_delta") double longitudeDelta,
         @RequestParam String category
     ) {
-        List<AttractionListItemResponse> attractionListItemResponseList =
+        List<AttractionListItemResponseWD> attractionListItemResponseList =
             attractionLoadService.findAttractionsClick(
                 latitude,
                 longitude,
@@ -116,4 +112,17 @@ public class AttractionController {
 			OK, SUCCESS_REGIONS_LOAD, regionsLoadResponse
 		);
 	}
+
+    @GetMapping("/attractions/flashmobs")
+    public ResponseEntity<ApiResponse<AttractionFlashmobListFindResponse>> findAttractionFlashmobList(
+        @RequestParam double latitude,
+        @RequestParam double longitude,
+        @RequestParam("latitude_delta") double latitudeDelta,
+        @RequestParam("longitude_delta") double longitudeDelta,
+        @AuthenticationPrincipal SecurityMember securityMember
+    ) {
+        Long memberId = securityMember.getId();
+        AttractionFlashmobListFindResponse response = attractionLoadService.findAttractionFlashmobList(memberId, latitude, longitude, latitudeDelta, longitudeDelta);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_ATTRACTION_LIST_CLICK_FIND, response);
+    }
 }

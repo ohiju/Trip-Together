@@ -1,4 +1,9 @@
+import {SafeAreaView} from 'react-native';
 import styled from 'styled-components/native';
+
+const Wrapper = styled(SafeAreaView)`
+  flex: 1;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -11,4 +16,4 @@ const Container = styled.View`
   justify-content: flex-end;
 `;
 
-export {Container};
+export {Container, Wrapper};

@@ -1,8 +1,9 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import NotYet from '../assets/data/NotYet';
+import EditCompleteBtn from '../components/myPage/profile/EditCompleteBtn';
 import AddButton from '../components/myPage/syncManage/AddButton';
-import { MyPageStackParams } from '../interfaces/router/myPage/MyPageStackParams';
+import {MyPageStackParams} from '../interfaces/router/myPage/MyPageStackParams';
 import CardHistory from '../pages/myPage/CardHistory';
 import CardManage from '../pages/myPage/CardManage';
 import MyMain from '../pages/myPage/MyMain';
@@ -15,6 +16,7 @@ import ExchangeSelectSync from '../pages/myPage/exchange/ExchangeSelectSync';
 import PinConfirm from '../pages/myPage/pin/PinConfirm';
 import PinMain from '../pages/myPage/pin/PinMain';
 import PinRegist from '../pages/myPage/pin/PinRegist';
+import ProfileEdit from '../pages/myPage/profile/ProfileEdit';
 import ProfileMain from '../pages/myPage/profile/ProfileMain';
 import SyncComplete from '../pages/myPage/sync/SyncComplete';
 import SyncConfirm from '../pages/myPage/sync/SyncConfirm';
@@ -31,33 +33,28 @@ const MyPageNavigator = () => {
         component={MyMain}
         options={{title: '마이'}}
       />
-      <MyPageStack.Screen
-        name="WalletManage"
-        component={WalletManage}
-        options={{title: '내 지갑', headerTitleAlign: 'center'}}
-      />
-      <MyPageStack.Screen
-        name="CardManage"
-        component={CardManage}
-        options={{title: '내 카드', headerTitleAlign: 'center'}}
-      />
-      <MyPageStack.Screen
-        name="SyncManage"
-        component={SyncManage}
-        options={{
-          title: '연동 계좌 관리',
-          headerTitleAlign: 'center',
-          headerRight: AddButton,
-        }}
-      />
-      <MyPageStack.Screen
-        name="CardHistory"
-        component={CardHistory}
-        options={{
-          title: '이용 내역',
-          headerTitleAlign: 'center',
-        }}
-      />
+      <MyPageStack.Group screenOptions={{headerTitleAlign: 'center'}}>
+        <MyPageStack.Screen
+          name="WalletManage"
+          component={WalletManage}
+          options={{title: '내 지갑'}}
+        />
+        <MyPageStack.Screen
+          name="CardManage"
+          component={CardManage}
+          options={{title: '내 카드'}}
+        />
+        <MyPageStack.Screen
+          name="SyncManage"
+          component={SyncManage}
+          options={{title: '연동 계좌 관리', headerRight: AddButton}}
+        />
+        <MyPageStack.Screen
+          name="CardHistory"
+          component={CardHistory}
+          options={{title: '이용 내역'}}
+        />
+      </MyPageStack.Group>
       <MyPageStack.Group
         screenOptions={{title: '핀 등록', headerTitleAlign: 'center'}}>
         <MyPageStack.Screen name="PinMain" component={PinMain} />
@@ -69,7 +66,11 @@ const MyPageNavigator = () => {
         <MyPageStack.Screen name="SyncMain" component={SyncMain} />
         <MyPageStack.Screen name="SyncSelect" component={SyncSelect} />
         <MyPageStack.Screen name="SyncConfirm" component={SyncConfirm} />
-        <MyPageStack.Screen name="SyncComplete" component={SyncComplete} />
+        <MyPageStack.Screen
+          name="SyncComplete"
+          component={SyncComplete}
+          options={{headerLeft: () => null}}
+        />
       </MyPageStack.Group>
       <MyPageStack.Group
         screenOptions={{title: '환전 하기', headerTitleAlign: 'center'}}>
@@ -97,8 +98,8 @@ const MyPageNavigator = () => {
         />
         <MyPageStack.Screen
           name="ProfileEdit"
-          component={NotYet}
-          options={{title: '프로필 수정'}}
+          component={ProfileEdit}
+          options={{title: '프로필 수정', headerRight: EditCompleteBtn}}
         />
         <MyPageStack.Screen
           name="ProfileTrip"

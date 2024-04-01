@@ -1,12 +1,9 @@
 package com.ssafy.twinklebank.account.service;
 
 import com.ssafy.twinklebank.account.aop.DistributedLock;
-import com.ssafy.twinklebank.account.data.request.AccountDeleteRequest;
-import com.ssafy.twinklebank.account.data.request.Verify1wonRequest;
+import com.ssafy.twinklebank.account.data.request.*;
 import com.ssafy.twinklebank.account.data.response.AccountResponse;
-import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
-import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
-import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
@@ -21,15 +18,17 @@ import com.ssafy.twinklebank.auth.provider.CodeProvider;
 import com.ssafy.twinklebank.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.twinklebank.member.domain.Member;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
-
+import com.ssafy.twinklebank.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
@@ -65,7 +64,28 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     @Transactional
     @Override
-    public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
+    public void saveAccount(long memberId, AccountSaveRequest accountSaveRequest) {
+        // find member
+        Member member = MemberUtils.loadMemberById(memberRepository, memberId);
+
+        // create uuid & account num
+        String uuid = UUID.randomUUID().toString();
+        String accountNum = RandomStringUtils.randomNumeric(11);
+
+        // create account & save
+        Account account = Account.builder()
+            .member(member)
+            .uuid(uuid)
+            .balance(0.0)
+            .name(accountSaveRequest.name())
+            .accountNum(accountNum)
+            .build();
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    @Override
+    public AddAccountResponse addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
         // Account Not Found
         Account account = findAccountByUuid(addAccountRequest.accountUuid());
 
@@ -77,7 +97,12 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
             .build();
 
         withdrawalAgreementRepository.save(withdrawalAgreement);
-    }
+		return AddAccountResponse.builder()
+			.accountName(account.getName())
+			.accountUuid(account.getUuid())
+			.accountNum(account.getAccountNum())
+			.build();
+	}
 
     @Transactional
     @Override
@@ -157,7 +182,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 			);
 
 		// 1원 인증 코드
-		String code = codeProvider.generateKoreanCode(4);
+		String code = codeProvider.generateKoreanCode(2);
 
 		DepositWithdrawRequest depositWithdrawRequest = DepositWithdrawRequest.builder()
 			.accountUuid(request.accountUuid())

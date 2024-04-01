@@ -8,15 +8,12 @@ import com.ssafy.twinklebank.auth.provider.CookieProvider;
 import com.ssafy.twinklebank.auth.utils.SecurityMember;
 import com.ssafy.twinklebank.auth.utils.SecurityUtil;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
-import com.ssafy.twinklebank.global.data.response.StatusCode;
 import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.twinklebank.member.data.request.MemberJoinRequest;
 import com.ssafy.twinklebank.member.data.response.AuthInfoFindResponse;
 import com.ssafy.twinklebank.member.service.MemberLoadService;
 import com.ssafy.twinklebank.member.service.MemberSaveService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,12 +37,6 @@ public class MemberController {
 	private final MemberLoadService memberLoadService;
 	private final ApplicationRepository applicationRepository;
 	private final CookieProvider cookieProvider;
-
-	@PostMapping("/join")
-	public ResponseEntity<ApiResponse<Map<String, String>>> join(@RequestBody @Valid MemberJoinRequest request) {
-		Map<String, String> memberResponse = memberSaveService.join(request);
-		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_JOIN, memberResponse);
-	}
 
 	@PostMapping("/logout")
 	public ResponseEntity<ApiResponse<Void>> logout(

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Modal} from 'react-native';
+import {Modal, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
+import {imagePath} from '../../assets/images/imagePath';
 import QRScanner from './QRscanner';
 
 const Wrapper = styled(TouchableOpacity)`
@@ -23,7 +24,7 @@ const Camera: React.FC = () => {
   return (
     <>
       <Wrapper onPress={onPress}>
-        <Image source={require('../../assets/images/qrcode.png')} />
+        <Image source={imagePath.qrcode} />
       </Wrapper>
       <Modal
         animationType="slide"

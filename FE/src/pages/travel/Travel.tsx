@@ -8,6 +8,7 @@ import Plans from '../../components/travel/Plans';
 import Package from '../../components/travel/Package';
 import Icons from '../../components/travel/Icons';
 import {PAGES} from '../../assets/data/pages';
+import {ICONS} from '../../assets/data/icons';
 
 function Travel() {
   const screenWidth = Math.round(Dimensions.get('window').width);
@@ -20,7 +21,7 @@ function Travel() {
   return (
     <Wrapper>
       <Plans />
-      <Icons pages={PAGES} gap={25} offset={35} pageWidth={screenWidth - 51} />
+      <Icons pages={ICONS} gap={25} offset={35} pageWidth={screenWidth - 51} />
       <Package
         pages={PAGES}
         gap={15}

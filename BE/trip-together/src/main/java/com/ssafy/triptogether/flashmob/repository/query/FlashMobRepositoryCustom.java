@@ -1,6 +1,6 @@
 package com.ssafy.triptogether.flashmob.repository.query;
 
-import com.ssafy.triptogether.attraction.data.FlashmobElementFindResponse;
+import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 
 import java.util.List;

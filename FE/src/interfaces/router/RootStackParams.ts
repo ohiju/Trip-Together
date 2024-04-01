@@ -2,8 +2,8 @@ import {ParamListBase} from '@react-navigation/native';
 import {TabParams} from './TabParams';
 
 interface PinAuthProps {
-  api: ((data?: any) => Promise<void>) | ((data?: any) => void);
-  data: object;
+  pinData: object;
+  api: string;
 }
 
 interface RootStackParams extends ParamListBase, TabParams {
@@ -13,4 +13,4 @@ interface RootStackParams extends ParamListBase, TabParams {
   PinAuth: PinAuthProps;
 }
 
-export type {RootStackParams};
+export type {PinAuthProps, RootStackParams};

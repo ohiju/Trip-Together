@@ -1,16 +1,17 @@
 package com.ssafy.triptogether.plan.data.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Builder;
 
 @Builder
 public record PlanDetail(
-    @NotNull @JsonProperty("daily_estimated_budget")
+    @JsonProperty("daily_estimated_budget")
     Double dailyEstimatedBudget,
-    @NotNull @JsonProperty("attractions")
+    Integer order,
+    @JsonProperty("attractions")
     List<AttractionDetail> attractionDetails
 ) {
 }

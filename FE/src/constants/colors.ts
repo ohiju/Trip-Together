@@ -12,6 +12,8 @@ const bg_main = '#f0f0f0';
 const bg_lightgray = '#cdcdcd';
 const bg_danger = 'tomato';
 const bg_danger_lignt = '#ff444499';
+const bg_warning = '#FFBF00';
+const bg_navy = '#1C274C';
 
 // 폰트 컬러
 const font_light = '#ffffff';
@@ -25,6 +27,8 @@ export {
   bg_light,
   bg_lightgray,
   bg_main,
+  bg_navy,
+  bg_warning,
   dark,
   font_danger,
   font_dark,

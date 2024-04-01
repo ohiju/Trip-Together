@@ -1,25 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
-import MyLocationMap from '../../components/flashMob/MyLocationMap';
-import {Container} from './FlashMainStyle';
-import PlaceInfo from '../../components/common/PlaceInfo';
 import Geolocation from '@react-native-community/geolocation';
 import {useFocusEffect} from '@react-navigation/native';
-import {setDisplay} from '../../store/slices/tabState';
+import React, {useEffect, useState} from 'react';
+import Loading from '../../components/common/Loading';
+import PlaceInfo from '../../components/common/PlaceInfo';
+import MyLocationMap from '../../components/flashMob/MyLocationMap';
+import {position} from '../../interfaces/states/position';
 import {useAppDispatch} from '../../store/hooks';
+import {setDisplay} from '../../store/slices/tabState';
+import {Container, Wrapper} from './FlashMainStyle';
+import Places from '../../assets/data/place';
 
 const FlashMain = () => {
-  const [myPosition, setMyPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+  const [myPosition, setMyPosition] = useState<position | null>(null);
 
+  // 탭바
   const dispatch = useAppDispatch();
-
   useFocusEffect(() => {
     dispatch(setDisplay(true));
   });
 
+  // 맵 불러오기
   useEffect(() => {
     Geolocation.getCurrentPosition(
       (info: any) => {
@@ -37,12 +37,12 @@ const FlashMain = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <Wrapper>
       <Container>
         {myPosition ? <MyLocationMap center={myPosition} /> : <></>}
-        <PlaceInfo theme="flashmob" />
+        <PlaceInfo theme="flashmob" place={Places[0]} />
       </Container>
-    </SafeAreaView>
+    </Wrapper>
   );
 };
 

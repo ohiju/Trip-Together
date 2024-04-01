@@ -1,7 +1,9 @@
 import {ParamListBase} from '@react-navigation/native';
 
-interface ChatMainStackParams extends ParamListBase {
-  chatroom: undefined;
+interface ChatStackParams extends ParamListBase {
+  ChatMain: undefined;
+  ChatRoom: {flashmob_id: number};
+  TranHistory: undefined;
 }
 
-export type {ChatMainStackParams};
+export type {ChatStackParams};

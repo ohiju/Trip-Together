@@ -1,5 +1,5 @@
-import {bankAccount} from '../assets/data/bankAccount';
 import {currency} from '../constants/currencies';
+import {bankAccount} from '../interfaces/bankAccount';
 import {ExchangeDataResult} from '../interfaces/hooks/ExchangeData';
 
 const useExchangeData = () => {

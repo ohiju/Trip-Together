@@ -1,41 +1,38 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-// import {imagePath} from '../../assets/images/imagePath';
-// import {imageBaseUrl} from '../../constants/urls';
-import useSwipeTop from '../../hooks/useSwipeTop';
-import {MapStackParams} from '../../interfaces/router/MapStackParams';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
-// import {RootState} from '../../store';
-// import {useAppSelector} from '../../store/hooks';
+import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
+import useSwipeTop from '../../hooks/useSwipeTop';
+import AppButton from './AppButton';
 import {
+  Address,
+  ButtonContainer,
+  ButtonView,
   Description,
+  DetailsRow,
   DragBar,
-  PlaceName,
   PlaceBox,
   PlaceImage,
   PlaceImageView,
-  PlaceView,
-  StyledShadow,
   PlaceInfoView,
-  Address,
-  Wrapper,
+  PlaceName,
+  PlaceView,
   Price,
   Rating,
-  ButtonContainer,
-  DetailsRow,
+  Wrapper,
 } from './PlaceInfoStyle';
-import AppButton from './AppButton';
-import {MakeFlashButton, JoinFlashButton} from '../../constants/AppButton';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import {StyledShadow} from '../myPage/main/ProfileStyle';
 
-const PlaceInfo = ({theme}: {theme: string}) => {
+const PlaceInfo = ({theme, place}: any) => {
   const [rating] = useState(4.9);
-  // 라우팅
+
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const onSwipeTop = () => {
     if (theme === 'trip') {
       navigation.navigate('placeinfo', {theme});
     } else if (theme === 'flashmob') {
-      navigation.navigate('flashmobs', {theme});
+      navigation.navigate('FlashPlaces', {theme});
     }
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
@@ -43,7 +40,6 @@ const PlaceInfo = ({theme}: {theme: string}) => {
   const handlePressMake = () => {
     navigation.navigate('makeflash');
   };
-
   const handlePressAllFlash = () => {
     navigation.navigate('allflash');
   };
@@ -56,35 +52,37 @@ const PlaceInfo = ({theme}: {theme: string}) => {
           <PlaceView>
             <PlaceImageView>
               <PlaceImage
-                source={require('../../assets/images/sagradafamilia.png')}
+                source={{uri: place.thumbnail_image_url}}
                 resizeMode="contain"
               />
             </PlaceImageView>
             <PlaceInfoView>
-              <PlaceName>La Sagrada Familia</PlaceName>
-              <Address>
-                C/ de Mallorca, 401, L`Eixample, 08013 Barcelona'
-              </Address>
+              <PlaceName>{place.name}</PlaceName>
+              <Address>{place.address}</Address>
               {theme === 'trip' ? (
                 <Description>
-                  <Rating>{rating}</Rating>
-                  <StarRatingDisplay rating={rating} starSize={20} />
-                  <Price>₩123,398</Price>
+                  <Rating>{place.avg_rating}</Rating>
+                  <StarRatingDisplay rating={place.avg_rating} starSize={20} />
+                  <Price>{place.avg_price}</Price>
                 </Description>
               ) : (
                 <DetailsRow>
                   <Rating>평점: {rating}</Rating>
                   <ButtonContainer>
-                    <AppButton
-                      text="모임 생성"
-                      style={MakeFlashButton}
-                      onPress={handlePressMake}
-                    />
-                    <AppButton
-                      text="모임 검색"
-                      style={JoinFlashButton}
-                      onPress={handlePressAllFlash}
-                    />
+                    <ButtonView>
+                      <AppButton
+                        text="모임 생성"
+                        style={MakeFlashButton}
+                        onPress={handlePressMake}
+                      />
+                    </ButtonView>
+                    <ButtonView>
+                      <AppButton
+                        text="모임 검색"
+                        style={JoinFlashButton}
+                        onPress={handlePressAllFlash}
+                      />
+                    </ButtonView>
                   </ButtonContainer>
                 </DetailsRow>
               )}

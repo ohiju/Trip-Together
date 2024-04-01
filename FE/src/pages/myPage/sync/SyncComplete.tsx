@@ -1,5 +1,10 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import React from 'react';
+import {BackHandler} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
 import {iconPath} from '../../../assets/icons/iconPath';
 import {imagePath} from '../../../assets/images/imagePath';
@@ -32,6 +37,21 @@ const SyncComplete = () => {
   const handleToMain = () => {
     navigation.navigate('MyMain');
   };
+
+  // 뒤로가기 차단
+  useFocusEffect(() => {
+    const backAction = () => {
+      navigation.navigate('MyPage');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  });
 
   return (
     <Wrapper>
