@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.flashmob.controller;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
@@ -147,10 +148,11 @@ public class FlashMobController {
     public ResponseEntity<ApiResponse<Void>> settlementSend(
         @AuthenticationPrincipal SecurityMember securityMember,
         @PathVariable("flashmob_id") long flashmobId,
-        @PathVariable("settlement_id") long settlementId
+        @PathVariable("settlement_id") long settlementId,
+        @RequestBody @Valid PinVerifyRequest pinVerifyRequest
     ) {
         long memberId = securityMember.getId();
-        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId);
+        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId, pinVerifyRequest);
 
         return ApiResponse.emptyResponse(
             OK, SUCCESS_SETTLEMENT_SEND
