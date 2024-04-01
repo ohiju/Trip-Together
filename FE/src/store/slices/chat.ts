@@ -1,5 +1,11 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ChatState, flashmob} from '../../interfaces/states/ChatState';
+import {
+  ChatState,
+  flashmob,
+  receiptDetail,
+  settlementDetail,
+  settlements,
+} from '../../interfaces/states/ChatState';
 
 const initialState: ChatState = {
   flashmobs: [
@@ -139,6 +145,81 @@ const initialState: ChatState = {
     ],
     currency_code: 'GBP',
   },
+  settlements: {
+    requester_settlements: [
+      {
+        settlement_id: 0,
+        total_price: 70,
+        currency_code: 'GBP',
+        is_done: false,
+        receiver_id: 3,
+        receiver_nickname: 'KTaeGyu',
+        receiver_image_url: 'profileImg/sample.jpg',
+      },
+      {
+        settlement_id: 1,
+        total_price: 40,
+        currency_code: 'GBP',
+        is_done: true,
+        receiver_id: 3,
+        receiver_nickname: 'KTaeGyu',
+        receiver_image_url: 'profileImg/sample.jpg',
+      },
+    ],
+    participant_settlements: [
+      {
+        settlement_id: 2,
+        total_price: 70,
+        currency_code: 'GBP',
+        is_done: true,
+        receiver_id: 1,
+        receiver_nickname: 'OhHeeJuice',
+        receiver_image_url: '',
+      },
+      {
+        settlement_id: 3,
+        total_price: 40,
+        currency_code: 'GBP',
+        is_done: false,
+        receiver_id: 1,
+        receiver_nickname: 'OhHeeJuice',
+        receiver_image_url: '',
+      },
+    ],
+  },
+  receipt: {
+    price: 70,
+    receipts: [
+      {
+        business_name: 'Pork on Fire',
+        created_at: '2024-03-25T12:30:00Z',
+        price: 50,
+      },
+      {
+        business_name: 'Fish and Chips',
+        created_at: '2024-03-25T18:20:00Z',
+        price: 20,
+      },
+    ],
+  },
+  settlement: {
+    attendees: [
+      {
+        member_id: 3,
+        member_nickname: 'KTaeGyu',
+        member_image_url: 'profileImg/sample.jpg',
+        price: 35,
+        has_sent: true,
+      },
+      {
+        member_id: 0,
+        member_nickname: 'OhHeeJuice',
+        member_image_url: '',
+        price: 35,
+        has_sent: false,
+      },
+    ],
+  },
 };
 
 const chatSlice = createSlice({
@@ -148,8 +229,18 @@ const chatSlice = createSlice({
     setFlashMobs: (state, action: PayloadAction<flashmob[]>) => {
       state.flashmobs = action.payload;
     },
+    setSettlements: (state, action: PayloadAction<settlements>) => {
+      state.settlements = action.payload;
+    },
+    setReceipt: (state, action: PayloadAction<receiptDetail>) => {
+      state.receipt = action.payload;
+    },
+    setSettlement: (state, action: PayloadAction<settlementDetail>) => {
+      state.settlement = action.payload;
+    },
   },
 });
 
-export const {setFlashMobs} = chatSlice.actions;
+export const {setFlashMobs, setSettlements, setReceipt, setSettlement} =
+  chatSlice.actions;
 export default chatSlice.reducer;

@@ -10,19 +10,19 @@ interface currency {
 const currencies: currency[] = [
   {
     continent: 'Europe',
-    currency_code: 'EUR',
-    currency_code_kr: '유로',
-    nation: 'EU',
-    nation_kr: '유럽 연합',
-    unit: 8364,
-  },
-  {
-    continent: 'Europe',
     currency_code: 'GBP',
     currency_code_kr: '파운드 스털링',
     nation: 'UK',
     nation_kr: '영국',
     unit: 163,
+  },
+  {
+    continent: 'Europe',
+    currency_code: 'EUR',
+    currency_code_kr: '유로',
+    nation: 'EU',
+    nation_kr: '유럽 연합',
+    unit: 8364,
   },
   {
     continent: 'Asia',

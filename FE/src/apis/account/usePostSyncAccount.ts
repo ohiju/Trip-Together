@@ -37,6 +37,8 @@ const usePostSyncAccount = () => {
   };
 
   const postSyncAccount = async (data: PostSyncAccountData) => {
+    console.log(data);
+
     const result = await axios
       .request(await postSyncAccountConfig(data))
       .then((res: AxiosResponse<PostSyncAccountResponse>) => {

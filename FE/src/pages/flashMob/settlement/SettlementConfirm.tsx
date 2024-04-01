@@ -5,9 +5,9 @@ import usePostSettlement, {
   PostSettlementParams,
 } from '../../../apis/flashMob/usePostSettlement';
 import AppButton from '../../../components/common/AppButton';
+import Receipt from '../../../components/flashMob/settlement/Receipt';
 import {BottomButton} from '../../../constants/AppButton';
 import {SettlementStackParams} from '../../../interfaces/router/flashMob/SettlementStackParams';
-import Receipt from './Receipt';
 import {} from './SelectHistoryStyle';
 import {
   Receipts,

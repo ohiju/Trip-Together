@@ -18,7 +18,7 @@ const ChatMenus = () => {
     navigation.navigate('Settlement', {flashmob_id});
   };
   const handleToTranHistory = () => {
-    navigation.navigate('TranHistory');
+    navigation.navigate('TranHistory', {flashmob_id});
   };
 
   return (

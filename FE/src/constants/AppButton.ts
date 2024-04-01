@@ -6,6 +6,7 @@ import {
   primary,
   primary_light,
   secondary,
+  secondary_light,
 } from './colors';
 
 const defaultStyle = {
@@ -95,6 +96,19 @@ const profileEditButton: AppButtonStyle = {
   },
 };
 
+const remittanceButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    bg1: secondary,
+    bg2: secondary_light,
+    borderR: '10px',
+    padding: '15px 0',
+  },
+  font: {
+    size: '24px',
+  },
+};
+
 export {
   BottomButton,
   JoinFlashButton,
@@ -102,5 +116,6 @@ export {
   defaultStyle,
   myWalletButton,
   profileEditButton,
+  remittanceButton,
   socialLoginButton,
 };

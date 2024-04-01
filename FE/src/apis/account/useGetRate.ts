@@ -38,6 +38,8 @@ const useGetRate = () => {
   };
 
   const getRate = async (params: GetRateParams) => {
+    console.log(params);
+
     const result = await axios
       .request(await getRateConfig(params))
       .then((res: AxiosResponse<GetRateResponse>) => {

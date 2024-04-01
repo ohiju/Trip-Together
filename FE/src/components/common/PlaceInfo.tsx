@@ -38,10 +38,10 @@ const PlaceInfo = ({theme, place}: any) => {
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
 
   const handlePressMake = () => {
-    navigation.navigate('makeflash');
+    navigation.navigate('FlashCreate', {id: place.attraction_id});
   };
   const handlePressAllFlash = () => {
-    navigation.navigate('allflash');
+    navigation.navigate('FlashList', {id: place.attraction_id});
   };
 
   return (
