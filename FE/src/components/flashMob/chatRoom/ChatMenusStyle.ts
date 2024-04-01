@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import {bg_light, bg_lightgray, font_dark} from '../../../constants/colors';
+import {bg_light, bg_main, font_dark} from '../../../constants/colors';
 
 const Wrapper = styled.View`
   height: 294px;
-  background: ${bg_lightgray};
+  background: ${bg_main};
   flex-direction: row;
   align-items: flex-start;
 `;

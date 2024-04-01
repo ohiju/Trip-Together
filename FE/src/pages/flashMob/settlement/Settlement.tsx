@@ -1,5 +1,10 @@
 import {IMAGE_BASE_URL} from '@env';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
@@ -99,6 +104,8 @@ const Settlement = () => {
   };
 
   // 라우팅
+  const {flashmob_id} =
+    useRoute<RouteProp<SettlementStackParams, 'Settlement'>>().params;
   const navigation = useNavigation<NavigationProp<SettlementStackParams>>();
   const handleToNext = () => {
     if (!currency) return;
@@ -110,6 +117,7 @@ const Settlement = () => {
       };
     });
     const props: SelectHistoryProps = {
+      flashmob_id,
       order: parseInt(order, 10),
       currency,
       attendees,

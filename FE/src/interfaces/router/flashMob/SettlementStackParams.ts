@@ -14,6 +14,7 @@ interface attendee {
 }
 
 interface SelectHistoryProps {
+  flashmob_id: number;
   order: number;
   currency: currency;
   attendees: attendee[];
@@ -21,6 +22,7 @@ interface SelectHistoryProps {
 }
 
 interface SelectPeopleProps {
+  flashmob_id: number;
   order: number;
   currency: currency;
   attendees: attendee[];
@@ -30,13 +32,14 @@ interface SelectPeopleProps {
 }
 
 interface SettlementConfirmProps {
+  flashmob_id: number;
   currency: currency;
   total_price: number;
   attendees: attendee[];
 }
 
 interface SettlementStackParams extends ParamListBase {
-  Settlement: undefined;
+  Settlement: {flashmob_id: number};
   SelectHistory: SelectHistoryProps;
   SelectPeople: SelectPeopleProps;
   SettlementConfirm: SettlementConfirmProps;

@@ -47,7 +47,7 @@ const SelectHistory = () => {
   const cardHistory = useAppSelector(
     (state: RootState) => state.cardHistory.content,
   );
-  const {order, currency, attendees, total_price} =
+  const {flashmob_id, order, currency, attendees, total_price} =
     useRoute<RouteProp<SettlementStackParams, 'SelectHistory'>>().params;
   const filtered = filterByCurrency(cardHistory, currency);
   const groups = groupByDate(filtered);
@@ -96,13 +96,14 @@ const SelectHistory = () => {
         if (checked.includes(item.account_history_id)) {
           return {
             business_name: item.usage,
-            created_at: item.created_at.toISOString(),
+            created_at: item.created_at.toLocaleString('ko-KR'),
             price: item.quantity,
           };
         }
       })
       .filter(item => item !== undefined) as receipt[];
     const props: SelectPeopleProps = {
+      flashmob_id,
       order,
       currency,
       attendees,

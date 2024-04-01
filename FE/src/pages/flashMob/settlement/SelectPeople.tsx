@@ -45,8 +45,15 @@ import {
 
 const SelectPeople = () => {
   // 데이터
-  const {order, receipts, total, currency, attendees, total_price} =
-    useRoute<RouteProp<SettlementStackParams, 'SelectPeople'>>().params;
+  const {
+    flashmob_id,
+    order,
+    receipts,
+    total,
+    currency,
+    attendees,
+    total_price,
+  } = useRoute<RouteProp<SettlementStackParams, 'SelectPeople'>>().params;
   const unit = String.fromCharCode(currency.unit);
   const {members} = useAppSelector((state: RootState) => state.chat.flashmob);
   const attendeeIds = attendees.map(attendee => attendee.member_id);
@@ -151,6 +158,7 @@ const SelectPeople = () => {
     });
     if (order - 1 === 0) {
       const props: SettlementConfirmProps = {
+        flashmob_id,
         currency,
         total_price,
         attendees: newAttendees,
@@ -158,6 +166,7 @@ const SelectPeople = () => {
       navigation.navigate('SettlementConfirm', props);
     } else {
       const props: SelectHistoryProps = {
+        flashmob_id,
         order: order - 1,
         currency,
         attendees: newAttendees,
