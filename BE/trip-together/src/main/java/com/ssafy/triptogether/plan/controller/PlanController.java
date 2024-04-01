@@ -70,7 +70,7 @@ public class PlanController {
 	) {
 		long memberId = securityMember.getId();
 		planSaveService.planModify(memberId, planId, plansSaveRequest);
-		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_SAVE);
+		return ApiResponse.emptyResponse(OK, SUCCESS_PLANS_MODIFY);
 	}
 
 	@GetMapping("/{plan_id}")
