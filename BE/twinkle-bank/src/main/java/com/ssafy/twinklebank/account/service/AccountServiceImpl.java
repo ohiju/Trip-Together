@@ -157,7 +157,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 			);
 
 		// 1원 인증 코드
-		String code = codeProvider.generateKoreanCode(4);
+		String code = codeProvider.generateKoreanCode(2);
 
 		DepositWithdrawRequest depositWithdrawRequest = DepositWithdrawRequest.builder()
 			.accountUuid(request.accountUuid())
