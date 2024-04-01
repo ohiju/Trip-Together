@@ -28,7 +28,7 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
 				application.clientId.eq(clientId)))
 			.from(account)
 			.leftJoin(withdrawalAgreement).on(withdrawalAgreement.account.id.eq(account.id))
-			.innerJoin(application).on(application.id.eq(withdrawalAgreement.application.id))
+			.leftJoin(application).on(application.id.eq(withdrawalAgreement.application.id))
 			.innerJoin(member).on(member.id.eq(account.member.id))
 			.where(member.id.eq(memberId))
 			.fetch();

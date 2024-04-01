@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
 
-public record AccountResponse(
+@Builder
+public record AddAccountResponse(
 	@JsonProperty("account_uuid") String accountUuid,
 	@JsonProperty("account_num") String accountNum,
-	double balance,
-	String name,
-	@JsonProperty("is_connected") boolean isConnected
+	@JsonProperty("account_name") String accountName
 ) {
 }

@@ -6,6 +6,7 @@ import com.ssafy.twinklebank.account.data.response.AccountResponse;
 import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
 import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
 import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
+import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
 import com.ssafy.twinklebank.account.data.response.getUserAccountsResponse;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
@@ -53,12 +54,12 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> addLinkedAccount(
+    public ResponseEntity<ApiResponse<AddAccountResponse>> addLinkedAccount(
         @RequestBody @Valid AddAccountRequest addAccountRequest,
         @RequestParam("client_id") String clientId
     ) {
-        accountSaveService.addLinkedAccount(clientId, addAccountRequest);
-        return ApiResponse.emptyResponse(CREATED, CREATED_LINKED_ACCOUNT);
+        AddAccountResponse addAccountResponse = accountSaveService.addLinkedAccount(clientId, addAccountRequest);
+        return ApiResponse.toResponseEntity(CREATED, CREATED_LINKED_ACCOUNT, addAccountResponse);
     }
 
     @DeleteMapping

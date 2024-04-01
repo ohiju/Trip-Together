@@ -52,7 +52,7 @@ const PlanDetail = () => {
           },
         },
       );
-      dispatch(resetTripInfo());
+      // dispatch(resetTripInfo());
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {

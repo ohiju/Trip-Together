@@ -22,6 +22,7 @@ import {
   Wrapper,
 } from './PlaceInfoStyle';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import {StyledShadow} from '../myPage/main/ProfileStyle';
 
 const PlaceInfo = ({theme, place}: any) => {
   const [rating] = useState(4.9);
@@ -45,46 +46,50 @@ const PlaceInfo = ({theme, place}: any) => {
 
   return (
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <PlaceBox>
-        <DragBar />
-        <PlaceView>
-          <PlaceImageView>
-            <PlaceImage
-              source={require('../../assets/images/sagradafamilia.png')}
-              resizeMode="contain"
-            />
-          </PlaceImageView>
-          <PlaceInfoView>
-            <PlaceName>{place.name}</PlaceName>
-            <Address>{place.address}</Address>
-            {theme === 'trip' ? (
-              <Description>
-                <Rating>{place.avg_rating}</Rating>
-                <StarRatingDisplay rating={place.avg_rating} starSize={20} />
-                <Price>{place.avg_price}</Price>
-              </Description>
-            ) : (
-              <DetailsRow>
-                <Rating>평점: {rating}</Rating>
-                <ButtonContainer>
-                  <AppButton
-                    text="모임 생성"
-                    style={MakeFlashButton}
-                    onPress={handlePressMake}
-                  />
-                  <ButtonView>
-                    <AppButton
-                      text="모임 검색"
-                      style={JoinFlashButton}
-                      onPress={handlePressAllFlash}
-                    />
-                  </ButtonView>
-                </ButtonContainer>
-              </DetailsRow>
-            )}
-          </PlaceInfoView>
-        </PlaceView>
-      </PlaceBox>
+      <StyledShadow offset={[0, 1]}>
+        <PlaceBox>
+          <DragBar />
+          <PlaceView>
+            <PlaceImageView>
+              <PlaceImage
+                source={{uri: place.thumbnail_image_url}}
+                resizeMode="contain"
+              />
+            </PlaceImageView>
+            <PlaceInfoView>
+              <PlaceName>{place.name}</PlaceName>
+              <Address>{place.address}</Address>
+              {theme === 'trip' ? (
+                <Description>
+                  <Rating>{place.avg_rating}</Rating>
+                  <StarRatingDisplay rating={place.avg_rating} starSize={20} />
+                  <Price>{place.avg_price}</Price>
+                </Description>
+              ) : (
+                <DetailsRow>
+                  <Rating>평점: {rating}</Rating>
+                  <ButtonContainer>
+                    <ButtonView>
+                      <AppButton
+                        text="모임 생성"
+                        style={MakeFlashButton}
+                        onPress={handlePressMake}
+                      />
+                    </ButtonView>
+                    <ButtonView>
+                      <AppButton
+                        text="모임 검색"
+                        style={JoinFlashButton}
+                        onPress={handlePressAllFlash}
+                      />
+                    </ButtonView>
+                  </ButtonContainer>
+                </DetailsRow>
+              )}
+            </PlaceInfoView>
+          </PlaceView>
+        </PlaceBox>
+      </StyledShadow>
     </Wrapper>
   );
 };

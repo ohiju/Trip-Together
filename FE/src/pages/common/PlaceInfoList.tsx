@@ -55,7 +55,10 @@ const PlaceInfoList = () => {
   const renderItem = ({item}: any) => (
     <ItemContainer onPress={() => handlePress(item.attraction_id)}>
       <ThumbnailContainer>
-        <Thumbnail source={imagePath.sagradafamilla} resizeMode="contain" />
+        <Thumbnail
+          source={{uri: item.thumbnail_image_url}}
+          resizeMode="contain"
+        />
       </ThumbnailContainer>
       <DetailsContainer>
         <Name>{item.name}</Name>

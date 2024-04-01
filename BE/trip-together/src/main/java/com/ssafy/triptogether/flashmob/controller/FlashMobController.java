@@ -1,5 +1,6 @@
 package com.ssafy.triptogether.flashmob.controller;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
@@ -140,6 +141,35 @@ public class FlashMobController {
 
         return ApiResponse.toResponseEntity(
             OK, SUCCESS_ATTENDEES_STATUS_LOAD, attendeesStatusResponse
+        );
+    }
+
+    @PostMapping("/flashmobs/{flashmob_id}/settlemetns/{settlement_id}")
+    public ResponseEntity<ApiResponse<Void>> settlementSend(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId,
+        @RequestBody @Valid PinVerifyRequest pinVerifyRequest
+    ) {
+        long memberId = securityMember.getId();
+        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId, pinVerifyRequest);
+
+        return ApiResponse.emptyResponse(
+            OK, SUCCESS_SETTLEMENT_SEND
+        );
+    }
+
+    @DeleteMapping("/flashmobs/{flashmob_id}/settlements/{settlement_id}")
+    public ResponseEntity<ApiResponse<Void>> settlementDelete(
+        @AuthenticationPrincipal SecurityMember securityMember,
+        @PathVariable("flashmob_id") long flashmobId,
+        @PathVariable("settlement_id") long settlementId
+    ) {
+        long memberId = securityMember.getId();
+        flashMobSaveService.settlementDelete(memberId, flashmobId, settlementId);
+
+        return ApiResponse.emptyResponse(
+            NO_CONTENT, SUCCESS_SETTLEMENT_DELETE
         );
     }
 }

@@ -103,8 +103,11 @@ const AllTrip = () => {
   const calculateDday = (startAt: string, endAt: string) => {
     const startDate = new Date(startAt);
     const endDate = new Date(endAt);
-    const diffTime = endDate.getTime() - startDate.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const myDate = new Date();
+
+    const diffDays = Math.floor(
+      (startDate.getTime() - myDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
     return diffDays;
   };
 

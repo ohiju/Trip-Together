@@ -3,6 +3,7 @@ package com.ssafy.twinklebank.account.service;
 import com.ssafy.twinklebank.account.aop.DistributedLock;
 import com.ssafy.twinklebank.account.data.request.*;
 import com.ssafy.twinklebank.account.data.response.AccountResponse;
+import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
 import com.ssafy.twinklebank.account.domain.Account;
 import com.ssafy.twinklebank.account.domain.AccountHistory;
 import com.ssafy.twinklebank.account.domain.Type;
@@ -84,7 +85,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     @Transactional
     @Override
-    public void addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
+    public AddAccountResponse addLinkedAccount(String clientId, AddAccountRequest addAccountRequest) {
         // Account Not Found
         Account account = findAccountByUuid(addAccountRequest.accountUuid());
 
@@ -96,7 +97,12 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
             .build();
 
         withdrawalAgreementRepository.save(withdrawalAgreement);
-    }
+		return AddAccountResponse.builder()
+			.accountName(account.getName())
+			.accountUuid(account.getUuid())
+			.accountNum(account.getAccountNum())
+			.build();
+	}
 
     @Transactional
     @Override
@@ -176,7 +182,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 			);
 
 		// 1원 인증 코드
-		String code = codeProvider.generateKoreanCode(4);
+		String code = codeProvider.generateKoreanCode(2);
 
 		DepositWithdrawRequest depositWithdrawRequest = DepositWithdrawRequest.builder()
 			.accountUuid(request.accountUuid())

@@ -55,6 +55,7 @@ interface AttractionProp {
   latitude: string;
   longitude: string;
   reviews: string[];
+  thumbnail_image_url: string;
 }
 
 const AttractionDetailsPage = () => {
@@ -156,7 +157,7 @@ const AttractionDetailsPage = () => {
       renderItem={({item}) => (
         <Container>
           <ImageBackground
-            source={imagePath.sagradafamilla}
+            source={{uri: item.thumbnail_image_url}}
             resizeMode="cover"
           />
           <HeadersContainer>

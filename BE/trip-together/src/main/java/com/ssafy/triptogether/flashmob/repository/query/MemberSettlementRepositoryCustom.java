@@ -5,8 +5,14 @@ import java.util.Optional;
 
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
 import com.ssafy.triptogether.flashmob.domain.ParticipantSettlement;
+import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
+import com.ssafy.triptogether.flashmob.domain.Settlement;
+import com.ssafy.triptogether.member.domain.Member;
 
 public interface MemberSettlementRepositoryCustom {
-	Optional<ParticipantSettlement> findByMemberIdAndSettlementId(long memberId, long settlementId);
+	ParticipantSettlement participantFindByMemberIdAndSettlementId(long memberId, long settlementId);
+	Settlement settlementFindByRequesterIdAndSettlementId(long memberId, long settlementId);
+	Member requesterFindBySettlementId(long settlementId);
 	List<AttendeesStatusDetail> checkParticipantsStatus(long memberId, long settlementId);
+	boolean checkSettlementIsDone(long settlementId);
 }
