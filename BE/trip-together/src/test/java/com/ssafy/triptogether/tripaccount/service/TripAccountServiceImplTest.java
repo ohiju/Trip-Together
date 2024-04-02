@@ -132,12 +132,12 @@ class TripAccountServiceImplTest {
                 .rate(255.5)
                 .build();
             TripAccount tripAccount1 = TripAccount.builder()
-                .balance(3.0)
+                .balance("3.0")
                 .currency(currency1)
                 .member(member)
                 .build();
             TripAccount tripAccount2 = TripAccount.builder()
-                .balance(10.0)
+                .balance("10.0")
                 .currency(currency2)
                 .member(member)
                 .build();
