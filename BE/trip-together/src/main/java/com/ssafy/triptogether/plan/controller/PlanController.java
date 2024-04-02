@@ -41,7 +41,7 @@ public class PlanController {
 		return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, planList);
 	}
 
-	@GetMapping("/{member_id}")
+	@GetMapping("/member/{member_id}")
 	public ResponseEntity<ApiResponse<DailyPlansResponse>> findPlans(
 		@PathVariable("member_id") long memberId
 	) {
