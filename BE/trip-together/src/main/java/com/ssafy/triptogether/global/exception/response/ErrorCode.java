@@ -44,6 +44,7 @@ public enum ErrorCode {
     RECEIPT_NOT_FOUND(404, "영수증이 없습니다."),
     SETTLEMENT_NOT_FOUND(404, "정산 요청을 찾을 수 없습니다."),
     SETTLEMENT_SEND_BAD_REQUEST(400, "이미 완료된 정산입니다."),
+    MEMBER_FLASHMOB_EXIST(400, "이미 완료된 신청입니다."),
     // AUTH
     UNDEFINED_ACCESS_TOKEN(400, "ACCESS TOKEN 존재하지 않습니다."),
     UNDEFINED_REFRESH_TOKEN(400, "REFRESH TOKEN 존재하지 않습니다."),
