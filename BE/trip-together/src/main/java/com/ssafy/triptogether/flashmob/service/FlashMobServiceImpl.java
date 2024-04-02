@@ -220,13 +220,13 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			.orElseThrow(
 				() -> new NotFoundException("SettlementSend", SETTLEMENT_NOT_FOUND)
 			);
-		if (settlement.getIsDone()) {
-			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
-		}
 		Currency currency = TripAccountUtils.findByCurrencyCode(currencyRepository, settlement.getCurrencyCode());
 
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId, settlementId);
+		if (participantSettlement.getHasSent()) {
+			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
+		}
 		TripAccount participantTripAccount = participantWithdraw(memberId, pinVerifyRequest, currency,
 			participantSettlement);
 		participantSettlement.settlementSend();
@@ -368,6 +368,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			).toList();
 		return AttendeeReceiptsResponse.builder()
 			.price(participantSettlement.getPrice())
+			.hasSent(participantSettlement.getHasSent())
 			.attendeesReceiptDetails(attendeesReceiptDetails)
 			.build();
 	}
