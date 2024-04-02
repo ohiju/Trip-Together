@@ -1,10 +1,13 @@
 package com.ssafy.triptogether.tripaccount.repository.query;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,10 +26,15 @@ public class AccountHistoryRepositoryCustomImpl implements AccountHistoryReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AccountHistory> findAccountHistoriesLoadDetailByMemberId(Long memberId, Pageable pageable) {
+    public Page<AccountHistory> findAccountHistoriesLoadDetailByMemberId(Long memberId, Pageable pageable, CurrencyCode currencyCode) {
+        BooleanBuilder whereClause = new BooleanBuilder(tripAccount.member.id.eq(memberId));
+        if (currencyCode != null) {
+            whereClause.and(tripAccount.currency.code.eq(currencyCode));
+        }
+
         JPAQuery<AccountHistory> query = queryFactory.selectFrom(accountHistory)
             .join(accountHistory.tripAccount, tripAccount)
-            .where(tripAccount.member.id.eq(memberId));
+            .where(whereClause);
 
         for (Sort.Order o : pageable.getSort()) {
             PathBuilder<AccountHistory> entityPath = new PathBuilder<>(AccountHistory.class, "accountHistory");

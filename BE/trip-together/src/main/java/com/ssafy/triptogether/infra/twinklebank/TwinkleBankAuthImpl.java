@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankTransfer1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankVerify1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleTokenRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
@@ -42,6 +44,9 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 
 	@Value("${app.clientId}")
 	private String TWINKLE_CLIENT_ID;
+
+	private final long TWINKLE_ACCESS_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L; // 6분
+	private final long TWINKLE_REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L; // 8일
 
 	@Override
 	public Map<String, String> getTwinkleBankToken(TwinkleTokenRequest twinkleTokenRequest, String code) {
@@ -138,6 +143,57 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		}
 	}
 
+	private String reissueIfExpired(String memberUuid, String accessToken) {
+		if (accessToken == null){ // 만료되었거나, 발급받지 않았거나
+			if (!redisTemplate.opsForValue().get("refresh:" + memberUuid).isEmpty()){ // refresh는 있는 경우 - 만료
+				reissueBank(memberUuid);
+				accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
+			}else{ // 발급받지 않았을 경우 -> 다시 은행 토큰 받도록
+				throw new UnAuthorizedException("twinklebank authimpl : 은행 재로그인 필요 ", UNAUTHORIZED_BANK);
+			}
+		}
+		return accessToken;
+	}
+
+	@Override
+	public void reissueBank(String memberUuid) {
+		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/member/v1/members/reissue")
+			.queryParam("client_id", TWINKLE_CLIENT_ID)
+			.toUriString();
+		String refreshToken = redisTemplate.opsForValue().get("refresh:" + memberUuid);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("cookie", "refreshToken="+ refreshToken);
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+
+		try{
+			ResponseEntity<ApiResponse> response = restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				entity,
+				ApiResponse.class
+			);
+
+			// accessToken 꺼내기
+			String newAccessToken = getAccessToken(response);
+			// refreshToken 꺼내기
+			String newRefreshToken = getRefreshToken(response);
+
+			if (newAccessToken == null || newAccessToken.isEmpty()) {
+				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_ACCESS_TOKEN);
+			}
+			if (newRefreshToken == null || newRefreshToken.isEmpty()) {
+				throw new NotFoundException("getTwinkleBankToken", UNDEFINED_REFRESH_TOKEN);
+			}
+			// 다시 저장
+			saveToken("access:" + memberUuid, newAccessToken, TWINKLE_ACCESS_TOKEN_EXPIRE_TIME);
+			saveToken("refresh:" + memberUuid, newRefreshToken, TWINKLE_REFRESH_TOKEN_EXPIRE_TIME);
+
+		} catch (RestClientException e) {
+			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+		}
+	}
+
 	private String getAccessToken(ResponseEntity<ApiResponse> response) {
 		System.out.println(response.getBody().getData());
 		TwinkleTokenResponse res = objectMapper.convertValue(response.getBody().getData(), TwinkleTokenResponse.class);
@@ -156,5 +212,10 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 			}
 		}
 		return refreshToken;
+	}
+
+	private void saveToken(String key, String value, long expire) {
+		redisTemplate.opsForValue()
+			.set(key, value, expire, TimeUnit.MILLISECONDS);
 	}
 }

@@ -28,7 +28,7 @@ const usePostExchange = () => {
   const postExchangeConfig = async (data: PostExchangeData) => {
     const {access_token} = await getToken();
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/account/v1/trip-account/trip-accounts`,
+      url: `${TRIP_API_URL}/api/account/v1/trip-account/trip-accounts/exchange`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${access_token}`,

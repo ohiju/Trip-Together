@@ -1,9 +1,9 @@
 package com.ssafy.triptogether.member.repository.query;
 
-import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
-
 import java.util.Optional;
 
+import com.ssafy.triptogether.member.data.response.ProfileFindResponse;
+
 public interface MemberRepositoryCustom {
-    Optional<ProfileFindResponse> findProfileByMemberId(long memberId);
+	Optional<ProfileFindResponse> findProfileByMemberId(long memberId);
 }

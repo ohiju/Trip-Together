@@ -1,5 +1,18 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import useDeleteSyncAccount, {
+  DeleteSyncAccountData,
+} from '../apis/account/useDeleteSyncAccount';
+import usePostExchange, {
+  PostExchangeData,
+} from '../apis/account/usePostExchange';
+import usePostSyncAccount, {
+  PostSyncAccountData,
+} from '../apis/account/usePostSyncAccount';
+import usePostRemmitance, {
+  PostRemmitanceData,
+  PostRemmitanceParams,
+} from '../apis/flashMob/usePostRemmitacne';
 import AppKeyboard from '../components/common/AppKeyboard';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
 import {
@@ -10,6 +23,7 @@ import {
   TitleView,
   Wrapper,
 } from './PinAuthStyle';
+import useQR, {QRdata} from '../apis/useQR';
 
 const PinAuth = () => {
   // 핀 번호 입력
@@ -25,10 +39,48 @@ const PinAuth = () => {
   }, [pin]);
 
   // api 요청 매서드
-  const {data, api} = useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
+  const postSyncAccount = usePostSyncAccount();
+  const postExchange = usePostExchange();
+  const postRemmitance = usePostRemmitance();
+  const qrpay = useQR();
+  const deleteSyncAccount = useDeleteSyncAccount();
+  const {pinData, api} =
+    useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
   useEffect(() => {
     if (pin.length === 6) {
-      api({data: {...data, pin_num: pin}});
+      if (api === 'postSyncAccount') {
+        const data: PostSyncAccountData = {
+          ...(pinData as PostSyncAccountData),
+          pin_num: pin,
+        };
+        postSyncAccount(data);
+      } else if (api === 'postExchange') {
+        const data: PostExchangeData = {
+          ...(pinData as PostExchangeData),
+          pin_num: pin,
+        };
+        postExchange(data);
+      } else if (api === 'postRemmitance') {
+        const params: PostRemmitanceParams = {
+          ...(pinData as PostRemmitanceParams),
+        };
+        const data: PostRemmitanceData = {
+          pin_num: pin,
+        };
+        postRemmitance(params, data);
+      } else if (api === 'qrpay') {
+        const data: QRdata = {
+          ...(pinData as QRdata),
+          pin_num: pin,
+        };
+        qrpay(data);
+      } else if (api === 'deleteSyncAccount') {
+        const data: DeleteSyncAccountData = {
+          ...(pinData as DeleteSyncAccountData),
+          pin_num: pin,
+        };
+        deleteSyncAccount(data);
+      }
     }
   }, [pin]);
 

@@ -37,8 +37,6 @@ const useGetBankAccounts = () => {
     const result = await axios
       .request(await getBankAccountsConfig())
       .then((res: AxiosResponse<GetBankAccountsResponse>) => {
-        console.log(res.data);
-
         dispatch(setBankAccounts(res.data.data.accounts));
       })
       .catch((err: AxiosError) => {

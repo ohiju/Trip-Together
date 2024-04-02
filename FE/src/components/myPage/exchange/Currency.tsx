@@ -1,8 +1,12 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
+import {kr_currency} from '../../../constants/currencies';
 import CurrencyProps from '../../../interfaces/props/CurrencyProps';
-import {ExchangeStackParams} from '../../../interfaces/router/myPage/ExchangeStackParams';
+import {
+  ExchangeSelectSyncProps,
+  ExchangeStackParams,
+} from '../../../interfaces/router/myPage/ExchangeStackParams';
 import {
   NationImage,
   NationText,
@@ -20,7 +24,12 @@ const Currency = ({currency}: CurrencyProps) => {
   // 라우팅
   const navigation = useNavigation<NavigationProp<ExchangeStackParams>>();
   const handleToNext = () => {
-    navigation.navigate('ExchangeSelectSync', {currency});
+    const props: ExchangeSelectSyncProps = {
+      from_currency: kr_currency,
+      to_currency: currency,
+      type: 'exchange',
+    };
+    navigation.navigate('ExchangeSelectSync', props);
   };
 
   return (

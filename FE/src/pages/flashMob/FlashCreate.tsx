@@ -1,8 +1,10 @@
 import {Picker} from '@react-native-picker/picker';
 import {
   NavigationProp,
+  RouteProp,
   useFocusEffect,
   useNavigation,
+  useRoute,
 } from '@react-navigation/native';
 import React, {useState} from 'react';
 import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -22,14 +24,20 @@ import {
   StyledPicker,
   Wrapper,
 } from './MakeFlashStyle';
+import axios from 'axios';
+import getToken from '../../hooks/getToken';
 
 const FlashCreate = () => {
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(false);
   const [numParticipants, setNumParticipants] = useState('');
+  const [num, setNum] = useState(1);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<FlashMobStackParams>>();
+
+  const {id} = useRoute<RouteProp<FlashMobStackParams, 'FlashCreate'>>().params;
+  console.log(id);
 
   useFocusEffect(() => {
     dispatch(setDisplay(false));
@@ -48,8 +56,29 @@ const FlashCreate = () => {
     hideDateTimePicker();
   };
 
-  const handleSearchSubmit = () => {
-    navigation.navigate('FlashList');
+  const handleSearchSubmit = async () => {
+    const {access_token} = await getToken();
+    const data = {
+      title: title,
+      start_time: startTime,
+      max_users: num + 1,
+    };
+    try {
+      console.log(data);
+      const response = await axios.post(
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}/flashmobs`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    navigation.navigate('FlashList', {id});
   };
 
   return (
@@ -83,9 +112,10 @@ const FlashCreate = () => {
           <PickerContainer>
             <StyledPicker
               selectedValue={numParticipants}
-              onValueChange={(itemValue: string) =>
-                setNumParticipants(itemValue)
-              }>
+              onValueChange={(itemValue: string, value: number) => {
+                setNumParticipants(itemValue);
+                setNum(value);
+              }}>
               <Picker.Item label="1명" value="1" />
               <Picker.Item label="2명" value="2" />
               <Picker.Item label="3명" value="3" />

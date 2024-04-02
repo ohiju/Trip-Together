@@ -1,15 +1,18 @@
 package com.ssafy.triptogether.flashmob.controller;
 
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
 import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
 import com.ssafy.triptogether.flashmob.service.FlashMobSaveService;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
+import com.ssafy.triptogether.global.data.response.StatusCode;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,7 @@ import static com.ssafy.triptogether.global.data.response.StatusCode.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/flashmob/v1")
+@RequestMapping("/api/flashmob/v1")
 @RequiredArgsConstructor
 public class FlashMobController {
 
@@ -65,6 +68,20 @@ public class FlashMobController {
         long memberId = securityMember.getId();
         flashMobSaveService.cancelFlashmob(flashmobId, memberId);
         return ApiResponse.emptyResponse(NO_CONTENT, SUCCESS_FLASHMOB_CANCEL);
+    }
+
+    @GetMapping("/flashmobs/{flashmob_id}/members")
+    public ResponseEntity<ApiResponse<FlashMobMembersLoadResponse>> flashmobMembersLoad(
+        @PathVariable("flashmob_id") long flashmobId,
+        @AuthenticationPrincipal SecurityMember securityMember
+    ) {
+        long memberId = securityMember.getId();
+        FlashMobMembersLoadResponse flashMobMembersLoadResponse = flashMobLoadService.flashmobMembersLoad(memberId,
+            flashmobId);
+
+        return ApiResponse.toResponseEntity(
+            OK, SUCCESS_FLASHMOB_MEMBER_LOAD, flashMobMembersLoadResponse
+        );
     }
 
     @PatchMapping("/flashmobs/{flashmob_id}/{member_id}")
@@ -147,10 +164,11 @@ public class FlashMobController {
     public ResponseEntity<ApiResponse<Void>> settlementSend(
         @AuthenticationPrincipal SecurityMember securityMember,
         @PathVariable("flashmob_id") long flashmobId,
-        @PathVariable("settlement_id") long settlementId
+        @PathVariable("settlement_id") long settlementId,
+        @RequestBody @Valid PinVerifyRequest pinVerifyRequest
     ) {
         long memberId = securityMember.getId();
-        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId);
+        flashMobSaveService.settlementSend(memberId, flashmobId, settlementId, pinVerifyRequest);
 
         return ApiResponse.emptyResponse(
             OK, SUCCESS_SETTLEMENT_SEND

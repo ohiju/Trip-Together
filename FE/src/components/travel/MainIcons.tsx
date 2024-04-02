@@ -82,7 +82,7 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              // Handle onPress
+              navigation.navigate('Insurance');
             }}
             style={styles.iconContainer}>
             <Image
@@ -93,19 +93,25 @@ const MainIcons = ({item, style}: IPage) => {
           <IconText>보험</IconText>
         </IconBox>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            // Handle onPress
-          }}
-          style={styles.iconContainer}>
-          <Text>1</Text>
-        </TouchableOpacity>
+        <IconBox>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Insurance');
+            }}
+            style={styles.iconContainer}>
+            <Image
+              source={require('../../assets/images/calculator.png')}
+              style={{width: 40, height: 40}}
+            />
+          </TouchableOpacity>
+          <IconText>계산</IconText>
+        </IconBox>
       )}
       {item.num === 1 ? (
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              // Handle onPress
+              navigation.navigate('CurrencyChange');
             }}
             style={styles.iconContainer}>
             <Image
@@ -116,19 +122,25 @@ const MainIcons = ({item, style}: IPage) => {
           <IconText>환전</IconText>
         </IconBox>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            // Handle onPress
-          }}
-          style={styles.iconContainer}>
-          <Text>1</Text>
-        </TouchableOpacity>
+        <IconBox>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Insurance');
+            }}
+            style={styles.iconContainer}>
+            <Image
+              source={require('../../assets/images/saving.png')}
+              style={{width: 40, height: 40}}
+            />
+          </TouchableOpacity>
+          <IconText>적금</IconText>
+        </IconBox>
       )}
       {item.num === 1 ? (
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              // Handle onPress
+              navigation.navigate('Sales');
             }}
             style={styles.iconContainer}>
             <Image
@@ -139,13 +151,19 @@ const MainIcons = ({item, style}: IPage) => {
           <IconText>상품</IconText>
         </IconBox>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            // Handle onPress
-          }}
-          style={styles.iconContainer}>
-          <Text>1</Text>
-        </TouchableOpacity>
+        <IconBox>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Insurance');
+            }}
+            style={styles.iconContainer}>
+            <Image
+              source={require('../../assets/images/myreport.png')}
+              style={{width: 40, height: 40}}
+            />
+          </TouchableOpacity>
+          <IconText>마이</IconText>
+        </IconBox>
       )}
     </PageItem>
   );

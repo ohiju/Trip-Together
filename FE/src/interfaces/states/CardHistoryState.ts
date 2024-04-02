@@ -3,17 +3,18 @@ interface cardHistory {
   nation: string;
   nation_kr: string;
   unit: number;
-  type: '충전' | '환불' | '출금';
+  type: '입금' | '환불' | '출금';
   usage: string;
   quantity: number;
+  created_at: string;
   balance: number;
-  created_at: Date;
 }
 
 interface pageable {
   pageNumber: number;
   pageSize: number;
   last: boolean;
+  first: boolean;
 }
 
 interface CardHistoryState {

@@ -9,7 +9,6 @@ interface ImagePath {
   europe5: ImageSourcePropType;
   adh01: ImageSourcePropType;
   attend: ImageSourcePropType;
-  bag: ImageSourcePropType;
   bag2: ImageSourcePropType;
   camera: ImageSourcePropType;
   chat: ImageSourcePropType;
@@ -59,7 +58,6 @@ export const imagePath: ImagePath = {
   europe5: require('./commercials/europe5.jpg'),
   adh01: require('./adh01.png'),
   attend: require('./attend.png'),
-  bag: require('./bag.jpg'),
   bag2: require('./bag2.png'),
   logobank: require('./logobank.png'),
   profiledefault: require('./profiledefault.png'),

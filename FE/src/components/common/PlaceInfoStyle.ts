@@ -41,8 +41,8 @@ const PlaceImageView = styled.View`
 `;
 
 const PlaceImage = styled.Image`
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
 `;
 
 const PlaceInfoView = styled.View`

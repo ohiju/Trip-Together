@@ -1,7 +1,23 @@
 package com.ssafy.triptogether.auth.service;
 
-import com.ssafy.triptogether.auth.data.response.MemberInfo;
 import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ssafy.triptogether.auth.data.response.MemberInfo;
 import com.ssafy.triptogether.auth.data.response.TokenInfo;
 import com.ssafy.triptogether.auth.data.response.TokenResponse;
 import com.ssafy.triptogether.auth.provider.CookieProvider;
@@ -12,25 +28,11 @@ import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleTokenRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoResponse;
 import com.ssafy.triptogether.member.domain.Member;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import com.ssafy.triptogether.member.repository.MemberRepository;
 import com.ssafy.triptogether.member.service.MemberSaveService;
+
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final StringRedisTemplate redisTemplate;
 	private final MemberRepository memberRepository;
-    private final CookieProvider cookieProvider;
+	private final CookieProvider cookieProvider;
 
 	// TODO : EXPIRE TIME 조정하기
 	private final long TWINKLE_ACCESS_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L; // 6분
@@ -98,7 +100,7 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 			.tokenInfo(tokenInfo)
 			.build();
 
-        // 저장
+		// 저장
 		// 사용자 uuid로 은행 access token, refresh token을 저장한다.
 		saveToken("access:" + member.getUuid(), twinkleBankTokenMap.get("access"), TWINKLE_ACCESS_TOKEN_EXPIRE_TIME);
 		saveToken("refresh:" + member.getUuid(), twinkleBankTokenMap.get("refresh"), TWINKLE_REFRESH_TOKEN_EXPIRE_TIME);
@@ -107,23 +109,23 @@ public class AuthServiceImpl implements AuthLoadService, AuthSaveService {
 		saveToken("refresh:" + member.getId(), tripTokenMap.get("refresh"),
 			jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
 
-        // ** 쿠키에 담기
-        String tripRefreshToken = tripTokenMap.get("refresh");
-        // refresh token은 헤더에 쿠키에 넣어준다
-        ResponseCookie cookie = cookieProvider.createCookie(tripRefreshToken);
+		// ** 쿠키에 담기
+		String tripRefreshToken = tripTokenMap.get("refresh");
+		// refresh token은 헤더에 쿠키에 넣어준다
+		ResponseCookie cookie = cookieProvider.createCookie(tripRefreshToken);
 
-        // 쿠키를 담을 헤더 생성
-        HttpHeaders headers = cookieProvider.addCookieHttpHeaders(cookie);
-        ApiResponse<TokenResponse> apiResponse = ApiResponse.<TokenResponse>builder()
-            .status(SUCCESS_TRIP_TOKEN.getStatus())
-            .message(SUCCESS_TRIP_TOKEN.getMessage())
-            .data(response)
-            .build();
+		// 쿠키를 담을 헤더 생성
+		HttpHeaders headers = cookieProvider.addCookieHttpHeaders(cookie);
+		ApiResponse<TokenResponse> apiResponse = ApiResponse.<TokenResponse>builder()
+			.status(SUCCESS_TRIP_TOKEN.getStatus())
+			.message(SUCCESS_TRIP_TOKEN.getMessage())
+			.data(response)
+			.build();
 
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .headers(headers)
-            .body(apiResponse);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.headers(headers)
+			.body(apiResponse);
 	}
 
 	private void saveToken(String key, String value, long expire) {

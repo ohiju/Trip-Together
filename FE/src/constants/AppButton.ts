@@ -1,11 +1,13 @@
 import {AppButtonStyle} from '../interfaces/props/AppButton';
 import {
+  bg_danger,
   bg_light,
   bg_main,
   font_light,
   primary,
   primary_light,
   secondary,
+  secondary_light,
 } from './colors';
 
 const defaultStyle = {
@@ -68,6 +70,18 @@ const MakeFlashButton: AppButtonStyle = {
   },
 };
 
+const MakeDeleteButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    padding: '8px 0',
+    bg1: bg_danger,
+  },
+  font: {
+    color: font_light,
+    size: '13px',
+  },
+};
+
 const JoinFlashButton: AppButtonStyle = {
   button: {
     width: '100%',
@@ -95,6 +109,19 @@ const profileEditButton: AppButtonStyle = {
   },
 };
 
+const remittanceButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    bg1: secondary,
+    bg2: secondary_light,
+    borderR: '10px',
+    padding: '15px 0',
+  },
+  font: {
+    size: '24px',
+  },
+};
+
 export {
   BottomButton,
   JoinFlashButton,
@@ -102,5 +129,7 @@ export {
   defaultStyle,
   myWalletButton,
   profileEditButton,
+  remittanceButton,
   socialLoginButton,
+  MakeDeleteButton,
 };

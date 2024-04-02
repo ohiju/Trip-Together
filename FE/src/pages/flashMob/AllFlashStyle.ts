@@ -17,6 +17,7 @@ const Title = styled.Text`
 const ChatRoomItem = styled(TouchableOpacity)`
   flex-direction: row;
   margin-bottom: 20px;
+  align-items: center;
 `;
 
 const ProfileImage = styled.Image`
@@ -27,6 +28,7 @@ const ProfileImage = styled.Image`
 
 const ChatRoomDetails = styled.View`
   margin-left: 10px;
+  width: 58%;
 `;
 
 const ChatRoomTitle = styled.Text`
@@ -38,6 +40,10 @@ const MeetingInfo = styled.Text`
   font-size: 14px;
 `;
 
+const ButtonView = styled.View`
+  width: 80px;
+`;
+
 export {
   Container,
   Title,
@@ -46,4 +52,5 @@ export {
   ChatRoomDetails,
   ChatRoomTitle,
   MeetingInfo,
+  ButtonView,
 };

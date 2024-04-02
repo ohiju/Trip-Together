@@ -8,10 +8,10 @@ import lombok.Builder;
 
 @Builder
 public record PlanDetail(
-    @JsonProperty("daily_estimated_budget")
-    Double dailyEstimatedBudget,
-    Integer order,
-    @JsonProperty("attractions")
-    List<AttractionDetail> attractionDetails
+	@JsonProperty("daily_estimated_budget")
+	Double dailyEstimatedBudget,
+	Integer order,
+	@JsonProperty("attractions")
+	List<AttractionDetail> attractionDetails
 ) {
 }

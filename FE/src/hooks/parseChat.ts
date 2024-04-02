@@ -7,9 +7,9 @@ const parseChat = (chat: flashmob) => {
     ? {uri: `${IMAGE_BASE_URL}/${chat.master_image_url}`}
     : imagePath.profiledefault;
   const title = chat.flashmob_title;
-  const placeTime = `${
-    chat.attraction_name
-  } / ${chat.flashmob_start_at.toLocaleString('ko-KR', {
+  const placeTime = `${chat.attraction_name} / ${new Date(
+    chat.flashmob_start_at,
+  ).toLocaleString('ko-KR', {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
