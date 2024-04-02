@@ -54,7 +54,7 @@ const ChatInput = ({opened, setOpened}: ChatInputProps) => {
   };
 
   // Pub
-  const client = useContext(WebSocketContext);
+  const client = useContext(WebSocketContext)?.current;
   const send = () => {
     if (!client?.connected) {
       console.log('소켓이 연결되지 않음');
@@ -75,6 +75,7 @@ const ChatInput = ({opened, setOpened}: ChatInputProps) => {
       body,
     };
     client.publish(params);
+    setContent('');
   };
 
   return (

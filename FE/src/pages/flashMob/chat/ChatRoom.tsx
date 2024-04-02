@@ -1,7 +1,8 @@
 import {TRIP_WS_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useRoute} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
+import {StompSubscription} from '@stomp/stompjs';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import useGetFlashmobMembers, {
   GetFlashmobMembersParams,
 } from '../../../apis/flashMob/useGetFlashmobMembers';
@@ -24,14 +25,16 @@ const ChatRoom = () => {
   const dispatch = useAppDispatch();
 
   // AsyncStorage Message 조회, Room Socket 연결
-  const client = useContext(WebSocketContext);
+  const client = useContext(WebSocketContext)?.current;
+  const subscription = useRef<StompSubscription | null>(null);
   useEffect(() => {
     if (!client) return;
+
     const connect = () => {
       client.onConnect = async () => {
-        console.log('connected');
-
         await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
+          console.log(item, 1);
+
           const empty: message[] = [];
           const stringifyEmpty = JSON.stringify(empty);
           await AsyncStorage.setItem(`${flashmob_id}`, stringifyEmpty);
@@ -43,13 +46,15 @@ const ChatRoom = () => {
           }
         });
 
-        client.subscribe(
+        subscription.current = client.subscribe(
           `${TRIP_WS_URL}/exchange/chat.exchange/room.${flashmob_id}`,
           async frame => {
             console.log('subscribed', frame);
             const data: message = await JSON.parse(frame.body);
 
             await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
+              console.log(item, 2);
+
               if (item !== undefined && item) {
                 const prev: message[] = JSON.parse(item);
                 const next: message[] = [...prev, data];
@@ -70,6 +75,11 @@ const ChatRoom = () => {
     };
 
     connect();
+    return () => {
+      if (subscription.current) {
+        subscription.current.unsubscribe();
+      }
+    };
   }, [flashmob_id, client]);
 
   // API 번개 채팅 참여자 조회

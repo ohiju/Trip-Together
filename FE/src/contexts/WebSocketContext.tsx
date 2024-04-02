@@ -1,32 +1,36 @@
 import {TRIP_WS_URL} from '@env';
 import {Client, StompConfig} from '@stomp/stompjs';
-import React, {createContext, useEffect, useRef} from 'react';
-import {RootState} from '../store';
-import {useAppSelector} from '../store/hooks';
+import React, {
+  MutableRefObject,
+  createContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import getToken from '../hooks/getToken';
 
 interface WebSocetContainerProps {
   children?: React.ReactNode;
 }
 
-const WebSocketContext = createContext<Client | null>(null);
+const WebSocketContext = createContext<MutableRefObject<Client | null> | null>(
+  null,
+);
 
 const WebSocketContainer = ({children}: WebSocetContainerProps) => {
-  const token = useAppSelector((state: RootState) => state.user.token);
+  const [isLogin, setIsLogin] = useState(false);
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
     const stompConfig: StompConfig = {
       brokerURL: `${TRIP_WS_URL}`,
-      debug: (frame: string) => console.log(frame),
-
-      reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       forceBinaryWSFrames: true,
       appendMissingNULLonIncoming: true,
     };
 
-    if (token) {
+    if (isLogin) {
       client.current = new Client(stompConfig);
 
       client.current.onConnect = () => {
@@ -54,10 +58,20 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
         }
       };
     }
-  }, [token]);
+  }, [isLogin]);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const {access_token} = await getToken();
+      if (access_token) {
+        setIsLogin(true);
+      }
+    };
+    checkLogin();
+  }, []);
 
   return (
-    <WebSocketContext.Provider value={client.current}>
+    <WebSocketContext.Provider value={client}>
       {children}
     </WebSocketContext.Provider>
   );

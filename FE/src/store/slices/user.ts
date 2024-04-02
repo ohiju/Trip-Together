@@ -7,7 +7,6 @@ import {
 } from '../../interfaces/states/UserState';
 
 const initialState: UserState = {
-  token: '',
   user: {
     member_id: 0,
     username: 'default',
