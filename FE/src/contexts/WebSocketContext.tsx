@@ -24,6 +24,8 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
   useEffect(() => {
     const stompConfig: StompConfig = {
       brokerURL: `${TRIP_WS_URL}`,
+      debug: (frame: string) => console.log(frame),
+      reconnectDelay: 0,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       forceBinaryWSFrames: true,
