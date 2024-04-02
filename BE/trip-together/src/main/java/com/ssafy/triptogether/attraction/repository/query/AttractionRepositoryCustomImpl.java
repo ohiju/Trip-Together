@@ -44,8 +44,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				distanceTo(latitude, longitude).as("distance")
 			))
 			.from(attraction)
-			.leftJoin(attractionCategory).on(attraction.id.eq(attractionCategory.category.id))
-			.leftJoin(QCategory.category).on(QCategory.category.id.eq(attractionCategory.category.id))
+			.leftJoin(attractionCategory).on(attraction.id.eq(attractionCategory.attraction.id))
+			// .leftJoin(QCategory.category).on(QCategory.category.id.eq(attractionCategory.category.id))
 			.where(
 				distanceTo(latitude, longitude).loe(distance),
 				searchCategory(category))

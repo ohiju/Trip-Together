@@ -37,7 +37,6 @@ const FlashCreate = () => {
   const navigation = useNavigation<NavigationProp<FlashMobStackParams>>();
 
   const {id} = useRoute<RouteProp<FlashMobStackParams, 'FlashCreate'>>().params;
-  console.log(id);
 
   useFocusEffect(() => {
     dispatch(setDisplay(false));
@@ -64,8 +63,7 @@ const FlashCreate = () => {
       max_users: num + 1,
     };
     try {
-      console.log(data);
-      const response = await axios.post(
+      await axios.post(
         `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}/flashmobs`,
         data,
         {
@@ -74,7 +72,6 @@ const FlashCreate = () => {
           },
         },
       );
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

@@ -31,8 +31,6 @@ const useQR = () => {
   };
 
   const qrPay = async (data: QRdata) => {
-    console.log(data);
-
     const result = await axios
       .request(await qrPayConfig(data))
       .then(() => {
