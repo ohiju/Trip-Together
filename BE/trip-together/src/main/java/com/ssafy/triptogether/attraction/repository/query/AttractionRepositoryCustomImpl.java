@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListItemResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponseWD;
+import com.ssafy.triptogether.attraction.domain.QCategory;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,8 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				distanceTo(latitude, longitude).as("distance")
 			))
 			.from(attraction)
-			.leftJoin(attractionCategory).on()
+			.leftJoin(attractionCategory).on(attraction.id.eq(attractionCategory.category.id))
+			.leftJoin(QCategory.category).on(QCategory.category.id.eq(attractionCategory.category.id))
 			.where(
 				distanceTo(latitude, longitude).loe(distance),
 				searchCategory(category))
