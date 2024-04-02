@@ -11,7 +11,7 @@ const useLogout = () => {
     const {access_token} = await getToken();
 
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/trip/api/member/v1/members/logout`,
+      url: `${TRIP_API_URL}/api/member/v1/members/logout`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${access_token}`,

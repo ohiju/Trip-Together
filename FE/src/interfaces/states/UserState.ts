@@ -27,6 +27,7 @@ interface putData {
 }
 
 interface UserState {
+  isLogin: boolean;
   user: user;
   member: member;
   putData: putData;
