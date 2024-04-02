@@ -21,6 +21,10 @@ const Camera: React.FC = () => {
     setModalVisible(true);
   };
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <>
       <Wrapper onPress={onPress}>
@@ -33,7 +37,7 @@ const Camera: React.FC = () => {
         onRequestClose={() => {
           setModalVisible(false);
         }}>
-        <QRScanner />
+        <QRScanner onClose={closeModal} />
       </Modal>
     </>
   );

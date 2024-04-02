@@ -23,7 +23,7 @@ const usePostSettlement = () => {
     data: PostSettlementData,
   ) => {
     const {access_token} = await getToken();
-
+    console.log(data);
     const axiosConfig: RawAxiosRequestConfig = {
       url: `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${flashmob_id}/settlements`,
       method: 'post',
