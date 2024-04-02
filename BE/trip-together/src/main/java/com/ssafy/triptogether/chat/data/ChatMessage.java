@@ -2,8 +2,11 @@ package com.ssafy.triptogether.chat.data;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
@@ -13,7 +16,8 @@ public record ChatMessage(
 	@JsonProperty("sender_nickname") String senderNickname,
 	@JsonProperty("sender_image_url") String senderImageUrl,
 	String content,
-	@JsonProperty("created_at") LocalDateTime createdAt,
+	@JsonProperty("created_at") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	LocalDateTime createdAt,
 	MessageType status
 ) {
 }
