@@ -139,6 +139,11 @@ const ButtonContainer = styled.View`
   margin-bottom: 19px;
 `;
 
+const ButtonView = styled.View`
+  width: 80px;
+  margin-right: 5px;
+`;
+
 export {
   Container,
   ImageBackground,
@@ -164,4 +169,5 @@ export {
   NavigationButtons,
   NavButton,
   ButtonContainer,
+  ButtonView,
 };

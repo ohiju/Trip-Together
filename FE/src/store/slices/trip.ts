@@ -10,6 +10,7 @@ interface PlaceProp {
   longitude: string;
   name: string;
   thumbnail_image_url: string;
+  flashmob_count: number;
 }
 
 interface ModifyProp {

@@ -7,6 +7,10 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import getToken from '../../hooks/getToken';
 import getFlag from '../../hooks/getFlag';
 import {TRIP_API_URL} from '@env';
+import {useAppDispatch} from '../../store/hooks';
+import {setModify} from '../../store/slices/trip';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {TravelStackParams} from '../../interfaces/router/TripStackParams';
 
 interface PlanDataProps {
   plan_id: number;
@@ -79,6 +83,9 @@ const PlaceImage = styled.Image`
 
 const AllTrip = () => {
   const [plansData, setPlansData] = useState<PlanDataProps[]>([]);
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<TravelStackParams>>();
+
   useEffect(() => {
     const fetchData = async () => {
       const {access_token} = await getToken();
@@ -109,6 +116,25 @@ const AllTrip = () => {
     return diffDays;
   };
 
+  const handleModifyPlan = async (item: any) => {
+    const {access_token} = await getToken();
+    try {
+      const response = await axios.get(
+        `${TRIP_API_URL}/api/plan/v1/plans/${item.plan_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      );
+      dispatch(setModify(response.data.data));
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+    }
+
+    navigation.navigate('plandetail');
+  };
+
   const onPressTrash = async (id: number) => {
     const {access_token} = await getToken();
 
@@ -127,7 +153,7 @@ const AllTrip = () => {
   };
 
   const renderItem = ({item}: {item: PlanDataProps}) => (
-    <PlanItemContainer>
+    <PlanItemContainer onPress={() => handleModifyPlan(item)}>
       <PlanImage source={getFlag(item.nation)} />
       <Title>{item.start_region}</Title>
       <DdayText>

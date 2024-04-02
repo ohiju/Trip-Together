@@ -28,6 +28,7 @@ const FlashMain = () => {
       avg_price: 12,
       latitude: '41.404',
       longitude: '2.1744',
+      flashmob_count: 0,
     },
   ]);
 

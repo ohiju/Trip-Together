@@ -18,6 +18,7 @@ import {
   Bag,
   BagImage,
   ButtonContainer,
+  ButtonView,
   Container,
   DetailsContainer,
   Header,
@@ -186,11 +187,13 @@ const AttractionDetailsPage = () => {
 
           {theme === 'flashmob' && (
             <ButtonContainer>
-              <AppButton
-                text="모임 생성"
-                style={MakeFlashButton}
-                onPress={handlePressMake}
-              />
+              <ButtonView>
+                <AppButton
+                  text="모임 생성"
+                  style={MakeFlashButton}
+                  onPress={handlePressMake}
+                />
+              </ButtonView>
               <AppButton
                 text="모임 검색"
                 style={JoinFlashButton}
