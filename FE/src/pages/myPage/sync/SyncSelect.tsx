@@ -23,8 +23,6 @@ import {Wrapper} from './SyncSelectStyle';
 
 const SyncSelect = () => {
   const syncOptions = useSyncOptions();
-  const getBankAccounts = useGetBankAccounts();
-  const oneTransfer = useOneTransfer();
 
   // 데이터
   const [selected, setSelected] = useState<bankAccount | null>(null);
@@ -44,6 +42,7 @@ const SyncSelect = () => {
   };
 
   // 라우팅
+  const oneTransfer = useOneTransfer();
   const pressContinue = () => {
     if (!selected) {
       Alert.alert('계좌를 선택해주세요.');
@@ -71,6 +70,7 @@ const SyncSelect = () => {
   };
 
   // API
+  const getBankAccounts = useGetBankAccounts();
   useEffect(() => {
     getBankAccounts();
   }, []);

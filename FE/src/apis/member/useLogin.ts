@@ -5,7 +5,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import {user} from '../../interfaces/states/UserState';
 import {token} from '../../interfaces/states/tokenState';
 import {useAppDispatch} from '../../store/hooks';
-import {setLogin, setUser} from '../../store/slices/user';
+import {setUser} from '../../store/slices/user';
 
 interface LoginResponse {
   status: number;
@@ -47,15 +47,17 @@ const useLogin = () => {
         // acess_token
         if (!res.data.data.token) throw new Error('액세스 토큰이 없습니다');
         console.log(res.data.data.token.access_token);
-        dispatch(setLogin(res.data.data.token.access_token));
         await EncryptedStorage.setItem(
           'token',
           JSON.stringify(res.data.data.token),
         );
         // user
         if (!res.data.data.token) throw new Error('유저 정보가 없습니다.');
+        await EncryptedStorage.setItem(
+          'user',
+          JSON.stringify(res.data.data.user),
+        );
         dispatch(setUser(res.data.data.user));
-        dispatch(setLogin(true));
       })
       .catch((err: AxiosError) => {
         Alert.alert(err.message);

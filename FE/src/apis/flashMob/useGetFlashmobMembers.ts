@@ -40,6 +40,8 @@ const useGetFlashmobMembers = () => {
     const result = await axios
       .request(await getFlashmobMembersConfig(params))
       .then((res: AxiosResponse<GetFlashmobMembersResponse>) => {
+        console.log(res.data.data);
+
         dispatch(setFlashMob(res.data.data));
       })
       .catch((err: AxiosError) => {

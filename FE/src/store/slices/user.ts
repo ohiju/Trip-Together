@@ -9,7 +9,7 @@ import {
 const initialState: UserState = {
   isLogin: false,
   user: {
-    member_id: 0,
+    member_id: -1,
     username: 'default',
     nickname: 'default',
     image_url: '',
@@ -17,7 +17,7 @@ const initialState: UserState = {
     is_pin: false,
   },
   member: {
-    member_id: 0,
+    member_id: -1,
     image_url: '',
     nickname: 'default',
     description: 'default',
@@ -37,11 +37,20 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setLogin: (state, action: PayloadAction<boolean>) => {
-      state.isLogin = action.payload;
-    },
     setUser: (state, action: PayloadAction<user>) => {
       state.user = action.payload;
+      state.isLogin = true;
+    },
+    deleteUser: (state, action: PayloadAction<true>) => {
+      state.isLogin = !action.payload;
+      state.user = {
+        member_id: -1,
+        username: 'default',
+        nickname: 'default',
+        image_url: '',
+        description: 'default',
+        is_pin: false,
+      };
     },
     setPin: (state, action: PayloadAction<boolean>) => {
       state.user.is_pin = action.payload;
@@ -65,7 +74,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const {setLogin, setUser, setPin, setMember, setPutData, putUser} =
+export const {setUser, setPin, setMember, setPutData, putUser, deleteUser} =
   userSlice.actions;
 
 export default userSlice.reducer;
