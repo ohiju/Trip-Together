@@ -33,6 +33,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 	@Override
 	public void send(ChatMessage chatMessage) {
+		log.debug(chatMessage.toString());
 		rabbitTemplate.convertAndSend(exchangeName, "room." + chatMessage.flashmobId(), chatMessage);
 	}
 
