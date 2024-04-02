@@ -4,8 +4,8 @@ import NotYet from '../assets/data/NotYet';
 import EditCompleteBtn from '../components/myPage/profile/EditCompleteBtn';
 import AddButton from '../components/myPage/syncManage/AddButton';
 import {MyPageStackParams} from '../interfaces/router/myPage/MyPageStackParams';
+import PinAuth from '../pages/PinAuth';
 import CardHistory from '../pages/myPage/CardHistory';
-import CardManage from '../pages/myPage/CardManage';
 import MyMain from '../pages/myPage/MyMain';
 import SyncManage from '../pages/myPage/SyncManage';
 import WalletManage from '../pages/myPage/WalletManage';
@@ -40,9 +40,9 @@ const MyPageNavigator = () => {
           options={{title: '내 지갑'}}
         />
         <MyPageStack.Screen
-          name="CardManage"
-          component={CardManage}
-          options={{title: '내 카드'}}
+          name="PinManage"
+          component={PinAuth}
+          options={{title: '핀 번호 수정'}}
         />
         <MyPageStack.Screen
           name="SyncManage"

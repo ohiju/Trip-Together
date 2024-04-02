@@ -1,9 +1,19 @@
 import {IMAGE_BASE_URL} from '@env';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React from 'react';
+import usePatchFlashMob, {
+  PatchFlashMobData,
+  PatchFlashMobParams,
+} from '../../../apis/flashMob/usePatchFlashMob';
 import {imagePath} from '../../../assets/images/imagePath';
 import {bg_danger, bg_lightgray, primary} from '../../../constants/colors';
 import {TabParams} from '../../../interfaces/router/TabParams';
+import {ChatStackParams} from '../../../interfaces/router/flashMob/ChatMainStackParams';
 import {ProfileMainProps} from '../../../interfaces/router/myPage/ProfileStackParams';
 import {message as messageType} from '../../../interfaces/states/ChatState';
 import {
@@ -29,10 +39,21 @@ const Attent = ({message}: AttendProps) => {
   const image_url = message.sender_image_url
     ? {uri: `${IMAGE_BASE_URL}/${message.sender_image_url}`}
     : imagePath.profiledefault;
+  const {flashmob_id} =
+    useRoute<RouteProp<ChatStackParams, 'ChatRoom'>>().params;
 
   // API
-  const handleAccept = () => {};
-  const handleReject = () => {};
+  const patchFlashMob = usePatchFlashMob();
+  const params: PatchFlashMobParams = {
+    flashmob_id,
+    member_id: message.sender_id,
+  };
+  const handleFlashmob = (isAccept: boolean) => {
+    const data: PatchFlashMobData = {
+      status: isAccept ? 'ATTEND' : 'REFUSE_UNCHECK',
+    };
+    patchFlashMob(params, data);
+  };
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<TabParams>>();
@@ -57,7 +78,9 @@ const Attent = ({message}: AttendProps) => {
           </ContentView>
         </ProfileView>
         <BtnView>
-          <Btn style={{backgroundColor: primary}} onPress={handleAccept}>
+          <Btn
+            style={{backgroundColor: primary}}
+            onPress={() => handleFlashmob(true)}>
             <BtnText>수락</BtnText>
           </Btn>
           <Btn
@@ -65,7 +88,9 @@ const Attent = ({message}: AttendProps) => {
             onPress={handleToProfile}>
             <BtnText>프로필 보기</BtnText>
           </Btn>
-          <Btn style={{backgroundColor: bg_danger}} onPress={handleReject}>
+          <Btn
+            style={{backgroundColor: bg_danger}}
+            onPress={() => handleFlashmob(false)}>
             <BtnText>거절</BtnText>
           </Btn>
         </BtnView>
