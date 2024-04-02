@@ -10,6 +10,8 @@ import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
 import com.ssafy.triptogether.member.domain.Member;
 
 public interface MemberSaveService {
+	void reportMember(long memberId);
+
 	ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest);
 
 	void savePin(long memberId, PinSaveRequest pinSaveRequest);

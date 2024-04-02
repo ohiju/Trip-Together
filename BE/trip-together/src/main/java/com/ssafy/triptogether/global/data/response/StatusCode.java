@@ -56,6 +56,7 @@ public enum StatusCode {
 	SUCCESS_PIN_SAVE(200, "pin 번호 등록 성공"),
 	SUCCESS_PIN_UPDATE(200, "pin 번호 수정 성공"),
 	SUCCESS_LOGOUT(200, "로그아웃 성공"),
+	SUCCESS_REPORT(200, "신고하기 성공"),
 	// CHAT
 	SUCCESS_SEND_CHAT(200, "채팅 메시지 전송 성공");
 
