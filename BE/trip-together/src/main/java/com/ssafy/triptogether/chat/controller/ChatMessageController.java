@@ -14,6 +14,7 @@ import com.ssafy.triptogether.global.data.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class ChatMessageController {
@@ -22,11 +23,13 @@ public class ChatMessageController {
 
 	@MessageMapping("chat.message")
 	public void publish(ChatMessage chatMessage) {
+		log.debug("publish: " + chatMessage.toString());
 		chatMessageService.send(chatMessage);
 	}
 
 	@RabbitListener(queues = "${rabbitmq.queue.name}")
 	public void subscribe(ChatMessage chatMessage) {
+		log.debug("subscribe: " + chatMessage.toString());
 		chatMessageService.handle(chatMessage);
 	}
 }
