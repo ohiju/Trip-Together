@@ -22,7 +22,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 	@Override
 	public void handle(ChatMessage chatMessage) {
-		log.debug("subscribe:handle: " + chatMessage.toString());
+		log.info("subscribe:handle: " + chatMessage.toString());
 		switch (chatMessage.status()) {
 			case JOIN -> handleJoin(chatMessage);
 			case ATTEND -> handleAttend(chatMessage);
@@ -34,7 +34,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 	@Override
 	public void send(ChatMessage chatMessage) {
-		log.debug("publish:send: " + chatMessage.toString());
+		log.info("publish:send: " + chatMessage.toString());
 		rabbitTemplate.convertAndSend(exchangeName, "room." + chatMessage.flashmobId(), chatMessage);
 	}
 

@@ -23,13 +23,13 @@ public class ChatMessageController {
 
 	@MessageMapping("chat.message")
 	public void publish(ChatMessage chatMessage) {
-		log.debug("publish: " + chatMessage.toString());
+		log.info("publish: " + chatMessage.toString());
 		chatMessageService.send(chatMessage);
 	}
 
 	@RabbitListener(queues = "${rabbitmq.queue.name}")
 	public void subscribe(ChatMessage chatMessage) {
-		log.debug("subscribe: " + chatMessage.toString());
+		log.info("subscribe: " + chatMessage.toString());
 		chatMessageService.handle(chatMessage);
 	}
 }
