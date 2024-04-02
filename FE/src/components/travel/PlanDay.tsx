@@ -52,6 +52,7 @@ interface SortableDownDataItem {
 
 function Row(props: any) {
   const {active, data, UporDown, onPressUp, onPressDown, onPressTrash} = props;
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
 
   const activeAnim = useRef(new Animated.Value(0));
 
@@ -97,7 +98,7 @@ function Row(props: any) {
           <Rating>{`${data.avg_rating}`}</Rating>
           <StarRatingDisplay rating={4.9} starSize={12} />
         </RatingContainer>
-        <Price>{`평균 가격: ${data.avg_price}`}</Price>
+        <Price>{`평균 가격: ${getCurrency(nation)} ${data.avg_price}`}</Price>
       </InfoContainer>
       {UporDown === 'up' ? (
         <Button onPress={() => onPressDown(data)}>

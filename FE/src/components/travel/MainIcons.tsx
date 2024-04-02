@@ -1,12 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ViewStyle,
-} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import styled from 'styled-components/native';
 import {imagePath} from '../../assets/images/imagePath';
 import {bg_light} from '../../constants/colors';
@@ -67,21 +61,6 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('AllTrip');
-            }}
-            style={styles.iconContainer}>
-            <Image
-              source={require('../../assets/images/writing.png')}
-              style={{width: 40, height: 40}}
-            />
-          </TouchableOpacity>
-          <IconText>계획</IconText>
-        </IconBox>
-      )}
-      {item.num === 1 ? (
-        <IconBox>
-          <TouchableOpacity
-            onPress={() => {
               navigation.navigate('Insurance');
             }}
             style={styles.iconContainer}>
@@ -91,6 +70,21 @@ const MainIcons = ({item, style}: IPage) => {
             />
           </TouchableOpacity>
           <IconText>보험</IconText>
+        </IconBox>
+      )}
+      {item.num === 1 ? (
+        <IconBox>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AllTrip');
+            }}
+            style={styles.iconContainer}>
+            <Image
+              source={require('../../assets/images/writing.png')}
+              style={{width: 40, height: 40}}
+            />
+          </TouchableOpacity>
+          <IconText>계획</IconText>
         </IconBox>
       ) : (
         <IconBox>
@@ -111,7 +105,7 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('CurrencyChange');
+              navigation.navigate('MyMain');
             }}
             style={styles.iconContainer}>
             <Image

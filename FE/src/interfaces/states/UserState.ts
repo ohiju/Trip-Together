@@ -27,7 +27,6 @@ interface putData {
 }
 
 interface UserState {
-  token: string;
   user: user;
   member: member;
   putData: putData;
