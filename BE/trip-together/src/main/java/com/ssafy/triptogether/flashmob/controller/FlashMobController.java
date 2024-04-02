@@ -50,7 +50,7 @@ public class FlashMobController {
         return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
     }
 
-    @GetMapping("/{member_id}")
+    @GetMapping("/flashmobs/{member_id}")
     public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findAttendingFlashmobList(
         @PathVariable("member_id") long memberId
     ) {
