@@ -2,7 +2,7 @@
 const primary = '#56E5FF';
 const primary_light = '#93EEFF';
 const primary_dark = '#4DCFE7';
-const secondary = '#62FF85';
+const secondary = '#56e376';
 const secondary_light = '#A3FFB7';
 const dark = '#000000';
 

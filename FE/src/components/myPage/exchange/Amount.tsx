@@ -4,8 +4,8 @@ import {WithLocalSvg} from 'react-native-svg/css';
 import {iconPath} from '../../../assets/icons/iconPath';
 import {font_dark, font_lightgray} from '../../../constants/colors';
 import {ExchangeData} from '../../../interfaces/hooks/ExchangeData';
-import {Exchanged} from '../../../pages/myPage/exchange/ExchangeInputStyle';
 import {
+  Exchanged,
   Input,
   InputView,
   Message,
@@ -39,13 +39,13 @@ const Amount = ({data, ammount, rate, onChange}: AmountProps) => {
         <TitleText>
           {nation_kr} {nation}
         </TitleText>
-        {isFrom ? (
+        {!isFrom ? (
           <WithLocalSvg width={26} height={26} asset={iconPath.info} />
         ) : null}
       </TitleView>
       <InputView>
         <Unit>{unit}</Unit>
-        {isFrom ? (
+        {!isFrom ? (
           <Input
             value={ammount}
             onChange={onChange}

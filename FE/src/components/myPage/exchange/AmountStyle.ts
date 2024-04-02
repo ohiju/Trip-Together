@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {font_dark} from '../../../constants/colors';
+import {font_dark, font_lightgray} from '../../../constants/colors';
 
 const Wrapper = styled.View`
   margin: 20px 15px;
@@ -34,6 +34,11 @@ const Unit = styled.Text`
   margin: 5px 10px;
 `;
 
+const Exchanged = styled.Text`
+  color: ${font_lightgray};
+  font-size: 20px;
+`;
+
 const UnitKr = styled.Text<{$color: string}>`
   color: ${({$color}) => $color};
   font-size: 20px;
@@ -46,6 +51,7 @@ const MessageView = styled.View`
 const Message = styled.Text``;
 
 export {
+  Exchanged,
   Input,
   InputView,
   Message,

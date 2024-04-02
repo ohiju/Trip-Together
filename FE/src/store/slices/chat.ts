@@ -2,50 +2,14 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
   ChatState,
   flashmob,
+  flashmobInfo,
   receiptDetail,
   settlementDetail,
   settlements,
 } from '../../interfaces/states/ChatState';
 
 const initialState: ChatState = {
-  flashmobs: [
-    {
-      flashmob_id: 0,
-      master_id: 3,
-      master_image_url: 'profileImg/sample.jpg',
-      flashmob_title: '지아니스 나폴리에서 9시에 저녁드실분~',
-      flashmob_start_at: new Date('2024-03-30T21:00:00'),
-      flashmob_max_count: 4,
-      flashmob_current_count: 2,
-      member_flashmob_id: 0,
-      attraction_name: '지아니스 나폴리',
-      status: 'ATTEND',
-    },
-    {
-      flashmob_id: 1,
-      master_id: 2,
-      master_image_url: '',
-      flashmob_title: '나랑 놀아줄 사람~',
-      flashmob_start_at: new Date('2024-03-30T21:00:00'),
-      flashmob_max_count: 4,
-      flashmob_current_count: 2,
-      member_flashmob_id: 1,
-      attraction_name: '우리집',
-      status: 'WAIT',
-    },
-    {
-      flashmob_id: 2,
-      master_id: 1,
-      master_image_url: 'profileImg/sample.jpg',
-      flashmob_title: '응 너랑 안놀아~',
-      flashmob_start_at: new Date('2024-03-30T21:00:00'),
-      flashmob_max_count: 4,
-      flashmob_current_count: 2,
-      member_flashmob_id: 2,
-      attraction_name: '니네집',
-      status: 'REFUSE_UNCHECK',
-    },
-  ],
+  flashmobs: [],
   messages: [
     {
       flashmob_id: 0,
@@ -121,19 +85,7 @@ const initialState: ChatState = {
     },
   ],
   flashmob: {
-    members: [
-      {
-        member_id: 1,
-        nickname: 'OhHeeJuice',
-        image_url: '',
-      },
-      {
-        member_id: 3,
-        nickname: 'KTaeGyu',
-        image_url: 'profileImg/sample.jpg',
-      },
-    ],
-    currency_code: 'GBP',
+    members: [],
   },
   settlements: {
     requester_settlements: [
@@ -219,6 +171,9 @@ const chatSlice = createSlice({
     setFlashMobs: (state, action: PayloadAction<flashmob[]>) => {
       state.flashmobs = action.payload;
     },
+    setFlashMob: (state, action: PayloadAction<flashmobInfo>) => {
+      state.flashmob = action.payload;
+    },
     setSettlements: (state, action: PayloadAction<settlements>) => {
       state.settlements = action.payload;
     },
@@ -231,6 +186,11 @@ const chatSlice = createSlice({
   },
 });
 
-export const {setFlashMobs, setSettlements, setReceipt, setSettlement} =
-  chatSlice.actions;
+export const {
+  setFlashMobs,
+  setFlashMob,
+  setSettlements,
+  setReceipt,
+  setSettlement,
+} = chatSlice.actions;
 export default chatSlice.reducer;

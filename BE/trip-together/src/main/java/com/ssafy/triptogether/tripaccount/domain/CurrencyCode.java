@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum CurrencyCode {
 	GBP(163),
-	EUR(8356);
+	EUR(8364);
 
 	private final Integer unit;
 

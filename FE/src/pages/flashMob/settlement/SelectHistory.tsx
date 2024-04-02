@@ -14,7 +14,7 @@ import AppButton from '../../../components/common/AppButton';
 import {Title} from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
 import {bg_lightgray, secondary} from '../../../constants/colors';
-import filterByCurrency from '../../../hooks/filterByCurrency';
+import filterByType from '../../../hooks/filterByType';
 import groupByDate from '../../../hooks/groupByDate';
 import {
   SelectPeopleProps,
@@ -49,7 +49,7 @@ const SelectHistory = () => {
   );
   const {flashmob_id, order, currency, attendees, total_price} =
     useRoute<RouteProp<SettlementStackParams, 'SelectHistory'>>().params;
-  const filtered = filterByCurrency(cardHistory, currency);
+  const filtered = filterByType(cardHistory, '출금');
   const groups = groupByDate(filtered);
   const unit = String.fromCharCode(currency.unit);
 
@@ -82,6 +82,7 @@ const SelectHistory = () => {
       page: 0,
       size: 10,
       sort: 'DESC',
+      currency_code: currency.currency_code,
     };
     getCardHistory(params);
   }, []);
@@ -91,6 +92,7 @@ const SelectHistory = () => {
   // 라우팅
   const navigation = useNavigation<NavigationProp<SettlementStackParams>>();
   const handleToNext = () => {
+    if (!filtered) return;
     const receipts = filtered
       .map(item => {
         if (checked.includes(item.account_history_id)) {

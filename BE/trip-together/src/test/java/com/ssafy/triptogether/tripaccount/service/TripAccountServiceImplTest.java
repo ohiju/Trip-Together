@@ -52,7 +52,7 @@ class TripAccountServiceImplTest {
         void setUp() {
             Currency currency1 = Currency.builder()
                 .code(CurrencyCode.EUR)
-                .currencyNation(CurrencyNation.EUR)
+                .currencyNation(CurrencyNation.EU)
                 .rate(365.1)
                 .build();
             Currency currency2 = Currency.builder()
@@ -123,7 +123,7 @@ class TripAccountServiceImplTest {
                 .build();
             Currency currency1 = Currency.builder()
                 .code(CurrencyCode.EUR)
-                .currencyNation(CurrencyNation.EUR)
+                .currencyNation(CurrencyNation.EU)
                 .rate(365.1)
                 .build();
             Currency currency2 = Currency.builder()
@@ -143,8 +143,8 @@ class TripAccountServiceImplTest {
                 .build();
             tripAccounts = List.of(tripAccount1, tripAccount2);
             TripAccountsLoadDetail tripAccountsLoadDetail1 = TripAccountsLoadDetail.builder()
-                .currencyNation(CurrencyNation.EUR)
-                .nationKr(CurrencyNation.EUR.getMessage())
+                .currencyNation(CurrencyNation.EU)
+                .nationKr(CurrencyNation.EU.getMessage())
                 .balance(3.0)
                 .unit(CurrencyCode.EUR.getUnit())
                 .build();
@@ -195,7 +195,7 @@ class TripAccountServiceImplTest {
                 .build();
             Currency currency = Currency.builder()
                 .code(CurrencyCode.EUR)
-                .currencyNation(CurrencyNation.EUR)
+                .currencyNation(CurrencyNation.EU)
                 .rate(1.0)
                 .build();
             TripAccount tripAccount = TripAccount.builder()

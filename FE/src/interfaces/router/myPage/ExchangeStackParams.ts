@@ -1,17 +1,34 @@
 import {ParamListBase} from '@react-navigation/native';
 import {currency} from '../../../constants/currencies';
 import {bankAccount} from '../../bankAccount';
+import {tripAccount} from '../../states/AccountState';
+
+interface ExchangeSelectSyncProps {
+  from_currency: currency;
+  to_currency: currency;
+  type: 'exchange' | 'refund';
+  tripAccount?: tripAccount;
+}
+
+interface ExchangeInputProps extends ExchangeSelectSyncProps {
+  account: bankAccount;
+}
+
+interface ExchangeConfirmProps extends ExchangeInputProps {
+  ammount: string;
+  rate: number;
+}
 
 interface ExchangeStackParams extends ParamListBase {
   ExchangeSearch: undefined;
-  ExchangeSelectSync: {currency: currency};
-  ExchangeInput: {account: bankAccount; currency: currency};
-  ExchangeConfirm: {
-    account: bankAccount;
-    currency: currency;
-    ammount: string;
-    rate: number;
-  };
+  ExchangeSelectSync: ExchangeSelectSyncProps;
+  ExchangeInput: ExchangeInputProps;
+  ExchangeConfirm: ExchangeConfirmProps;
 }
 
-export type {ExchangeStackParams};
+export type {
+  ExchangeConfirmProps,
+  ExchangeInputProps,
+  ExchangeSelectSyncProps,
+  ExchangeStackParams,
+};

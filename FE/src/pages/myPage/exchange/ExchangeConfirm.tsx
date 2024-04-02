@@ -11,8 +11,8 @@ import Deposit from '../../../components/myPage/exchange/Deposit';
 import Term from '../../../components/myPage/exchange/Term';
 import Withdraw from '../../../components/myPage/exchange/Withdraw';
 import {BottomButton} from '../../../constants/AppButton';
-import {kr_currency} from '../../../constants/currencies';
 import {infoCollect, term} from '../../../constants/terms';
+import parseExchange from '../../../hooks/parseExchange';
 import {
   PinAuthProps,
   RootStackParams,
@@ -22,20 +22,30 @@ import {Terms, Wrapper} from './ExchangeConfirmStyle';
 
 const ExchangeConfirm = () => {
   // 데이터
-  const {currency, account, ammount, rate} =
+  const {from_currency, to_currency, account, ammount, rate, type} =
     useRoute<RouteProp<ExchangeStackParams, 'ExchangeConfirm'>>().params;
+  const {rateText, ammountText} = parseExchange({
+    from_currency,
+    to_currency,
+    ammount,
+    rate,
+    type,
+  });
 
   // 라우팅
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const pressExchange = () => {
+    const quantity = parseInt(ammount, 10);
     const pinData: PostExchangeData = {
       pin_num: '',
       account_uuid: account.account_uuid,
-      to_currency_code: currency.currency_code,
-      from_currency_code: kr_currency.currency_code,
-      to_quantity: parseInt(ammount, 10),
-      from_quantity: parseInt(ammount, 10) * rate,
+      to_currency_code: to_currency.currency_code,
+      from_currency_code: from_currency.currency_code,
+      to_quantity: type === 'exchange' ? quantity : quantity * rate,
+      from_quantity: type === 'exchange' ? quantity * rate : quantity,
     };
+    console.log(pinData);
+
     const props: PinAuthProps = {
       pinData,
       api: 'postExchange',
@@ -48,12 +58,13 @@ const ExchangeConfirm = () => {
 
   return (
     <Wrapper>
-      <Deposit ammount={ammount} currency={currency} />
+      <Deposit rateText={rateText} ammountText={ammountText} />
       <Withdraw
         account={account}
         ammount={ammount}
-        currency={currency}
+        currency={type === 'exchange' ? to_currency : from_currency}
         rate={rate}
+        type={type}
       />
       <Terms>
         <Term check={term1} setCheck={setTerm1} />

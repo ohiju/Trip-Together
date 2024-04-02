@@ -10,22 +10,22 @@ import {
   Wrapper,
 } from './DepositStyle';
 
-const Deposit = ({ammount, currency}: DepositProps) => {
-  const {currency_code_kr} = currency;
-  const unit = String.fromCharCode(currency.unit);
+interface DepositProps {
+  rateText: string;
+  ammountText: string;
+}
 
+const Deposit = ({rateText, ammountText}: DepositProps) => {
   return (
     <Wrapper>
       <TitleView>
         <TitleText>환전 희망 금액</TitleText>
       </TitleView>
       <RateView>
-        <RateText>1 {currency_code_kr} = 1400 원</RateText>
+        <RateText>{rateText}</RateText>
       </RateView>
       <AmountView>
-        <AmountText>
-          {ammount} {unit}
-        </AmountText>
+        <AmountText>{ammountText}</AmountText>
       </AmountView>
     </Wrapper>
   );
