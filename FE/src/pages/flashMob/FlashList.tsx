@@ -11,6 +11,7 @@ import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStac
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
 import {
+  AllChatRoomItem,
   ButtonView,
   ChatRoomDetails,
   ChatRoomItem,
@@ -26,6 +27,7 @@ import AppButton from '../../components/common/AppButton';
 import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
 import {imagePath} from '../../assets/images/imagePath';
 import {TRIP_API_URL} from '@env';
+import getTime from '../../hooks/getTime';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -67,6 +69,7 @@ const FlashList = () => {
             },
           },
         );
+        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -164,26 +167,26 @@ const FlashList = () => {
       <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
-        <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
+        <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
         <MeetingInfo>{item.attraction_name}</MeetingInfo>
       </ChatRoomDetails>
     </ChatRoomItem>
   );
 
   const renderFullItem = ({item}: any) => (
-    <ChatRoomItem>
+    <AllChatRoomItem>
       <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
-        <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
+        <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
         <MeetingInfo>{item.attraction_name}</MeetingInfo>
       </ChatRoomDetails>
       {renderButton(item)}
-    </ChatRoomItem>
+    </AllChatRoomItem>
   );
 
   const screenHeight = Dimensions.get('window').height;
-  const halfScreenHeight = screenHeight / 3;
+  const halfScreenHeight = (screenHeight * 2) / 5;
 
   return (
     <Container>
@@ -196,7 +199,7 @@ const FlashList = () => {
         />
       </View>
 
-      <View>
+      <View style={{height: halfScreenHeight}}>
         <Title>전체 모임</Title>
         <FlatList
           data={allFlashmobs}
