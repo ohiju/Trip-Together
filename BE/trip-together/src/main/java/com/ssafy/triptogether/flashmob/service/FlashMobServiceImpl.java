@@ -101,6 +101,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 		// send chat message
 		// TODO: 해당 채팅방에 참가요청에 대한 채팅 메시지 전송
+		chatMessageUtil.sendAttendMsg(flashmobId, memberId, member.getNickname(), member.getImageUrl());
 	}
 
 	@Transactional
@@ -139,6 +140,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			flashmobId, memberId);
 		if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
 			memberFlashMob.applyAcceptance();
+			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(), memberFlashMob.getMember().getImageUrl());
 			return true; // 수락되었을 시에만 true 반환
 		} else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
 			memberFlashMob.applyDenial();
