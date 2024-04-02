@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CurrencyNation {
-	EUR("유럽"),
+	EU("유럽"),
 	UK("영국");
 
 	private final String message;

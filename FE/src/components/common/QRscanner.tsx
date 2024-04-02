@@ -1,62 +1,32 @@
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  Text,
-  View,
-  Linking,
-  TouchableHighlight,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import {CameraScreen} from 'react-native-camera-kit';
+import {
+  PinAuthProps,
+  RootStackParams,
+} from '../../interfaces/router/RootStackParams';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 
-const QRScanner = () => {
+const QRScanner = ({onClose}: any) => {
   const [qrvalue, setQrvalue] = useState('');
   const [opneScanner, setOpneScanner] = useState(true);
-
-  const onOpenlink = () => {
-    // If scanned then function to open URL in Browser
-    Linking.openURL(qrvalue);
-  };
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   const onBarcodeScan = qrvalue => {
     // Called after te successful scanning of QRCode/Barcode
     setQrvalue(qrvalue);
-    setOpneScanner(false);
-  };
+    const pinData = {
+      attraction_business_num: qrvalue.data.attraction_business_num,
+      quantity: qrvalue.data.quantity,
+    };
+    const props: PinAuthProps = {
+      pinData,
+      api: 'qrpay',
+    };
+    navigation.navigate('PinAuth', props);
 
-  const onOpneScanner = () => {
-    // To Start Scanning
-    if (Platform.OS === 'android') {
-      async function requestCameraPermission() {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            {
-              title: 'Camera Permission',
-              message: 'App needs permission for camera access',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            // If CAMERA Permission is granted
-            setQrvalue('');
-            setOpneScanner(true);
-          } else {
-            Alert.alert('CAMERA permission denied');
-          }
-        } catch (err) {
-          Alert.alert('Camera permission err', err);
-          console.warn(err);
-        }
-      }
-      // Calling the camera permission function
-      requestCameraPermission();
-    } else {
-      setQrvalue('');
-      setOpneScanner(true);
-    }
+    setOpneScanner(false);
+    onClose();
   };
 
   return (
@@ -84,15 +54,6 @@ const QRScanner = () => {
           <Text style={styles.textStyle}>
             {qrvalue ? 'Scanned Result: ' + qrvalue : ''}
           </Text>
-          {/* {qrvalue.includes('https://') ||
-          qrvalue.includes('http://') ||
-          qrvalue.includes('geo:') ? (
-            <TouchableHighlight onPress={onOpenlink}>
-              <Text style={styles.textLinkStyle}>
-                {qrvalue.includes('geo:') ? 'Open in Map' : 'Open Link'}
-              </Text>
-            </TouchableHighlight>
-          ) : null} */}
         </View>
       )}
     </SafeAreaView>

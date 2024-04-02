@@ -23,7 +23,8 @@ import {
 import axios from 'axios';
 import getToken from '../../hooks/getToken';
 import AppButton from '../../components/common/AppButton';
-import {MakeFlashButton} from '../../constants/AppButton';
+import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
+import {imagePath} from '../../assets/images/imagePath';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -45,6 +46,9 @@ const FlashList = () => {
   const user_id = useAppSelector(state => state.user.user.member_id);
   const [myFlashmobs, setMyFlashmobs] = useState<FlashMobProp[]>([]);
   const [allFlashmobs, setAllFlashmobs] = useState<FlashMobProp[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const DEFAULT_IMAGE_URL = imagePath.profiledefault;
 
   useFocusEffect(() => {
     dispatch(setDisplay(true));
@@ -62,6 +66,7 @@ const FlashList = () => {
             },
           },
         );
+        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -77,27 +82,46 @@ const FlashList = () => {
     };
 
     fetchData();
-  }, [id, user_id]);
+  }, [id, user_id, refreshKey]);
 
-  const handlePressChat = () => {
-    navigation.navigate('ChatRoom');
+  const handlePressChat = (flash_id: number) => {
+    navigation.navigate('ChatRoom', {flashmob_id: flash_id});
   };
 
   const handlePressJoin = async (item: FlashMobProp) => {
     const {access_token} = await getToken();
-    try {
-      const response = await axios.post(
-        `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
+    if (!item.status) {
+      try {
+        const response = await axios.post(
+          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
           },
-        },
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log('Error fetching data:', error);
+        );
+        console.log(response.data);
+        setRefreshKey(prevKey => prevKey + 1);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+    } else if (item.status === 'WAIT') {
+      try {
+        console.log(item.flashmob_id, user_id);
+        const response = await axios.delete(
+          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          },
+        );
+        console.log(response.data);
+        setRefreshKey(prevKey => prevKey + 1);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
     }
   };
 
@@ -116,8 +140,8 @@ const FlashList = () => {
       return (
         <ButtonView>
           <AppButton
-            text="대기 중"
-            style={MakeFlashButton}
+            text="신청 취소"
+            style={MakeDeleteButton}
             onPress={() => handlePressJoin(item)}
           />
         </ButtonView>
@@ -128,6 +152,7 @@ const FlashList = () => {
           <AppButton
             text="참가 중"
             style={MakeFlashButton}
+            disabled={true}
             onPress={() => handlePressJoin(item)}
           />
         </ButtonView>
@@ -136,8 +161,8 @@ const FlashList = () => {
   };
 
   const renderItem = ({item}: any) => (
-    <ChatRoomItem onPress={handlePressChat}>
-      <ProfileImage source={item.master_image_url} />
+    <ChatRoomItem onPress={() => handlePressChat(item.flashmob_id)}>
+      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
@@ -147,8 +172,8 @@ const FlashList = () => {
   );
 
   const renderFullItem = ({item}: any) => (
-    <ChatRoomItem onPress={handlePressChat}>
-      <ProfileImage source={item.master_image_url} />
+    <ChatRoomItem>
+      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>

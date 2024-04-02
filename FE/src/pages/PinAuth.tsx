@@ -23,6 +23,7 @@ import {
   TitleView,
   Wrapper,
 } from './PinAuthStyle';
+import useQR, {QRdata} from '../apis/useQR';
 
 const PinAuth = () => {
   // 핀 번호 입력
@@ -41,6 +42,7 @@ const PinAuth = () => {
   const postSyncAccount = usePostSyncAccount();
   const postExchange = usePostExchange();
   const postRemmitance = usePostRemmitance();
+  const qrpay = useQR();
   const deleteSyncAccount = useDeleteSyncAccount();
   const {pinData, api} =
     useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
@@ -66,6 +68,12 @@ const PinAuth = () => {
           pin_num: pin,
         };
         postRemmitance(params, data);
+      } else if (api === 'qrpay') {
+        const data: QRdata = {
+          ...(pinData as QRdata),
+          pin_num: pin,
+        };
+        qrpay(data);
       } else if (api === 'deleteSyncAccount') {
         const data: DeleteSyncAccountData = {
           ...(pinData as DeleteSyncAccountData),

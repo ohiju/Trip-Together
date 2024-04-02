@@ -1,9 +1,5 @@
 package com.ssafy.triptogether.member.domain;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
@@ -13,23 +9,17 @@ import com.ssafy.triptogether.plan.domain.Plan;
 import com.ssafy.triptogether.review.domain.Review;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.tripaccount.domain.TripAccount;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,7 +31,7 @@ public class Member extends BaseEntity {
 	@Column(name = "member_id")
 	private Long id;
 
-	@Column(name = "bank_uuid")
+	@Column(name = "bank_uuid", unique = true)
 	private String uuid;
 
 	@Column(name = "pin_num")
@@ -72,6 +62,9 @@ public class Member extends BaseEntity {
 	@Column(name = "rate")
 	private Double rate;
 
+	@Column(name = "report_count")
+	private Integer reportCount;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<TripAccount> tripAccounts = new ArrayList<>();
@@ -97,12 +90,13 @@ public class Member extends BaseEntity {
 	private List<MemberSettlement> memberSettlements = new ArrayList<>();
 
 	@Builder
-	public Member(String username, String uuid, String nickname, Gender gender, LocalDate birth) {
+	public Member(String username, String uuid, String nickname, Gender gender, LocalDate birth, Integer reportCount) {
 		this.username = username;
 		this.uuid = uuid;
 		this.nickname = nickname;
 		this.gender = gender;
 		this.birth = birth;
+		this.reportCount = reportCount;
 	}
 
 	public void update(ProfileUpdateRequest profileUpdateRequest) {
@@ -113,5 +107,11 @@ public class Member extends BaseEntity {
 
 	public void savePin(String pinNum) {
 		this.pinNum = pinNum;
+	}
+
+	public void report() {
+		if (this.reportCount < 5) {
+			this.reportCount++;
+		}
 	}
 }

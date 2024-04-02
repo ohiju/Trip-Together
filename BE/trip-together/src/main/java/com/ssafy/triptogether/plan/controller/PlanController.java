@@ -33,12 +33,20 @@ public class PlanController {
     private final PlanLoadService planLoadService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<DailyPlansResponse>> findPlans(
+	public ResponseEntity<ApiResponse<DailyPlansResponse>> findMyPlans(
 		@AuthenticationPrincipal SecurityMember securityMember
 	) {
 		long memberId = securityMember.getId();
 		DailyPlansResponse planList = planLoadService.findPlans(memberId);
 		return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, planList);
+	}
+
+	@GetMapping("/member/{member_id}")
+	public ResponseEntity<ApiResponse<DailyPlansResponse>> findPlans(
+		@PathVariable("member_id") long memberId
+	) {
+		DailyPlansResponse response = planLoadService.findPlans(memberId);
+		return ApiResponse.toResponseEntity(OK, SUCCESS_PLAN_DETAIL_FIND, response);
 	}
 
 	@PostMapping

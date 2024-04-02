@@ -11,6 +11,8 @@ import lombok.Builder;
 public record AttendeeReceiptsResponse(
 	@JsonProperty("price")
 	Double price,
+	@JsonProperty("has_sent")
+	Boolean hasSent,
 	@JsonProperty("receipts")
 	List<AttendeesReceiptDetail> attendeesReceiptDetails
 ) {
