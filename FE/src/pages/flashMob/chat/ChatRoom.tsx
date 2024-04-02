@@ -31,10 +31,9 @@ const ChatRoom = () => {
     if (!client) return;
 
     const connect = () => {
+      client.configure({reconnectDelay: 5000});
       client.onConnect = async () => {
         await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
-          console.log(item, 1);
-
           const empty: message[] = [];
           const stringifyEmpty = JSON.stringify(empty);
           await AsyncStorage.setItem(`${flashmob_id}`, stringifyEmpty);
@@ -53,8 +52,6 @@ const ChatRoom = () => {
             const data: message = await JSON.parse(frame.body);
 
             await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
-              console.log(item, 2);
-
               if (item !== undefined && item) {
                 const prev: message[] = JSON.parse(item);
                 const next: message[] = [...prev, data];
@@ -77,6 +74,7 @@ const ChatRoom = () => {
     connect();
     return () => {
       if (subscription.current) {
+        client.configure({reconnectDelay: 0});
         subscription.current.unsubscribe();
       }
     };

@@ -5,7 +5,7 @@ const parseCardHistory = (history: cardHistory) => {
   const image_url = imagePath[`${history.nation.toLowerCase()}round`];
   const nation_kr = history.nation_kr;
   let sign = '';
-  if (history.type !== '입금') {
+  if (history.type !== '입금' && history.type !== '환전') {
     sign = '-';
   }
   const unit = String.fromCharCode(history.unit);

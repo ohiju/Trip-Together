@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {font_dark} from '../../../constants/colors';
+import {bg_danger, font_danger, font_dark} from '../../../constants/colors';
 
 const Wrapper = styled.View`
   flex-direction: row;
@@ -23,6 +23,14 @@ const UserInfoView = styled.View`
   margin-left: 15px;
 `;
 
+const UserInfoTopView = styled.View`
+  flex-direction: row;
+`;
+
+const NameView = styled.View`
+  flex: 1;
+`;
+
 const Nickname = styled.Text`
   color: ${font_dark};
   font-weight: 600;
@@ -33,6 +41,20 @@ const Username = styled.Text`
   font-size: 14px;
 `;
 
+const LogoutView = styled.View``;
+
+const LogoutBtn = styled.Pressable`
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: ${bg_danger};
+  padding: 5px 10px;
+`;
+
+const LogoutBtnText = styled.Text`
+  color: ${font_danger};
+  font-weight: 600;
+`;
+
 const Description = styled.Text`
   width: 100%;
   font-size: 14px;
@@ -40,9 +62,14 @@ const Description = styled.Text`
 
 export {
   Description,
+  LogoutBtn,
+  LogoutBtnText,
+  LogoutView,
+  NameView,
   Nickname,
   ProfileImage,
   ProfileImageView,
+  UserInfoTopView,
   UserInfoView,
   Username,
   Wrapper,
