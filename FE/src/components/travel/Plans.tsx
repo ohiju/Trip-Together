@@ -105,7 +105,6 @@ const Plans = () => {
           },
         },
       );
-      console.log(response.data.data);
       dispatch(setModify(response.data.data));
     } catch (error) {
       console.error('Error fetching plans:', error);

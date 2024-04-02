@@ -56,7 +56,6 @@ const KeywordSearch = () => {
         },
       );
       const res = response.data.data;
-      console.log(response.data);
       dispatch(setPlaces(res));
       navigation.navigate('map');
     } catch (error) {

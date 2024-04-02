@@ -28,7 +28,7 @@ const ProfileImage = styled.Image`
 
 const ChatRoomDetails = styled.View`
   margin-left: 10px;
-  width: 58%;
+  width: 55%;
 `;
 
 const ChatRoomTitle = styled.Text`
