@@ -3,6 +3,7 @@ import React from 'react';
 import parseProfile from '../../../hooks/parseProfile';
 import useSwipeTop from '../../../hooks/useSwipeTop';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
+import {ProfileMainProps} from '../../../interfaces/router/myPage/ProfileStackParams';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
 import {
@@ -26,7 +27,10 @@ const Profile = () => {
   // 라우팅
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const onSwipeTop = () => {
-    navigation.navigate('ProfileMain');
+    const props: ProfileMainProps = {
+      member_id: user.member_id,
+    };
+    navigation.navigate('ProfileMain', props);
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
 

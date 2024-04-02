@@ -7,7 +7,7 @@ import {
 } from '../../interfaces/states/UserState';
 
 const initialState: UserState = {
-  isLogin: false,
+  token: '',
   user: {
     member_id: 0,
     username: 'default',
@@ -37,8 +37,8 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setLogin: (state, action: PayloadAction<boolean>) => {
-      state.isLogin = action.payload;
+    setLogin: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
     },
     setUser: (state, action: PayloadAction<user>) => {
       state.user = action.payload;

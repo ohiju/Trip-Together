@@ -115,26 +115,36 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 	@Transactional
 	@Override
-	public boolean applyFlashmob(
-		long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
-		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
+	public RequestMemberResponse applyFlashmob(long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
+		// check if master
 		boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, masterId);
 		if (!isMaster) {
 			throw new ForbiddenException("applyFlashmob", MEMBER_NOT_MASTER, masterId);
 		}
 
-		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository,
-			flashmobId, memberId);
+		// find member flashmob & member
+		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+
+		// apply & send message
+		boolean isAccepted = false;
 		if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
 			memberFlashMob.applyAcceptance();
 			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(), memberFlashMob.getMember().getImageUrl());
-			return true; // 수락되었을 시에만 true 반환
+			isAccepted = true;
 		} else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
 			memberFlashMob.applyDenial();
 		} else {
 			throw new BadRequestException("applyFlashmob", BAD_STATUS_REQUEST, applyFlashmobRequest.status());
 		}
-		return false;
+
+		// create & return response
+		return RequestMemberResponse.builder()
+			.memberId(member.getId())
+			.memberProfileImageUrl(member.getImageUrl())
+			.nickname(member.getNickname())
+			.isAccepted(isAccepted)
+			.build();
 	}
 
 	@Transactional

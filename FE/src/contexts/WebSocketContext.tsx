@@ -1,5 +1,6 @@
 import {TRIP_WS_URL} from '@env';
-import React, {createContext, useEffect, useState} from 'react';
+import {Client, StompConfig} from '@stomp/stompjs';
+import React, {createContext, useEffect, useRef} from 'react';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 
@@ -7,44 +8,56 @@ interface WebSocetContainerProps {
   children?: React.ReactNode;
 }
 
-const WebSocketContext = createContext<WebSocket | null>(null);
+const WebSocketContext = createContext<Client | null>(null);
 
 const WebSocketContainer = ({children}: WebSocetContainerProps) => {
-  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
-  const isLoggedin = useAppSelector((state: RootState) => state.user.isLogin);
+  const token = useAppSelector((state: RootState) => state.user.token);
+  const client = useRef<Client | null>(null);
 
   useEffect(() => {
-    if (isLoggedin) {
-      const socket = new WebSocket(TRIP_WS_URL);
+    const stompConfig: StompConfig = {
+      brokerURL: `${TRIP_WS_URL}`,
+      debug: (frame: string) => console.log(frame),
 
-      socket.onopen = () => {
-        console.log('onopen');
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      forceBinaryWSFrames: true,
+      appendMissingNULLonIncoming: true,
+    };
+
+    if (token) {
+      client.current = new Client(stompConfig);
+
+      client.current.onConnect = () => {
+        console.log(`connected to ${stompConfig.brokerURL}`);
       };
 
-      socket.onmessage = e => {
-        console.log('onmessage', e.data);
+      client.current.onDisconnect = error => {
+        console.log(`disconnected to  ${stompConfig.brokerURL}`);
+        console.log(error);
       };
 
-      socket.onerror = e => {
-        console.log('onerror', e.message);
+      client.current.onStompError = error => {
+        console.log(`stomp error to  ${stompConfig.brokerURL}`);
+        console.log(error);
       };
 
-      socket.onclose = e => {
-        console.log('onclose', e.code, e.reason);
+      client.current.onWebSocketError = error => {
+        console.log(`websoket error to  ${stompConfig.brokerURL}`);
+        console.log(error);
       };
-
-      setWebSocket(socket);
 
       return () => {
-        if (socket) {
-          socket.close();
+        if (client.current) {
+          client.current.deactivate();
         }
       };
     }
-  }, [isLoggedin]);
+  }, [token]);
 
   return (
-    <WebSocketContext.Provider value={webSocket}>
+    <WebSocketContext.Provider value={client.current}>
       {children}
     </WebSocketContext.Provider>
   );
