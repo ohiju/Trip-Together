@@ -10,6 +10,7 @@ import {setDisplay} from '../../store/slices/tabState';
 import axios from 'axios';
 import {setStartRegion} from '../../store/slices/trip';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 interface CityResult {
   region_id: number;
@@ -35,7 +36,7 @@ const Search = () => {
 
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/regions?name=${text}`,
+        `${TRIP_API_URL}/api/attraction/v1/regions?name=${text}`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,

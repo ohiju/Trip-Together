@@ -25,6 +25,7 @@ import getToken from '../../hooks/getToken';
 import AppButton from '../../components/common/AppButton';
 import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
 import {imagePath} from '../../assets/images/imagePath';
+import {TRIP_API_URL} from '@env';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -59,7 +60,7 @@ const FlashList = () => {
       const {access_token} = await getToken();
       try {
         const response = await axios.get(
-          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}/flashmobs`,
+          `${TRIP_API_URL}/api/attraction/v1/attractions/${id}/flashmobs`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -92,7 +93,7 @@ const FlashList = () => {
     if (!item.status) {
       try {
         const response = await axios.post(
-          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {},
           {
             headers: {
@@ -108,7 +109,7 @@ const FlashList = () => {
     } else if (item.status === 'WAIT') {
       try {
         const response = await axios.delete(
-          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,

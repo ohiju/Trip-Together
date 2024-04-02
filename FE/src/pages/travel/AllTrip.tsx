@@ -6,6 +6,7 @@ import {bg_light} from '../../constants/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import getToken from '../../hooks/getToken';
 import getFlag from '../../hooks/getFlag';
+import {TRIP_API_URL} from '@env';
 
 interface PlanDataProps {
   plan_id: number;
@@ -83,14 +84,11 @@ const AllTrip = () => {
       const {access_token} = await getToken();
 
       try {
-        const response = await axios.get(
-          'https://j10a309.p.ssafy.io/api/plan/v1/plans',
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
+        const response = await axios.get(`${TRIP_API_URL}/api/plan/v1/plans`, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
           },
-        );
+        });
         setPlansData(response.data.data.plans);
       } catch (error) {
         // console.error('Error fetching plans:', error);
@@ -115,7 +113,7 @@ const AllTrip = () => {
     const {access_token} = await getToken();
 
     try {
-      await axios.delete(`https://j10a309.p.ssafy.io/api/plan/v1/plans/${id}`, {
+      await axios.delete(`${TRIP_API_URL}/api/plan/v1/plans/${id}`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },

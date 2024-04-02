@@ -26,6 +26,7 @@ import {
 } from './MakeFlashStyle';
 import axios from 'axios';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 const FlashCreate = () => {
   const [title, setTitle] = useState('');
@@ -64,7 +65,7 @@ const FlashCreate = () => {
     };
     try {
       await axios.post(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}/flashmobs`,
+        `${TRIP_API_URL}/api/attraction/v1/attractions/${id}/flashmobs`,
         data,
         {
           headers: {

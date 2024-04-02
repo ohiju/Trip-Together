@@ -36,6 +36,7 @@ import {useAppDispatch} from '../../store/hooks';
 import getToken from '../../hooks/getToken';
 import getFlag from '../../hooks/getFlag';
 import getCurrency from '../../hooks/getCurrency';
+import {TRIP_API_URL} from '@env';
 
 interface plansDataProps {
   plan_id: number;
@@ -60,14 +61,11 @@ const Plans = () => {
     const {access_token} = await getToken();
 
     try {
-      const response = await axios.get(
-        'https://j10a309.p.ssafy.io/api/plan/v1/plans',
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
+      const response = await axios.get(`${TRIP_API_URL}/api/plan/v1/plans`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
         },
-      );
+      });
       if (response.data.data.plans !== null) {
         setPlansData(response.data.data.plans);
       }
@@ -98,7 +96,7 @@ const Plans = () => {
     const {access_token} = await getToken();
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/plan/v1/plans/${plansData[now].plan_id}`,
+        `${TRIP_API_URL}/api/plan/v1/plans/${plansData[now].plan_id}`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,

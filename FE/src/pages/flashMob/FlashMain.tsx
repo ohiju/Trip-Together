@@ -11,6 +11,7 @@ import {Container, Wrapper} from './FlashMainStyle';
 import axios from 'axios';
 import getToken from '../../hooks/getToken';
 import {setPlaces} from '../../store/slices/trip';
+import {TRIP_API_URL} from '@env';
 
 const FlashMain = () => {
   const [myPosition, setMyPosition] = useState<position | null>({
@@ -56,7 +57,7 @@ const FlashMain = () => {
       const {access_token} = await getToken();
       try {
         const response = await axios.get(
-          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/flashmobs?latitude=${41.3879}&longitude=${2.16992}&latitude_delta=${1.2}&longitude_delta=${1.1}&category=`,
+          `${TRIP_API_URL}/api/attraction/v1/attractions/flashmobs?latitude=${41.3879}&longitude=${2.16992}&latitude_delta=${1.2}&longitude_delta=${1.1}&category=`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
