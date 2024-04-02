@@ -1,7 +1,10 @@
 import {IMAGE_BASE_URL} from '@env';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
 import {bg_danger, bg_lightgray, primary} from '../../../constants/colors';
+import {TabParams} from '../../../interfaces/router/TabParams';
+import {ProfileMainProps} from '../../../interfaces/router/myPage/ProfileStackParams';
 import {message as messageType} from '../../../interfaces/states/ChatState';
 import {
   Btn,
@@ -32,7 +35,13 @@ const Attent = ({message}: AttendProps) => {
   const handleReject = () => {};
 
   // 라우팅
-  const handleToProfile = () => {};
+  const navigation = useNavigation<NavigationProp<TabParams>>();
+  const handleToProfile = () => {
+    const props: ProfileMainProps = {
+      member_id: message.sender_id,
+    };
+    navigation.navigate('ProfileMain', props);
+  };
 
   return (
     <Wrapper>

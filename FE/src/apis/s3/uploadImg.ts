@@ -2,6 +2,7 @@ import {ManagedUpload} from 'aws-sdk/clients/s3';
 import {Buffer} from 'buffer';
 import * as RNFS from 'react-native-fs';
 import s3, {awsS3config} from '../../constants/S3';
+import {ProfileMainProps} from '../../interfaces/router/myPage/ProfileStackParams';
 import {RootState} from '../../store';
 import {useAppSelector} from '../../store/hooks';
 import usePutMember, {PutMemberData} from '../member/usePutMember';
@@ -81,7 +82,10 @@ const useS3Upload = () => {
         nickname: nickname ? nickname : member.nickname,
         description: description ? description : member.description,
       };
-      await putMember(data);
+      const props: ProfileMainProps = {
+        member_id: member.member_id,
+      };
+      await putMember(data, props);
     } catch (err) {
       console.error(err);
       throw new Error(`Error in s3Upload: ${err}`);

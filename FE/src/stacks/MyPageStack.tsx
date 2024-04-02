@@ -90,7 +90,6 @@ const MyPageNavigator = () => {
           name="ProfileMain"
           component={ProfileMain}
           options={{
-            title: '내 프로필',
             fullScreenGestureEnabled: true,
             customAnimationOnGesture: true,
             animation: 'slide_from_bottom',

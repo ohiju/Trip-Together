@@ -11,11 +11,11 @@ import TabNavigator from './TabNavigator';
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
+  const token = useAppSelector((state: RootState) => state.user.token);
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      {isLogin ? (
+      {token ? (
         <>
           <Stack.Screen name="Main" component={TabNavigator} />
           <Stack.Screen

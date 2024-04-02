@@ -35,7 +35,7 @@ import {
 
 const Receipt = () => {
   // 데이터
-  const {flashmob_id, settlement_id, currency_code, is_done} =
+  const {flashmob_id, settlement_id, currency_code} =
     useRoute<RouteProp<TranHistoryStackParams, 'Receipt'>>().params;
   const receiptDetail = useAppSelector(
     (state: RootState) => state.chat.receipt,
@@ -95,8 +95,8 @@ const Receipt = () => {
         </Histories>
         <AppButton
           style={remittanceButton}
-          text={is_done ? '송금완료' : '송금하기'}
-          disabled={is_done}
+          text={receiptDetail.has_sent ? '송금완료' : '송금하기'}
+          disabled={receiptDetail.has_sent}
           onPress={remmitance}
         />
       </CardView>
