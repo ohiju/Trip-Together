@@ -44,15 +44,20 @@ const KeywordSearch = () => {
 
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=&category=${text}`,
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+          trip.start_latitude
+        }&longitude=${
+          trip.start_longitude
+        }&latitude_delta=${0.622}&longitude_delta=${0.421}&category=${text}`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         },
       );
-      const regions = response.data.data;
-      setSearchResults(regions);
+      const res = response.data.data;
+      dispatch(setPlaces(res));
+      navigation.navigate('map');
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
@@ -99,10 +104,10 @@ const KeywordSearch = () => {
           <IconImage source={require('../../assets/images/location.png')} />
           <IconText>명소</IconText>
         </IconInputs>
-        <IconInputs onPress={() => handleButtonPress('축제')}>
+        {/* <IconInputs onPress={() => handleButtonPress('축제')}>
           <IconImage source={require('../../assets/images/confetti.png')} />
           <IconText>축제</IconText>
-        </IconInputs>
+        </IconInputs> */}
         <IconInputs onPress={() => handleButtonPress('식당')}>
           <IconImage source={require('../../assets/images/restaurant.png')} />
           <IconText>음식</IconText>

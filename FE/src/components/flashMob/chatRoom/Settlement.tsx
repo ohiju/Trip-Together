@@ -1,7 +1,19 @@
 import {IMAGE_BASE_URL} from '@env';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React from 'react';
 import {imagePath} from '../../../assets/images/imagePath';
 import {bg_lightgray, primary} from '../../../constants/colors';
+import {ChatStackParams} from '../../../interfaces/router/flashMob/ChatMainStackParams';
+import {FlashMobStackParams} from '../../../interfaces/router/flashMob/FlashMobStackParams';
+import {
+  CurSituProps,
+  ReceiptProps,
+} from '../../../interfaces/router/flashMob/TranHistoryStackParams';
 import {message as messageType} from '../../../interfaces/states/ChatState';
 import {
   Btn,
@@ -21,14 +33,39 @@ interface SettlementProps {
   message: messageType;
 }
 
+interface settlementData {
+  settlement_id: number;
+  currency_code: string;
+}
+
 const Settlement = ({message}: SettlementProps) => {
   const image_url = message.sender_image_url
     ? {uri: `${IMAGE_BASE_URL}/${message.sender_image_url}`}
     : imagePath.profiledefault;
+  const {settlement_id, currency_code}: settlementData = JSON.parse(
+    message.content,
+  );
 
   // 라우팅
-  const handleToReceipt = () => {};
-  const handleToCurSitu = () => {};
+  const {flashmob_id} =
+    useRoute<RouteProp<ChatStackParams, 'ChatRoom'>>().params;
+  const navigation = useNavigation<NavigationProp<FlashMobStackParams>>();
+  const handleToReceipt = () => {
+    const props: ReceiptProps = {
+      flashmob_id,
+      settlement_id,
+      currency_code,
+    };
+    navigation.navigate('Receipt', props);
+  };
+  const handleToCurSitu = () => {
+    const props: CurSituProps = {
+      flashmob_id,
+      settlement_id,
+      currency_code,
+    };
+    navigation.navigate('CurSitu', props);
+  };
 
   return (
     <Wrapper>

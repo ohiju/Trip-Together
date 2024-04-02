@@ -2,18 +2,22 @@ package com.ssafy.triptogether.attraction.repository.query;
 
 import static com.querydsl.core.types.ExpressionUtils.*;
 import static com.ssafy.triptogether.attraction.domain.QAttraction.*;
+import static com.ssafy.triptogether.attraction.domain.QAttractionCategory.*;
 import static com.ssafy.triptogether.flashmob.domain.QFlashMob.*;
 
 import java.util.List;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListItemResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
 import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponseWD;
+import com.ssafy.triptogether.attraction.domain.QCategory;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class AttractionRepositoryCustomImpl implements AttractionRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
+	private final MysqlNativeSqlCreator mysqlNativeSqlCreator;
 
 	@Override
 	public List<AttractionListItemResponseWD> findAttractionClick(double latitude, double longitude, double distance,
@@ -36,22 +41,14 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				attraction.avgPrice,
 				attraction.longitude,
 				attraction.latitude,
-				new MysqlNativeSqlCreator().createCalcDistanceSQL(
-					latitude,
-					longitude,
-					attraction.latitude,
-					attraction.longitude
-				).as("distance")
+				distanceTo(latitude, longitude).as("distance")
 			))
 			.from(attraction)
-			.where(new MysqlNativeSqlCreator().createCalcDistanceSQL(
-					latitude,
-					longitude,
-					attraction.latitude,
-					attraction.longitude
-				).loe(distance)
-				.and(attraction.name.like("%" + category + "%")))
-			// .orderBy(attraction.avgRating.desc())
+			.leftJoin(attractionCategory).on(attraction.id.eq(attractionCategory.attraction.id))
+			// .leftJoin(QCategory.category).on(QCategory.category.id.eq(attractionCategory.category.id))
+			.where(
+				distanceTo(latitude, longitude).loe(distance),
+				searchCategory(category))
 			.orderBy(Expressions.numberTemplate(Double.class, "distance").asc())
 			.fetch();
 	}
@@ -70,12 +67,7 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 			))
 			.from(attraction)
 			.where(attraction.name.like("%" + keyword + "%"))
-			.orderBy(new MysqlNativeSqlCreator().createCalcDistanceSQL(
-				latitude,
-				longitude,
-				attraction.latitude,
-				attraction.longitude
-			).asc())
+			.orderBy(distanceTo(latitude, longitude).asc())
 			.limit(5)
 			.fetch();
 	}
@@ -100,13 +92,24 @@ public class AttractionRepositoryCustomImpl implements AttractionRepositoryCusto
 				)
 			))
 			.from(attraction)
-			.where(new MysqlNativeSqlCreator().createCalcDistanceSQL(
-				latitude,
-				longitude,
-				attraction.latitude,
-				attraction.longitude
-			).loe(distance))
+			.where(distanceTo(latitude, longitude).loe(distance))
 			.orderBy(attraction.avgRating.desc())
 			.fetch();
+	}
+
+	private BooleanExpression searchCategory(String category) {
+		if (category.isEmpty()) {
+			return null;
+		}
+		return attractionCategory.category.name.like("%" + category + "%");
+	}
+
+	private NumberExpression<Double> distanceTo(double latitude, double longitude) {
+		return mysqlNativeSqlCreator.createCalcDistanceSQL(
+			latitude,
+			longitude,
+			attraction.latitude,
+			attraction.longitude
+		);
 	}
 }

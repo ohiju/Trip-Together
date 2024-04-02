@@ -1,22 +1,8 @@
 package com.ssafy.triptogether.attraction.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ssafy.triptogether.attraction.data.request.FlashmobCreateRequest;
 import com.ssafy.triptogether.attraction.data.request.FlashmobUpdateRequest;
-import com.ssafy.triptogether.attraction.data.response.AttractionDetailFindResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListFindResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionFlashmobListItemResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponse;
-import com.ssafy.triptogether.attraction.data.response.AttractionListItemResponseWD;
-import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
-import com.ssafy.triptogether.attraction.data.response.FlashmobListFindResponse;
-import com.ssafy.triptogether.attraction.data.response.FlashmobUpdateResponse;
-import com.ssafy.triptogether.attraction.data.response.RegionLoadDetail;
-import com.ssafy.triptogether.attraction.data.response.RegionsLoadResponse;
+import com.ssafy.triptogether.attraction.data.response.*;
 import com.ssafy.triptogether.attraction.domain.Attraction;
 import com.ssafy.triptogether.attraction.domain.AttractionImage;
 import com.ssafy.triptogether.attraction.repository.AttractionRepository;
@@ -27,6 +13,7 @@ import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
 import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
 import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
+import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.utils.distance.MysqlNativeSqlCreator;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.domain.RoomStatus;
@@ -35,8 +22,13 @@ import com.ssafy.triptogether.member.utils.MemberUtils;
 import com.ssafy.triptogether.plan.data.response.ReviewResponse;
 import com.ssafy.triptogether.review.repository.ReviewRepository;
 import com.ssafy.triptogether.review.utils.ReviewUtils;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.BLACKLIST_MEMBER;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -113,6 +105,11 @@ public class AttractionServiceImpl implements AttractionSaveService, AttractionL
 	public long createFlashmob(Long memberId, long attractionId, FlashmobCreateRequest flashmobCreateRequest) {
 		Attraction attraction = AttractionUtils.findByAttractionId(attractionRepository, attractionId);
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+
+		// blacklist prevention
+		if (member.getReportCount() >= 5) {
+			throw new BadRequestException("sendAttendanceRequest", BLACKLIST_MEMBER);
+		}
 
 		FlashMob flashMob = FlashMob.builder()
 			.attraction(attraction)

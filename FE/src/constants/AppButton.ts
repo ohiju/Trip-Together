@@ -3,6 +3,7 @@ import {
   bg_danger,
   bg_light,
   bg_main,
+  bg_warning,
   font_light,
   primary,
   primary_light,
@@ -109,6 +110,21 @@ const profileEditButton: AppButtonStyle = {
   },
 };
 
+const reportButton: AppButtonStyle = {
+  button: {
+    width: '100%',
+    bg1: bg_light,
+    bg2: bg_main,
+    borderC: bg_warning,
+    borderW: '2px',
+    borderR: '10px',
+    padding: '5px 0',
+  },
+  font: {
+    color: bg_warning,
+  },
+};
+
 const remittanceButton: AppButtonStyle = {
   button: {
     width: '100%',
@@ -130,6 +146,7 @@ export {
   myWalletButton,
   profileEditButton,
   remittanceButton,
+  reportButton,
   socialLoginButton,
   MakeDeleteButton,
 };

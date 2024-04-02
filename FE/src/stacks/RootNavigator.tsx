@@ -1,17 +1,27 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import getToken from '../hooks/getToken';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
 import Login from '../pages/Login';
 import PinAuth from '../pages/PinAuth';
 import SocialLogin from '../pages/SocialLogin';
-import {RootState} from '../store';
-import {useAppSelector} from '../store/hooks';
 import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const isLogin = useAppSelector((state: RootState) => state.user.isLogin);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const {access_token} = await getToken();
+      if (access_token) {
+        setIsLogin(true);
+      }
+    };
+
+    checkLogin();
+  }, []);
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>

@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React from 'react';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
 import useSwipeTop from '../../hooks/useSwipeTop';
@@ -23,10 +23,10 @@ import {
 } from './PlaceInfoStyle';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
 import {StyledShadow} from '../myPage/main/ProfileStyle';
+import getCurrency from '../../hooks/getCurrency';
+import {useAppSelector} from '../../store/hooks';
 
 const PlaceInfo = ({theme, place}: any) => {
-  const [rating] = useState(4.9);
-
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const onSwipeTop = () => {
     if (theme === 'trip') {
@@ -36,6 +36,7 @@ const PlaceInfo = ({theme, place}: any) => {
     }
   };
   const {onTouchStart, onTouchEnd} = useSwipeTop(onSwipeTop);
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
 
   const handlePressMake = () => {
     navigation.navigate('FlashCreate', {id: place.attraction_id});
@@ -52,22 +53,24 @@ const PlaceInfo = ({theme, place}: any) => {
           <PlaceView>
             <PlaceImageView>
               <PlaceImage
-                source={{uri: place.thumbnail_image_url}}
+                source={{uri: place?.thumbnail_image_url}}
                 resizeMode="contain"
               />
             </PlaceImageView>
             <PlaceInfoView>
-              <PlaceName>{place.name}</PlaceName>
-              <Address>{place.address}</Address>
+              <PlaceName>{place?.name}</PlaceName>
+              <Address>{place?.address}</Address>
               {theme === 'trip' ? (
                 <Description>
-                  <Rating>{place.avg_rating}</Rating>
-                  <StarRatingDisplay rating={place.avg_rating} starSize={20} />
-                  <Price>{place.avg_price}</Price>
+                  <Rating>{place?.avg_rating}</Rating>
+                  <StarRatingDisplay rating={place?.avg_rating} starSize={20} />
+                  <Price>
+                    {getCurrency(nation)} {place?.avg_price}
+                  </Price>
                 </Description>
               ) : (
                 <DetailsRow>
-                  <Rating>평점: {rating}</Rating>
+                  <Rating>평점: {place?.avg_rating}</Rating>
                   <ButtonContainer>
                     <ButtonView>
                       <AppButton

@@ -1,19 +1,5 @@
 package com.ssafy.triptogether.member.controller;
 
-import static com.ssafy.triptogether.global.data.response.StatusCode.*;
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-import static org.springframework.http.HttpStatus.*;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.provider.CookieProvider;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
@@ -28,11 +14,18 @@ import com.ssafy.triptogether.member.data.response.ProfileUpdateResponse;
 import com.ssafy.triptogether.member.data.response.ReissueResponse;
 import com.ssafy.triptogether.member.service.MemberLoadService;
 import com.ssafy.triptogether.member.service.MemberSaveService;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import static com.ssafy.triptogether.global.data.response.StatusCode.*;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.COOKIE_NOT_FOUND;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/member/v1/members")
@@ -42,6 +35,14 @@ public class MemberController {
 	private final MemberSaveService memberSaveService;
 	private final MemberLoadService memberLoadService;
 	private final CookieProvider cookieProvider;
+
+	@PostMapping("/{member_id}/report")
+	public ResponseEntity<ApiResponse<Void>> reportMember(
+		@PathVariable("member_id") long memberId
+	) {
+		memberSaveService.reportMember(memberId);
+		return ApiResponse.emptyResponse(OK, SUCCESS_REPORT);
+	}
 
 	@PatchMapping
 	public ResponseEntity<ApiResponse<ProfileUpdateResponse>> updateProfile(

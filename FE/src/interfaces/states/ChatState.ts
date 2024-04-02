@@ -52,6 +52,7 @@ interface settlements {
 
 interface receiptDetail {
   price: number;
+  has_sent: boolean;
   receipts: receipt[];
 }
 

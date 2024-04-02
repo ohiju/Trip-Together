@@ -34,6 +34,7 @@ public enum ErrorCode {
     // REVIEW
     REVIEW_NOT_FOUND(404, "여행지를 찾을 수 없습니다"),
     // FLASHMOB
+    BLACKLIST_MEMBER(403, "블랙리스트에 추가된 회원입니다."),
     UNDEFINED_FLASHMOB(404, "번개를 찾을 수 없습니다."),
     UNDEFINED_MEMBER_FLASHMOB(404, "사용자의 번개 참여내역을 찾을 수 없습니다."),
     FLASHMOB_MEMBER_NOT_FOUND(404, "번개에 참여한 사용자를 찾을 수 없습니다."),

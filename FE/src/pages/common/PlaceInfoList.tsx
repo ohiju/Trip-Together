@@ -6,8 +6,6 @@ import {
 import React from 'react';
 import {FlatList} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import Places from '../../assets/data/place';
-import {imagePath} from '../../assets/images/imagePath';
 import AppButton from '../../components/common/AppButton';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
 import {
@@ -26,7 +24,7 @@ import {
 } from './PlaceInfoListStyle';
 import {useAppSelector} from '../../store/hooks';
 import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import useSwipeBottom from '../../hooks/useSwipeBottom';
+import getCurrency from '../../hooks/getCurrency';
 
 interface RouteParams {
   theme?: string;
@@ -37,6 +35,7 @@ const PlaceInfoList = () => {
   const route = useRoute();
   const {theme}: RouteParams = route.params || {};
   const places = useAppSelector(state => state.trip.tripInfo.places);
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
 
   // const onSwipeBottom = () => {
   //   navigation.navigate('FlashMain');
@@ -76,7 +75,9 @@ const PlaceInfoList = () => {
                 <Rating>평점: {item.avg_rating}</Rating>
                 <StarRatingDisplay rating={item.avg_rating} starSize={20} />
               </StarContainer>
-              <Price>평균 가격: {item.avg_price}</Price>
+              <Price>
+                평균 가격: {getCurrency(nation)} {item.avg_price}
+              </Price>
             </>
           ) : (
             <DetailsRow>

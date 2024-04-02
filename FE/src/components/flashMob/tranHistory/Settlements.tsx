@@ -69,11 +69,7 @@ const Settlements = ({settlements, type}: SettlementsProps) => {
   const navigation = useNavigation<NavigationProp<TranHistoryStackParams>>();
   const {flashmob_id} =
     useRoute<RouteProp<TranHistoryStackParams, 'TranHistory'>>().params;
-  const handleToDetail = (
-    settlement_id: number,
-    currency_code: string,
-    is_done: boolean,
-  ) => {
+  const handleToDetail = (settlement_id: number, currency_code: string) => {
     if (type === 'requester') {
       navigation.navigate('CurSitu', {
         flashmob_id,
@@ -85,7 +81,6 @@ const Settlements = ({settlements, type}: SettlementsProps) => {
         flashmob_id,
         settlement_id,
         currency_code,
-        is_done,
       });
     }
   };
@@ -115,7 +110,6 @@ const Settlements = ({settlements, type}: SettlementsProps) => {
                     handleToDetail(
                       settlement.settlement_id,
                       settlement.currency_code,
-                      settlement.is_done,
                     )
                   }
                   style={({pressed}) => ({
