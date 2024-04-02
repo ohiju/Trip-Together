@@ -206,7 +206,10 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 				participantSettlementRepository.save(participantSettlement);
 				makeReceipt(attendeesDetail, participantSettlement);
 			});
-		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(), settlement.toString());
+		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(),
+			String.format("{ \"settlement_id\": \"%d\", \"currency_code\": \"%s\"}",
+				settlement.getId(),
+				settlementSaveRequest.currencyCode()));
 	}
 
 	/**
