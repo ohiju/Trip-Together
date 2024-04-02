@@ -12,7 +12,7 @@ interface MyPageStackParams
     ProfileStackParams {
   MyMain: undefined;
   WalletManage: undefined;
-  CardManage: undefined;
+  PinManage: undefined;
   SyncManage: undefined;
   CardHistory: undefined;
 }

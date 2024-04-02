@@ -14,7 +14,7 @@ const MyData = () => {
   return (
     <Wrapper>
       <TitleView>
-        <Title>마이 페이지</Title>
+        <Title>소비 데이터</Title>
       </TitleView>
       <DataView onLayout={onViewLayout}>
         <Data

@@ -3,7 +3,6 @@ import {ImageSourcePropType} from 'react-native';
 interface IconPath {
   [key: string | number]: ImageSourcePropType;
   bank: ImageSourcePropType;
-  card: ImageSourcePropType;
   caret: ImageSourcePropType;
   check: ImageSourcePropType;
   checkcircle: ImageSourcePropType;
@@ -12,6 +11,7 @@ interface IconPath {
   lock: ImageSourcePropType;
   plane: ImageSourcePropType;
   pen: ImageSourcePropType;
+  pin: ImageSourcePropType;
   plus: ImageSourcePropType;
   plus2: ImageSourcePropType;
   search: ImageSourcePropType;
@@ -24,7 +24,6 @@ interface IconPath {
 
 export const iconPath: IconPath = {
   bank: require('./bank.svg'),
-  card: require('./card.svg'),
   caret: require('./caret.svg'),
   check: require('./check.svg'),
   checkcircle: require('./checkcircle.svg'),
@@ -32,6 +31,7 @@ export const iconPath: IconPath = {
   info: require('./info.svg'),
   lock: require('./lock.svg'),
   pen: require('./pen.svg'),
+  pin: require('./pin.svg'),
   plane: require('./plane.svg'),
   plus: require('./plus.svg'),
   plus2: require('./plus2.svg'),

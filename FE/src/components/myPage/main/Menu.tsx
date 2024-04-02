@@ -14,7 +14,7 @@ interface MenuProps {
 const Menu = ({menu}: MenuProps) => {
   const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
   const handleNavigate = () => {
-    navigation.navigate(menu.navigation);
+    navigation.navigate(menu.navigation, menu.props);
   };
 
   return (

@@ -39,7 +39,7 @@ public class CodeProvider {
 		StringBuilder code = new StringBuilder();
 
 		for (int i = 0; i < length; i++) {
-			long randomValue = secureRandom.nextInt(1,15403);
+			long randomValue = secureRandom.nextInt(1,15000);
 			KoreanCode randomCode = koreanCodeRepository.findById(randomValue)
 				.orElseGet(()->KoreanCode.builder().code("반짝").build());
 			code.append(randomCode.getCode());

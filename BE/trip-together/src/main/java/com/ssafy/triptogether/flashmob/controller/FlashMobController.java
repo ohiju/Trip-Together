@@ -4,16 +4,10 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
-import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
-import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
-import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
+import com.ssafy.triptogether.flashmob.data.response.*;
 import com.ssafy.triptogether.flashmob.service.FlashMobLoadService;
 import com.ssafy.triptogether.flashmob.service.FlashMobSaveService;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
-import com.ssafy.triptogether.global.data.response.StatusCode;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +36,18 @@ public class FlashMobController {
     }
 
     @GetMapping("/flashmobs")
-    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findAttendingFlashmobList(
+    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findMyAttendingFlashmobList(
         @AuthenticationPrincipal SecurityMember securityMember
     ) {
         long memberId = securityMember.getId();
+        AttendingFlashmobListFindResponse response = flashMobLoadService.findAttendingFlashmobList(memberId);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
+    }
+
+    @GetMapping("/flashmobs/{member_id}")
+    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findAttendingFlashmobList(
+        @PathVariable("member_id") long memberId
+    ) {
         AttendingFlashmobListFindResponse response = flashMobLoadService.findAttendingFlashmobList(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
     }
@@ -85,15 +87,14 @@ public class FlashMobController {
     }
 
     @PatchMapping("/flashmobs/{flashmob_id}/{member_id}")
-    public ResponseEntity<ApiResponse<Void>> applyFlashmob(
+    public ResponseEntity<ApiResponse<RequestMemberResponse>> applyFlashmob(
         @PathVariable("flashmob_id") long flashmobId,
         @PathVariable("member_id") long memberId,
         @RequestBody ApplyFlashmobRequest applyFlashmobRequest,
         @AuthenticationPrincipal SecurityMember securityMember
     ) {
-        boolean isAccepted = flashMobSaveService.applyFlashmob(flashmobId, memberId, applyFlashmobRequest, securityMember.getId());
-        return ApiResponse.emptyResponse(OK,
-            isAccepted ? SUCCESS_APPLY_ACCEPT : SUCCESS_APPLY_DENY);
+        RequestMemberResponse response = flashMobSaveService.applyFlashmob(flashmobId, memberId, applyFlashmobRequest, securityMember.getId());
+        return ApiResponse.toResponseEntity(OK, response.isAccepted() ? SUCCESS_APPLY_ACCEPT : SUCCESS_APPLY_DENY, response);
     }
 
     @DeleteMapping("/flashmobs/{flashmob_id}/exit")

@@ -1,12 +1,5 @@
 package com.ssafy.triptogether.flashmob.service;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
@@ -16,35 +9,15 @@ import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveRequest;
-import com.ssafy.triptogether.flashmob.data.response.AttendeeReceiptsResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
-import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
-import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
-import com.ssafy.triptogether.flashmob.data.response.FlashMobMemberDetail;
-import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
-import com.ssafy.triptogether.flashmob.data.response.ParticipantSettlementsLoadDetail;
-import com.ssafy.triptogether.flashmob.data.response.RequesterSettlementsLoadDetail;
-import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
-import com.ssafy.triptogether.flashmob.domain.FlashMob;
-import com.ssafy.triptogether.flashmob.domain.MemberFlashMob;
-import com.ssafy.triptogether.flashmob.domain.MemberSettlement;
-import com.ssafy.triptogether.flashmob.domain.ParticipantSettlement;
-import com.ssafy.triptogether.flashmob.domain.RequesterSettlement;
-import com.ssafy.triptogether.flashmob.domain.Settlement;
+import com.ssafy.triptogether.flashmob.data.response.*;
+import com.ssafy.triptogether.flashmob.domain.*;
 import com.ssafy.triptogether.flashmob.domain.document.Receipt;
 import com.ssafy.triptogether.flashmob.domain.document.ReceiptHistory;
-import com.ssafy.triptogether.flashmob.repository.FlashMobRepository;
-import com.ssafy.triptogether.flashmob.repository.MemberFlashMobRepository;
-import com.ssafy.triptogether.flashmob.repository.ParticipantSettlementRepository;
-import com.ssafy.triptogether.flashmob.repository.ReceiptRepository;
-import com.ssafy.triptogether.flashmob.repository.RequesterSettlementRepository;
-import com.ssafy.triptogether.flashmob.repository.SettlementRepository;
+import com.ssafy.triptogether.flashmob.repository.*;
 import com.ssafy.triptogether.flashmob.utils.FlashMobUtils;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
-import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.member.domain.Member;
 import com.ssafy.triptogether.member.domain.RoomStatus;
 import com.ssafy.triptogether.member.repository.MemberRepository;
@@ -61,8 +34,13 @@ import com.ssafy.triptogether.tripaccount.provider.AccountHistoryProvider;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 import com.ssafy.triptogether.tripaccount.utils.TripAccountUtils;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -89,6 +67,11 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 		FlashMob flashMob = flashMobRepository.findById(flashmobId)
 			.orElseThrow(() -> new NotFoundException("SendAttendanceRequest", UNDEFINED_FLASHMOB));
+
+		// blacklist prevention
+		if (member.getReportCount() >= 5) {
+			throw new BadRequestException("sendAttendanceRequest", BLACKLIST_MEMBER);
+		}
 
 		// double click prevention
 		if (memberFlashMobRepository.existsByFlashMobIdAndMemberId(flashmobId, memberId)) {
@@ -132,26 +115,36 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 	@Transactional
 	@Override
-	public boolean applyFlashmob(
-		long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
-		FlashMob flashMob = FlashMobUtils.findByFlashmobId(flashMobRepository, flashmobId);
+	public RequestMemberResponse applyFlashmob(long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
+		// check if master
 		boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, masterId);
 		if (!isMaster) {
 			throw new ForbiddenException("applyFlashmob", MEMBER_NOT_MASTER, masterId);
 		}
 
-		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository,
-			flashmobId, memberId);
+		// find member flashmob & member
+		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+
+		// apply & send message
+		boolean isAccepted = false;
 		if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
 			memberFlashMob.applyAcceptance();
 			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(), memberFlashMob.getMember().getImageUrl());
-			return true; // 수락되었을 시에만 true 반환
+			isAccepted = true;
 		} else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
 			memberFlashMob.applyDenial();
 		} else {
 			throw new BadRequestException("applyFlashmob", BAD_STATUS_REQUEST, applyFlashmobRequest.status());
 		}
-		return false;
+
+		// create & return response
+		return RequestMemberResponse.builder()
+			.memberId(member.getId())
+			.memberProfileImageUrl(member.getImageUrl())
+			.nickname(member.getNickname())
+			.isAccepted(isAccepted)
+			.build();
 	}
 
 	@Transactional
@@ -206,7 +199,10 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 				participantSettlementRepository.save(participantSettlement);
 				makeReceipt(attendeesDetail, participantSettlement);
 			});
-		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(), settlement.toString());
+		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(),
+			String.format("{ \"settlement_id\": \"%d\", \"currency_code\": \"%s\"}",
+				settlement.getId(),
+				settlementSaveRequest.currencyCode()));
 	}
 
 	/**
@@ -226,13 +222,13 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			.orElseThrow(
 				() -> new NotFoundException("SettlementSend", SETTLEMENT_NOT_FOUND)
 			);
-		if (settlement.getIsDone()) {
-			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
-		}
 		Currency currency = TripAccountUtils.findByCurrencyCode(currencyRepository, settlement.getCurrencyCode());
 
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId, settlementId);
+		if (participantSettlement.getHasSent()) {
+			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
+		}
 		TripAccount participantTripAccount = participantWithdraw(memberId, pinVerifyRequest, currency,
 			participantSettlement);
 		participantSettlement.settlementSend();
@@ -374,6 +370,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			).toList();
 		return AttendeeReceiptsResponse.builder()
 			.price(participantSettlement.getPrice())
+			.hasSent(participantSettlement.getHasSent())
 			.attendeesReceiptDetails(attendeesReceiptDetails)
 			.build();
 	}
