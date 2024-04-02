@@ -14,9 +14,13 @@ interface GetCardHistoryParams {
   page: number;
   size: number;
   sort: 'DESC' | 'ASC';
+  currency_code?: string;
 }
 
-interface GetCardHistoryResponse extends PaginationResponse<cardHistory> {}
+interface GetCardHistoryResponse extends PaginationResponse<cardHistory> {
+  status: number;
+  message: string;
+}
 
 const useGetCardHistory = () => {
   const axios = useAxois();
@@ -24,6 +28,7 @@ const useGetCardHistory = () => {
 
   const getCardHistoryConfig = async (params: GetCardHistoryParams) => {
     const {access_token} = await getToken();
+
     const axiosConfig: RawAxiosRequestConfig = {
       url: `${TRIP_API_URL}/api/account/v1/trip-account/account-histories`,
       method: 'get',
@@ -41,11 +46,12 @@ const useGetCardHistory = () => {
       .request(await getCardHistoryConfig(params))
       .then((res: AxiosResponse<GetCardHistoryResponse>) => {
         const payload: CardHistoryState = {
-          content: res.data.content,
+          content: res.data.data.content,
           pageable: {
-            pageNumber: res.data.pageable.pageNumber,
-            pageSize: res.data.pageable.pageSize,
-            last: res.data.last,
+            pageNumber: res.data.data.pageable.pageNumber,
+            pageSize: res.data.data.pageable.pageSize,
+            last: res.data.data.last,
+            first: res.data.data.first,
           },
         };
         dispatch(pushContent(payload));

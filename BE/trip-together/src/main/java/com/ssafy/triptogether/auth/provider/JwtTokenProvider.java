@@ -1,14 +1,15 @@
 package com.ssafy.triptogether.auth.provider;
 
-import com.ssafy.triptogether.auth.service.UserDetailsServiceImpl;
-import com.ssafy.triptogether.auth.utils.SecurityMember;
-import com.ssafy.triptogether.auth.utils.SecurityUtil;
-import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +18,22 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.ssafy.triptogether.auth.service.UserDetailsServiceImpl;
+import com.ssafy.triptogether.auth.utils.SecurityMember;
+import com.ssafy.triptogether.auth.utils.SecurityUtil;
+import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedException;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.FORBIDDEN_ACCESS_MEMBER;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j

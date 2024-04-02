@@ -1,5 +1,11 @@
 package com.ssafy.triptogether.auth.validator.pin;
 
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
 import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;

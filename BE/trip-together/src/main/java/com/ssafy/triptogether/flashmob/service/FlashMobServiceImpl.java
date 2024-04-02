@@ -11,6 +11,7 @@ import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
 import com.ssafy.triptogether.auth.utils.SecurityMember;
 import com.ssafy.triptogether.auth.validator.flashmobmember.FlashMobMemberVerify;
 import com.ssafy.triptogether.auth.validator.pin.PinVerify;
+import com.ssafy.triptogether.chat.util.ChatMessageUtil;
 import com.ssafy.triptogether.flashmob.data.request.ApplyFlashmobRequest;
 import com.ssafy.triptogether.flashmob.data.request.AttendeesReceiptDetail;
 import com.ssafy.triptogether.flashmob.data.request.SettlementSaveAttendeesDetail;
@@ -20,6 +21,8 @@ import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusDetail;
 import com.ssafy.triptogether.flashmob.data.response.AttendeesStatusResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobListFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMemberDetail;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMembersLoadResponse;
 import com.ssafy.triptogether.flashmob.data.response.ParticipantSettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.RequesterSettlementsLoadDetail;
 import com.ssafy.triptogether.flashmob.data.response.SettlementsLoadResponse;
@@ -77,6 +80,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	private final CurrencyRepository currencyRepository;
 	// Provider
 	private final AccountHistoryProvider accountHistoryProvider;
+	private final ChatMessageUtil chatMessageUtil;
 
 	@Transactional
 	@Override
@@ -196,6 +200,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 				participantSettlementRepository.save(participantSettlement);
 				makeReceipt(attendeesDetail, participantSettlement);
 			});
+		chatMessageUtil.sendSettlementMsg(flashmobId, memberId, requester.getNickname(), requester.getImageUrl(), settlement.toString());
 	}
 
 	/**
@@ -381,6 +386,15 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 			memberId, settlementId);
 		return AttendeesStatusResponse.builder()
 			.attendeesStatusDetails(attendeesStatusDetails)
+			.build();
+	}
+
+	@FlashMobMemberVerify
+	@Override
+	public FlashMobMembersLoadResponse flashmobMembersLoad(long memberId, long flashmobId) {
+		List<FlashMobMemberDetail> allMemberInFlashMob = flashMobRepository.findAllMemberInFlashMob(flashmobId);
+		return FlashMobMembersLoadResponse.builder()
+			.flashMobMemberDetails(allMemberInFlashMob)
 			.build();
 	}
 }

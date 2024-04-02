@@ -1,4 +1,6 @@
 import React from 'react';
+import {currency as currencyType} from '../../../constants/currencies';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {WithdrawProps} from '../../../interfaces/props/WithdrawProps';
 import {
   Hr,
@@ -12,13 +14,25 @@ import {
   Wrapper,
 } from './WithdrawStyle';
 
-const Withdraw = ({account, ammount, currency, rate}: WithdrawProps) => {
+interface WithdrawProps {
+  account: bankAccount;
+  ammount: string;
+  currency: currencyType;
+  rate: number;
+  type: 'exchange' | 'refund';
+}
+
+const Withdraw = ({account, ammount, currency, rate, type}: WithdrawProps) => {
   const {account_num} = account;
   const balance = account.balance.toLocaleString('ko-KR');
   const unit = String.fromCharCode(currency.unit);
   const withdraw = Math.floor(parseInt(ammount, 10) * rate);
   const WithdrawStr = withdraw.toLocaleString('ko-KR');
-  const change = (account.balance - withdraw).toLocaleString('ko-KR');
+  const change = (
+    type === 'exchange'
+      ? account.balance - withdraw
+      : account.balance + withdraw
+  ).toLocaleString('ko-KR');
 
   return (
     <Wrapper>
@@ -40,7 +54,9 @@ const Withdraw = ({account, ammount, currency, rate}: WithdrawProps) => {
         <SubTitleText>출금 정보</SubTitleText>
       </SubTitleView>
       <ItemView>
-        <ItemTitleText>충전 금액</ItemTitleText>
+        <ItemTitleText>
+          {type === 'exchange' ? '충전' : '환전'} 금액
+        </ItemTitleText>
         <ItemContentText>
           {ammount} {unit}
         </ItemContentText>
@@ -50,12 +66,12 @@ const Withdraw = ({account, ammount, currency, rate}: WithdrawProps) => {
         <ItemContentText>1 : {rate}</ItemContentText>
       </ItemView>
       <ItemView>
-        <ItemTitleText>출금 금액</ItemTitleText>
+        <ItemTitleText>{type === 'exchange' ? '출' : '입'}금액</ItemTitleText>
         <ItemContentText>{WithdrawStr} 원</ItemContentText>
       </ItemView>
       <Hr />
       <ItemView>
-        <ItemTitleText>충전 후 잔액</ItemTitleText>
+        <ItemTitleText>거래 후 잔액</ItemTitleText>
         <ItemContentText>{change} 원</ItemContentText>
       </ItemView>
     </Wrapper>

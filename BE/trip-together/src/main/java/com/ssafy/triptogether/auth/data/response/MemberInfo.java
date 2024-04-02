@@ -20,14 +20,14 @@ public record MemberInfo(
 	@NotNull @JsonProperty("is_pin")
 	Boolean isPin
 ) {
-	public MemberInfo{
-		if (nickname == null){
+	public MemberInfo {
+		if (nickname == null) {
 			nickname = "";
 		}
-		if (imageUrl == null){
+		if (imageUrl == null) {
 			imageUrl = "";
 		}
-		if (description == null){
+		if (description == null) {
 			description = "";
 		}
 	}

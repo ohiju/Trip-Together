@@ -1,5 +1,13 @@
 package com.ssafy.triptogether.flashmob.repository.query;
 
+import static com.querydsl.core.types.ExpressionUtils.*;
+import static com.ssafy.triptogether.attraction.domain.QAttraction.*;
+import static com.ssafy.triptogether.flashmob.domain.QFlashMob.*;
+import static com.ssafy.triptogether.flashmob.domain.QMemberFlashMob.*;
+import static com.ssafy.triptogether.member.domain.QMember.*;
+
+import java.util.List;
+
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -7,6 +15,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.triptogether.attraction.data.response.FlashmobElementFindResponse;
 import com.ssafy.triptogether.flashmob.data.response.AttendingFlashmobFindResponse;
+import com.ssafy.triptogether.flashmob.data.response.FlashMobMemberDetail;
 import com.ssafy.triptogether.member.domain.RoomStatus;
 import lombok.RequiredArgsConstructor;
 
@@ -104,6 +113,18 @@ public class FlashMobRepositoryCustomImpl implements FlashMobRepositoryCustom {
             .innerJoin(member).on(member.id.eq(memberFlashMob.member.id))
             .innerJoin(attraction).on(attraction.id.eq(flashMob.attraction.id))
             .where(member.id.eq(memberId), memberFlashMob.roomStatus.in(RoomStatus.WAIT, RoomStatus.ATTEND, RoomStatus.REFUSE_UNCHECK))
+            .fetch();
+    }
+
+    @Override
+    public List<FlashMobMemberDetail> findAllMemberInFlashMob(long flashMobId) {
+        return queryFactory.select(Projections.constructor(FlashMobMemberDetail.class,
+                member.id,
+                member.imageUrl,
+                member.nickname))
+            .from(memberFlashMob)
+            .where(memberFlashMob.flashMob.id.eq(flashMobId))
+            .join(memberFlashMob.member, member)
             .fetch();
     }
 }

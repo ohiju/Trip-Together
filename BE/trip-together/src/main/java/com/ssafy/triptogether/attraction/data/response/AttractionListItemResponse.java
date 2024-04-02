@@ -1,10 +1,7 @@
 package com.ssafy.triptogether.attraction.data.response;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
@@ -21,4 +18,5 @@ public record AttractionListItemResponse(
 	Double avgPrice,
 	String latitude,
 	String longitude
-) { }
+) {
+}

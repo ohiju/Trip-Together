@@ -1,13 +1,13 @@
 package com.ssafy.triptogether.plan.data.request;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.triptogether.plan.domain.document.DailyPlan;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public record PlansModifyRequest(
 	@NotNull @JsonProperty("start_region_id")

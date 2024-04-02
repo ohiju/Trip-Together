@@ -34,31 +34,31 @@ import {
   Members,
   MessageView,
   Nickname,
+  Option,
+  OptionText,
+  OptionView,
   OrderInput,
   OrderText,
   OrderView,
   ProfileImg,
+  Select,
+  SelectText,
+  SelectTitle,
+  SelectView,
   Wrapper,
 } from './SettlementStyle';
 
 const Settlement = () => {
   // 데이터
-  const {members, currency_code} = useAppSelector(
-    (state: RootState) => state.chat.flashmob,
-  );
+  const [currencyCode, setCurrecyCode] = useState('');
+  const {members} = useAppSelector((state: RootState) => state.chat.flashmob);
   const imageUrl = (image_url: string) => {
     const result = image_url
       ? {uri: `${IMAGE_BASE_URL}/${image_url}`}
       : imagePath.profiledefault;
     return result;
   };
-  const nickname = (memberNickname: string, memberUsername: string) => {
-    const result = memberNickname ? memberNickname : memberUsername;
-    return result;
-  };
-  const currency = currencies.find(
-    item => item.currency_code === currency_code,
-  );
+  const currency = currencies.find(item => item.currency_code === currencyCode);
 
   // 체크박스 (초기 인원 설정)
   const [checked, setChecked] = useState<number[]>(
@@ -81,7 +81,17 @@ const Settlement = () => {
     }
   };
 
-  // 인풋
+  // Select (통화 코드 선택)
+  const [opened, setOpened] = useState(false);
+  const handleOpen = () => {
+    setOpened(!opened);
+  };
+  const handleCurrencyCode = (code: string) => {
+    setCurrecyCode(code);
+    handleOpen();
+  };
+
+  // 인풋 (차수 설정)
   const [order, setOrder] = useState('1');
   const [message, setMessage] = useState('');
   const [isInRange, setIsInRange] = useState(true);
@@ -157,7 +167,7 @@ const Settlement = () => {
           {members.map(member => (
             <MemberView key={member.member_id}>
               <ProfileImg source={imageUrl(member.image_url)} />
-              <Nickname>{nickname(member.nickname, member.username)}</Nickname>
+              <Nickname>{member.nickname}</Nickname>
               <CheckBox onPress={() => handleCheck(member.member_id)}>
                 <WithLocalSvg
                   width={30}
@@ -169,6 +179,28 @@ const Settlement = () => {
             </MemberView>
           ))}
         </Members>
+        <SelectView>
+          <SelectTitle>통화를 선택하세요 : </SelectTitle>
+          <Select onPress={handleOpen}>
+            <SelectText>{currencyCode ? currencyCode : '통화 선택'}</SelectText>
+            <WithLocalSvg
+              width={25}
+              height={25}
+              rotation={opened ? 270 : 90}
+              asset={iconPath.caret}
+            />
+          </Select>
+          {opened ? (
+            <OptionView>
+              <Option onPress={() => handleCurrencyCode('GBP')}>
+                <OptionText>GBP</OptionText>
+              </Option>
+              <Option onPress={() => handleCurrencyCode('EUR')}>
+                <OptionText>EUR</OptionText>
+              </Option>
+            </OptionView>
+          ) : null}
+        </SelectView>
       </Body>
       <AppButton
         style={BottomButton}

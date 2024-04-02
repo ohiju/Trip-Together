@@ -24,6 +24,7 @@ import com.ssafy.twinklebank.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 	private final MemberRepository memberRepository;
 	private final CodeProvider codeProvider;
 	private final StringRedisTemplate redisTemplate;
+    private final PasswordEncoder passwordEncoder;
 
 	private final long CODE_EXPIRE_TIME = 10 * 60 * 1000L; // 10분
 
@@ -64,9 +66,11 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
     @Transactional
     @Override
-    public void saveAccount(long memberId, AccountSaveRequest accountSaveRequest) {
+    public void saveAccount(AccountSaveRequest accountSaveRequest) {
         // find member
-        Member member = MemberUtils.loadMemberById(memberRepository, memberId);
+        Member member = MemberUtils.loadMemberByUserNameAndPassword(
+            memberRepository, passwordEncoder, accountSaveRequest.username(), accountSaveRequest.password()
+        );
 
         // create uuid & account num
         String uuid = UUID.randomUUID().toString();
@@ -76,7 +80,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
         Account account = Account.builder()
             .member(member)
             .uuid(uuid)
-            .balance(0.0)
+            .balance(5000000.0)
             .name(accountSaveRequest.name())
             .accountNum(accountNum)
             .build();

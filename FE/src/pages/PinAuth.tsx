@@ -1,5 +1,8 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import useDeleteSyncAccount, {
+  DeleteSyncAccountData,
+} from '../apis/account/useDeleteSyncAccount';
 import usePostExchange, {
   PostExchangeData,
 } from '../apis/account/usePostExchange';
@@ -40,6 +43,7 @@ const PinAuth = () => {
   const postExchange = usePostExchange();
   const postRemmitance = usePostRemmitance();
   const qrpay = useQR();
+  const deleteSyncAccount = useDeleteSyncAccount();
   const {pinData, api} =
     useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
   useEffect(() => {
@@ -70,6 +74,12 @@ const PinAuth = () => {
           pin_num: pin,
         };
         qrpay(data);
+      } else if (api === 'deleteSyncAccount') {
+        const data: DeleteSyncAccountData = {
+          ...(pinData as DeleteSyncAccountData),
+          pin_num: pin,
+        };
+        deleteSyncAccount(data);
       }
     }
   }, [pin]);

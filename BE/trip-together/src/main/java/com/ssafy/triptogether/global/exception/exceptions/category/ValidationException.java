@@ -7,9 +7,9 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
  * 클라이언트가 입력한 값이 검증되지 않음
  */
 public class ValidationException extends TripRuntimeException {
-    protected static final String MESSAGE_KEY = "error.InValid";
+	protected static final String MESSAGE_KEY = "error.InValid";
 
-    public ValidationException(String detailMessageKey, ErrorCode errorCode, Object... params) {
-        super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
-    }
+	public ValidationException(String detailMessageKey, ErrorCode errorCode, Object... params) {
+		super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
+	}
 }

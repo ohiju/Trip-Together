@@ -1,8 +1,8 @@
-const groupByDate = <T extends {created_at: Date}>(items: T[]) => {
+const groupByDate = <T extends {created_at: string}>(items: T[]) => {
   const groupedItems: {[ket: string]: typeof items} = {};
 
   items.forEach(item => {
-    const date = item.created_at.toISOString().split('T')[0];
+    const date = new Date(item.created_at).toISOString().split('T')[0];
 
     if (!groupedItems[date]) {
       groupedItems[date] = [];

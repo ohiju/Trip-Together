@@ -97,7 +97,9 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
 
 		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
-		accessToken = reissueIfExpired(memberUuid, accessToken);
+		// if (accessToken == null){ // 만료되었거나, 발급받지 않았거나
+		//
+		// }
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);
@@ -123,7 +125,6 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
 
 		// TODO : bank access token이 만료되었거나, 발급받지 않았을 경우 예외 상황 처리
-		accessToken = reissueIfExpired(memberUuid, accessToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);

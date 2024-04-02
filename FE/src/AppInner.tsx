@@ -1,14 +1,17 @@
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
-import RootNavigator from './stacks/RootNavigator';
+import WebSocketContainer from './contexts/WebSocketContext';
 import usePermissions from './hooks/usePermissions';
+import RootNavigator from './stacks/RootNavigator';
 
 function AppInner() {
   usePermissions();
 
   return (
     <NavigationContainer>
-      <RootNavigator />
+      <WebSocketContainer>
+        <RootNavigator />
+      </WebSocketContainer>
     </NavigationContainer>
   );
 }

@@ -1,16 +1,15 @@
 package com.ssafy.triptogether.infra.twinklebank;
 
+import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.triptogether.global.data.response.ApiResponse;
 import com.ssafy.triptogether.global.exception.exceptions.category.ExternalServerException;
-import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleAccountSyncRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountExchangeRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountsLoadRequest;
@@ -29,19 +27,16 @@ import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleMemberInfoR
 
 import lombok.RequiredArgsConstructor;
 
-import static com.ssafy.triptogether.global.exception.response.ErrorCode.TWINKLE_BANK_SERVER_ERROR;
-
 @Component
 @RequiredArgsConstructor
 public class TwinkleBankClientImpl implements TwinkleBankClient {
-	@Value("${app.bankUrl}")
-	private String TWINKLE_BANK_URI;
-
-	@Value("${app.clientId}")
-	private String TWINKLE_CLIENT_ID;
 	private final RestTemplate restTemplate;
 	private final StringRedisTemplate redisTemplate;
 	private final ObjectMapper objectMapper;
+	@Value("${app.bankUrl}")
+	private String TWINKLE_BANK_URI;
+	@Value("${app.clientId}")
+	private String TWINKLE_CLIENT_ID;
 
 	/**
 	 * 요청자의 은행 계좌 목록 조회 요청

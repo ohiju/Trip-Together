@@ -47,7 +47,8 @@ const MessageView = styled.View`
 
 const Members = styled.ScrollView`
   flex: 1;
-  margin: 5px 15px 10px 15px;
+  z-index: 0;
+  margin: 5px 15px 0 15px;
 `;
 
 const MemberView = styled.View`
@@ -70,15 +71,76 @@ const Nickname = styled.Text`
 
 const CheckBox = styled.Pressable``;
 
+const SelectView = styled.View`
+  position: relative;
+  z-index: 1;
+  flex-direction: row;
+  padding: 0 15px;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  justify-content: flex-end;
+`;
+
+const SelectTitle = styled.Text`
+  font-size: 18px;
+`;
+
+const Select = styled.Pressable`
+  width: 35%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 1px;
+  padding: 10px 0;
+`;
+
+const SelectText = styled.Text`
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  margin-right: 10px;
+`;
+
+const OptionView = styled.View`
+  position: absolute;
+  bottom: 55px;
+  right: 15px;
+  width: 35%;
+  align-items: center;
+  gap: 10px;
+  background: ${bg_light};
+  border-radius: 10px;
+`;
+
+const Option = styled.Pressable`
+  width: 100%;
+  align-items: center;
+  padding: 15px 0;
+  border-width: 1px;
+  border-radius: 10px;
+`;
+
+const OptionText = styled.Text`
+  font-size: 18px;
+`;
+
 export {
   CheckBox,
   MemberView,
   Members,
   MessageView,
   Nickname,
+  Option,
+  OptionText,
+  OptionView,
   OrderInput,
   OrderText,
   OrderView,
   ProfileImg,
+  Select,
+  SelectText,
+  SelectTitle,
+  SelectView,
   Wrapper,
 };

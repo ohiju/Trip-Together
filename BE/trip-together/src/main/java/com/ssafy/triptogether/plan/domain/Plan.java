@@ -32,68 +32,69 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "plan")
 public class Plan extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plan_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "plan_id")
+	private Long id;
 
-    @NotBlank
-    @Column(name = "title")
-    private String title;
+	@NotBlank
+	@Column(name = "title")
+	private String title;
 
-    @NotNull
-    @Column(name = "estimated_budget")
-    private Double estimatedBudget;
+	@NotNull
+	@Column(name = "estimated_budget")
+	private Double estimatedBudget;
 
-    @Column(name = "real_budget")
-    private Double realBudget;
+	@Column(name = "real_budget")
+	private Double realBudget;
 
-    @Column(name = "start_at")
-    private LocalDate startAt;
+	@Column(name = "start_at")
+	private LocalDate startAt;
 
-    @Column(name = "end_at")
-    private LocalDate endAt;
+	@Column(name = "end_at")
+	private LocalDate endAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
-    private Region region;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "region_id")
+	private Region region;
 
-    @Builder
-    public Plan(String title, Double estimatedBudget, LocalDate startAt, LocalDate endAt, Member member, Region region) {
-        this.title = title;
-        this.estimatedBudget = estimatedBudget == null ? 0.0 : estimatedBudget;
-        this.startAt = startAt;
-        this.endAt = endAt;
-        setMember(member);
-        setRegion(region);
-    }
+	@Builder
+	public Plan(String title, Double estimatedBudget, LocalDate startAt, LocalDate endAt, Member member,
+		Region region) {
+		this.title = title;
+		this.estimatedBudget = estimatedBudget == null ? 0.0 : estimatedBudget;
+		this.startAt = startAt;
+		this.endAt = endAt;
+		setMember(member);
+		setRegion(region);
+	}
 
-    @PrePersist
-    @PreUpdate
-    private void validateStartAndEndDates() {
-        if (endAt.isBefore(startAt)) {
-            throw new BadRequestException("PlanStartAndEndDates", ErrorCode.PLAN_DATE_BAD_REQUEST);
-        }
-    }
+	@PrePersist
+	@PreUpdate
+	private void validateStartAndEndDates() {
+		if (endAt.isBefore(startAt)) {
+			throw new BadRequestException("PlanStartAndEndDates", ErrorCode.PLAN_DATE_BAD_REQUEST);
+		}
+	}
 
-    public void setRegion(Region region) {
-        this.region = region;
-        region.getPlans().add(this);
-    }
+	public void setRegion(Region region) {
+		this.region = region;
+		region.getPlans().add(this);
+	}
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getPlans().add(this);
-    }
+	public void setMember(Member member) {
+		this.member = member;
+		member.getPlans().add(this);
+	}
 
-    public void modify(PlansSaveRequest plansSaveRequest) {
-        this.title = plansSaveRequest.title();
-        this.estimatedBudget = plansSaveRequest.estimatedBudget();
-        this.startAt = plansSaveRequest.startAt();
-        this.endAt = plansSaveRequest.endAt();
-    }
+	public void modify(PlansSaveRequest plansSaveRequest) {
+		this.title = plansSaveRequest.title();
+		this.estimatedBudget = plansSaveRequest.estimatedBudget();
+		this.startAt = plansSaveRequest.startAt();
+		this.endAt = plansSaveRequest.endAt();
+	}
 }
