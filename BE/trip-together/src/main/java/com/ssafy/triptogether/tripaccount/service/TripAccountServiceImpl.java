@@ -111,7 +111,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.map(tripAccount -> TripAccountsLoadDetail.builder()
 				.currencyNation(tripAccount.getCurrency().getCurrencyNation())
 				.nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
-				.balance(tripAccount.getBalance())
+				.balance(Double.parseDouble(tripAccount.getBalance()))
 				.unit(tripAccount.getCurrency().getCode().getUnit())
 				.build()
 			).toList();
@@ -186,10 +186,10 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			Currency currency = getCurrency(tripAccountExchangeRequest.toCurrencyCode());
 			tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
 				.ifPresent(tripAccount -> {
-					tripAccount.depositBalance(tripAccountExchangeRequest.toQuantity());
+					tripAccount.depositBalance(String.valueOf(tripAccountExchangeRequest.toQuantity()));
 				});
 			TripAccount tripAccount = TripAccount.builder()
-				.balance(tripAccountExchangeRequest.toQuantity())
+				.balance(String.valueOf(tripAccountExchangeRequest.toQuantity()))
 				.currency(currency)
 				.member(member)
 				.build();
@@ -214,7 +214,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.orElseThrow(
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
-		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
+		tripAccount.withdrawBalance(String.valueOf(tripAccountExchangeRequest.fromQuantity()));
 		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
 		return AccountHistorySaveRequest.builder()
 			.paymentReceiverDetail(null)
@@ -248,7 +248,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			.orElseThrow(
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
-		tripAccount.withdrawBalance(tripAccountPaymentRequest.quantity());
+		tripAccount.withdrawBalance(String.valueOf(tripAccountPaymentRequest.quantity()));
 		return AccountHistorySaveRequest.builder()
 			.paymentSenderDetail(PaymentSenderDetail.builder()
 				.type(Type.WITHDRAW)
