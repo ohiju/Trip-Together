@@ -11,10 +11,16 @@ const Container = styled.View`
 const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 `;
 
 const ChatRoomItem = styled(TouchableOpacity)`
+  flex-direction: row;
+  margin-bottom: 20px;
+  align-items: center;
+`;
+
+const AllChatRoomItem = styled.View`
   flex-direction: row;
   margin-bottom: 20px;
   align-items: center;
@@ -53,4 +59,5 @@ export {
   ChatRoomTitle,
   MeetingInfo,
   ButtonView,
+  AllChatRoomItem,
 };

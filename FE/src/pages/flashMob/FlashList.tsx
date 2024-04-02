@@ -11,6 +11,7 @@ import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStac
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
 import {
+  AllChatRoomItem,
   ButtonView,
   ChatRoomDetails,
   ChatRoomItem,
@@ -25,6 +26,8 @@ import getToken from '../../hooks/getToken';
 import AppButton from '../../components/common/AppButton';
 import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
 import {imagePath} from '../../assets/images/imagePath';
+import {TRIP_API_URL} from '@env';
+import getTime from '../../hooks/getTime';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -59,13 +62,14 @@ const FlashList = () => {
       const {access_token} = await getToken();
       try {
         const response = await axios.get(
-          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}/flashmobs`,
+          `${TRIP_API_URL}/api/attraction/v1/attractions/${id}/flashmobs`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
           },
         );
+        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -92,7 +96,7 @@ const FlashList = () => {
     if (!item.status) {
       try {
         const response = await axios.post(
-          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {},
           {
             headers: {
@@ -108,7 +112,7 @@ const FlashList = () => {
     } else if (item.status === 'WAIT') {
       try {
         const response = await axios.delete(
-          `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
+          `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -163,26 +167,26 @@ const FlashList = () => {
       <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
-        <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
+        <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
         <MeetingInfo>{item.attraction_name}</MeetingInfo>
       </ChatRoomDetails>
     </ChatRoomItem>
   );
 
   const renderFullItem = ({item}: any) => (
-    <ChatRoomItem>
+    <AllChatRoomItem>
       <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
-        <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
+        <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
         <MeetingInfo>{item.attraction_name}</MeetingInfo>
       </ChatRoomDetails>
       {renderButton(item)}
-    </ChatRoomItem>
+    </AllChatRoomItem>
   );
 
   const screenHeight = Dimensions.get('window').height;
-  const halfScreenHeight = screenHeight / 3;
+  const halfScreenHeight = (screenHeight * 2) / 5;
 
   return (
     <Container>
@@ -195,7 +199,7 @@ const FlashList = () => {
         />
       </View>
 
-      <View>
+      <View style={{height: halfScreenHeight}}>
         <Title>전체 모임</Title>
         <FlatList
           data={allFlashmobs}

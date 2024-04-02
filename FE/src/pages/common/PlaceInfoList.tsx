@@ -14,6 +14,7 @@ import {useAppSelector} from '../../store/hooks';
 import {
   Address,
   ButtonContainer,
+  ButtonView,
   DetailsContainer,
   DetailsRow,
   ItemContainer,
@@ -36,11 +37,6 @@ const PlaceInfoList = () => {
   const {theme}: RouteParams = route.params || {};
   const places = useAppSelector(state => state.trip.tripInfo.places);
   const nation = useAppSelector(state => state.trip.tripInfo.nation);
-
-  // const onSwipeBottom = () => {
-  //   navigation.navigate('FlashMain');
-  // };
-  // const {onTouchStart, onTouchEnd} = useSwipeBottom(onSwipeBottom);
 
   const handlePress = (id: number) => {
     if (theme === 'trip') {
@@ -83,16 +79,20 @@ const PlaceInfoList = () => {
             <DetailsRow>
               <Rating>평점: {item.avg_rating}</Rating>
               <ButtonContainer>
-                <AppButton
-                  text="모임 생성"
-                  style={MakeFlashButton}
-                  onPress={() => handlePressMake(item.attraction_id)}
-                />
-                <AppButton
-                  text="모임 검색"
-                  style={JoinFlashButton}
-                  onPress={() => handlePressAllFlash(item.attraction_id)}
-                />
+                <ButtonView>
+                  <AppButton
+                    text="모임 생성"
+                    style={MakeFlashButton}
+                    onPress={() => handlePressMake(item.attraction_id)}
+                  />
+                </ButtonView>
+                <ButtonView>
+                  <AppButton
+                    text="모임 검색"
+                    style={JoinFlashButton}
+                    onPress={() => handlePressAllFlash(item.attraction_id)}
+                  />
+                </ButtonView>
               </ButtonContainer>
             </DetailsRow>
           )}

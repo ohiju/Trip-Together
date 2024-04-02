@@ -9,6 +9,7 @@ import {setLocation} from '../../store/slices/trip';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 const KeywordSearch = () => {
   const [searchText, setSearchText] = useState('');
@@ -25,7 +26,7 @@ const KeywordSearch = () => {
 
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}&category=`,
+        `${TRIP_API_URL}/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=${text}&category=`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -44,7 +45,7 @@ const KeywordSearch = () => {
 
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+        `${TRIP_API_URL}/api/attraction/v1/attractions/click?latitude=${
           trip.start_latitude
         }&longitude=${
           trip.start_longitude
@@ -69,7 +70,7 @@ const KeywordSearch = () => {
     const {access_token} = await getToken();
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+        `${TRIP_API_URL}/api/attraction/v1/attractions/click?latitude=${
           item.latitude
         }&longitude=${
           item.longitude

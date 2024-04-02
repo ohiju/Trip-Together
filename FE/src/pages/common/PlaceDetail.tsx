@@ -18,6 +18,7 @@ import {
   Bag,
   BagImage,
   ButtonContainer,
+  ButtonView,
   Container,
   DetailsContainer,
   Header,
@@ -42,6 +43,7 @@ import {
 import axios from 'axios';
 import getToken from '../../hooks/getToken';
 import getCurrency from '../../hooks/getCurrency';
+import {TRIP_API_URL} from '@env';
 
 interface RouteParams {
   theme?: string;
@@ -99,7 +101,7 @@ const AttractionDetailsPage = () => {
 
       try {
         const response = await axios.get(
-          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/${id}`,
+          `${TRIP_API_URL}/api/attraction/v1/attractions/${id}`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -185,11 +187,13 @@ const AttractionDetailsPage = () => {
 
           {theme === 'flashmob' && (
             <ButtonContainer>
-              <AppButton
-                text="모임 생성"
-                style={MakeFlashButton}
-                onPress={handlePressMake}
-              />
+              <ButtonView>
+                <AppButton
+                  text="모임 생성"
+                  style={MakeFlashButton}
+                  onPress={handlePressMake}
+                />
+              </ButtonView>
               <AppButton
                 text="모임 검색"
                 style={JoinFlashButton}

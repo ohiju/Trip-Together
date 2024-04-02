@@ -17,6 +17,7 @@ import {setPlanId, setTripTitle} from '../../store/slices/trip';
 import axios, {AxiosError} from 'axios';
 import {setPlaces} from '../../store/slices/trip';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
@@ -37,7 +38,7 @@ const TripTitle = () => {
     }
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+        `${TRIP_API_URL}/api/attraction/v1/attractions/click?latitude=${
           trip.start_latitude
         }&longitude=${
           trip.start_longitude
@@ -69,7 +70,7 @@ const TripTitle = () => {
     };
     try {
       const response = await axios.post(
-        `https://j10a309.p.ssafy.io/api/plan/v1/plans`,
+        `${TRIP_API_URL}/api/plan/v1/plans`,
         data,
         {
           headers: {

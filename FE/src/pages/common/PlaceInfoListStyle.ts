@@ -67,6 +67,12 @@ const DetailsRow = styled.View`
 const ButtonContainer = styled.View`
   flex-direction: row;
   width: 50%;
+  justify-content: space-between;
+`;
+
+const ButtonView = styled.View`
+  width: 80px;
+  margin-right: 5px;
 `;
 
 const Wrapper = styled.View`
@@ -86,5 +92,6 @@ export {
   Price,
   DetailsRow,
   ButtonContainer,
+  ButtonView,
   Wrapper,
 };

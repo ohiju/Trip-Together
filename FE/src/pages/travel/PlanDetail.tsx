@@ -15,6 +15,7 @@ import {useAppDispatch} from '../../store/hooks';
 import {resetTripInfo} from '../../store/slices/trip';
 import {setDisplay} from '../../store/slices/tabState';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -44,7 +45,7 @@ const PlanDetail = () => {
     };
     try {
       await axios.patch(
-        `https://j10a309.p.ssafy.io/api/plan/v1/plans/${trip.plan_id}`,
+        `${TRIP_API_URL}/api/plan/v1/plans/${trip.plan_id}`,
         data,
         {
           headers: {

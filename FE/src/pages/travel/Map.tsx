@@ -12,6 +12,7 @@ import {useAppDispatch} from '../../store/hooks';
 import {setPlaces} from '../../store/slices/trip';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import getToken from '../../hooks/getToken';
+import {TRIP_API_URL} from '@env';
 
 const Map = () => {
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
@@ -24,7 +25,7 @@ const Map = () => {
       const {access_token} = await getToken();
       try {
         const response = await axios.get(
-          `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+          `${TRIP_API_URL}/api/attraction/v1/attractions/click?latitude=${
             trip.start_latitude
           }&longitude=${
             trip.start_longitude
