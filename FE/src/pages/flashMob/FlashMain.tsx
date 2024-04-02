@@ -64,7 +64,6 @@ const FlashMain = () => {
           },
         );
         const attractionsData = response.data.data.attractions;
-        console.log(response.data);
         setAllPlaces(attractionsData);
         dispatch(setPlaces(attractionsData));
       } catch (error) {
