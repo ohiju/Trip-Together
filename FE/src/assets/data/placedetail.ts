@@ -9,7 +9,17 @@ const PlaceDetail = [
     attraction_image_urls: ['url1', 'url2'],
     latitude: '41',
     longitude: '42',
-    reviews: [],
+    reviews: [
+      {
+        review_id: 1,
+        writer_id: 1,
+        writer_profile_image_url: '작성자 프로필 이미지 url',
+        writer_nickname: 'ohiju',
+        rating: 4,
+        content: 'good',
+      },
+    ],
+    thumbnail_image_url: '123',
   },
 ];
 
