@@ -66,7 +66,6 @@ const FlashList = () => {
             },
           },
         );
-        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -108,7 +107,6 @@ const FlashList = () => {
       }
     } else if (item.status === 'WAIT') {
       try {
-        console.log(item.flashmob_id, user_id);
         const response = await axios.delete(
           `https://j10a309.p.ssafy.io/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {

@@ -41,6 +41,7 @@ import {
 } from './PlaceDetailStyle';
 import axios from 'axios';
 import getToken from '../../hooks/getToken';
+import getCurrency from '../../hooks/getCurrency';
 
 interface RouteParams {
   theme?: string;
@@ -74,6 +75,7 @@ const AttractionDetailsPage = () => {
   const [show, setShow] = useState(true);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [attraction, setAttraction] = useState<AttractionProp>(PlaceDetail[0]);
+  const nation = useAppSelector(state => state.trip.tripInfo.nation);
 
   const route = useRoute();
   const {theme, id}: RouteParams = route.params || {};
@@ -113,14 +115,7 @@ const AttractionDetailsPage = () => {
     fetchData();
   }, [id]);
 
-  const images = Array.from({length: 5}, (_, index) => ({
-    id: index.toString(),
-    source: imagePath.review,
-  }));
-
-  const renderImageItem = ({item}: {item: any}) => (
-    <ReviewImage source={item.source} />
-  );
+  const renderImageItem = ({item}: any) => <ReviewImage source={{uri: item}} />;
 
   const renderReviewItem = ({item}: {item: any}) => (
     <ReviewItem>
@@ -210,7 +205,9 @@ const AttractionDetailsPage = () => {
               <Info>평점: {4.9}</Info>
               <StarRatingDisplay rating={4.9} starSize={18} />
             </StarInfo>
-            <Info>평균 가격: {item.avg_price}</Info>
+            <Info>
+              평균 가격: {getCurrency(nation)} {item.avg_price}
+            </Info>
             <Info>
               운영 시간: {item.start_at} - {item.end_at}
             </Info>
@@ -219,7 +216,7 @@ const AttractionDetailsPage = () => {
               <Title>사진</Title>
               <Line />
               <FlatList
-                data={images}
+                data={item.attraction_image_urls}
                 renderItem={renderImageItem}
                 horizontal
                 keyExtractor={keyExtractor}
