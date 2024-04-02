@@ -1,4 +1,3 @@
-import {TRIP_WS_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {StompSubscription} from '@stomp/stompjs';
@@ -46,10 +45,10 @@ const ChatRoom = () => {
         });
 
         subscription.current = client.subscribe(
-          `${TRIP_WS_URL}/exchange/chat.exchange/room.${flashmob_id}`,
+          `/exchange/chat.exchange/room.${flashmob_id}`,
           async frame => {
-            console.log('subscribed', frame);
             const data: message = await JSON.parse(frame.body);
+            console.log('subscribed', frame.body);
 
             await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
               if (item !== undefined && item) {
