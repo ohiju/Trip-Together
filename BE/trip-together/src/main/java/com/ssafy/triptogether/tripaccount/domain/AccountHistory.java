@@ -51,18 +51,23 @@ public class AccountHistory extends BaseEntity {
 	@Column(name = "quantity")
 	private Double quantity;
 
+	@NotNull
+	@Column(name = "balance")
+	private Double balance;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trip_account_id")
 	private TripAccount tripAccount;
 
 	@Builder
 	public AccountHistory(Type type, String businessName, String businessNum, String address, Double quantity,
-		TripAccount tripAccount) {
+		Double balance, TripAccount tripAccount) {
 		this.type = type;
 		this.businessName = businessName;
 		this.businessNum = businessNum;
 		this.address = address;
 		this.quantity = quantity;
+		this.balance = balance;
 		setTripAccount(tripAccount);
 	}
 

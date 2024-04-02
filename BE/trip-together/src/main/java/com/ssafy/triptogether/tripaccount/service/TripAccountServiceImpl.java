@@ -195,7 +195,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.build();
 			tripAccountRepository.save(tripAccount);
 			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
-			AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			return AccountHistorySaveRequest.builder()
 				.paymentReceiverDetail(PaymentReceiverDetail.builder()
 					.tripAccount(tripAccount)
 					.type(Type.DEPOSIT)
@@ -207,7 +207,6 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				)
 				.paymentSenderDetail(null)
 				.build();
-			return accountHistorySaveRequest;
 		}
 
 		Currency currency = getCurrency(tripAccountExchangeRequest.fromCurrencyCode());
@@ -217,7 +216,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			);
 		tripAccount.withdrawBalance(tripAccountExchangeRequest.fromQuantity());
 		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
-		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+		return AccountHistorySaveRequest.builder()
 			.paymentReceiverDetail(null)
 			.paymentSenderDetail(PaymentSenderDetail.builder()
 				.tripAccount(tripAccount)
@@ -228,7 +227,6 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.quantity(tripAccountExchangeRequest.fromQuantity())
 				.build())
 			.build();
-		return accountHistorySaveRequest;
 	}
 
 	/**
@@ -251,7 +249,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
 			);
 		tripAccount.withdrawBalance(tripAccountPaymentRequest.quantity());
-		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+		return AccountHistorySaveRequest.builder()
 			.paymentSenderDetail(PaymentSenderDetail.builder()
 				.type(Type.WITHDRAW)
 				.address(attraction.getAddress())
@@ -263,7 +261,6 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 			)
 			.paymentReceiverDetail(null)
 			.build();
-		return accountHistorySaveRequest;
 	}
 
 	private Currency getCurrency(String tripAccountExchangeRequest) {
