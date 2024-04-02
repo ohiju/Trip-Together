@@ -24,6 +24,7 @@ import axios from 'axios';
 import getToken from '../../hooks/getToken';
 import AppButton from '../../components/common/AppButton';
 import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
+import {imagePath} from '../../assets/images/imagePath';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -47,6 +48,8 @@ const FlashList = () => {
   const [allFlashmobs, setAllFlashmobs] = useState<FlashMobProp[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const DEFAULT_IMAGE_URL = imagePath.profiledefault;
+
   useFocusEffect(() => {
     dispatch(setDisplay(true));
   });
@@ -63,6 +66,7 @@ const FlashList = () => {
             },
           },
         );
+        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -80,8 +84,8 @@ const FlashList = () => {
     fetchData();
   }, [id, user_id, refreshKey]);
 
-  const handlePressChat = (id: number) => {
-    navigation.navigate('ChatRoom', {flashmob_id: id});
+  const handlePressChat = (flash_id: number) => {
+    navigation.navigate('ChatRoom', {flashmob_id: flash_id});
   };
 
   const handlePressJoin = async (item: FlashMobProp) => {
@@ -158,7 +162,7 @@ const FlashList = () => {
 
   const renderItem = ({item}: any) => (
     <ChatRoomItem onPress={() => handlePressChat(item.flashmob_id)}>
-      <ProfileImage source={item.master_image_url} />
+      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>
@@ -169,7 +173,7 @@ const FlashList = () => {
 
   const renderFullItem = ({item}: any) => (
     <ChatRoomItem>
-      <ProfileImage source={item.master_image_url} />
+      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{item.flashmob_start_at}</MeetingInfo>

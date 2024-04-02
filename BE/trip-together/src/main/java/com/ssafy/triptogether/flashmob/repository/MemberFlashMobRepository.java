@@ -7,4 +7,5 @@ import com.ssafy.triptogether.member.repository.query.MemberFlashmobRepositoryCu
 
 public interface MemberFlashMobRepository extends JpaRepository<MemberFlashMob, Long>, MemberFlashmobRepositoryCustom {
 	long countMemberFlashMobsByFlashMob_Id(long flashmobId);
+	boolean existsByFlashMobIdAndMemberId(long flashmobId, long memberId);
 }

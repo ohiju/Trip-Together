@@ -29,9 +29,12 @@ import {
   NavButton,
   NavigationButtons,
   ProfileImage,
+  ReviewContent,
   ReviewDetails,
   ReviewImage,
   ReviewItem,
+  ReviewRating,
+  ReviewWriter,
   ReviewsContainer,
   StarInfo,
   Title,
@@ -44,6 +47,15 @@ interface RouteParams {
   id?: number;
 }
 
+interface ReviewProp {
+  review_id: number;
+  writer_id: number;
+  writer_profile_image_url: string;
+  writer_nickname: string;
+  rating: number;
+  content: string;
+}
+
 interface AttractionProp {
   attraction_name: string;
   attraction_address: string;
@@ -54,7 +66,7 @@ interface AttractionProp {
   attraction_image_urls: string[];
   latitude: string;
   longitude: string;
-  reviews: string[];
+  reviews: ReviewProp[];
   thumbnail_image_url: string;
 }
 
@@ -114,9 +126,9 @@ const AttractionDetailsPage = () => {
     <ReviewItem>
       <ProfileImage source={imagePath.profiledefault} />
       <ReviewDetails>
-        {/* <ReviewWriter>{item.writer_nickname}</ReviewWriter>
+        <ReviewWriter>{item.writer_nickname}</ReviewWriter>
         <ReviewRating>Rating: {item.rating}</ReviewRating>
-        <ReviewContent>{item.content}</ReviewContent> */}
+        <ReviewContent>{item.content}</ReviewContent>
       </ReviewDetails>
     </ReviewItem>
   );
