@@ -42,10 +42,18 @@ public class FlashMobController {
     }
 
     @GetMapping("/flashmobs")
-    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findAttendingFlashmobList(
+    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findMyAttendingFlashmobList(
         @AuthenticationPrincipal SecurityMember securityMember
     ) {
         long memberId = securityMember.getId();
+        AttendingFlashmobListFindResponse response = flashMobLoadService.findAttendingFlashmobList(memberId);
+        return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
+    }
+
+    @GetMapping("/{member_id}")
+    public ResponseEntity<ApiResponse<AttendingFlashmobListFindResponse>> findAttendingFlashmobList(
+        @PathVariable("member_id") long memberId
+    ) {
         AttendingFlashmobListFindResponse response = flashMobLoadService.findAttendingFlashmobList(memberId);
         return ApiResponse.toResponseEntity(OK, SUCCESS_FLASHMOB_LIST_FIND, response);
     }
