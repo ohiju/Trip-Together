@@ -90,6 +90,11 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		FlashMob flashMob = flashMobRepository.findById(flashmobId)
 			.orElseThrow(() -> new NotFoundException("SendAttendanceRequest", UNDEFINED_FLASHMOB));
 
+		// double click prevention
+		if (memberFlashMobRepository.existsByFlashMobIdAndMemberId(flashmobId, memberId)) {
+			throw new BadRequestException("sendAttendanceRequest", MEMBER_FLASHMOB_EXIST);
+		}
+
 		// create member flashmob & save
 		MemberFlashMob memberFlashMob = MemberFlashMob.builder()
 			.isMaster(false)
@@ -100,7 +105,6 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		memberFlashMobRepository.save(memberFlashMob);
 
 		// send chat message
-		// TODO: 해당 채팅방에 참가요청에 대한 채팅 메시지 전송
 		chatMessageUtil.sendAttendMsg(flashmobId, memberId, member.getNickname(), member.getImageUrl());
 	}
 
@@ -115,6 +119,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		memberFlashMob.checkDenial();
 	}
 
+	@Transactional
 	@Override
 	public void cancelFlashmob(long flashmobId, long memberId) {
 		// find member flashmob
@@ -125,7 +130,6 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		memberFlashMobRepository.delete(memberFlashMob);
 	}
 
-	// TODO: 해당 사용자에게 메시지 큐 연분
 	@Transactional
 	@Override
 	public boolean applyFlashmob(
