@@ -195,7 +195,7 @@ const FlashList = () => {
         />
       </View>
 
-      <View style={{height: halfScreenHeight * 2}}>
+      <View>
         <Title>전체 모임</Title>
         <FlatList
           data={allFlashmobs}
