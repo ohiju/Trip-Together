@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.triptogether.global.domain.BaseEntity;
 import com.ssafy.triptogether.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
+import com.ssafy.triptogether.global.utils.BigDecimalUtil;
 import com.ssafy.triptogether.member.domain.Member;
 
 import jakarta.persistence.CascadeType;
@@ -20,7 +21,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,16 +46,15 @@ public class TripAccount extends BaseEntity {
 	private Currency currency;
 
 	@NotNull
-	@Min(0)
 	@Column(name = "balance")
-	private Double balance;
+	private String balance;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "tripAccount", cascade = CascadeType.ALL)
 	private List<AccountHistory> accountHistories = new ArrayList<>();
 
 	@Builder
-	public TripAccount(Member member, Currency currency, Double balance) {
+	public TripAccount(Member member, Currency currency, String balance) {
 		setMember(member);
 		this.currency = currency;
 		this.balance = balance;
@@ -66,14 +65,12 @@ public class TripAccount extends BaseEntity {
 		member.getTripAccounts().add(this);
 	}
 
-	public void depositBalance(Double newBalance) {
-		this.balance += newBalance;
+	public void depositBalance(String newBalance) {
+		// this.balance += newBalance;
+		this.balance = BigDecimalUtil.add(balance, newBalance);
 	}
 
-	public void withdrawBalance(Double newBalance) {
-		if (this.balance < newBalance) {
-			throw new BadRequestException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_BALANCE_BAD_REQUEST);
-		}
-		this.balance -= newBalance;
+	public void withdrawBalance(String newBalance) {
+		this.balance = BigDecimalUtil.withdrawalBalance(balance, newBalance);
 	}
 }

@@ -27,8 +27,8 @@ interface message {
 
 interface member {
   member_id: number;
-  image_url: string;
-  nickname: string;
+  member_image_url: string;
+  member_nickname: string;
 }
 
 interface flashmobInfo {

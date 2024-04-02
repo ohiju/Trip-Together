@@ -236,7 +236,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		Member requesterMember = requesterSettlementRepository.requesterFindBySettlementId(settlementId);
 		TripAccount requesterTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
 			requesterMember.getId(), settlementId);
-		requesterTripAccount.depositBalance(participantSettlement.getPrice());
+		requesterTripAccount.depositBalance(String.valueOf(participantSettlement.getPrice()));
 
 		PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
 			.tripAccount(requesterTripAccount)
@@ -269,7 +269,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	private TripAccount participantWithdraw(long memberId, PinVerifyRequest pinVerifyRequest, Currency currency, ParticipantSettlement participantSettlement) {
 		TripAccount participantTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
 			memberId, currency.getId());
-		participantTripAccount.withdrawBalance(participantSettlement.getPrice());
+		participantTripAccount.withdrawBalance(String.valueOf(participantSettlement.getPrice()));
 		return participantTripAccount;
 	}
 

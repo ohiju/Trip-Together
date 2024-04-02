@@ -56,7 +56,6 @@ const KeywordSearch = () => {
         },
       );
       const res = response.data.data;
-      console.log(response.data);
       dispatch(setPlaces(res));
       navigation.navigate('map');
     } catch (error) {
@@ -105,10 +104,10 @@ const KeywordSearch = () => {
           <IconImage source={require('../../assets/images/location.png')} />
           <IconText>명소</IconText>
         </IconInputs>
-        <IconInputs onPress={() => handleButtonPress('축제')}>
+        {/* <IconInputs onPress={() => handleButtonPress('축제')}>
           <IconImage source={require('../../assets/images/confetti.png')} />
           <IconText>축제</IconText>
-        </IconInputs>
+        </IconInputs> */}
         <IconInputs onPress={() => handleButtonPress('식당')}>
           <IconImage source={require('../../assets/images/restaurant.png')} />
           <IconText>음식</IconText>

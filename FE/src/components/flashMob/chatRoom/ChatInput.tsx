@@ -1,4 +1,3 @@
-import {TRIP_WS_URL} from '@env';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {IPublishParams} from '@stomp/stompjs';
 import React, {
@@ -71,7 +70,7 @@ const ChatInput = ({opened, setOpened}: ChatInputProps) => {
     };
     const body: string = JSON.stringify(message);
     const params: IPublishParams = {
-      destination: `${TRIP_WS_URL}/pub/chat.message`,
+      destination: `/pub/chat.message`,
       body,
     };
     client.publish(params);

@@ -51,7 +51,6 @@ const usePatchFlashMob = () => {
     const result = await axios
       .request(await patchFlashMobConfig(params, data))
       .then((res: AxiosResponse<PatchFlashMobResponse>) => {
-        Alert.alert(res.data.message);
         dispatch(setFlashMob(res.data.data));
       })
       .catch((err: AxiosError) => {

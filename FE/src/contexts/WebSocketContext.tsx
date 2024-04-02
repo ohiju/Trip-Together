@@ -65,10 +65,12 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
   useEffect(() => {
     const checkLogin = async () => {
       const {access_token} = await getToken();
+
       if (access_token) {
         setIsLogin(true);
       }
     };
+
     checkLogin();
   }, []);
 

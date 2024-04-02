@@ -5,9 +5,12 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import useGetFlashmobMembers, {
+  GetFlashmobMembersParams,
+} from '../../../apis/flashMob/useGetFlashmobMembers';
 import {iconPath} from '../../../assets/icons/iconPath';
 import {imagePath} from '../../../assets/images/imagePath';
 import AppButton from '../../../components/common/AppButton';
@@ -51,7 +54,9 @@ import {
 const Settlement = () => {
   // 데이터
   const [currencyCode, setCurrecyCode] = useState('');
-  const {members} = useAppSelector((state: RootState) => state.chat.flashmob);
+  const members = useAppSelector(
+    (state: RootState) => state.chat.flashmob.members,
+  );
   const imageUrl = (image_url: string) => {
     const result = image_url
       ? {uri: `${IMAGE_BASE_URL}/${image_url}`}
@@ -141,6 +146,13 @@ const Settlement = () => {
   };
 
   // API (채팅방 정보 조회)
+  const getFlashmobMembers = useGetFlashmobMembers();
+  useEffect(() => {
+    const params: GetFlashmobMembersParams = {
+      flashmob_id,
+    };
+    getFlashmobMembers(params);
+  }, []);
 
   return (
     <Wrapper>
@@ -166,8 +178,8 @@ const Settlement = () => {
         <Members>
           {members.map(member => (
             <MemberView key={member.member_id}>
-              <ProfileImg source={imageUrl(member.image_url)} />
-              <Nickname>{member.nickname}</Nickname>
+              <ProfileImg source={imageUrl(member.member_image_url)} />
+              <Nickname>{member.member_nickname}</Nickname>
               <CheckBox onPress={() => handleCheck(member.member_id)}>
                 <WithLocalSvg
                   width={30}

@@ -1,4 +1,3 @@
-import {TRIP_WS_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {StompSubscription} from '@stomp/stompjs';
@@ -14,7 +13,7 @@ import {ChatStackParams} from '../../../interfaces/router/flashMob/ChatMainStack
 import {message} from '../../../interfaces/states/ChatState';
 import {RootState} from '../../../store';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {pushMessages, setMessages} from '../../../store/slices/chat';
+import {pushMessage, setMessages} from '../../../store/slices/chat';
 import {Wrapper} from './ChatRoomStyle';
 
 const ChatRoom = () => {
@@ -31,9 +30,10 @@ const ChatRoom = () => {
     if (!client) return;
 
     const connect = () => {
-      client.configure({reconnectDelay: 5000});
       client.onConnect = async () => {
         await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
+          console.log(item, 1);
+
           const empty: message[] = [];
           const stringifyEmpty = JSON.stringify(empty);
           await AsyncStorage.setItem(`${flashmob_id}`, stringifyEmpty);
@@ -46,12 +46,14 @@ const ChatRoom = () => {
         });
 
         subscription.current = client.subscribe(
-          `${TRIP_WS_URL}/exchange/chat.exchange/room.${flashmob_id}`,
+          `/exchange/chat.exchange/room.${flashmob_id}`,
           async frame => {
-            console.log('subscribed', frame);
             const data: message = await JSON.parse(frame.body);
+            console.log('subscribed', frame.body);
 
             await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
+              console.log(item, 2);
+
               if (item !== undefined && item) {
                 const prev: message[] = JSON.parse(item);
                 const next: message[] = [...prev, data];
@@ -63,7 +65,7 @@ const ChatRoom = () => {
               }
             });
 
-            dispatch(pushMessages(data));
+            dispatch(pushMessage(data));
           },
         );
       };
@@ -73,8 +75,9 @@ const ChatRoom = () => {
 
     connect();
     return () => {
+      console.log(subscription.current);
+
       if (subscription.current) {
-        client.configure({reconnectDelay: 0});
         subscription.current.unsubscribe();
       }
     };
