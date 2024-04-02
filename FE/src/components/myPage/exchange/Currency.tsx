@@ -37,7 +37,7 @@ const Currency = ({currency}: CurrencyProps) => {
       <NationView>
         <NationImage
           source={imagePath[`${nation.toLowerCase()}round`]}
-          resizeMode="contain"
+          resizeMode="cover"
         />
         <NationText>{nation_kr}</NationText>
       </NationView>

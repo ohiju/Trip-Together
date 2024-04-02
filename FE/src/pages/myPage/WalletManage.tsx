@@ -77,7 +77,7 @@ const WalletManage = () => {
                 <CountryView>
                   <Flag
                     source={imagePath[`${account.nation.toLowerCase()}round`]}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </CountryView>
                 <BalanceView>

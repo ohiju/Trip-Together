@@ -25,7 +25,7 @@ const History = ({history}: HistoryProps) => {
     <Wrapper>
       <TopView>
         <NationView>
-          <NationImg source={image_url} resizeMode="contain" />
+          <NationImg source={image_url} resizeMode="cover" />
           <NationText>{nation_kr}</NationText>
         </NationView>
         <QuantityText $sign={sign}>{quantity}</QuantityText>

@@ -77,8 +77,8 @@ const Editor = ({member}: EditorProps) => {
     <Wrapper>
       <ImageView>
         <ImageBtn onPress={selectImage}>
-          <Image source={imgConfig} resizeMode="contain" />
-          <CameraIcon source={imagePath.camera} resizeMode="contain" />
+          <Image source={imgConfig} resizeMode="cover" />
+          <CameraIcon source={imagePath.camera} resizeMode="cover" />
         </ImageBtn>
       </ImageView>
       <InputBox>

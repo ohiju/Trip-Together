@@ -36,7 +36,7 @@ const Profile = () => {
   return (
     <Wrapper>
       <ProfileImageView>
-        <ProfileImage source={image_url} resizeMode="contain" />
+        <ProfileImage source={image_url} resizeMode="cover" />
       </ProfileImageView>
       <UserInfoView>
         <UserInfoTopView>

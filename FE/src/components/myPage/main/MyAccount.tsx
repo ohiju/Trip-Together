@@ -23,7 +23,7 @@ const MyAccount = ({myAccount}: MyAccountProps) => {
       <CountryView>
         <Flag
           source={imagePath[`${nation.toLowerCase()}round`]}
-          resizeMode="contain"
+          resizeMode="cover"
         />
         <Country>{nation_kr}</Country>
       </CountryView>

@@ -11,7 +11,7 @@ const ExchangeOption = ({account}: ExchangeOptionProps) => {
   return (
     <Wrapper>
       <OptionView>
-        <BankLogo source={imagePath.logobank} resizeMode="contain" />
+        <BankLogo source={imagePath.logobank} resizeMode="cover" />
         <Option>{account.account_num}</Option>
       </OptionView>
     </Wrapper>

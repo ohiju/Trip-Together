@@ -8,6 +8,9 @@ import {FlatList} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import AppButton from '../../components/common/AppButton';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
+import getCurrency from '../../hooks/getCurrency';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import {useAppSelector} from '../../store/hooks';
 import {
   Address,
   ButtonContainer,
@@ -22,9 +25,6 @@ import {
   ThumbnailContainer,
   Wrapper,
 } from './PlaceInfoListStyle';
-import {useAppSelector} from '../../store/hooks';
-import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import getCurrency from '../../hooks/getCurrency';
 
 interface RouteParams {
   theme?: string;
@@ -63,7 +63,7 @@ const PlaceInfoList = () => {
         <ThumbnailContainer>
           <Thumbnail
             source={{uri: item.thumbnail_image_url}}
-            resizeMode="contain"
+            resizeMode="cover"
           />
         </ThumbnailContainer>
         <DetailsContainer>

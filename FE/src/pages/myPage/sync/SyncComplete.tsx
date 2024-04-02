@@ -66,7 +66,7 @@ const SyncComplete = () => {
       </SloganView>
       <Body>
         <IconView>
-          <Icon source={imagePath.sync} resizeMode="contain" />
+          <Icon source={imagePath.sync} resizeMode="cover" />
         </IconView>
         <InfoBox>
           <InfoTitleView>

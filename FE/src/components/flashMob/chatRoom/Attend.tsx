@@ -69,7 +69,7 @@ const Attent = ({message}: AttendProps) => {
       <Card>
         <Image source={imagePath.attend} resizeMode="cover" />
         <ProfileView>
-          <ProfileImg source={image_url} resizeMode="contain" />
+          <ProfileImg source={image_url} resizeMode="cover" />
           <ContentView>
             <Content>
               <Nickname>{message.sender_nickname}</Nickname> 님 께서 참가를

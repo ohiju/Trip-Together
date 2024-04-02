@@ -10,11 +10,17 @@ const EditCompleteBtn = () => {
   const s3Upload = useS3Upload();
   const putMember = usePutMember();
   const member = useAppSelector((state: RootState) => state.user.member);
-  const {imgConfig, nickname, description} = useAppSelector(
-    (state: RootState) => state.user.putData,
+  const imgConfig = useAppSelector(
+    (state: RootState) => state.user.putData.imgConfig,
+  );
+  const nickname = useAppSelector(
+    (state: RootState) => state.user.putData.nickname,
+  );
+  const description = useAppSelector(
+    (state: RootState) => state.user.putData.description,
   );
 
-  const onPress = () => {
+  const submit = () => {
     if (imgConfig) {
       s3Upload?.();
     } else {
@@ -31,7 +37,7 @@ const EditCompleteBtn = () => {
   };
 
   return (
-    <Wrapper onPress={onPress}>
+    <Wrapper onPress={submit}>
       <BtnText>완료</BtnText>
     </Wrapper>
   );

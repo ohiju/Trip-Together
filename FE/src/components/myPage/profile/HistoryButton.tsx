@@ -17,7 +17,7 @@ const HistoryButton = ({source, text, onPress}: HistoryButtonProps) => {
       style={({pressed}) => ({
         backgroundColor: pressed ? bg_lightgray : bg_main,
       })}>
-      <HistoryBtnImg source={imagePath[source]} resizeMode="contain" />
+      <HistoryBtnImg source={imagePath[source]} resizeMode="cover" />
       <HistoryBtnText>{text}</HistoryBtnText>
     </Wrapper>
   );

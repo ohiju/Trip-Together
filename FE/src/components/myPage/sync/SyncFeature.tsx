@@ -14,7 +14,7 @@ const SyncFeature = ({image, title, features}: SyncFeatureProps) => {
   return (
     <Wrapper>
       <FeatureImageView>
-        <FeatureImage source={imagePath[image]} resizeMode="contain" />
+        <FeatureImage source={imagePath[image]} resizeMode="cover" />
       </FeatureImageView>
       <FeatureView>
         <FeatureTitle>{title}</FeatureTitle>

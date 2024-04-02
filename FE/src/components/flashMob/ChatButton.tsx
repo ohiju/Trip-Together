@@ -13,7 +13,7 @@ const ToChat = () => {
 
   return (
     <Wrapper onPress={handlePressButton}>
-      <ChatImage source={imagePath.chat} resizeMode="contain" />
+      <ChatImage source={imagePath.chat} resizeMode="cover" />
       <ChatText>채팅하기</ChatText>
     </Wrapper>
   );

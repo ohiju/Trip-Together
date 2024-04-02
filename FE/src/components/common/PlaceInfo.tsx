@@ -2,7 +2,11 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {JoinFlashButton, MakeFlashButton} from '../../constants/AppButton';
+import getCurrency from '../../hooks/getCurrency';
 import useSwipeTop from '../../hooks/useSwipeTop';
+import {MapStackParams} from '../../interfaces/router/MapStackParams';
+import {useAppSelector} from '../../store/hooks';
+import {StyledShadow} from '../myPage/main/ProfileStyle';
 import AppButton from './AppButton';
 import {
   Address,
@@ -21,10 +25,6 @@ import {
   Rating,
   Wrapper,
 } from './PlaceInfoStyle';
-import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import {StyledShadow} from '../myPage/main/ProfileStyle';
-import getCurrency from '../../hooks/getCurrency';
-import {useAppSelector} from '../../store/hooks';
 
 const PlaceInfo = ({theme, place}: any) => {
   const navigation = useNavigation<NavigationProp<MapStackParams>>();
@@ -54,7 +54,7 @@ const PlaceInfo = ({theme, place}: any) => {
             <PlaceImageView>
               <PlaceImage
                 source={{uri: place?.thumbnail_image_url}}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             </PlaceImageView>
             <PlaceInfoView>

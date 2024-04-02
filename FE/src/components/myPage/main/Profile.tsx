@@ -41,7 +41,7 @@ const Profile = () => {
         <ProfileBox>
           <ProfileView>
             <ProfileImageView>
-              <ProfileImage source={image_url} resizeMode="contain" />
+              <ProfileImage source={image_url} resizeMode="cover" />
             </ProfileImageView>
             <UserInfoView>
               <Nickname>{nickname}</Nickname>
