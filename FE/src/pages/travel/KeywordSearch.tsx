@@ -44,15 +44,21 @@ const KeywordSearch = () => {
 
     try {
       const response = await axios.get(
-        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/search?latitude=${trip.start_latitude}&longitude=${trip.start_longitude}&keyword=&category=${text}`,
+        `https://j10a309.p.ssafy.io/api/attraction/v1/attractions/click?latitude=${
+          trip.start_latitude
+        }&longitude=${
+          trip.start_longitude
+        }&latitude_delta=${0.622}&longitude_delta=${0.421}&category=${text}`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         },
       );
-      const regions = response.data.data;
-      setSearchResults(regions);
+      const res = response.data.data;
+      console.log(response.data);
+      dispatch(setPlaces(res));
+      navigation.navigate('map');
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
