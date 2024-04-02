@@ -12,6 +12,7 @@ import Travel from '../pages/travel/Travel';
 import TripTitle from '../pages/travel/TripTitle';
 import KeywordSearch from '../pages/travel/KeywordSearch';
 import AllTrip from '../pages/travel/AllTrip';
+import NotYet from '../assets/data/NotYet';
 
 const TravelStack = createNativeStackNavigator<TravelStackParams>();
 
@@ -92,6 +93,29 @@ const TravelNavigator = () => {
         <TravelStack.Screen
           name="placedetail"
           component={PlaceDetail}
+          options={{
+            title: '',
+          }}
+        />
+      </TravelStack.Group>
+      <TravelStack.Group>
+        <TravelStack.Screen
+          name="Insurance"
+          component={NotYet}
+          options={{
+            title: '',
+          }}
+        />
+        <TravelStack.Screen
+          name="CurrencyChange"
+          component={NotYet}
+          options={{
+            title: '',
+          }}
+        />
+        <TravelStack.Screen
+          name="Sales"
+          component={NotYet}
           options={{
             title: '',
           }}

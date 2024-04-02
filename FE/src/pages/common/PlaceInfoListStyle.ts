@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {bg_main} from '../../constants/colors';
+import {bg_light} from '../../constants/colors';
 
 const ItemContainer = styled.TouchableOpacity`
   flex-direction: row;
@@ -71,7 +71,7 @@ const ButtonContainer = styled.View`
 
 const Wrapper = styled.View`
   flex: 1;
-  background: ${bg_main};
+  background: ${bg_light};
 `;
 
 export {

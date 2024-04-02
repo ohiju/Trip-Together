@@ -20,6 +20,7 @@ import {
   TitleView,
   Wrapper,
 } from './PinAuthStyle';
+import useQR, {QRdata} from '../apis/useQR';
 
 const PinAuth = () => {
   // 핀 번호 입력
@@ -38,6 +39,7 @@ const PinAuth = () => {
   const postSyncAccount = usePostSyncAccount();
   const postExchange = usePostExchange();
   const postRemmitance = usePostRemmitance();
+  const qrpay = useQR();
   const {pinData, api} =
     useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
   useEffect(() => {
@@ -62,6 +64,12 @@ const PinAuth = () => {
           pin_num: pin,
         };
         postRemmitance(params, data);
+      } else if (api === 'qrpay') {
+        const data: QRdata = {
+          ...(pinData as QRdata),
+          pin_num: pin,
+        };
+        qrpay(data);
       }
     }
   }, [pin]);
