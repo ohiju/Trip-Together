@@ -56,6 +56,16 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
 
     @Transactional
     @Override
+    public void reportMember(long memberId) {
+        // find member
+        Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+
+        // report member
+        member.report();
+    }
+
+    @Transactional
+    @Override
     public ProfileUpdateResponse updateProfile(long memberId, ProfileUpdateRequest profileUpdateRequest) {
         // find member
         Member member = MemberUtils.findByMemberId(memberRepository, memberId);
@@ -148,6 +158,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
             .nickname(twinkleMemberInfoResponse.name())
             .gender(twinkleMemberInfoResponse.gender())
             .birth(twinkleMemberInfoResponse.birth())
+            .reportCount(0)
             .build();
 
         member = memberRepository.save(member);
