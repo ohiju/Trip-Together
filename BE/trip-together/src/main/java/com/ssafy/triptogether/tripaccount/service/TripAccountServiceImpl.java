@@ -188,29 +188,44 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 		if (tripAccountExchangeRequest.fromCurrencyCode().equals("KRW")) {
 			Currency currency = getCurrency(tripAccountExchangeRequest.toCurrencyCode());
 			tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
-				.ifPresent(tripAccount -> {
+				.ifPresentOrElse(tripAccount -> {
 					tripAccount.depositBalance(String.valueOf(tripAccountExchangeRequest.toQuantity()));
+					AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+						.paymentReceiverDetail(PaymentReceiverDetail.builder()
+							.tripAccount(tripAccount)
+							.type(Type.DEPOSIT)
+							.businessNum("19991224")
+							.businessName("Trip-Together")
+							.address("역삼동")
+							.quantity(tripAccountExchangeRequest.toQuantity())
+							.build()
+						)
+						.paymentSenderDetail(null)
+						.build();
+					accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+				}, () -> {
+					TripAccount tripAccount = TripAccount.builder()
+						.balance(String.valueOf(tripAccountExchangeRequest.toQuantity()))
+						.currency(currency)
+						.member(member)
+						.build();
+					tripAccountRepository.save(tripAccount);
+					AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+						.paymentReceiverDetail(PaymentReceiverDetail.builder()
+							.tripAccount(tripAccount)
+							.type(Type.DEPOSIT)
+							.businessNum("19991224")
+							.businessName("Trip-Together")
+							.address("역삼동")
+							.quantity(tripAccountExchangeRequest.toQuantity())
+							.build()
+						)
+						.paymentSenderDetail(null)
+						.build();
+					accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
 				});
-			TripAccount tripAccount = TripAccount.builder()
-				.balance(String.valueOf(tripAccountExchangeRequest.toQuantity()))
-				.currency(currency)
-				.member(member)
-				.build();
-			tripAccountRepository.save(tripAccount);
+
 			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
-			AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
-				.paymentReceiverDetail(PaymentReceiverDetail.builder()
-					.tripAccount(tripAccount)
-					.type(Type.DEPOSIT)
-					.businessNum("19991224")
-					.businessName("Trip-Together")
-					.address("역삼동")
-					.quantity(tripAccountExchangeRequest.toQuantity())
-					.build()
-				)
-				.paymentSenderDetail(null)
-				.build();
-			accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
 			return;
 		}
 
