@@ -355,7 +355,7 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId,
 			settlementId);
-		Receipt receipt = receiptRepository.findById(participantSettlement.getId())
+		Receipt receipt = receiptRepository.findByMemberSettlementId(participantSettlement.getId())
 			.orElseThrow(
 				() -> new NotFoundException("ReceiptsLoad", RECEIPT_NOT_FOUND)
 			);
