@@ -18,6 +18,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping("/api/member/v1/members")
 @RestController
+@Slf4j
 public class MemberController {
 
 	private final MemberSaveService memberSaveService;
@@ -99,7 +102,7 @@ public class MemberController {
 		Cookie cookie = cookieProvider.getCookie(request, "refreshToken").orElseThrow(
 			() -> new NotFoundException("MemberController", COOKIE_NOT_FOUND));
 		String refreshToken = cookie.getValue();
-
+		log.info("refresh "+ refreshToken);
 		return memberLoadService.reissue(refreshToken);
 	}
 
