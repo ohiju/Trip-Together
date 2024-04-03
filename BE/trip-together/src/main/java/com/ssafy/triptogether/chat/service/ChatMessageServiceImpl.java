@@ -35,7 +35,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 	@Override
 	public void send(ChatMessage chatMessage) {
 		log.info("publish:send: " + chatMessage.toString());
-		rabbitTemplate.convertAndSend(exchangeName, "room." + chatMessage.flashmobId(), chatMessage);
+		rabbitTemplate.convertAndSend("amq.topic", "room." + chatMessage.flashmobId(), chatMessage);
 	}
 
 	private void handleJoin(ChatMessage chatMessage) {

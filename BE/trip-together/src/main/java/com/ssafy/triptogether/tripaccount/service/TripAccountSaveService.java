@@ -8,9 +8,9 @@ import com.ssafy.triptogether.tripaccount.data.request.TripAccountPaymentRequest
 public interface TripAccountSaveService {
 	void currencyRateUpdate();
 
-	AccountHistorySaveRequest tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
+	void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
 		TripAccountExchangeRequest tripAccountExchangeRequest);
 
-	AccountHistorySaveRequest tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
+	void tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
 		TripAccountPaymentRequest tripAccountPaymentRequest);
 }
