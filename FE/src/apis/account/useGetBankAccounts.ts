@@ -44,6 +44,7 @@ const useGetBankAccounts = () => {
           Alert.alert('은행 계좌가 없습니다.');
           navigation.navigate('MyMain');
         }
+
         dispatch(setBankAccounts(res.data.data.accounts));
       })
       .catch((err: AxiosError) => {

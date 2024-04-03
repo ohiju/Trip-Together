@@ -70,8 +70,8 @@ const WalletManage = () => {
   return (
     <Wrapper>
       <Accounts>
-        {groups.map(group => (
-          <AccountRow>
+        {groups.map((group, idx) => (
+          <AccountRow key={idx}>
             {group.map(account => (
               <Account key={account.nation}>
                 <CountryView>

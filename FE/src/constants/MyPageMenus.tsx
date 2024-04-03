@@ -28,7 +28,14 @@ const menus: menu[] = [
     ),
     text: '핀 번호 수정',
     navigation: 'PinManage',
-    props: {pinData: {}, api: 'pinPatch'},
+    props: {
+      pinData: {
+        pre_pin_num: '',
+        new_pin_num: '',
+        new_pin_num_check: '',
+      },
+      api: 'pinPatch',
+    },
   },
   {
     id: 1,

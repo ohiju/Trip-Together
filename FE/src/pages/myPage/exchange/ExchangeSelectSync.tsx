@@ -1,11 +1,10 @@
 import {
   NavigationProp,
   RouteProp,
-  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
 import AppButton from '../../../components/common/AppButton';
@@ -52,9 +51,9 @@ const ExchangeSelectSync = () => {
 
   // API 은행 계좌 목록 조회
   const getBankAccounts = useGetBankAccounts();
-  useFocusEffect(() => {
+  useEffect(() => {
     getBankAccounts();
-  });
+  }, []);
 
   return (
     <Wrapper>

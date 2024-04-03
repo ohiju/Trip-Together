@@ -43,4 +43,5 @@ const usePatchPin = () => {
   return patchPin;
 };
 
+export type {PatchPinData};
 export default usePatchPin;
