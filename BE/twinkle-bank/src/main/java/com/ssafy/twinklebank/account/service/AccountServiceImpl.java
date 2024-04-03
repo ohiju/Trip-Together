@@ -175,7 +175,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
 	@Transactional
 	@Override
-	public void transfer1won(long memberId, Transfer1wonRequest request) {
+	public String transfer1won(long memberId, Transfer1wonRequest request) {
 		// client id가 존재하는지 확인
 		Application application = ApplicationUtils.loadApplicationByClientId(applicationRepository, request.clientId());
 
@@ -201,6 +201,7 @@ public class AccountServiceImpl implements AccountLoadService, AccountSaveServic
 
 		// 코드 10분간 저장하기
 		saveCode(request.accountUuid(), code);
+		return code;
 	}
 
 	@Override

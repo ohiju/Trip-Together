@@ -13,6 +13,6 @@ public interface AccountSaveService {
 
     void withdraw(long memberId, DepositWithdrawRequest request);
 
-    void transfer1won(long memberId, Transfer1wonRequest request);
+    String transfer1won(long memberId, Transfer1wonRequest request);
     void verify1won(Verify1wonRequest request);
 }

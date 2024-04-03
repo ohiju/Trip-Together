@@ -34,6 +34,7 @@ import com.ssafy.triptogether.syncaccount.data.response.BankAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsDetail;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
+import com.ssafy.triptogether.syncaccount.data.response.Transfer1wonResponse;
 import com.ssafy.triptogether.syncaccount.domain.SyncAccount;
 import com.ssafy.triptogether.syncaccount.repository.SyncAccountRepository;
 
@@ -219,14 +220,14 @@ public class SyncAccountServiceImpl implements SyncAccountLoadService, SyncAccou
 
 	@Transactional
 	@Override
-	public void transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
+	public Transfer1wonResponse transfer1won(Long memberId, String memberUuid, Transfer1wonRequest request) {
 
 		TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest = TwinkleBankTransfer1wonRequest.builder()
 			.accountUuid(request.accountUuid())
 			.clientId(TWINKLE_CLIENT_ID)
 			.build();
 
-		twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
+		return twinkleBankAuth.transfer1won(twinkleBankTransfer1wonRequest, memberUuid);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import com.ssafy.triptogether.syncaccount.data.request.Transfer1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.request.Verify1wonRequest;
 import com.ssafy.triptogether.syncaccount.data.response.BankAccountsLoadResponse;
 import com.ssafy.triptogether.syncaccount.data.response.SyncAccountsLoadResponse;
+import com.ssafy.triptogether.syncaccount.data.response.Transfer1wonResponse;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountLoadService;
 import com.ssafy.triptogether.syncaccount.service.SyncAccountSaveService;
 
@@ -108,12 +109,12 @@ public class SyncAccountController {
 	}
 
 	@PostMapping("/1wontransfer")
-	public ResponseEntity<ApiResponse<Void>> transfer1won(@RequestBody @Valid Transfer1wonRequest request,
+	public ResponseEntity<ApiResponse<Transfer1wonResponse>> transfer1won(@RequestBody @Valid Transfer1wonRequest request,
 		@AuthenticationPrincipal SecurityMember securityMember) {
 		String memberUuid = securityMember.getUuid();
 		Long memberId = securityMember.getId();
-		syncAccountLoadService.transfer1won(memberId, memberUuid, request);
-		return ApiResponse.emptyResponse(HttpStatus.OK, SUCCESS_1WON_TRANSFER);
+		Transfer1wonResponse response = syncAccountLoadService.transfer1won(memberId, memberUuid, request);
+		return ApiResponse.toResponseEntity(HttpStatus.OK, SUCCESS_1WON_TRANSFER, response);
 	}
 
 	@PostMapping("/1wonverify")
