@@ -14,7 +14,7 @@ const Image = styled.Image`
   height: 30px;
 `;
 
-const Camera: React.FC = () => {
+const Camera = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const onPress = () => {

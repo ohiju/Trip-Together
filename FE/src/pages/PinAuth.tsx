@@ -1,4 +1,9 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import useDeleteSyncAccount, {
   DeleteSyncAccountData,
@@ -13,8 +18,11 @@ import usePostRemmitance, {
   PostRemmitanceData,
   PostRemmitanceParams,
 } from '../apis/flashMob/usePostRemmitacne';
+import usePatchPin, {PatchPinData} from '../apis/member/usePatchPin';
+import useQR, {QRdata} from '../apis/useQR';
 import AppKeyboard from '../components/common/AppKeyboard';
 import {RootStackParams} from '../interfaces/router/RootStackParams';
+import {TabParams} from '../interfaces/router/TabParams';
 import {
   Pin,
   PinBox,
@@ -23,7 +31,6 @@ import {
   TitleView,
   Wrapper,
 } from './PinAuthStyle';
-import useQR, {QRdata} from '../apis/useQR';
 
 const PinAuth = () => {
   // 핀 번호 입력
@@ -37,6 +44,7 @@ const PinAuth = () => {
     });
     setTokens(newToken as tokenType);
   }, [pin]);
+  const navigation = useNavigation<NavigationProp<TabParams>>();
 
   // api 요청 매서드
   const postSyncAccount = usePostSyncAccount();
@@ -44,6 +52,7 @@ const PinAuth = () => {
   const postRemmitance = usePostRemmitance();
   const qrpay = useQR();
   const deleteSyncAccount = useDeleteSyncAccount();
+  const patchPin = usePatchPin();
   const {pinData, api} =
     useRoute<RouteProp<RootStackParams, 'PinAuth'>>().params;
   useEffect(() => {
@@ -80,14 +89,42 @@ const PinAuth = () => {
           pin_num: pin,
         };
         deleteSyncAccount(data);
+      } else if (api === 'pinPatch') {
+        let data: PatchPinData = {
+          ...(pinData as PatchPinData),
+        };
+        if (data.pre_pin_num === '') {
+          data.pre_pin_num = pin;
+          navigation.navigate('PinAuth', {pinData: data, api});
+        } else if (data.new_pin_num === '') {
+          data.new_pin_num = pin;
+          navigation.navigate('PinAuth', {pinData: data, api});
+        } else if (data.new_pin_num_check === '') {
+          data.new_pin_num_check = pin;
+          patchPin(data);
+        }
       }
     }
   }, [pin]);
 
+  const title = () => {
+    if (api === 'pinPatch') {
+      const data = pinData as PatchPinData;
+      if (data.pre_pin_num === '') {
+        return '이전 PIN 번호를 눌러주세요';
+      } else if (data.new_pin_num === '') {
+        return '새 PIN 번호를 입력해주세요';
+      } else if (data.new_pin_num_check === '') {
+        return '새 PIN 번호를 확인해주세요';
+      }
+    }
+    return 'PIN 번호를 눌러주세요';
+  };
+
   return (
     <Wrapper>
       <TitleView>
-        <TitleText>PIN 번호를 눌러주세요</TitleText>
+        <TitleText>{title()}</TitleText>
         <PinBox>
           {tokens.map((token, idx) => (
             <PinView key={idx}>

@@ -32,7 +32,7 @@ public class AccountHistoryProvider {
 				.businessName(receiver.businessName())
 				.address(receiver.address())
 				.quantity(receiver.quantity())
-				.balance(Double.parseDouble(receiver.tripAccount().getBalance()))
+				.balance(receiver.tripAccount().getBalance())
 				.build();
 			accountHistoryRepository.save(receiverAccountHistory);
 		}
@@ -45,7 +45,7 @@ public class AccountHistoryProvider {
 				.businessName(sender.businessName())
 				.address(sender.address())
 				.quantity(sender.quantity())
-				.balance(Double.parseDouble(sender.tripAccount().getBalance()))
+				.balance(sender.tripAccount().getBalance())
 				.build();
 			accountHistoryRepository.save(senderAccountHistory);
 		}

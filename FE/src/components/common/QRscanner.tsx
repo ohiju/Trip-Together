@@ -1,11 +1,11 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {CameraScreen} from 'react-native-camera-kit';
 import {
   PinAuthProps,
   RootStackParams,
 } from '../../interfaces/router/RootStackParams';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 const QRScanner = ({onClose}: any) => {
   const [qrvalue, setQrvalue] = useState('');
@@ -15,9 +15,10 @@ const QRScanner = ({onClose}: any) => {
   const onBarcodeScan = qrvalue => {
     // Called after te successful scanning of QRCode/Barcode
     setQrvalue(qrvalue);
+    console.log(qrvalue);
     const pinData = {
-      attraction_business_num: qrvalue.data.attraction_business_num,
-      quantity: qrvalue.data.quantity,
+      attraction_business_num: qrvalue.attraction_business_num,
+      quantity: qrvalue.quantity,
     };
     const props: PinAuthProps = {
       pinData,

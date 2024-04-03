@@ -23,6 +23,8 @@ public record AccountHistoriesLoadDetail(
 	String usage,
 	@JsonProperty("quantity")
 	Double quantity,
+	@JsonProperty("balance")
+	String balance,
 	@JsonProperty("created_at")
 	LocalDateTime createdAt
 ) {

@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <Wrapper>
       <LogoView>
-        <Logo source={imagePath.logo} resizeMode="cover" />
+        <Logo source={imagePath.logo} resizeMode="contain" />
       </LogoView>
       <SloganView>
         <Slogan>하나의 은행 계정으로</Slogan>

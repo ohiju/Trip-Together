@@ -31,39 +31,48 @@ const ChatRoom = () => {
 
     const connect = () => {
       client.onConnect = async () => {
-        await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
-          console.log(item, 1);
+        console.log('storage', `${flashmob_id}_messages`);
 
-          const empty: message[] = [];
-          const stringifyEmpty = JSON.stringify(empty);
-          await AsyncStorage.setItem(`${flashmob_id}`, stringifyEmpty);
-          if (item !== undefined && item) {
-            const prev: message[] = JSON.parse(item);
-            dispatch(setMessages(prev));
-          } else {
-            dispatch(setMessages(empty));
-          }
-        });
+        await AsyncStorage.getItem(`${flashmob_id}_messages`).then(
+          async item => {
+            if (item !== undefined && item) {
+              const prev: message[] = JSON.parse(item);
+              dispatch(setMessages(prev));
+            } else {
+              const empty: message[] = [];
+              const stringifyEmpty = JSON.stringify(empty);
+              await AsyncStorage.setItem(
+                `${flashmob_id}_messages`,
+                stringifyEmpty,
+              );
+              dispatch(setMessages(empty));
+            }
+          },
+        );
 
         subscription.current = client.subscribe(
-          `/exchange/chat.exchange/room.${flashmob_id}`,
+          `/topic/room.${flashmob_id}`,
           async frame => {
             const data: message = await JSON.parse(frame.body);
-            console.log('subscribed', frame.body);
-
-            await AsyncStorage.getItem(`${flashmob_id}`).then(async item => {
-              console.log(item, 2);
-
-              if (item !== undefined && item) {
-                const prev: message[] = JSON.parse(item);
-                const next: message[] = [...prev, data];
-                const stringifyNext = JSON.stringify(next);
-                await AsyncStorage.setItem(`${flashmob_id}`, stringifyNext);
-              } else {
-                const stringifyData = JSON.stringify([data]);
-                await AsyncStorage.setItem(`${flashmob_id}`, stringifyData);
-              }
-            });
+            await AsyncStorage.getItem(`${flashmob_id}_messages`).then(
+              async item => {
+                if (item !== undefined && item) {
+                  const prev: message[] = JSON.parse(item);
+                  const next: message[] = [...prev, data];
+                  const stringifyNext = JSON.stringify(next);
+                  await AsyncStorage.setItem(
+                    `${flashmob_id}_messages`,
+                    stringifyNext,
+                  );
+                } else {
+                  const stringifyData = JSON.stringify([data]);
+                  await AsyncStorage.setItem(
+                    `${flashmob_id}_messages`,
+                    stringifyData,
+                  );
+                }
+              },
+            );
 
             dispatch(pushMessage(data));
           },
@@ -79,6 +88,8 @@ const ChatRoom = () => {
 
       if (subscription.current) {
         subscription.current.unsubscribe();
+        client.deactivate();
+        dispatch(setMessages([]));
       }
     };
   }, [flashmob_id, client]);
