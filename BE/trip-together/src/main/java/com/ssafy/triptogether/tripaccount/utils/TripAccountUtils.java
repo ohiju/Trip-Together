@@ -1,5 +1,7 @@
 package com.ssafy.triptogether.tripaccount.utils;
 
+import java.util.Optional;
+
 import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.triptogether.global.exception.response.ErrorCode;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
@@ -22,5 +24,10 @@ public class TripAccountUtils {
 			.orElseThrow(
 				() -> new NotFoundException("CurrencyFindByCurrencyCode", ErrorCode.CURRENCY_NOT_FOUND)
 			);
+	}
+
+	public static Optional<TripAccount> findReqeusterTripAccount(TripAccountRepository repository, long memberId,
+		long currencyId) {
+		return repository.findByMemberIdAndCurrencyId(memberId, currencyId);
 	}
 }
