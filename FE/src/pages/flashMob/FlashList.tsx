@@ -26,7 +26,7 @@ import getToken from '../../hooks/getToken';
 import AppButton from '../../components/common/AppButton';
 import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
 import {imagePath} from '../../assets/images/imagePath';
-import {TRIP_API_URL} from '@env';
+import {IMAGE_BASE_URL, TRIP_API_URL} from '@env';
 import getTime from '../../hooks/getTime';
 
 interface FlashMobProp {
@@ -164,7 +164,13 @@ const FlashList = () => {
 
   const renderItem = ({item}: any) => (
     <ChatRoomItem onPress={() => handlePressChat(item.flashmob_id)}>
-      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
+      <ProfileImage
+        source={
+          item.master_image_url
+            ? {uri: `${IMAGE_BASE_URL}/${item.master_image_url}`}
+            : DEFAULT_IMAGE_URL
+        }
+      />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
@@ -175,7 +181,13 @@ const FlashList = () => {
 
   const renderFullItem = ({item}: any) => (
     <AllChatRoomItem>
-      <ProfileImage source={item.master_image_url || DEFAULT_IMAGE_URL} />
+      <ProfileImage
+        source={
+          item.master_image_url
+            ? {uri: `${IMAGE_BASE_URL}/${item.master_image_url}`}
+            : DEFAULT_IMAGE_URL
+        }
+      />
       <ChatRoomDetails>
         <ChatRoomTitle>{item.flashmob_title}</ChatRoomTitle>
         <MeetingInfo>{getTime(item.flashmob_start_at)}</MeetingInfo>
