@@ -8,7 +8,7 @@ import lombok.Builder;
 
 @Builder
 public record ReissueResponse(
-	@NotBlank @JsonProperty("access")
+	@NotBlank @JsonProperty("access_token")
 	String access,
 	@NotNull @JsonProperty("expires_in")
 	Long expiresIn,
