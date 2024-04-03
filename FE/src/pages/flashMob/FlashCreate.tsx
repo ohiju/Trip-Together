@@ -1,3 +1,4 @@
+import {TRIP_API_URL} from '@env';
 import {Picker} from '@react-native-picker/picker';
 import {
   NavigationProp,
@@ -6,11 +7,13 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import axios from 'axios';
 import React, {useState} from 'react';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import AppButton from '../../components/common/AppButton';
 import DismissKeyboardView from '../../components/common/DismissKeyboardView';
 import {BottomButton} from '../../constants/AppButton';
+import getToken from '../../hooks/getToken';
 import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStackParams';
 import {useAppDispatch} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
@@ -24,9 +27,6 @@ import {
   StyledPicker,
   Wrapper,
 } from './MakeFlashStyle';
-import axios from 'axios';
-import getToken from '../../hooks/getToken';
-import {TRIP_API_URL} from '@env';
 
 const FlashCreate = () => {
   const [title, setTitle] = useState('');
@@ -74,7 +74,7 @@ const FlashCreate = () => {
         },
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     navigation.navigate('FlashList', {id});
   };

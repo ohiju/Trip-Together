@@ -21,7 +21,7 @@ interface message {
   sender_nickname: string;
   sender_image_url: string;
   content: string;
-  created_at: Date;
+  created_at: string;
   status: status;
 }
 

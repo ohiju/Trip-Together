@@ -1,3 +1,4 @@
+import {IMAGE_BASE_URL, TRIP_API_URL} from '@env';
 import {
   NavigationProp,
   RouteProp,
@@ -5,8 +6,14 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Dimensions, FlatList, View} from 'react-native';
+import {imagePath} from '../../assets/images/imagePath';
+import AppButton from '../../components/common/AppButton';
+import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
+import getTime from '../../hooks/getTime';
+import getToken from '../../hooks/getToken';
 import {FlashMobStackParams} from '../../interfaces/router/flashMob/FlashMobStackParams';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {setDisplay} from '../../store/slices/tabState';
@@ -21,13 +28,6 @@ import {
   ProfileImage,
   Title,
 } from './AllFlashStyle';
-import axios from 'axios';
-import getToken from '../../hooks/getToken';
-import AppButton from '../../components/common/AppButton';
-import {MakeDeleteButton, MakeFlashButton} from '../../constants/AppButton';
-import {imagePath} from '../../assets/images/imagePath';
-import {IMAGE_BASE_URL, TRIP_API_URL} from '@env';
-import getTime from '../../hooks/getTime';
 
 interface FlashMobProp {
   flashmob_id: number;
@@ -69,7 +69,6 @@ const FlashList = () => {
             },
           },
         );
-        console.log(response.data.data);
         const fetchedFlashmobs = response.data.data.flashmobs;
         const myFlashmobs = fetchedFlashmobs.filter(
           (flashmob: FlashMobProp) => flashmob.master_id === user_id,
@@ -80,7 +79,7 @@ const FlashList = () => {
         );
         setAllFlashmobs(allFlashmobs);
       } catch (error) {
-        console.log('Error fetching data:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -95,7 +94,7 @@ const FlashList = () => {
     const {access_token} = await getToken();
     if (!item.status) {
       try {
-        const response = await axios.post(
+        await axios.post(
           `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {},
           {
@@ -104,14 +103,13 @@ const FlashList = () => {
             },
           },
         );
-        console.log(response.data);
         setRefreshKey(prevKey => prevKey + 1);
       } catch (error) {
-        console.log('Error fetching data:', error);
+        console.error('Error fetching data:', error);
       }
     } else if (item.status === 'WAIT') {
       try {
-        const response = await axios.delete(
+        await axios.delete(
           `${TRIP_API_URL}/api/flashmob/v1/flashmobs/${item.flashmob_id}`,
           {
             headers: {
@@ -119,10 +117,9 @@ const FlashList = () => {
             },
           },
         );
-        console.log(response.data);
         setRefreshKey(prevKey => prevKey + 1);
       } catch (error) {
-        console.log('Error fetching data:', error);
+        console.error('Error fetching data:', error);
       }
     }
   };

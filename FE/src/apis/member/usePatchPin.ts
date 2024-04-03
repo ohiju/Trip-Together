@@ -1,6 +1,9 @@
 import {TRIP_API_URL} from '@env';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {ToastAndroid} from 'react-native';
 import getToken from '../../hooks/getToken';
+import {MyPageStackParams} from '../../interfaces/router/myPage/MyPageStackParams';
 import useAxois from '../useAxois';
 
 interface PatchPinData {
@@ -11,6 +14,7 @@ interface PatchPinData {
 
 const usePatchPin = () => {
   const axios = useAxois();
+  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
 
   const patchPinConfig = async (data: PatchPinData) => {
     const {access_token} = await getToken();
@@ -31,7 +35,8 @@ const usePatchPin = () => {
     const result = await axios
       .request(await patchPinConfig(data))
       .then((res: AxiosResponse) => {
-        console.log(res);
+        navigation.navigate('MyMain');
+        ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
       })
       .catch((err: AxiosResponse) => {
         console.error(err);

@@ -52,7 +52,6 @@ const useLogin = () => {
         );
         // user
         if (!res.data.data.token) throw new Error('유저 정보가 없습니다.');
-        console.log(res.data.data.token.access_token);
         await EncryptedStorage.setItem(
           'user',
           JSON.stringify(res.data.data.user),

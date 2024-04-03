@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 const Wrapper = styled.View`
-  flex: 1;
+  height: 40%;
   flex-direction: row;
   margin-top: 16px;
 `;

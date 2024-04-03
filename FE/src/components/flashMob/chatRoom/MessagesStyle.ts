@@ -8,19 +8,32 @@ import {
 
 const Wrapper = styled.View<{$isMe: boolean}>`
   margin: 5px 5px 10px 5px;
-  align-items: ${({$isMe}) => ($isMe ? 'flex-end' : 'flex-start')};
+  flex-direction: row;
+  justify-content: ${({$isMe}) => ($isMe ? 'flex-end' : 'flex-start')};
 `;
 
-const MessageView = styled.View``;
+const ProfileImg = styled.Image`
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+`;
+
+const MessageView = styled.View`
+  max-width: 80%;
+`;
 
 const Nickname = styled.Text<{$isMe: boolean}>`
   color: ${font_dark};
   font-weight: 900;
   align-self: ${({$isMe}) => ($isMe ? 'flex-end' : 'flex-start')};
+  margin: 0 5px;
+`;
+
+const ContentBox = styled.View`
+  justify-content: flex-start;
 `;
 
 const ContentView = styled.View<{$isMe: boolean}>`
-  max-width: 80%;
   background: ${({$isMe}) => ($isMe ? primary : secondary)};
   padding: 8px 15px;
   border-radius: 10px;
@@ -41,4 +54,13 @@ const Time = styled.Text<{$isMe: boolean}>`
   align-self: ${({$isMe}) => ($isMe ? 'flex-start' : 'flex-end')};
 `;
 
-export {Content, ContentView, MessageView, Nickname, Time, Wrapper};
+export {
+  Content,
+  ContentBox,
+  ContentView,
+  MessageView,
+  Nickname,
+  ProfileImg,
+  Time,
+  Wrapper,
+};

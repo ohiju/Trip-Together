@@ -24,7 +24,6 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
   useEffect(() => {
     const stompConfig: StompConfig = {
       brokerURL: `${TRIP_WS_URL}`,
-      debug: (frame: string) => console.log(frame),
       reconnectDelay: 0,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -34,25 +33,6 @@ const WebSocketContainer = ({children}: WebSocetContainerProps) => {
 
     if (isLogin) {
       client.current = new Client(stompConfig);
-
-      client.current.onConnect = () => {
-        console.log(`connected to ${stompConfig.brokerURL}`);
-      };
-
-      client.current.onDisconnect = error => {
-        console.log(`disconnected to  ${stompConfig.brokerURL}`);
-        console.log(error);
-      };
-
-      client.current.onStompError = error => {
-        console.log(`stomp error to  ${stompConfig.brokerURL}`);
-        console.log(error);
-      };
-
-      client.current.onWebSocketError = error => {
-        console.log(`websoket error to  ${stompConfig.brokerURL}`);
-        console.log(error);
-      };
 
       return () => {
         if (client.current) {

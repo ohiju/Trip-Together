@@ -1,6 +1,13 @@
 import {TRIP_API_URL} from '@env';
 import axios, {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {token} from '../interfaces/states/tokenState';
+
+interface RefreshResponse {
+  status: number;
+  message: string;
+  data: token;
+}
 
 const useRefresh = () => {
   const refreshParams = async () => {
@@ -10,7 +17,7 @@ const useRefresh = () => {
       url: `${TRIP_API_URL}/api/member/v1/members/reissue`,
       method: 'get',
       headers: {
-        'set-cookies': `refreshToken=${refreshToken};`,
+        'Set-Cookie': `refreshToken=${refreshToken};`,
       },
     };
 
@@ -20,11 +27,13 @@ const useRefresh = () => {
   const refresh = async () => {
     const result = await axios
       .request(await refreshParams())
-      .then((res: AxiosResponse) => {
-        console.log(res);
+      .then((res: AxiosResponse<RefreshResponse>) => {
+        console.log(res.data);
+
+        return res;
       })
       .catch((err: AxiosError) => {
-        console.error(err);
+        return err;
       });
 
     return result;
@@ -33,4 +42,5 @@ const useRefresh = () => {
   return refresh;
 };
 
+export type {RefreshResponse};
 export default useRefresh;

@@ -42,6 +42,8 @@ const useGetReceipt = () => {
     const result = await axios
       .request(await getReceiptConfig(params))
       .then((res: AxiosResponse<GetReceiptResponse>) => {
+        console.log(res.data);
+
         dispatcch(setReceipt(res.data.data));
       })
       .catch((err: AxiosError) => {

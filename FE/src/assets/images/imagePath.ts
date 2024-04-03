@@ -48,6 +48,8 @@ interface ImagePath {
   trip: ImageSourcePropType;
   ukround: ImageSourcePropType;
   up: ImageSourcePropType;
+  flip: ImageSourcePropType;
+  capture: ImageSourcePropType;
 }
 
 export const imagePath: ImagePath = {
@@ -97,4 +99,6 @@ export const imagePath: ImagePath = {
   trip: require('./trip.png'),
   ukround: require('./ukround.png'),
   up: require('./up.png'),
+  flip: require('./flip.png'),
+  capture: require('./capture.png'),
 };

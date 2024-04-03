@@ -16,7 +16,7 @@ import useSwipeBottom from '../../../hooks/useSwipeBottom';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
-import {ProfileView, Wrapper} from './ProfileMainStyle';
+import {BtnView, ProfileView, Wrapper} from './ProfileMainStyle';
 
 const ProfileMain = () => {
   // 데이터
@@ -67,11 +67,13 @@ const ProfileMain = () => {
     <Wrapper onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <ProfileView>
         <Profile />
-        <AppButton
-          style={isUser ? profileEditButton : reportButton}
-          text={isUser ? '프로필 수정' : '신고하기'}
-          onPress={handlePressButton}
-        />
+        <BtnView>
+          <AppButton
+            style={isUser ? profileEditButton : reportButton}
+            text={isUser ? '프로필 수정' : '신고하기'}
+            onPress={handlePressButton}
+          />
+        </BtnView>
         <HistoryButtons />
       </ProfileView>
       <MyData />

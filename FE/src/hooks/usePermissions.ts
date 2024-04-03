@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Alert, Linking, Platform} from 'react-native';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 
 function usePermissions() {
   // 권한 관련
@@ -8,7 +8,6 @@ function usePermissions() {
     if (Platform.OS === 'android') {
       check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
         .then(result => {
-          console.log('check location', result);
           if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {
             Alert.alert(
               '이 앱은 위치 권한 허용이 필요합니다.',
@@ -20,7 +19,6 @@ function usePermissions() {
                 },
                 {
                   text: '아니오',
-                  onPress: () => console.log('No Pressed'),
                   style: 'cancel',
                 },
               ],
@@ -42,7 +40,6 @@ function usePermissions() {
                 },
                 {
                   text: '아니오',
-                  onPress: () => console.log('No Pressed'),
                   style: 'cancel',
                 },
               ],
@@ -71,7 +68,6 @@ function usePermissions() {
           ) {
             return request(PERMISSIONS.IOS.CAMERA);
           } else {
-            console.log(result);
             throw new Error('카메라 지원 안 함');
           }
         })

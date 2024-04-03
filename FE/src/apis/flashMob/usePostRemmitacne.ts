@@ -1,6 +1,8 @@
 import {TRIP_API_URL} from '@env';
-import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AxiosError, RawAxiosRequestConfig} from 'axios';
 import getToken from '../../hooks/getToken';
+import {ChatStackParams} from '../../interfaces/router/flashMob/ChatMainStackParams';
 import useAxois from '../useAxois';
 
 interface PostRemmitanceData {
@@ -14,6 +16,7 @@ interface PostRemmitanceParams {
 
 const usePostRemmitance = () => {
   const axios = useAxois();
+  const navigation = useNavigation<NavigationProp<ChatStackParams>>();
 
   const postRemmitanceConfig = async (
     {flashmob_id, settlement_id}: PostRemmitanceParams,
@@ -39,8 +42,8 @@ const usePostRemmitance = () => {
   ) => {
     const result = await axios
       .request(await postRemmitanceConfig(params, data))
-      .then((res: AxiosResponse) => {
-        console.log(res);
+      .then(() => {
+        navigation.navigate('ChatRoom', {flashmob_id: params.flashmob_id});
       })
       .catch((err: AxiosError) => {
         console.error(err);

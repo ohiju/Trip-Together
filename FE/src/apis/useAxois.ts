@@ -1,31 +1,58 @@
-import {TRIP_API_URL} from '@env';
-import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {token as tokenType} from '../interfaces/states/tokenState';
+import useRefresh, {RefreshResponse} from './useRefresh';
+
+interface RefreshResult {
+  status: number;
+  message: string;
+  data?: tokenType;
+}
 
 const useAxios = () => {
   const instance = axios.create();
+  const refresh = useRefresh();
 
   instance.interceptors.response.use(
     response => response,
     async (error: AxiosError<{code: string}, any>) => {
       const {config, response} = error;
+      const originalRequest = config as InternalAxiosRequestConfig<any>;
+
       if (response && response.status === 419) {
-        if (response.data.code === 'expired') {
-          const originalRequest = config as InternalAxiosRequestConfig<any>;
-          const refreshToken = await EncryptedStorage.getItem('refreshToken');
-          // token refresh 요청
-          const {data} = await axios.get(
-            `${TRIP_API_URL}/api/member/v1/members/reissue`,
-            {headers: {Cookie: `refreshToken=${refreshToken}`}},
+        const result = await refresh();
+
+        if (result.status === 201) {
+          const res = result as AxiosResponse<RefreshResponse>;
+          // refresh_token
+          const cookies = res.headers['set-cookie'];
+          if (!cookies) throw new Error('쿠키가 없습니다');
+          const refreshTokenCookie = cookies.find(cookie =>
+            /refreshToken=/.test(cookie),
           );
-          // 새로운 토큰 저장
-          originalRequest.headers.authorization = `Bearer ${data.data.access}`;
-          // 419로 요청 실패했던 요청 새로운 토큰으로 재요청
+          if (!refreshTokenCookie) throw new Error('리프레시 토큰이 없습니다');
+          const refreshToken = refreshTokenCookie.split(';')[0].split('=')[1];
+          await EncryptedStorage.setItem('refreshToken', refreshToken);
+          // access_token
+          const token = JSON.stringify(res.data.data);
+          await EncryptedStorage.setItem('token', token);
+          // 재요청
+          originalRequest.headers.authorization = `Bearer ${res.data.data.access_token}`;
           return axios(originalRequest);
+        } else {
+          await EncryptedStorage.clear();
+          return Promise.reject(error);
         }
       }
+
+      return Promise.reject(error);
     },
   );
+
   return instance;
 };
 
