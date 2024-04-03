@@ -67,7 +67,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 			);
 			return objectMapper.convertValue(response.getBody().getData(), TwinkleBankAccountsLoadResponse.class);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 
 			return objectMapper.convertValue(response.getBody().getData(), TwinkleMemberInfoResponse.class);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 
@@ -240,7 +240,7 @@ public class TwinkleBankClientImpl implements TwinkleBankClient {
 				ApiResponse.class
 			);
 		} catch (RestClientException e) {
-			throw new ExternalServerException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
+			throw new BadRequestException("TwinkleBankAccountsLoad", TWINKLE_BANK_SERVER_ERROR);
 		}
 	}
 }
