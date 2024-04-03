@@ -35,6 +35,8 @@ import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 import com.ssafy.triptogether.tripaccount.utils.TripAccountUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,7 @@ import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadService {
 	// Repository
 	private final FlashMobRepository flashMobRepository;
@@ -218,26 +221,32 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	@Override
 	public void settlementSend(long memberId, long flashmobId, long settlementId, PinVerifyRequest pinVerifyRequest) {
 		Member participantMember = MemberUtils.findByMemberId(memberRepository, memberId);
+		log.info("-------------participant member find success--------------");
 		Settlement settlement = settlementRepository.findById(settlementId)
 			.orElseThrow(
 				() -> new NotFoundException("SettlementSend", SETTLEMENT_NOT_FOUND)
 			);
+		log.info("-------------settlement find success--------------");
 		Currency currency = TripAccountUtils.findByCurrencyCode(currencyRepository, settlement.getCurrencyCode());
-
+		log.info("-------------currency find success--------------");
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId, settlementId);
+		log.info("-------------participant settlement find success--------------");
 		if (participantSettlement.getHasSent()) {
 			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
 		}
 		TripAccount participantTripAccount = participantWithdraw(memberId, pinVerifyRequest, currency,
 			participantSettlement);
+		log.info("-------------participant account find success--------------");
 		participantSettlement.settlementSend();
 
 		Member requesterMember = requesterSettlementRepository.requesterFindBySettlementId(settlementId);
+		log.info("-------------requester member find success--------------");
 		TripAccount requesterTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
 			requesterMember.getId(), settlementId);
+		log.info("-------------requester account find success--------------");
 		requesterTripAccount.depositBalance(String.valueOf(participantSettlement.getPrice()));
-
+		log.info("-------------history start--------------");
 		PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
 			.tripAccount(requesterTripAccount)
 			.address("역삼동")
