@@ -23,7 +23,9 @@ const HeadersContainer = styled.View`
   justify-content: space-between;
 `;
 
-const Header = styled.View``;
+const Header = styled.View`
+  width: 80%;
+`;
 
 const Line = styled.View`
   width: 100%;
@@ -39,7 +41,7 @@ const Title = styled.Text`
 `;
 
 const Address = styled.Text`
-  width: 300px;
+  width: 80%;
 `;
 
 const Bag = styled(TouchableOpacity)`
