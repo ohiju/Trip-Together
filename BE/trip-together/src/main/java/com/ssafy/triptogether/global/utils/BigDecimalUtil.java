@@ -17,7 +17,7 @@ public class BigDecimalUtil {
 	public static String withdrawalBalance(String balance, String newBalance) {
 		BigDecimal balanceBD = new BigDecimal(balance);
 		BigDecimal newBalanceBD = new BigDecimal(newBalance);
-		if (balanceBD.compareTo(newBalanceBD) < 0) { // 내가 크면 +
+		if (balanceBD.compareTo(newBalanceBD) < 0) {
 			throw new BadRequestException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_BALANCE_BAD_REQUEST);
 		}
 		return (new BigDecimal(balance).subtract(new BigDecimal(newBalance))).toString();
