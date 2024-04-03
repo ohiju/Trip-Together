@@ -58,7 +58,7 @@ public class MemberSettlementRepositoryCustomImpl implements MemberSettlementRep
 		return queryFactory.select(member)
 			.from(requesterSettlement)
 			.where(requesterSettlement.settlement.id.eq(settlementId))
-			.join(requesterSettlement.member, member).fetchJoin()
+			.join(requesterSettlement.member, member)
 			.fetchOne();
 	}
 
