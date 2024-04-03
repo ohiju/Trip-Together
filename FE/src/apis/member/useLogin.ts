@@ -59,7 +59,11 @@ const useLogin = () => {
         dispatch(setUser(res.data.data.user));
       })
       .catch((err: AxiosError) => {
-        Alert.alert(err.message);
+        if (err.status === 404) {
+          Alert.alert('회원 정보가 없습니다.');
+        } else {
+          Alert.alert(err.message);
+        }
       });
 
     return result;

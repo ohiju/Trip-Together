@@ -4,7 +4,7 @@ import {Image, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import styled from 'styled-components/native';
 import {imagePath} from '../../assets/images/imagePath';
 import {bg_light} from '../../constants/colors';
-import {TravelStackParams} from '../../interfaces/router/TripStackParams';
+import {TabParams} from '../../interfaces/router/TabParams';
 
 interface IPage {
   item: {num: number; color: string};
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 });
 
 const MainIcons = ({item, style}: IPage) => {
-  const navigation = useNavigation<NavigationProp<TravelStackParams>>();
+  const navigation = useNavigation<NavigationProp<TabParams>>();
 
   return (
     <PageItem color={item.color} style={style}>
@@ -105,7 +105,7 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('MyMain');
+              navigation.navigate('CurrencyChange');
             }}
             style={styles.iconContainer}>
             <Image
@@ -148,7 +148,7 @@ const MainIcons = ({item, style}: IPage) => {
         <IconBox>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Insurance');
+              navigation.navigate('Sales');
             }}
             style={styles.iconContainer}>
             <Image

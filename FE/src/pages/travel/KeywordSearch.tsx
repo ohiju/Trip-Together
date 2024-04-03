@@ -1,20 +1,21 @@
-import React, {useState, useRef} from 'react';
-import {Text, FlatList, TouchableOpacity} from 'react-native';
-import styled from 'styled-components/native';
-import {bg_light, font_dark} from '../../constants/colors';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import axios from 'axios';
-import {setPlaces} from '../../store/slices/trip';
-import {setLocation} from '../../store/slices/trip';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
-import getToken from '../../hooks/getToken';
 import {TRIP_API_URL} from '@env';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, Text, TouchableOpacity} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
+import styled from 'styled-components/native';
+import AppInput from '../../components/common/AppInput';
+import {bg_light, bg_lightgray} from '../../constants/colors';
+import getToken from '../../hooks/getToken';
+import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {setLocation, setPlaces} from '../../store/slices/trip';
 
 const KeywordSearch = () => {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const searchInputRef = useRef(null);
+  const searchInputRef = useRef<TextInput | null>(null);
 
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
   const dispatch = useAppDispatch();
@@ -89,26 +90,24 @@ const KeywordSearch = () => {
     }
   };
 
+  useEffect(() => {
+    if (!searchInputRef) return;
+    searchInputRef.current?.focus();
+  }, [searchInputRef]);
+
   return (
     <Container>
-      {/* Search Bar */}
       <SearchInput
         ref={searchInputRef}
         placeholder="검색어를 입력하세요"
         value={searchText}
         onChangeText={handleSearchChange}
       />
-
-      {/* Icon Bar */}
       <IconContainer>
         <IconInputs onPress={() => handleButtonPress('명소')}>
           <IconImage source={require('../../assets/images/location.png')} />
           <IconText>명소</IconText>
         </IconInputs>
-        {/* <IconInputs onPress={() => handleButtonPress('축제')}>
-          <IconImage source={require('../../assets/images/confetti.png')} />
-          <IconText>축제</IconText>
-        </IconInputs> */}
         <IconInputs onPress={() => handleButtonPress('식당')}>
           <IconImage source={require('../../assets/images/restaurant.png')} />
           <IconText>음식</IconText>
@@ -118,8 +117,6 @@ const KeywordSearch = () => {
           <IconText>숙박</IconText>
         </IconInputs>
       </IconContainer>
-
-      {/* Search Results */}
       <FlatList
         data={searchResults}
         renderItem={({item}) => (
@@ -127,7 +124,7 @@ const KeywordSearch = () => {
             <Text>{item.name}</Text>
           </ResultItem>
         )}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
       />
     </Container>
   );
@@ -145,32 +142,33 @@ const IconContainer = styled.View`
   justify-content: space-around;
 `;
 
-const IconInputs = styled(TouchableOpacity)`
-  width: 60px;
-  height: 60px;
-  border-radius: 50px;
-  border: 1px solid ${font_dark};
+const IconInputs = styled.TouchableOpacity`
+  flex: 1;
+  flex-direction: row;
+  border-radius: 10px;
+  border: 1px solid ${bg_lightgray};
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  background-color: ${bg_light};
+  padding: 8px 0;
+  margin: 0 15px;
 `;
 
 const IconImage = styled.Image`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 `;
 
 const IconText = styled.Text`
-  font-size: 12px;
+  font-size: 16px;
+  margin-left: 8px;
 `;
 
-const SearchInput = styled.TextInput`
+const SearchInput = styled(AppInput)`
   height: 50px;
   border-color: gray;
   border-width: 1px;
   border-radius: 8px;
-  padding-horizontal: 10px;
+  padding: 0 10px;
   margin-bottom: 10px;
 `;
 

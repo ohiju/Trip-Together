@@ -8,6 +8,8 @@ import AppButton from '../../../components/common/AppButton';
 import Receipt from '../../../components/flashMob/settlement/Receipt';
 import {BottomButton} from '../../../constants/AppButton';
 import {SettlementStackParams} from '../../../interfaces/router/flashMob/SettlementStackParams';
+import {RootState} from '../../../store';
+import {useAppSelector} from '../../../store/hooks';
 import {} from './SelectHistoryStyle';
 import {
   Receipts,
@@ -20,15 +22,19 @@ import {
 const SettlementConfirm = () => {
   const {flashmob_id, currency, total_price, attendees} =
     useRoute<RouteProp<SettlementStackParams, 'SettlementConfirm'>>().params;
+  const userId = useAppSelector(
+    (state: RootState) => state.user.user.member_id,
+  );
 
   // API
   const postSettlement = usePostSettlement();
   const handleSettlement = () => {
+    const filtered = attendees.filter(item => item.member_id !== userId);
     const data: PostSettlementData = {
       currency_code: currency.currency_code,
       total_price,
       attendees_count: attendees.length,
-      attendees,
+      attendees: filtered,
     };
     const params: PostSettlementParams = {
       flashmob_id,

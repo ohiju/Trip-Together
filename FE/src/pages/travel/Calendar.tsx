@@ -1,14 +1,18 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Wrapper} from './CalendarStyle';
-import CalendarView from '../../components/travel/Calendar';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationProp} from '@react-navigation/native';
-import {CalendarStackParams} from '../../interfaces/router/CalendarStackParams';
-import AppButton from '../../components/common/AppButton';
-import {BottomButton} from '../../constants/AppButton';
 import {Alert} from 'react-native';
+import AppButton from '../../components/common/AppButton';
+import {
+  Body,
+  Hightlight,
+  HightlightRed,
+} from '../../components/common/InfoPageStyle';
+import CalendarView from '../../components/travel/Calendar';
+import {BottomButton} from '../../constants/AppButton';
+import {CalendarStackParams} from '../../interfaces/router/CalendarStackParams';
 import {useAppDispatch} from '../../store/hooks';
 import {setDate} from '../../store/slices/trip';
+import {Title, TitleView, Wrapper} from './CalendarStyle';
 
 const Calendar = () => {
   const [startDate, setStartDate] = useState('');
@@ -28,13 +32,21 @@ const Calendar = () => {
 
   return (
     <Wrapper>
-      <CalendarView
-        startDate={startDate}
-        endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-      />
-
+      <TitleView>
+        <Title>
+          <Hightlight>시작 날짜</Hightlight>와{' '}
+          <HightlightRed>종료 날짜</HightlightRed>를
+        </Title>
+        <Title>선택해주세요</Title>
+      </TitleView>
+      <Body>
+        <CalendarView
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
+      </Body>
       <AppButton
         style={BottomButton}
         text="다음"
