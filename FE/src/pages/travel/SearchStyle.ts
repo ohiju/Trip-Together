@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {bg_main, bg_light} from '../../constants/colors';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Wrapper = styled.View`
   flex: 1;
@@ -22,9 +23,16 @@ const SearchInput = styled.TextInput`
 
 const SearchResult = styled.View`
   padding: 10px;
-  width: 340px;
+  width: 90%;
   margin-bottom: 10px;
   border-bottom-width: 0.5px;
 `;
 
-export {Wrapper, SearchInput, SearchResult};
+const SearchResultBox = styled(TouchableOpacity)`
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 5px;
+`;
+
+export {Wrapper, SearchInput, SearchResult, SearchResultBox};
