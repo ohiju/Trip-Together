@@ -209,7 +209,7 @@ public class MemberServiceImpl implements MemberSaveService, MemberLoadService {
         // accessToken 까서 created at, expires in 빼서 넣어주기
         claims = jwtTokenProvider.parseClaims(tokenMap.get("access").substring(7));
         Long createdAt = (Long) claims.get("created");
-        Integer expiresIn = (Integer) claims.get("expiresIn");
+        Long expiresIn = (Long) claims.get("expiresIn");
 
         ReissueResponse response = ReissueResponse.builder()
             .access(tokenMap.get("access"))

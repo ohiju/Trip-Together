@@ -11,7 +11,7 @@ public record ReissueResponse(
 	@NotBlank @JsonProperty("access")
 	String access,
 	@NotNull @JsonProperty("expires_in")
-	Integer expiresIn,
+	Long expiresIn,
 	@NotNull @JsonProperty("created_at")
 	Long createdAt
 ) {
