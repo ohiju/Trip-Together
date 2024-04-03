@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
-import {Wrapper, SearchInput, SearchResult} from './SearchStyle';
+import {
+  Wrapper,
+  SearchInput,
+  SearchResult,
+  SearchResultBox,
+} from './SearchStyle';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {SearchStackParams} from '../../interfaces/router/SearchStackParams';
 import {useAppDispatch} from '../../store/hooks';
 import {useFocusEffect} from '@react-navigation/native';
-import DismissKeyboardView from '../../components/common/DismissKeyboardView';
-import {StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
+// import DismissKeyboardView from '../../components/common/DismissKeyboardView';
+import {StyleSheet, FlatList, Text} from 'react-native';
 import {setDisplay} from '../../store/slices/tabState';
 import axios from 'axios';
 import {setStartRegion} from '../../store/slices/trip';
@@ -56,28 +61,26 @@ const Search = () => {
   };
 
   return (
-    <DismissKeyboardView style={styles.dismissKeyboard}>
-      <Wrapper>
-        <SearchInput
-          placeholder="어디로 여행을 떠나시나요?"
-          value={searchText}
-          onChangeText={handleSearchChange}
-        />
-        <FlatList
-          style={styles.flatList}
-          data={searchResults}
-          renderItem={({item}) => (
-            <TouchableOpacity onPress={() => handleSearchSubmit(item)}>
-              <SearchResult>
-                <Text>{item.city_name}</Text>
-              </SearchResult>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.flatListContent}
-        />
-      </Wrapper>
-    </DismissKeyboardView>
+    <Wrapper>
+      <SearchInput
+        placeholder="시작 도시를 설정해주세요"
+        value={searchText}
+        onChangeText={handleSearchChange}
+      />
+      <FlatList
+        style={styles.flatList}
+        data={searchResults}
+        renderItem={({item}) => (
+          <SearchResultBox onPress={() => handleSearchSubmit(item)}>
+            <SearchResult>
+              <Text>{item.city_name}</Text>
+            </SearchResult>
+          </SearchResultBox>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.flatListContent}
+      />
+    </Wrapper>
   );
 };
 
