@@ -8,12 +8,12 @@ import QRScanner from './QRscanner';
 const Wrapper = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
+  padding-top: 4px;
 `;
 
 const Icon = styled.Image`
   width: 26px;
   height: 26px;
-  margin-bottom: 3px;
 `;
 
 const IconText = styled.Text`

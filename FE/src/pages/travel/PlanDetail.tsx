@@ -51,7 +51,6 @@ const PlanDetail = () => {
           },
         },
       );
-      // dispatch(resetTripInfo());
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {
@@ -62,7 +61,7 @@ const PlanDetail = () => {
     }
   };
 
-  const renderPagination = (index: any, total: any, context: any) => {
+  const renderPagination = (index: number, total: number, context: Swiper) => {
     return (
       <RenderPagination
         index={index}

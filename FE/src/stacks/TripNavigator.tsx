@@ -32,7 +32,8 @@ const TravelNavigator = () => {
         name="AllTrip"
         component={AllTrip}
         options={{
-          title: '',
+          title: '내 계획',
+          headerTitleAlign: 'center',
         }}
       />
       <TravelStack.Group

@@ -1,5 +1,11 @@
-import React from 'react';
-import {FlatList, Modal, TouchableWithoutFeedback} from 'react-native';
+import React, {Dispatch, SetStateAction} from 'react';
+import {
+  FlatList,
+  GestureResponderEvent,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import Swiper from 'react-native-swiper';
 import {imagePath} from '../../assets/images/imagePath';
 import {
   CenteredView,
@@ -17,15 +23,15 @@ import {
 } from './RenderPaginationStyle';
 
 interface PaginationProps {
-  index: any;
-  total: any;
-  context: any;
+  index: number;
+  total: number;
+  context: Swiper;
   currentPage: number;
   modalVisible: boolean;
-  setCurrentPage: any;
-  setModalVisible: any;
-  handleMapPress: any;
-  handleFinishPress: any;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  setModalVisible: Dispatch<SetStateAction<boolean>>;
+  handleMapPress: (e: GestureResponderEvent) => void;
+  handleFinishPress: (e: GestureResponderEvent) => void;
 }
 
 const RenderPagination = ({

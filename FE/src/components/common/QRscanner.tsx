@@ -1,17 +1,12 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {CameraScreen} from 'react-native-camera-kit';
+import styled from 'styled-components/native';
 import {QRdata} from '../../apis/useQR';
 import {
   PinAuthProps,
   RootStackParams,
 } from '../../interfaces/router/RootStackParams';
-
-interface QRValue {
-  attraction_business_num: string;
-  quantity: number;
-}
 
 const QRScanner = ({onClose}: any) => {
   const [qrvalue, setQrvalue] = useState('');
@@ -39,75 +34,61 @@ const QRScanner = ({onClose}: any) => {
   };
 
   return (
-    <SafeAreaView style={styles.camera}>
+    <Camera>
       {opneScanner ? (
-        <View style={{flex: 1}}>
+        <FlexView>
           <CameraScreen
+            allowCaptureRetake={false}
+            captureButtonImageStyle={{}}
+            cameraFlipImageStyle={{}}
+            hideControls={true}
             showFrame={false}
-            // Show/hide scan frame
             scanBarcode={true}
-            // Can restrict for the QR Code only
             laserColor={'blue'}
-            // Color can be of your choice
             frameColor={'yellow'}
-            // If frame is visible then frame color
-            colorForScannerFrame={'black'}
-            // Scanner Frame color
+            cameraRatioOverlay={null}
+            captureButtonImage={null}
+            cameraFlipImage={null}
+            torchOnImage={null}
+            torchOffImage={null}
+            torchImageStyle={{}}
             onReadCode={event =>
               onBarcodeScan(event.nativeEvent.codeStringValue)
             }
+            onBottomButtonPressed={() => {}}
           />
-        </View>
+        </FlexView>
       ) : (
-        <View style={styles.container}>
-          <Text style={styles.textStyle}>
-            {qrvalue ? 'Scanned Result: ' + qrvalue : ''}
-          </Text>
-        </View>
+        <Container>
+          <StyledText>{qrvalue ? 'Scanned Result: ' + qrvalue : ''}</StyledText>
+        </Container>
       )}
-    </SafeAreaView>
+    </Camera>
   );
 };
 
 export default QRScanner;
 
-const styles = StyleSheet.create({
-  camera: {
-    position: 'absolute',
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 10,
-    alignItems: 'center',
-  },
-  titleText: {
-    fontSize: 22,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  textStyle: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center',
-    padding: 10,
-    marginTop: 16,
-  },
-  buttonStyle: {
-    fontSize: 16,
-    color: 'white',
-    backgroundColor: 'green',
-    padding: 5,
-    minWidth: 250,
-  },
-  buttonTextStyle: {
-    padding: 5,
-    color: 'white',
-    textAlign: 'center',
-  },
-  textLinkStyle: {
-    color: 'blue',
-    paddingVertical: 20,
-  },
-});
+const Camera = styled.SafeAreaView`
+  position: absolute;
+  flex: 1;
+`;
+
+const FlexView = styled.View`
+  flex: 1;
+`;
+
+const Container = styled.View`
+  flex: 1;
+  background-color: 'white';
+  padding: 10px;
+  align-items: center;
+`;
+
+const StyledText = styled.Text`
+  color: 'black';
+  font-size: 16px;
+  text-align: center;
+  padding: 10px;
+  margin-top: 16px;
+`;
