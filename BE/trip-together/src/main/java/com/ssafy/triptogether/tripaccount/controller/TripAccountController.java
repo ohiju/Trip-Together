@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 public class TripAccountController {
 	private final TripAccountLoadService tripAccountLoadService;
 	private final TripAccountSaveService tripAccountSaveService;
-	private final AccountHistoryProvider accountHistoryProvider;
 
 	@GetMapping("/currencies")
 	public ResponseEntity<ApiResponse<CurrenciesLoadResponse>> currenciesLoad() {
@@ -95,9 +94,7 @@ public class TripAccountController {
 		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
 			.pinNum(tripAccountExchangeRequest.pinNum())
 			.build();
-		AccountHistorySaveRequest accountHistorySaveRequest = tripAccountSaveService.tripAccountExchange(memberId,
-			pinVerifyRequest, tripAccountExchangeRequest);
-		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+		tripAccountSaveService.tripAccountExchange(memberId, pinVerifyRequest, tripAccountExchangeRequest);
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_EXCHANGE
@@ -113,9 +110,7 @@ public class TripAccountController {
 		PinVerifyRequest pinVerifyRequest = PinVerifyRequest.builder()
 			.pinNum(tripAccountPaymentRequest.pinNum())
 			.build();
-		AccountHistorySaveRequest accountHistorySaveRequest = tripAccountSaveService.tripAccountPay(memberId,
-			pinVerifyRequest, tripAccountPaymentRequest);
-		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+		tripAccountSaveService.tripAccountPay(memberId, pinVerifyRequest, tripAccountPaymentRequest);
 
 		return ApiResponse.emptyResponse(
 			HttpStatus.OK, StatusCode.SUCCESS_TRIP_ACCOUNT_PAY
