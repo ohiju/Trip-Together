@@ -16,8 +16,8 @@ public record ChatMessage(
 	@JsonProperty("sender_nickname") String senderNickname,
 	@JsonProperty("sender_image_url") String senderImageUrl,
 	String content,
-	@JsonProperty("created_at") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	LocalDateTime createdAt,
+	@JsonProperty("created_at")
+	String createdAt,
 	MessageType status
 ) {
 }

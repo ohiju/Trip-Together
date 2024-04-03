@@ -23,7 +23,7 @@ public class ChatMessageUtil {
 			.senderNickname(memberNickname)
 			.senderImageUrl(memberImgUrl)
 			.content(memberNickname + " 님이 참가를 희망합니다.")
-			.createdAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now().toString())
 			.status(ATTEND)
 			.build();
 		chatMessageService.send(chatMessage);
@@ -36,7 +36,7 @@ public class ChatMessageUtil {
 			.senderNickname(memberNickname)
 			.senderImageUrl(memberImgUrl)
 			.content(memberNickname + " 님이 참가 하였습니다.")
-			.createdAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now().toString())
 			.status(JOIN)
 			.build();
 		chatMessageService.send(chatMessage);
@@ -49,7 +49,7 @@ public class ChatMessageUtil {
 			.senderNickname(memberNickname)
 			.senderImageUrl(memberImgUrl)
 			.content(content) // TODO: 정산 요청의 경우 어떤 내용물을 보내줄 지 결정
-			.createdAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now().toString())
 			.status(SETTLEMENT)
 			.build();
 		chatMessageService.send(chatMessage);
