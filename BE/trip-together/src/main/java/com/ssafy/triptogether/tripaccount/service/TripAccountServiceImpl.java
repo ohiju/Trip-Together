@@ -145,6 +145,7 @@ public class TripAccountServiceImpl implements TripAccountLoadService, TripAccou
 				.type(accountHistory.getType().getMessage())
 				.usage(accountHistory.getBusinessName())
 				.quantity(accountHistory.getQuantity())
+				.balance(accountHistory.getBalance())
 				.createdAt(accountHistory.getCreatedAt())
 				.build()
 			).toList();
