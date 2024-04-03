@@ -34,6 +34,7 @@ import com.ssafy.triptogether.tripaccount.provider.AccountHistoryProvider;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
 import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 import com.ssafy.triptogether.tripaccount.utils.TripAccountUtils;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.triptogether.global.exception.response.ErrorCode.*;
 
@@ -118,7 +120,8 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 
 	@Transactional
 	@Override
-	public RequestMemberResponse applyFlashmob(long flashmobId, long memberId, ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
+	public RequestMemberResponse applyFlashmob(long flashmobId, long memberId,
+		ApplyFlashmobRequest applyFlashmobRequest, long masterId) {
 		// check if master
 		boolean isMaster = memberFlashMobRepository.isMaster(flashmobId, masterId);
 		if (!isMaster) {
@@ -126,14 +129,16 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 		}
 
 		// find member flashmob & member
-		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository, flashmobId, memberId);
+		MemberFlashMob memberFlashMob = MemberFlashmobUtils.findByFlashmobIdAndMemberId(memberFlashMobRepository,
+			flashmobId, memberId);
 		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
 
 		// apply & send message
 		boolean isAccepted = false;
 		if (applyFlashmobRequest.status().equals(RoomStatus.ATTEND)) {
 			memberFlashMob.applyAcceptance();
-			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(), memberFlashMob.getMember().getImageUrl());
+			chatMessageUtil.sendJoinMsg(flashmobId, memberId, memberFlashMob.getMember().getNickname(),
+				memberFlashMob.getMember().getImageUrl());
 			isAccepted = true;
 		} else if (applyFlashmobRequest.status().equals(RoomStatus.REFUSE_UNCHECK)) {
 			memberFlashMob.applyDenial();
@@ -221,53 +226,78 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	@Override
 	public void settlementSend(long memberId, long flashmobId, long settlementId, PinVerifyRequest pinVerifyRequest) {
 		Member participantMember = MemberUtils.findByMemberId(memberRepository, memberId);
-		log.info("-------------participant member find success--------------");
 		Settlement settlement = settlementRepository.findById(settlementId)
 			.orElseThrow(
 				() -> new NotFoundException("SettlementSend", SETTLEMENT_NOT_FOUND)
 			);
-		log.info("-------------settlement find success--------------");
 		Currency currency = TripAccountUtils.findByCurrencyCode(currencyRepository, settlement.getCurrencyCode());
-		log.info("-------------currency find success--------------");
 		ParticipantSettlement participantSettlement = participantSettlementRepository.participantFindByMemberIdAndSettlementId(
 			memberId, settlementId);
-		log.info("-------------participant settlement find success--------------");
 		if (participantSettlement.getHasSent()) {
 			throw new BadRequestException("SettlementSend", SETTLEMENT_SEND_BAD_REQUEST);
 		}
 		TripAccount participantTripAccount = participantWithdraw(memberId, pinVerifyRequest, currency,
 			participantSettlement);
-		log.info("-------------participant account find success--------------");
 		participantSettlement.settlementSend();
 
 		Member requesterMember = requesterSettlementRepository.requesterFindBySettlementId(settlementId);
-		log.info("-------------requester member find success--------------");
-		TripAccount requesterTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
+		Optional<TripAccount> requesterTripAccount = TripAccountUtils.findReqeusterTripAccount(tripAccountRepository,
 			requesterMember.getId(), settlementId);
-		log.info("-------------requester account find success--------------");
-		requesterTripAccount.depositBalance(String.valueOf(participantSettlement.getPrice()));
-		log.info("-------------history start--------------");
-		PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
-			.tripAccount(requesterTripAccount)
-			.address("역삼동")
-			.businessName(participantMember.getNickname())
-			.businessNum(participantMember.getUuid())
-			.quantity(participantSettlement.getPrice())
-			.type(Type.DEPOSIT)
-			.build();
-		PaymentSenderDetail paymentSenderDetail = PaymentSenderDetail.builder()
-			.tripAccount(participantTripAccount)
-			.address("역삼동")
-			.businessName(requesterMember.getNickname())
-			.businessNum(requesterMember.getUuid())
-			.quantity(participantSettlement.getPrice())
-			.type(Type.WITHDRAW)
-			.build();
-		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
-			.paymentReceiverDetail(paymentReceiverDetail)
-			.paymentSenderDetail(paymentSenderDetail)
-			.build();
-		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+		requesterTripAccount.ifPresentOrElse(
+			tripAccount -> {
+				tripAccount.depositBalance(String.valueOf(participantSettlement.getPrice()));
+				PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
+					.tripAccount(tripAccount)
+					.address("역삼동")
+					.businessName(participantMember.getNickname())
+					.businessNum(participantMember.getUuid())
+					.quantity(participantSettlement.getPrice())
+					.type(Type.DEPOSIT)
+					.build();
+				PaymentSenderDetail paymentSenderDetail = PaymentSenderDetail.builder()
+					.tripAccount(participantTripAccount)
+					.address("역삼동")
+					.businessName(requesterMember.getNickname())
+					.businessNum(requesterMember.getUuid())
+					.quantity(participantSettlement.getPrice())
+					.type(Type.WITHDRAW)
+					.build();
+				AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+					.paymentReceiverDetail(paymentReceiverDetail)
+					.paymentSenderDetail(paymentSenderDetail)
+					.build();
+				accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+			},
+			() -> {
+				TripAccount tripAccount  = TripAccount.builder()
+					.balance("0")
+					.member(requesterMember)
+					.currency(currency)
+					.build();
+				TripAccount savedTripAccount = tripAccountRepository.save(tripAccount);
+				savedTripAccount.depositBalance(String.valueOf(participantSettlement.getPrice()));
+				PaymentReceiverDetail paymentReceiverDetail = PaymentReceiverDetail.builder()
+					.tripAccount(savedTripAccount)
+					.address("역삼동")
+					.businessName(participantMember.getNickname())
+					.businessNum(participantMember.getUuid())
+					.quantity(participantSettlement.getPrice())
+					.type(Type.DEPOSIT)
+					.build();
+				PaymentSenderDetail paymentSenderDetail = PaymentSenderDetail.builder()
+					.tripAccount(participantTripAccount)
+					.address("역삼동")
+					.businessName(requesterMember.getNickname())
+					.businessNum(requesterMember.getUuid())
+					.quantity(participantSettlement.getPrice())
+					.type(Type.WITHDRAW)
+					.build();
+				AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+					.paymentReceiverDetail(paymentReceiverDetail)
+					.paymentSenderDetail(paymentSenderDetail)
+					.build();
+				accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+			});
 
 		if (participantSettlementRepository.checkSettlementIsDone(settlementId)) {
 			settlement.updateIsDone();
@@ -275,7 +305,8 @@ public class FlashMobServiceImpl implements FlashMobSaveService, FlashMobLoadSer
 	}
 
 	@PinVerify
-	private TripAccount participantWithdraw(long memberId, PinVerifyRequest pinVerifyRequest, Currency currency, ParticipantSettlement participantSettlement) {
+	private TripAccount participantWithdraw(long memberId, PinVerifyRequest pinVerifyRequest, Currency currency,
+		ParticipantSettlement participantSettlement) {
 		TripAccount participantTripAccount = TripAccountUtils.findByMemberIdAndCurrencyId(tripAccountRepository,
 			memberId, currency.getId());
 		participantTripAccount.withdrawBalance(String.valueOf(participantSettlement.getPrice()));

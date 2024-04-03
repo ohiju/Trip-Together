@@ -18,9 +18,6 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      show_sql: true
-      format_sql: true
-      use_sql_comments: true
       ddl-auto: update
 #  mvc:
 #    servlet:
