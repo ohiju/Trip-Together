@@ -7,6 +7,7 @@ import com.ssafy.twinklebank.account.data.request.AddAccountRequest;
 import com.ssafy.twinklebank.account.data.request.DepositWithdrawRequest;
 import com.ssafy.twinklebank.account.data.request.Transfer1wonRequest;
 import com.ssafy.twinklebank.account.data.response.AddAccountResponse;
+import com.ssafy.twinklebank.account.data.response.Transfer1wonResponse;
 import com.ssafy.twinklebank.account.data.response.getUserAccountsResponse;
 import com.ssafy.twinklebank.account.service.AccountLoadService;
 import com.ssafy.twinklebank.account.service.AccountSaveService;
@@ -18,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.ssafy.twinklebank.global.data.response.StatusCode.*;
 import static org.springframework.http.HttpStatus.*;
@@ -94,12 +97,14 @@ public class AccountController {
     }
 
     @PostMapping("/1wontransfer")
-    public ResponseEntity<ApiResponse<Void>> transfer1won(
+    public ResponseEntity<ApiResponse<Transfer1wonResponse>> transfer1won(
         @AuthenticationPrincipal SecurityMember securityMember,
         @Valid @RequestBody Transfer1wonRequest request){
         Long memberId = securityMember.getId();
-        accountSaveService.transfer1won(memberId, request);
-        return ApiResponse.emptyResponse(OK, SUCCESS_1WON_TRANSFER);
+        String code1won = accountSaveService.transfer1won(memberId, request);
+
+        Transfer1wonResponse response = Transfer1wonResponse.builder().code1won(code1won).build();
+        return ApiResponse.toResponseEntity(OK, SUCCESS_1WON_TRANSFER, response);
     }
 
     @PostMapping("/1wonverify")
