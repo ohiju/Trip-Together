@@ -10,6 +10,10 @@ interface TravelStackParams extends ParamListBase {
   plandetail: undefined;
   placeinfo: {theme: string};
   placedetail: {theme: string};
+
+  Insurance: undefined;
+  CurrencyChange: undefined;
+  Sales: undefined;
 }
 
 export type {TravelStackParams};

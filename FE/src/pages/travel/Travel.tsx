@@ -1,14 +1,14 @@
+import {useFocusEffect} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions} from 'react-native';
-import {Wrapper} from './TravelStyle';
-import {useAppDispatch} from '../../store/hooks';
-import {useFocusEffect} from '@react-navigation/native';
-import {setDisplay} from '../../store/slices/tabState';
-import Plans from '../../components/travel/Plans';
-import Package from '../../components/travel/Package';
-import Icons from '../../components/travel/Icons';
-import {PAGES} from '../../assets/data/pages';
 import {ICONS} from '../../assets/data/icons';
+import {PAGES} from '../../assets/data/pages';
+import Icons from '../../components/travel/Icons';
+import Package from '../../components/travel/Package';
+import Plans from '../../components/travel/Plans';
+import {useAppDispatch} from '../../store/hooks';
+import {setDisplay} from '../../store/slices/tabState';
+import {Wrapper} from './TravelStyle';
 
 function Travel() {
   const screenWidth = Math.round(Dimensions.get('window').width);

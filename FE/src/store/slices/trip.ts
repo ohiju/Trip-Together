@@ -170,6 +170,8 @@ export const tripSlice = createSlice({
   },
 });
 
+export type {attractionProp};
+
 export const {
   setStartRegion,
   setDate,

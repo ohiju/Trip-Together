@@ -1,6 +1,11 @@
 import styled from 'styled-components/native';
 import {bg_light} from '../../constants/colors';
 
+const Wrapper = styled.View`
+  flex: 1;
+  background: ${bg_light};
+`;
+
 const ItemContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
@@ -13,7 +18,7 @@ const ThumbnailContainer = styled.View`
   width: 80px;
   height: 80px;
   overflow: hidden;
-  border-radius: 50px;
+  border-radius: 100px;
   justify-content: center;
   align-items: center;
   margin-right: 10px;
@@ -75,23 +80,18 @@ const ButtonView = styled.View`
   margin-right: 5px;
 `;
 
-const Wrapper = styled.View`
-  flex: 1;
-  background: ${bg_light};
-`;
-
 export {
-  ItemContainer,
-  ThumbnailContainer,
-  Thumbnail,
-  DetailsContainer,
-  StarContainer,
-  Name,
   Address,
-  Rating,
-  Price,
-  DetailsRow,
   ButtonContainer,
   ButtonView,
+  DetailsContainer,
+  DetailsRow,
+  ItemContainer,
+  Name,
+  Price,
+  Rating,
+  StarContainer,
+  Thumbnail,
+  ThumbnailContainer,
   Wrapper,
 };

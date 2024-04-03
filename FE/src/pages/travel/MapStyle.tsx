@@ -1,6 +1,10 @@
-import styled from 'styled-components/native';
-import {bg_light, bg_lightgray} from '../../constants/colors';
 import {TouchableOpacity} from 'react-native';
+import styled from 'styled-components/native';
+import {bg_light, bg_lightgray, font_dark} from '../../constants/colors';
+
+const Wrapper = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -37,13 +41,6 @@ const DragBar = styled(TouchableOpacity)`
 const ButtonImage = styled.Image`
   width: 100%;
   height: 25px;
-  resize-mode: contain;
-`;
-
-const PlanImage = styled.Image`
-  width: 55px;
-  height: 55px;
-  resize-mode: contain;
 `;
 
 const SliderFullContent = styled.View`
@@ -58,24 +55,28 @@ const SliderFullContent = styled.View`
   border-top-left-radius: 15px;
 `;
 
-const PlanIcon = styled(TouchableOpacity)`
-  position: absolute;
-  background-color: ${bg_light};
-  width: 45px;
-  height: 45px;
-  top: 80px;
-  right: 20px;
-  border-radius: 25px;
+const PlanIcon = styled.TouchableOpacity`
   align-items: center;
-  justify-content: center;
+`;
+
+const PlanImage = styled.Image`
+  width: 30px;
+  height: 30px;
+`;
+
+const PlanText = styled.Text`
+  color: ${font_dark};
+  font-size: 12px;
 `;
 
 export {
+  ButtonImage,
   Container,
+  DragBar,
+  PlanIcon,
+  PlanImage,
+  PlanText,
   SliderContainer,
   SliderFullContent,
-  ButtonImage,
-  PlanImage,
-  PlanIcon,
-  DragBar,
+  Wrapper,
 };

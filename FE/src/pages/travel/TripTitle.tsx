@@ -1,23 +1,29 @@
+import {TRIP_API_URL} from '@env';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import axios, {AxiosError} from 'axios';
 import React, {useState} from 'react';
+import {Alert} from 'react-native';
+import AppButton from '../../components/common/AppButton';
 import {
-  Wrapper,
+  Body,
+  Hightlight,
+  Slogan,
+  SloganView,
+  Title,
+  TitleView,
+} from '../../components/common/InfoPageStyle';
+import {BottomButton} from '../../constants/AppButton';
+import getToken from '../../hooks/getToken';
+import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {setPlaces, setPlanId, setTripTitle} from '../../store/slices/trip';
+import {
   TitleContainer,
   TitleInput,
   TitleLength,
   TitleLengthText,
+  Wrapper,
 } from './TripTitleStyle';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {TripTitleStackParams} from '../../interfaces/router/TripTitleStackParams';
-import AppButton from '../../components/common/AppButton';
-import {BottomButton} from '../../constants/AppButton';
-import DismissKeyboardView from '../../components/common/DismissKeyboardView';
-import {Alert, StyleSheet} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {setPlanId, setTripTitle} from '../../store/slices/trip';
-import axios, {AxiosError} from 'axios';
-import {setPlaces} from '../../store/slices/trip';
-import getToken from '../../hooks/getToken';
-import {TRIP_API_URL} from '@env';
 
 const TripTitle = () => {
   const navigation = useNavigation<NavigationProp<TripTitleStackParams>>();
@@ -30,8 +36,8 @@ const TripTitle = () => {
 
   const handleSubmit = async () => {
     const {access_token} = await getToken();
-
-    dispatch(setTripTitle(title));
+    const input = title ? title : `${username}님의 ${nation} 여행 계획`;
+    dispatch(setTripTitle(input));
     await handleFinishPress();
     if (!finishPressSuccess) {
       return;
@@ -51,7 +57,7 @@ const TripTitle = () => {
       );
       const res = response.data.data;
       dispatch(setPlaces(res));
-      navigation.navigate('map', {title});
+      navigation.navigate('map', {input});
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
@@ -90,8 +96,16 @@ const TripTitle = () => {
   };
 
   return (
-    <DismissKeyboardView style={Style.container}>
-      <Wrapper>
+    <Wrapper>
+      <TitleView>
+        <Title>
+          <Hightlight>여행 제목</Hightlight>을 입력해주세요
+        </Title>
+      </TitleView>
+      <SloganView>
+        <Slogan>최대 15자까지 제목을 입력할 수 있어요!</Slogan>
+      </SloganView>
+      <Body>
         <TitleContainer>
           <TitleInput
             placeholder={`${username}님의 ${nation} 여행 계획`}
@@ -102,14 +116,10 @@ const TripTitle = () => {
             <TitleLengthText>{title.length}/15</TitleLengthText>
           </TitleLength>
         </TitleContainer>
-        <AppButton style={BottomButton} text="다음" onPress={handleSubmit} />
-      </Wrapper>
-    </DismissKeyboardView>
+      </Body>
+      <AppButton style={BottomButton} text="다음" onPress={handleSubmit} />
+    </Wrapper>
   );
 };
-
-const Style = StyleSheet.create({
-  container: {flex: 1},
-});
 
 export default TripTitle;

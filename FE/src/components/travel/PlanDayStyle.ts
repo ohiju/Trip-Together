@@ -1,6 +1,6 @@
-import styled from 'styled-components/native';
-import {View, Animated, Text, Dimensions, TouchableOpacity} from 'react-native';
+import {Animated, Dimensions} from 'react-native';
 import SortableList from 'react-native-sortable-list';
+import styled from 'styled-components/native';
 import {bg_light, bg_lightgray} from '../../constants/colors';
 
 const PlaceImage = styled.Image`
@@ -9,7 +9,7 @@ const PlaceImage = styled.Image`
   margin-right: 15px;
 `;
 
-const Button = styled(TouchableOpacity)`
+const Button = styled.TouchableOpacity`
   width: 34px;
   height: 34px;
   border-radius: 50px;
@@ -18,7 +18,7 @@ const Button = styled(TouchableOpacity)`
   align-items: center;
 `;
 
-const Container = styled(View)`
+const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -26,7 +26,7 @@ const Container = styled(View)`
   padding-top: 60px;
 `;
 
-const FirstHalf = styled(View)`
+const FirstHalf = styled.View`
   flex: 1.5;
   overflow: hidden;
 `;
@@ -50,7 +50,7 @@ const MiddlePrice = styled.Text`
   font-weight: 900;
 `;
 
-const SecondHalf = styled(View)`
+const SecondHalf = styled.View`
   position: relative;
   flex: 1;
   overflow: hidden;
@@ -58,7 +58,6 @@ const SecondHalf = styled(View)`
   padding-top: 20px;
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-  elevation: 15;
 `;
 
 const DragBar = styled.View`
@@ -76,9 +75,10 @@ const List = styled(SortableList)`
 
 const window = Dimensions.get('window');
 
-const ContentContainer = styled(View)`
+const ContentContainer = styled.View`
   width: ${window.width}px;
-  padding-horizontal: 0;
+  padding-left: 0;
+  padding-right: 0;
 `;
 
 const RowContainer = styled(Animated.View)`
@@ -86,17 +86,8 @@ const RowContainer = styled(Animated.View)`
   align-items: center;
   background-color: #fff;
   padding: 8px;
-  margin-horizontal: 16px;
-  margin-vertical: 9px;
+  margin: 9px 16px;
   border-radius: 8px;
-  shadow-color: #000;
-  shadow-offset: {
-    width: 0;
-    height: 2;
-  }
-  shadow-opacity: 0.25;
-  shadow-radius: 3.84px;
-  elevation: 5;
 `;
 
 const Image = styled(PlaceImage)`
@@ -106,55 +97,55 @@ const Image = styled(PlaceImage)`
   margin-right: 16px;
 `;
 
-const InfoContainer = styled(View)`
+const InfoContainer = styled.View`
   flex: 1;
 `;
 
-const Name = styled(Text)`
+const Name = styled.Text`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 4px;
 `;
 
-const Address = styled(Text)`
+const Address = styled.Text`
   font-size: 14px;
   margin-bottom: 4px;
 `;
 
-const RatingContainer = styled(View)`
+const RatingContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 4px;
 `;
 
-const Rating = styled(Text)`
+const Rating = styled.Text`
   font-size: 14px;
   color: green;
   margin-right: 5px;
 `;
 
-const Price = styled(Text)`
+const Price = styled.Text`
   font-size: 14px;
 `;
 
 export {
-  PlaceImage,
-  Container,
-  FirstHalf,
+  Address,
   Button,
-  Middle,
-  MiddleTitle,
-  MiddlePrice,
-  SecondHalf,
-  DragBar,
-  List,
+  Container,
   ContentContainer,
-  RowContainer,
+  DragBar,
+  FirstHalf,
   Image,
   InfoContainer,
+  List,
+  Middle,
+  MiddlePrice,
+  MiddleTitle,
   Name,
-  Address,
-  RatingContainer,
-  Rating,
+  PlaceImage,
   Price,
+  Rating,
+  RatingContainer,
+  RowContainer,
+  SecondHalf,
 };

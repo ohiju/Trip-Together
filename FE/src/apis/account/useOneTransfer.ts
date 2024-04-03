@@ -41,10 +41,8 @@ const useOneTransfer = () => {
       .request(await oneTransferConfig(data))
       .then((res: AxiosResponse<OneTransferResponse>) => {
         navigation.navigate('SyncConfirm', {selected});
-        ToastAndroid.show(
-          res.data.message + ' 송금자: ' + res.data.data.code1won,
-          ToastAndroid.SHORT,
-        );
+        Alert.alert(`송금자: ${res.data.data.code1won}`);
+        ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
       })
       .catch((err: AxiosError) => {
         Alert.alert(err.message);

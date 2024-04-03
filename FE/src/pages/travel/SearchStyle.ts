@@ -1,6 +1,6 @@
-import styled from 'styled-components/native';
-import {bg_main, bg_light} from '../../constants/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import styled from 'styled-components/native';
+import {bg_light, bg_main, font_dark} from '../../constants/colors';
 
 const Wrapper = styled.View`
   flex: 1;
@@ -8,22 +8,22 @@ const Wrapper = styled.View`
   width: 100%;
   justify-content: center;
   align-items: center;
+  padding: 15px;
 `;
 
 const SearchInput = styled.TextInput`
   position: relative;
   background-color: ${bg_main};
-  width: 80%;
-  padding: 1px 15px;
-  height: 40px;
-  margin-top: 60px;
-  border-radius: 20px;
-  margin-bottom: 20px;
+  width: 100%;
+  padding: 15px 15px;
+  margin: 15px 0 20px 0;
+  border-radius: 10px;
+  font-size: 18px;
 `;
 
 const SearchResult = styled.View`
   padding: 10px;
-  width: 90%;
+  width: 100%;
   margin-bottom: 10px;
   border-bottom-width: 0.5px;
 `;
@@ -35,4 +35,9 @@ const SearchResultBox = styled(TouchableOpacity)`
   margin-left: 5px;
 `;
 
-export {Wrapper, SearchInput, SearchResult, SearchResultBox};
+const SearchText = styled.Text`
+  color: ${font_dark};
+  font-size: 16px;
+`;
+
+export {SearchInput, SearchResult, SearchResultBox, SearchText, Wrapper};

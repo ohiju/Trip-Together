@@ -2,11 +2,14 @@ import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {Animated, Dimensions, Easing, Platform, StyleSheet} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {imagePath} from '../../assets/images/imagePath';
+import getCurrency from '../../hooks/getCurrency';
+import {BagItem} from '../../interfaces/states/BagState';
 import {RootState} from '../../store';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {addItemToBag, deleteItemFromBag} from '../../store/slices/bag';
 import {
   addDailyPlan,
+  attractionProp,
   deleteDailyPlan,
   setTotalBudget,
 } from '../../store/slices/trip';
@@ -28,7 +31,6 @@ import {
   RatingContainer,
   SecondHalf,
 } from './PlanDayStyle';
-import getCurrency from '../../hooks/getCurrency';
 
 const window = Dimensions.get('window');
 
@@ -93,7 +95,6 @@ function Row(props: any) {
       <Image source={{uri: data.thumbnail_image_url}} resizeMode="cover" />
       <InfoContainer>
         <Name>{data.attraction_name}</Name>
-        {/* <Address>{data.address}</Address> */}
         <RatingContainer>
           <Rating>{`${data.avg_rating}`}</Rating>
           <StarRatingDisplay rating={4.9} starSize={12} />
@@ -122,18 +123,17 @@ function Row(props: any) {
   );
 }
 
-interface RenderRowProp {
-  data: any;
-  active: boolean;
-}
-
 interface DailyPlan {
   attractions: any[];
   order: number;
   daily_estimated_budget: number;
 }
 
-const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
+interface PlanDayProps {
+  dailyPlan: DailyPlan;
+}
+
+const PlanDay = ({dailyPlan}: PlanDayProps) => {
   const topList = dailyPlan.attractions;
   const today = dailyPlan.order;
   const bottomList = useAppSelector((state: RootState) => state.bag.bagInfo);
@@ -141,18 +141,16 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
   const nation = useAppSelector(state => state.trip.tripInfo.nation);
 
   const singleDayTotalPrice = topList.reduce((total, attraction) => {
-    return total + parseFloat(attraction.avg_price);
+    return total + parseFloat(attraction.avg_price).toFixed(2);
   }, 0);
 
   const allDaysTotalPrice = useAppSelector((state: RootState) => {
     return state.trip.tripInfo.daily_plans.reduce((total, day) => {
-      const singleDayTotalPrice = day.attractions.reduce(
-        (dayTotal, attraction) => {
-          return dayTotal + parseFloat(attraction.avg_price);
-        },
-        0,
-      );
-      return total + singleDayTotalPrice;
+      const result = day.attractions.reduce((dayTotal, attraction) => {
+        return dayTotal + parseFloat(attraction.avg_price);
+      }, 0);
+
+      return total + result;
     }, 0);
   });
 
@@ -160,48 +158,54 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
     dispatch(setTotalBudget(allDaysTotalPrice));
   }, [allDaysTotalPrice, dispatch]);
 
-  const handleRowPress = useCallback((row, action) => {
-    if (action === 'up') {
-      dispatch(addDailyPlan({order: today, attraction: row}));
-      dispatch(deleteItemFromBag(row.attraction_id));
-    } else if (action === 'down') {
-      dispatch(
-        deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
-      );
-      dispatch(addItemToBag(row));
-    }
-  }, []);
+  const handleRowPress = useCallback(
+    (row: attractionProp & BagItem, action: string) => {
+      if (action === 'up') {
+        dispatch(addDailyPlan({order: today, attraction: row}));
+        dispatch(deleteItemFromBag(row.attraction_id));
+      } else if (action === 'down') {
+        dispatch(
+          deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
+        );
+        dispatch(addItemToBag(row));
+      }
+    },
+    [],
+  );
 
-  const handleTrashPress = useCallback((row, action) => {
-    if (action === 'down') {
-      dispatch(deleteItemFromBag(row.attraction_id));
-    } else if (action === 'up') {
-      dispatch(
-        deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
-      );
-    }
-  }, []);
+  const handleTrashPress = useCallback(
+    (row: attractionProp & BagItem, action: string) => {
+      if (action === 'down') {
+        dispatch(deleteItemFromBag(row.attraction_id));
+      } else if (action === 'up') {
+        dispatch(
+          deleteDailyPlan({order: today, attraction_id: row.attraction_id}),
+        );
+      }
+    },
+    [],
+  );
 
-  const renderRowUp = useCallback(({data, active}: RenderRowProp) => {
+  const renderRowUp = useCallback(({data, active}: any) => {
     return (
       <Row
         data={data}
         active={active}
         UporDown="up"
-        onPressDown={row => handleRowPress(row, 'down')}
-        onPressTrash={row => handleTrashPress(row, 'up')}
+        onPressDown={(row: typeof data) => handleRowPress(row, 'down')}
+        onPressTrash={(row: typeof data) => handleTrashPress(row, 'up')}
       />
     );
   }, []);
 
-  const renderRowDown = useCallback(({data, active}: RenderRowProp) => {
+  const renderRowDown = useCallback(({data, active}: any) => {
     return (
       <Row
         data={data}
         active={active}
         UporDown="down"
-        onPressUp={row => handleRowPress(row, 'up')}
-        onPressTrash={row => handleTrashPress(row, 'down')}
+        onPressUp={(row: typeof data) => handleRowPress(row, 'up')}
+        onPressTrash={(row: typeof data) => handleTrashPress(row, 'down')}
       />
     );
   }, []);
@@ -224,9 +228,8 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
     <Container>
       <FirstHalf>
         <List
-          style={styles.list}
-          contentContainerStyle={styles.contentContainer}
           data={sortableUpData}
+          contentContainerStyle={styles.contentContainer}
           renderRow={renderRowUp}
         />
       </FirstHalf>
@@ -244,7 +247,6 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
       </Middle>
       <SecondHalf>
         <List
-          style={styles.list}
           contentContainerStyle={styles.contentContainer}
           data={sortableDownData}
           renderRow={renderRowDown}
@@ -256,9 +258,6 @@ const PlanDay = ({dailyPlan}: {dailyPlan: DailyPlan}) => {
 };
 
 const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
   contentContainer: {
     width: window.width,
     ...Platform.select({

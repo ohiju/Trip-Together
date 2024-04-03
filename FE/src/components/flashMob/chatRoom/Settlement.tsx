@@ -15,6 +15,8 @@ import {
   ReceiptProps,
 } from '../../../interfaces/router/flashMob/TranHistoryStackParams';
 import {message as messageType} from '../../../interfaces/states/ChatState';
+import {RootState} from '../../../store';
+import {useAppSelector} from '../../../store/hooks';
 import {
   Btn,
   BtnText,
@@ -45,6 +47,9 @@ const Settlement = ({message}: SettlementProps) => {
   const {settlement_id, currency_code}: settlementData = JSON.parse(
     message.content,
   );
+  const userId = useAppSelector(
+    (state: RootState) => state.user.user.member_id,
+  );
 
   // 라우팅
   const {flashmob_id} =
@@ -68,7 +73,7 @@ const Settlement = ({message}: SettlementProps) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper $isMe={message.sender_id === userId}>
       <Card>
         <Image source={imagePath.settlement} resizeMode="cover" />
         <ProfileView>
@@ -81,14 +86,17 @@ const Settlement = ({message}: SettlementProps) => {
           </ContentView>
         </ProfileView>
         <BtnView>
-          <Btn style={{backgroundColor: primary}} onPress={handleToReceipt}>
-            <BtnText>영수증 보기</BtnText>
-          </Btn>
-          <Btn
-            style={{backgroundColor: bg_lightgray}}
-            onPress={handleToCurSitu}>
-            <BtnText>정산 현황</BtnText>
-          </Btn>
+          {message.sender_id !== userId ? (
+            <Btn style={{backgroundColor: primary}} onPress={handleToReceipt}>
+              <BtnText>영수증 보기</BtnText>
+            </Btn>
+          ) : (
+            <Btn
+              style={{backgroundColor: bg_lightgray}}
+              onPress={handleToCurSitu}>
+              <BtnText>정산 현황</BtnText>
+            </Btn>
+          )}
         </BtnView>
       </Card>
     </Wrapper>

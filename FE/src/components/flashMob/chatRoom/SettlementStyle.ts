@@ -1,13 +1,13 @@
 import styled from 'styled-components/native';
 import {bg_main, font_dark, font_light} from '../../../constants/colors';
 
-const Wrapper = styled.View`
-  align-items: flex-end;
+const Wrapper = styled.View<{$isMe: boolean}>`
+  align-items: ${({$isMe}) => ($isMe ? 'flex-end' : 'flex-start')};
   margin: 5px 0 10px 0;
 `;
 
 const Card = styled.View`
-  width: 70%;
+  width: 75%;
   border-radius: 10px;
   overflow: hidden;
   border-width: 1px;

@@ -1,21 +1,19 @@
-import axios, {AxiosError} from 'axios';
-import React, {useState} from 'react';
-import {Alert, StyleSheet} from 'react-native';
-import Swiper from 'react-native-swiper';
+import {TRIP_API_URL} from '@env';
 import {
   NavigationProp,
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
+import axios, {AxiosError} from 'axios';
+import React, {useState} from 'react';
+import {Alert, StyleSheet} from 'react-native';
+import Swiper from 'react-native-swiper';
 import PlanDay from '../../components/travel/PlanDay';
 import RenderPagination from '../../components/travel/RenderPagination';
-import {useAppSelector} from '../../store/hooks';
-import {useAppDispatch} from '../../store/hooks';
-import {resetTripInfo} from '../../store/slices/trip';
-import {setDisplay} from '../../store/slices/tabState';
 import getToken from '../../hooks/getToken';
-import {TRIP_API_URL} from '@env';
+import {PlanDetailParams} from '../../interfaces/router/PlanDetailParams';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {setDisplay} from '../../store/slices/tabState';
 
 const PlanDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -53,7 +51,6 @@ const PlanDetail = () => {
           },
         },
       );
-      // dispatch(resetTripInfo());
       navigation.navigate('travel_main');
       Alert.alert('알림', '완료처리 되었습니다.');
     } catch (err) {
@@ -64,7 +61,7 @@ const PlanDetail = () => {
     }
   };
 
-  const renderPagination = (index: any, total: any, context: any) => {
+  const renderPagination = (index: number, total: number, context: Swiper) => {
     return (
       <RenderPagination
         index={index}

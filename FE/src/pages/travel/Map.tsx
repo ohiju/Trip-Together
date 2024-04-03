@@ -1,21 +1,15 @@
+import {TRIP_API_URL} from '@env';
+import axios from 'axios';
 import React, {useEffect} from 'react';
-import {SafeAreaView} from 'react-native';
-import {imagePath} from '../../assets/images/imagePath';
 import PlaceInfo from '../../components/common/PlaceInfo';
 import GoogleMap from '../../components/travel/GoogleMap';
 import SearchPlace from '../../components/travel/SearchPlace';
-import {MapStackParams} from '../../interfaces/router/MapStackParams';
-import {Container, PlanImage, PlanIcon} from './MapStyle';
-import {useAppSelector} from '../../store/hooks';
-import axios from 'axios';
-import {useAppDispatch} from '../../store/hooks';
-import {setPlaces} from '../../store/slices/trip';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import getToken from '../../hooks/getToken';
-import {TRIP_API_URL} from '@env';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {setPlaces} from '../../store/slices/trip';
+import {Container, Wrapper} from './MapStyle';
 
 const Map = () => {
-  const navigation = useNavigation<NavigationProp<MapStackParams>>();
   const trip = useAppSelector(state => state.trip.tripInfo);
 
   const dispatch = useAppDispatch();
@@ -46,21 +40,15 @@ const Map = () => {
     fetchAttractions();
   }, []);
 
-  const handlePlanPress = () => {
-    navigation.navigate('plandetail');
-  };
-
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <Wrapper>
       <Container>
         <GoogleMap trip={trip} />
         <SearchPlace />
-        <PlanIcon onPress={handlePlanPress}>
-          <PlanImage source={imagePath.planning} />
-        </PlanIcon>
         <PlaceInfo theme="trip" place={trip.places[0]} />
       </Container>
-    </SafeAreaView>
+    </Wrapper>
   );
 };
+
 export default Map;

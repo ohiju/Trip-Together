@@ -1,7 +1,12 @@
 import React from 'react';
-import {Calendar} from 'react-native-calendars';
-import {StyleSheet} from 'react-native';
-import {Wrapper, DateContainer, DateText} from './CalendarStyle';
+import {
+  AppCalendar,
+  DateContainer,
+  DateText,
+  DateView,
+  SelectedDate,
+  Wrapper,
+} from './CalendarStyle';
 
 interface CalendarViewProps {
   startDate: string;
@@ -53,8 +58,7 @@ const CalendarView = ({
 
   return (
     <Wrapper>
-      <Calendar
-        style={styles.calendar}
+      <AppCalendar
         markedDates={markedDates}
         theme={{
           selectedDayBackgroundColor: 'green',
@@ -64,27 +68,18 @@ const CalendarView = ({
         }}
         onDayPress={handleDayPress}
       />
-      <DateContainer>
-        <DateText>시작 일자</DateText>
-        <DateText>{startDate}</DateText>
-      </DateContainer>
-      <DateContainer>
-        <DateText>종료 일자</DateText>
-        <DateText>{endDate}</DateText>
-      </DateContainer>
+      <DateView>
+        <DateContainer>
+          <DateText>시작 일자</DateText>
+          <SelectedDate>{startDate}</SelectedDate>
+        </DateContainer>
+        <DateContainer>
+          <DateText>종료 일자</DateText>
+          <SelectedDate>{endDate}</SelectedDate>
+        </DateContainer>
+      </DateView>
     </Wrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  calendar: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    marginBottom: 100,
-    paddingRight: 40,
-    paddingLeft: 40,
-    width: 400,
-  },
-});
 
 export default CalendarView;

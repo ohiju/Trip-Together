@@ -1,17 +1,24 @@
 import React, {useState} from 'react';
-import {Modal, TouchableOpacity} from 'react-native';
+import {Modal} from 'react-native';
 import styled from 'styled-components/native';
 import {imagePath} from '../../assets/images/imagePath';
+import {font_dark} from '../../constants/colors';
 import QRScanner from './QRscanner';
 
-const Wrapper = styled(TouchableOpacity)`
-  width: 30px;
-  height: 30px;
+const Wrapper = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
 `;
 
-const Image = styled.Image`
-  width: 30px;
-  height: 30px;
+const Icon = styled.Image`
+  width: 26px;
+  height: 26px;
+`;
+
+const IconText = styled.Text`
+  color: ${font_dark};
+  font-size: 12px;
 `;
 
 const Camera = () => {
@@ -28,7 +35,8 @@ const Camera = () => {
   return (
     <>
       <Wrapper onPress={onPress}>
-        <Image source={imagePath.qrcode} />
+        <Icon source={imagePath.qrcode} />
+        <IconText>결 제</IconText>
       </Wrapper>
       <Modal
         animationType="slide"
