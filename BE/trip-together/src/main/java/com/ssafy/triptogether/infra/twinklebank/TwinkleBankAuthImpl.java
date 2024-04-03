@@ -8,7 +8,9 @@ import com.ssafy.triptogether.global.exception.exceptions.category.UnAuthorizedE
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankTransfer1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankVerify1wonRequest;
 import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleTokenRequest;
+import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleAccountSyncResponse;
 import com.ssafy.triptogether.infra.twinklebank.data.response.TwinkleTokenResponse;
+import com.ssafy.triptogether.syncaccount.data.response.Transfer1wonResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +93,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 	}
 
 	@Override
-	public void transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
+	public Transfer1wonResponse transfer1won(TwinkleBankTransfer1wonRequest twinkleBankTransfer1wonRequest, String memberUuid) {
 		String url = UriComponentsBuilder.fromHttpUrl(TWINKLE_BANK_URI + "/account/v1/accounts/1wontransfer")
 			.toUriString();
 		String accessToken = redisTemplate.opsForValue().get("access:" + memberUuid);
@@ -113,6 +115,7 @@ public class TwinkleBankAuthImpl implements TwinkleBankAuth {
 				entity,
 				ApiResponse.class
 			);
+			return objectMapper.convertValue(response.getBody().getData(), Transfer1wonResponse.class);
 		} catch (RestClientException e) {
 			throw new ExternalServerException("transfer1won", TWINKLE_BANK_SERVER_ERROR);
 		}
