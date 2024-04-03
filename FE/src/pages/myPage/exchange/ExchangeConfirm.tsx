@@ -44,8 +44,6 @@ const ExchangeConfirm = () => {
       to_quantity: type === 'exchange' ? quantity : quantity * rate,
       from_quantity: type === 'exchange' ? quantity * rate : quantity,
     };
-    console.log(pinData);
-
     const props: PinAuthProps = {
       pinData,
       api: 'postExchange',

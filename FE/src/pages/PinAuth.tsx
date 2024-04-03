@@ -95,9 +95,11 @@ const PinAuth = () => {
         };
         if (data.pre_pin_num === '') {
           data.pre_pin_num = pin;
+          setPin('');
           navigation.navigate('PinAuth', {pinData: data, api});
         } else if (data.new_pin_num === '') {
           data.new_pin_num = pin;
+          setPin('');
           navigation.navigate('PinAuth', {pinData: data, api});
         } else if (data.new_pin_num_check === '') {
           data.new_pin_num_check = pin;

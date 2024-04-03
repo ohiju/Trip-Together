@@ -1,7 +1,10 @@
 import {TRIP_API_URL} from '@env';
-import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AxiosError, RawAxiosRequestConfig} from 'axios';
 import getToken from '../../hooks/getToken';
+import {MyPageStackParams} from '../../interfaces/router/myPage/MyPageStackParams';
 import useAxois from '../useAxois';
+import useGetSyncAccounts from './useGetSyncAccounts';
 
 interface DeleteSyncAccountData {
   pin_num: string;
@@ -10,6 +13,8 @@ interface DeleteSyncAccountData {
 
 const useDeleteSyncAccount = () => {
   const axios = useAxois();
+  const getSyncAccounts = useGetSyncAccounts();
+  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
 
   const deleteSyncAccountConfig = async (data: DeleteSyncAccountData) => {
     const {access_token} = await getToken();
@@ -29,8 +34,8 @@ const useDeleteSyncAccount = () => {
   const deleteSyncAccount = async (data: DeleteSyncAccountData) => {
     const result = await axios
       .request(await deleteSyncAccountConfig(data))
-      .then((res: AxiosResponse) => {
-        console.log(res);
+      .then(() => {
+        navigation.navigate('MyMain');
       })
       .catch((err: AxiosError) => {
         console.error(err);

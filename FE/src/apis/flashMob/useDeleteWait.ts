@@ -1,7 +1,8 @@
 import {TRIP_API_URL} from '@env';
-import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {AxiosError, RawAxiosRequestConfig} from 'axios';
 import getToken from '../../hooks/getToken';
 import useAxois from '../useAxois';
+import useGetFlashMobs from './useGetFlashMobs';
 
 interface DeleteWaitParams {
   flashmob_id: number;
@@ -9,6 +10,7 @@ interface DeleteWaitParams {
 
 const useDeleteWait = () => {
   const axios = useAxois();
+  const getFlashMobs = useGetFlashMobs();
 
   const deleteWaitConfig = async ({flashmob_id}: DeleteWaitParams) => {
     const {access_token} = await getToken();
@@ -27,8 +29,8 @@ const useDeleteWait = () => {
   const deleteWait = async (params: DeleteWaitParams) => {
     const result = await axios
       .request(await deleteWaitConfig(params))
-      .then((res: AxiosResponse) => {
-        console.log(res);
+      .then(() => {
+        getFlashMobs();
       })
       .catch((err: AxiosError) => {
         console.error(err);

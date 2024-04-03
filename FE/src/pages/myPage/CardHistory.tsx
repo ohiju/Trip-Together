@@ -19,7 +19,7 @@ const CardHistory = () => {
   useEffect(() => {
     const params: GetCardHistoryParams = {
       page: 0,
-      size: 10,
+      size: 100,
       sort: 'DESC',
     };
     getCardHistory(params);

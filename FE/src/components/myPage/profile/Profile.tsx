@@ -1,7 +1,6 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import useLogout from '../../../apis/member/useLogout';
-import useRefresh from '../../../apis/useRefresh';
 import {bg_light, bg_main} from '../../../constants/colors';
 import parseProfile from '../../../hooks/parseProfile';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
@@ -30,10 +29,8 @@ const Profile = () => {
 
   // API 로그아웃
   const logout = useLogout();
-  const refresh = useRefresh();
   const handleLogout = () => {
     logout();
-    // refresh();
   };
 
   return (

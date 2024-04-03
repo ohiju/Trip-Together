@@ -1,7 +1,8 @@
 import {TRIP_API_URL} from '@env';
-import {AxiosError, AxiosResponse, RawAxiosRequestConfig} from 'axios';
+import {AxiosError, RawAxiosRequestConfig} from 'axios';
 import getToken from '../../hooks/getToken';
 import useAxois from '../useAxois';
+import useGetFlashMobs from './useGetFlashMobs';
 
 interface PatchWaitParams {
   flashmob_id: number;
@@ -9,6 +10,7 @@ interface PatchWaitParams {
 
 const usePatchWait = () => {
   const axios = useAxois();
+  const getFlashMobs = useGetFlashMobs();
 
   const patchWaitConfig = async ({flashmob_id}: PatchWaitParams) => {
     const {access_token} = await getToken();
@@ -27,8 +29,8 @@ const usePatchWait = () => {
   const patchWait = async (params: PatchWaitParams) => {
     const result = await axios
       .request(await patchWaitConfig(params))
-      .then((res: AxiosResponse) => {
-        console.log(res);
+      .then(() => {
+        getFlashMobs();
       })
       .catch((err: AxiosError) => {
         console.error(err);

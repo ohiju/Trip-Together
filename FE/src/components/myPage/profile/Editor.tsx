@@ -47,13 +47,13 @@ const Editor = ({member}: EditorProps) => {
 
     launchImageLibrary(options, async (response: ImagePickerResponse) => {
       if (response.didCancel) {
-        console.log('사용자가 이미지 선택을 취소했습니다.');
+        console.error('사용자가 이미지 선택을 취소했습니다.');
       } else if (
         response.errorCode === 'camera_unavailable' ||
         response.errorCode === 'permission' ||
         response.errorCode === 'others'
       ) {
-        console.log('ImagePicker 에러: ', response.errorMessage);
+        console.error('ImagePicker 에러: ', response.errorMessage);
       } else if (response.assets && response.assets[0]) {
         setImgConfig(response.assets[0]);
         dispatch(setPutData({imgConfig: response.assets[0]}));

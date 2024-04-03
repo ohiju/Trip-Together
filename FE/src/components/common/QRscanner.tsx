@@ -2,24 +2,32 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {CameraScreen} from 'react-native-camera-kit';
+import {QRdata} from '../../apis/useQR';
 import {
   PinAuthProps,
   RootStackParams,
 } from '../../interfaces/router/RootStackParams';
+
+interface QRValue {
+  attraction_business_num: string;
+  quantity: number;
+}
 
 const QRScanner = ({onClose}: any) => {
   const [qrvalue, setQrvalue] = useState('');
   const [opneScanner, setOpneScanner] = useState(true);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
-  const onBarcodeScan = qrvalue => {
+  const onBarcodeScan = (value: string) => {
     // Called after te successful scanning of QRCode/Barcode
-    setQrvalue(qrvalue);
-    console.log(qrvalue);
-    const pinData = {
-      attraction_business_num: qrvalue.attraction_business_num,
-      quantity: qrvalue.quantity,
+    setQrvalue(value);
+    const {attraction_business_num, quantity} = JSON.parse(value);
+    const pinData: QRdata = {
+      pin_num: '',
+      attraction_business_num: attraction_business_num,
+      quantity: quantity,
     };
+
     const props: PinAuthProps = {
       pinData,
       api: 'qrpay',

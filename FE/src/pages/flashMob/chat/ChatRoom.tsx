@@ -31,8 +31,6 @@ const ChatRoom = () => {
 
     const connect = () => {
       client.onConnect = async () => {
-        console.log('storage', `${flashmob_id}_messages`);
-
         await AsyncStorage.getItem(`${flashmob_id}_messages`).then(
           async item => {
             if (item !== undefined && item) {
@@ -84,8 +82,6 @@ const ChatRoom = () => {
 
     connect();
     return () => {
-      console.log(subscription.current);
-
       if (subscription.current) {
         subscription.current.unsubscribe();
         client.deactivate();

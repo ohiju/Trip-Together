@@ -56,7 +56,7 @@ const ChatInput = ({opened, setOpened}: ChatInputProps) => {
   const client = useContext(WebSocketContext)?.current;
   const send = () => {
     if (!client?.connected) {
-      console.log('소켓이 연결되지 않음');
+      console.error('소켓이 연결되지 않음');
       return;
     }
     const message: messageType = {

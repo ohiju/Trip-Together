@@ -14,7 +14,7 @@ interface OneTransferData {
 interface OneTransferResponse {
   status: number;
   message: string;
-  data: null;
+  data: {code1won: string};
 }
 
 const useOneTransfer = () => {
@@ -41,7 +41,10 @@ const useOneTransfer = () => {
       .request(await oneTransferConfig(data))
       .then((res: AxiosResponse<OneTransferResponse>) => {
         navigation.navigate('SyncConfirm', {selected});
-        ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
+        ToastAndroid.show(
+          res.data.message + ' 송금자: ' + res.data.data.code1won,
+          ToastAndroid.SHORT,
+        );
       })
       .catch((err: AxiosError) => {
         Alert.alert(err.message);

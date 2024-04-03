@@ -6,6 +6,11 @@ const Wrapper = styled.View`
   background: ${bg_main};
 `;
 
+const BtnView = styled.View`
+  flex: 1;
+  justify-content: center;
+`;
+
 const ProfileView = styled.View`
   flex: 5;
   background: ${bg_light};
@@ -13,4 +18,4 @@ const ProfileView = styled.View`
   padding: 10px 15px 10px 15px;
 `;
 
-export {ProfileView, Wrapper};
+export {BtnView, ProfileView, Wrapper};
