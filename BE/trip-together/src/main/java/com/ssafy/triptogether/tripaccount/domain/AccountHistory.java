@@ -53,7 +53,7 @@ public class AccountHistory extends BaseEntity {
 
 	@NotNull
 	@Column(name = "balance")
-	private Double balance;
+	private String balance;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trip_account_id")
@@ -61,7 +61,7 @@ public class AccountHistory extends BaseEntity {
 
 	@Builder
 	public AccountHistory(Type type, String businessName, String businessNum, String address, Double quantity,
-		Double balance, TripAccount tripAccount) {
+		String balance, TripAccount tripAccount) {
 		this.type = type;
 		this.businessName = businessName;
 		this.businessNum = businessNum;
