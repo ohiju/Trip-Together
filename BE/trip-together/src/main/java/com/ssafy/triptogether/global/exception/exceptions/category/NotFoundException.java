@@ -8,6 +8,7 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
  */
 public class NotFoundException extends TripRuntimeException {
 	protected static final String MESSAGE_KEY = "error.NotFound";
+
 	public NotFoundException(String detailMessageKey, ErrorCode errorCode, Object... params) {
 		super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
 	}

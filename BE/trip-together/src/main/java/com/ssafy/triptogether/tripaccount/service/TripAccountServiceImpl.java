@@ -1,20 +1,69 @@
 package com.ssafy.triptogether.tripaccount.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.triptogether.tripaccount.data.response.CurrenciesDetailResponse;
+import com.ssafy.triptogether.attraction.domain.Attraction;
+import com.ssafy.triptogether.attraction.repository.AttractionRepository;
+import com.ssafy.triptogether.attraction.utils.AttractionUtils;
+import com.ssafy.triptogether.auth.data.request.PinVerifyRequest;
+import com.ssafy.triptogether.auth.validator.pin.PinVerify;
+import com.ssafy.triptogether.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.triptogether.global.exception.response.ErrorCode;
+import com.ssafy.triptogether.infra.currencyrate.CurrencyRateClient;
+import com.ssafy.triptogether.infra.currencyrate.data.response.CurrencyRateResponse;
+import com.ssafy.triptogether.infra.twinklebank.TwinkleBankClient;
+import com.ssafy.triptogether.infra.twinklebank.data.request.TwinkleBankAccountExchangeRequest;
+import com.ssafy.triptogether.member.domain.Member;
+import com.ssafy.triptogether.member.repository.MemberRepository;
+import com.ssafy.triptogether.member.utils.MemberUtils;
+import com.ssafy.triptogether.tripaccount.concurrency.DistributedLock;
+import com.ssafy.triptogether.tripaccount.data.request.AccountHistorySaveRequest;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentReceiverDetail;
+import com.ssafy.triptogether.tripaccount.data.request.PaymentSenderDetail;
+import com.ssafy.triptogether.tripaccount.data.request.TripAccountExchangeRequest;
+import com.ssafy.triptogether.tripaccount.data.request.TripAccountPaymentRequest;
+import com.ssafy.triptogether.tripaccount.data.response.AccountHistoriesLoadDetail;
+import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadDetail;
 import com.ssafy.triptogether.tripaccount.data.response.CurrenciesLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.RateLoadResponse;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadDetail;
+import com.ssafy.triptogether.tripaccount.data.response.TripAccountsLoadResponse;
+import com.ssafy.triptogether.tripaccount.domain.AccountHistory;
 import com.ssafy.triptogether.tripaccount.domain.Currency;
+import com.ssafy.triptogether.tripaccount.domain.CurrencyCode;
+import com.ssafy.triptogether.tripaccount.domain.TripAccount;
+import com.ssafy.triptogether.tripaccount.domain.Type;
+import com.ssafy.triptogether.tripaccount.provider.AccountHistoryProvider;
+import com.ssafy.triptogether.tripaccount.repository.AccountHistoryRepository;
 import com.ssafy.triptogether.tripaccount.repository.CurrencyRepository;
+import com.ssafy.triptogether.tripaccount.repository.TripAccountRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class TripAccountServiceImpl implements TripAccountLoadService {
+public class TripAccountServiceImpl implements TripAccountLoadService, TripAccountSaveService {
+	// Repository
 	private final CurrencyRepository currencyRepository;
+	private final TripAccountRepository tripAccountRepository;
+	private final AccountHistoryRepository accountHistoryRepository;
+	private final MemberRepository memberRepository;
+	private final AttractionRepository attractionRepository;
+	// Client
+	private final CurrencyRateClient currencyRateClient;
+	private final TwinkleBankClient twinkleBankClient;
+	// Provider
+	private final AccountHistoryProvider accountHistoryProvider;
 
 	/**
 	 * 환전 가능 통화 목록을 조회하는 메서드
@@ -23,17 +72,249 @@ public class TripAccountServiceImpl implements TripAccountLoadService {
 	@Override
 	public CurrenciesLoadResponse currenciesLoad() {
 		List<Currency> currencies = currencyRepository.findAll();
-		List<CurrenciesDetailResponse> collectCurrencies = currencies.stream()
+		List<CurrenciesLoadDetail> collectCurrencies = currencies.stream()
 			.map(
-				currency -> CurrenciesDetailResponse.builder()
+				currency -> CurrenciesLoadDetail.builder()
 					.code(currency.getCode())
-					.nation(currency.getCurrencyNation().name())
+					.nation(currency.getCurrencyNation())
 					.nationKr(currency.getCurrencyNation().getMessage())
-					.unit(currency.getUnit())
+					.unit(currency.getCode().getUnit())
 					.build()
 			).toList();
 		return CurrenciesLoadResponse.builder()
-			.currenciesDetailResponse(collectCurrencies)
+			.currenciesLoadDetail(collectCurrencies)
 			.build();
+	}
+
+	/**
+	 * 해당 통화 코드의 환율 정보 반환
+	 * @param currencyCode 요청 통화 코드
+	 * @return 환율 정보
+	 */
+	@Override
+	public RateLoadResponse rateLoad(CurrencyCode currencyCode) {
+		Currency currency = currencyRepository.findByCode(currencyCode)
+			.orElseThrow(
+				() -> new NotFoundException("RateLoad", ErrorCode.CURRENCY_NOT_FOUND, currencyCode)
+			);
+		return RateLoadResponse.builder()
+			.rate(currency.getRate())
+			.build();
+	}
+
+	/**
+	 * 회원의 지갑 내 목록 조회
+	 * @param memberId 요청자의 member_id
+	 * @return 지갑 내 목록
+	 */
+	@Override
+	public TripAccountsLoadResponse tripAccountsLoad(long memberId) {
+		List<TripAccount> tripAccounts = tripAccountRepository.findByMemberId(memberId);
+		List<TripAccountsLoadDetail> tripAccountsLoadDetails = tripAccounts.stream()
+			.map(tripAccount -> TripAccountsLoadDetail.builder()
+				.currencyNation(tripAccount.getCurrency().getCurrencyNation())
+				.nationKr(tripAccount.getCurrency().getCurrencyNation().getMessage())
+				.balance(Double.parseDouble(tripAccount.getBalance()))
+				.unit(tripAccount.getCurrency().getCode().getUnit())
+				.build()
+			).toList();
+		return TripAccountsLoadResponse.builder()
+			.tripAccountsLoadDetails(tripAccountsLoadDetails)
+			.tripAccountCount(tripAccountsLoadDetails.size())
+			.build();
+	}
+
+	/**
+	 * 지갑 전체 거래 내역 조회
+	 * @param memberId 요청자의 member_id
+	 * @param pageable 페이징 기준
+	 * @param currencyCode 통화코드 쿼리
+	 * @return 페이징에 따른 거래 내역
+	 */
+	@Override
+	public Page<AccountHistoriesLoadDetail> accountHistoriesLoad(long memberId, Pageable pageable, CurrencyCode currencyCode) {
+		Page<AccountHistory> accountHistories = accountHistoryRepository.findAccountHistoriesLoadDetailByMemberId(
+			memberId, pageable, currencyCode);
+
+		List<AccountHistoriesLoadDetail> accountHistoriesLoadDetails = accountHistories.getContent().stream()
+			.map(accountHistory -> AccountHistoriesLoadDetail.builder()
+				.accountHistoryId(accountHistory.getId())
+				.currencyNation(accountHistory.getTripAccount().getCurrency().getCurrencyNation())
+				.nationKr(accountHistory.getTripAccount().getCurrency().getCurrencyNation().getMessage())
+				.unit(accountHistory.getTripAccount().getCurrency().getCode().getUnit())
+				.type(accountHistory.getType().getMessage())
+				.usage(accountHistory.getBusinessName())
+				.quantity(accountHistory.getQuantity())
+				.balance(accountHistory.getBalance())
+				.createdAt(accountHistory.getCreatedAt())
+				.build()
+			).toList();
+
+		return new PageImpl<>(accountHistoriesLoadDetails, pageable, accountHistories.getTotalElements());
+	}
+
+	/**
+	 * 전체 통화 코드의 환율 정보 업데이트
+	 */
+	@Transactional
+	@Override
+	public void currencyRateUpdate() {
+		List<CurrencyRateResponse> currencyRateResponses = currencyRateClient.currencyRatesLoad();
+		Map<CurrencyCode, Currency> currencyMap = currencyRepository.findAll()
+			.stream()
+			.collect(Collectors.toMap(Currency::getCode, Function.identity()));
+		currencyRateResponses.forEach(currencyRateResponse -> {
+			CurrencyCode currencyCode = CurrencyCode.fromString(currencyRateResponse.cur_unit());
+			Currency currency = currencyMap.get(currencyCode);
+			if (currency != null) {
+				currency.updateRate(Double.valueOf(currencyRateResponse.dealBasR()));
+			}
+		});
+	}
+
+	/**
+	 * 환전 요청
+	 * @param memberId 요청자의 member_id
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param tripAccountExchangeRequest 환전 정보
+	 */
+	@PinVerify
+	@DistributedLock(key = "'exchange:' + #memberId + ':' + #tripAccountExchangeRequest.fromCurrencyCode()")
+	@Transactional
+	@Override
+	public void tripAccountExchange(long memberId, PinVerifyRequest pinVerifyRequest,
+		TripAccountExchangeRequest tripAccountExchangeRequest) {
+		Member member = MemberUtils.findByMemberId(memberRepository, memberId);
+
+		if (tripAccountExchangeRequest.fromCurrencyCode().equals("KRW")) {
+			Currency currency = getCurrency(tripAccountExchangeRequest.toCurrencyCode());
+			tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
+				.ifPresentOrElse(tripAccount -> {
+					tripAccount.depositBalance(String.valueOf(tripAccountExchangeRequest.toQuantity()));
+					AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+						.paymentReceiverDetail(PaymentReceiverDetail.builder()
+							.tripAccount(tripAccount)
+							.type(Type.DEPOSIT)
+							.businessNum("19991224")
+							.businessName("Trip-Together")
+							.address("역삼동")
+							.quantity(tripAccountExchangeRequest.toQuantity())
+							.build()
+						)
+						.paymentSenderDetail(null)
+						.build();
+					accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+				}, () -> {
+					TripAccount tripAccount = TripAccount.builder()
+						.balance(String.valueOf(tripAccountExchangeRequest.toQuantity()))
+						.currency(currency)
+						.member(member)
+						.build();
+					tripAccountRepository.save(tripAccount);
+					AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+						.paymentReceiverDetail(PaymentReceiverDetail.builder()
+							.tripAccount(tripAccount)
+							.type(Type.DEPOSIT)
+							.businessNum("19991224")
+							.businessName("Trip-Together")
+							.address("역삼동")
+							.quantity(tripAccountExchangeRequest.toQuantity())
+							.build()
+						)
+						.paymentSenderDetail(null)
+						.build();
+					accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+				});
+
+			twinkleBankWithdrawRequest(member.getUuid(), tripAccountExchangeRequest);
+			return;
+		}
+
+		Currency currency = getCurrency(tripAccountExchangeRequest.fromCurrencyCode());
+		TripAccount tripAccount = tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
+			.orElseThrow(
+				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
+			);
+		tripAccount.withdrawBalance(String.valueOf(tripAccountExchangeRequest.fromQuantity()));
+		twinkleBankDepositRequest(member.getUuid(), tripAccountExchangeRequest);
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentReceiverDetail(null)
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.tripAccount(tripAccount)
+				.type(Type.REFUND)
+				.businessNum("19991224")
+				.businessName("Trip-Together")
+				.address("역삼동")
+				.quantity(tripAccountExchangeRequest.fromQuantity())
+				.build())
+			.build();
+		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+	}
+
+	/**
+	 * 바코드 결제
+	 * @param memberId 요청자 member_id
+	 * @param pinVerifyRequest PIN 인증 요청
+	 * @param tripAccountPaymentRequest 결제 요청 정보
+	 */
+	@PinVerify
+	@DistributedLock(key = "'pay:' + #memberId + ':' + #tripAccountPaymentRequest.attractionBusinessNum()")
+	@Transactional
+	@Override
+	public void tripAccountPay(long memberId, PinVerifyRequest pinVerifyRequest,
+		TripAccountPaymentRequest tripAccountPaymentRequest) {
+		Attraction attraction = AttractionUtils.findByBusinessNum(attractionRepository,
+			tripAccountPaymentRequest.attractionBusinessNum());
+		Currency currency = getCurrency(attraction.getRegion().getNation().getMessage());
+		TripAccount tripAccount = tripAccountRepository.findByMemberIdAndCurrencyId(memberId, currency.getId())
+			.orElseThrow(
+				() -> new NotFoundException("TripAccountExchange", ErrorCode.TRIP_ACCOUNT_NOT_FOUND)
+			);
+		tripAccount.withdrawBalance(String.valueOf(tripAccountPaymentRequest.quantity()));
+		AccountHistorySaveRequest accountHistorySaveRequest = AccountHistorySaveRequest.builder()
+			.paymentSenderDetail(PaymentSenderDetail.builder()
+				.type(Type.WITHDRAW)
+				.address(attraction.getAddress())
+				.businessNum(attraction.getBusinessNum())
+				.businessName(attraction.getName())
+				.quantity(tripAccountPaymentRequest.quantity())
+				.tripAccount(tripAccount)
+				.build()
+			)
+			.paymentReceiverDetail(null)
+			.build();
+		accountHistoryProvider.accountHistoryMaker(accountHistorySaveRequest);
+	}
+
+	private Currency getCurrency(String tripAccountExchangeRequest) {
+		CurrencyCode currencyCode = CurrencyCode.fromString(tripAccountExchangeRequest);
+		return currencyRepository.findByCode(currencyCode)
+			.orElseThrow(
+				() -> new NotFoundException("TripAccountExchange", ErrorCode.CURRENCY_NOT_FOUND)
+			);
+	}
+
+	private void twinkleBankDepositRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
+		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
+			.accountUuid(tripAccountExchangeRequest.accountUuid())
+			.price(tripAccountExchangeRequest.toQuantity())
+			.type(Type.DEPOSIT)
+			.address("역삼동")
+			.businessName("Trip-Together")
+			.build();
+		twinkleBankClient.bankAccountDeposit(twinkleBankAccountExchangeRequest);
+	}
+
+	private void twinkleBankWithdrawRequest(String memberUuid, TripAccountExchangeRequest tripAccountExchangeRequest) {
+		TwinkleBankAccountExchangeRequest twinkleBankAccountExchangeRequest = TwinkleBankAccountExchangeRequest.builder()
+			.uuid(memberUuid)
+			.accountUuid(tripAccountExchangeRequest.accountUuid())
+			.price(tripAccountExchangeRequest.fromQuantity())
+			.type(Type.WITHDRAW)
+			.address("역삼동")
+			.businessName("Trip-Together")
+			.build();
+		twinkleBankClient.bankAccountWithdraw(twinkleBankAccountExchangeRequest);
 	}
 }

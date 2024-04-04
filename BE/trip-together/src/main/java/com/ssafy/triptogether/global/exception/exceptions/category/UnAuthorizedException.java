@@ -8,6 +8,7 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
  */
 public class UnAuthorizedException extends TripRuntimeException {
 	protected static final String MESSAGE_KEY = "error.UnAuthorized";
+
 	public UnAuthorizedException(String detailMessageKey, ErrorCode errorCode, Object... params) {
 		super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
 	}

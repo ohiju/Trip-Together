@@ -1,22 +1,22 @@
 package com.ssafy.twinklebank.member.utils;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import static com.ssafy.twinklebank.global.exception.response.ErrorCode.*;
 
-import com.ssafy.twinklebank.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.twinklebank.global.exception.exceptions.WrongUserNameOrPassWordException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.ssafy.twinklebank.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.twinklebank.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.twinklebank.member.domain.Member;
 import com.ssafy.twinklebank.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 public class MemberUtils {
-	private final MemberRepository memberRepository;
-	private final PasswordEncoder passwordEncoder;
 
 	/**
 	 * username, password로 사용자를 가져오는 함수
@@ -25,13 +25,31 @@ public class MemberUtils {
 	 * @param password
 	 * @return 인증된 유저
 	 */
-	public Member getMember(String username, String password) {
+	public static Member loadMemberByUserNameAndPassword(MemberRepository memberRepository,
+		PasswordEncoder passwordEncoder, String username,
+		String password) {
 
-		Member member = memberRepository.findMemberByUsername(username)
-			.orElseThrow(() -> new WrongUserNameOrPassWordException("MemberUtils"));
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new WrongPasswordException("MemberUtils");
+			throw new UnAuthorizedException("MemberUtils", WRONG_PASSWORD);
 		}
 		return member;
 	}
+
+	public static Member loadMemberById(MemberRepository memberRepository, Long id) {
+		return memberRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
+	}
+
+	public static Member loadMemberByUsername(MemberRepository memberRepository, String username) {
+		return memberRepository.findByUsername(username)
+			.orElseThrow(() -> new NotFoundException("MemberUtils", UNDEFINED_MEMBER));
+	}
+
+	public static Member loadMemberByMemberUuid(MemberRepository memberRepository, String memberUuid){
+		return memberRepository.findByUuid(memberUuid)
+			.orElseThrow(()-> new NotFoundException("MemberUtils : loadMemberByMemberUuid ", UNDEFINED_MEMBER));
+	}
+
 }

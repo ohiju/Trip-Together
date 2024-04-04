@@ -1,11 +1,11 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {Alert, ToastAndroid} from 'react-native';
-import {WithLocalSvg} from 'react-native-svg/css';
-import bankAccounts, {bankAccount} from '../../../assets/data/bankAccount';
-import {iconPath} from '../../../assets/icons/iconPath';
-import {imagePath} from '../../../assets/images/imagePath';
+import React, {useEffect, useState} from 'react';
+import {Alert} from 'react-native';
+import useGetBankAccounts from '../../../apis/account/useGetBankAccounts';
+import useOneTransfer, {
+  OneTransferData,
+} from '../../../apis/account/useOneTransfer';
 import AppButton from '../../../components/common/AppButton';
+import AppSelect from '../../../components/common/AppSelect';
 import {
   Body,
   Hightlight,
@@ -15,56 +15,44 @@ import {
   TitleView,
 } from '../../../components/common/InfoPageStyle';
 import {BottomButton} from '../../../constants/AppButton';
-import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
+import {useSyncOptions} from '../../../constants/AppSelectOptions';
+import {bankAccount} from '../../../interfaces/bankAccount';
 import {RootState} from '../../../store';
 import {useAppSelector} from '../../../store/hooks';
-import {
-  Balance,
-  BalanceView,
-  BankLogo,
-  Option,
-  OptionBox,
-  OptionView,
-  Options,
-  Select,
-  SelectBox,
-  SelectView,
-  Wrapper,
-} from './SyncSelectStyle';
+import {Wrapper} from './SyncSelectStyle';
 
 const SyncSelect = () => {
-  // 잔액 파싱
-  const localing = (num: number) => {
-    return num.toLocaleString('ko-KR');
-  };
+  const syncOptions = useSyncOptions();
 
-  // 드롭다운
-  const [opened, setOpened] = useState<boolean>(false);
-  const openOptions = () => {
-    setOpened(true);
-  };
-  const closeOptions = () => {
-    setOpened(false);
-  };
-
-  // 선택, 중복 체크
-  const synced = useAppSelector(
-    (state: RootState) => state.user.userInfo.sync_accounts,
-  );
+  // 데이터
   const [selected, setSelected] = useState<bankAccount | null>(null);
-  const select = (target: bankAccount) => {
-    for (const account of synced) {
-      if (account.uuid === target.account_uuid) {
+
+  // 유효성
+  const syncAccounts = useAppSelector(
+    (state: RootState) => state.account.sync_accounts,
+  );
+  const checkValid = (target: bankAccount) => {
+    for (const account of syncAccounts) {
+      if (account.account_uuid === target.account_uuid) {
         Alert.alert('이미 등록된 계좌입니다.');
-        return;
+        return false;
       }
     }
-    setSelected(target);
-    setOpened(false);
+    return true;
   };
 
   // 라우팅
-  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
+  const oneTransfer = useOneTransfer();
+  const pressContinue = () => {
+    if (!selected) {
+      Alert.alert('계좌를 선택해주세요.');
+      return;
+    }
+    const data: OneTransferData = {
+      account_uuid: selected.account_uuid,
+    };
+    oneTransfer(data, selected);
+  };
   const handleToNext = () => {
     if (!selected) {
       Alert.alert('계좌를 선택해주세요.');
@@ -73,17 +61,19 @@ const SyncSelect = () => {
     Alert.alert('해당 계좌로 1원이 송금됩니다', '계속 하시겠습니까?', [
       {
         text: '계속',
-        onPress: () => {
-          // 1원 인증 전송 API
-          navigation.navigate('SyncConfirm', {selected});
-          ToastAndroid.show('1원이 송금되었습니다.', ToastAndroid.SHORT);
-        },
+        onPress: pressContinue,
       },
       {
         text: '취소',
       },
     ]);
   };
+
+  // API
+  const getBankAccounts = useGetBankAccounts();
+  useEffect(() => {
+    getBankAccounts();
+  }, []);
 
   return (
     <Wrapper>
@@ -97,44 +87,12 @@ const SyncSelect = () => {
         <Slogan>선택해주세요.</Slogan>
       </SloganView>
       <Body>
-        <SelectBox>
-          <SelectView onPress={opened ? closeOptions : openOptions}>
-            {selected ? (
-              <OptionView>
-                <BankLogo source={imagePath.bankLogo} resizeMode="contain" />
-                <Option>{selected.account_num}</Option>
-              </OptionView>
-            ) : (
-              <Select>계좌 선택</Select>
-            )}
-            <WithLocalSvg
-              width={25}
-              height={25}
-              rotation={opened ? 270 : 90}
-              asset={iconPath.caret}
-            />
-          </SelectView>
-          {opened ? (
-            <Options>
-              {bankAccounts.map(account => (
-                <OptionBox
-                  key={account.account_uuid}
-                  onPress={() => select(account)}>
-                  <OptionView>
-                    <BankLogo
-                      source={imagePath.bankLogo}
-                      resizeMode="contain"
-                    />
-                    <Option>{account.account_num}</Option>
-                  </OptionView>
-                  <BalanceView>
-                    <Balance>잔액 {localing(account.balance)} 원</Balance>
-                  </BalanceView>
-                </OptionBox>
-              ))}
-            </Options>
-          ) : null}
-        </SelectBox>
+        <AppSelect
+          setData={setSelected}
+          placeholder="계좌 선택"
+          options={syncOptions}
+          checkValid={checkValid}
+        />
       </Body>
       <AppButton
         style={BottomButton}

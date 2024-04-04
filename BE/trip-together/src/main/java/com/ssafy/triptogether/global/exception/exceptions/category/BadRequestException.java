@@ -9,6 +9,7 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
  */
 public class BadRequestException extends TripRuntimeException {
 	protected static final String MESSAGE_KEY = "error.BadRequest";
+
 	public BadRequestException(String detailMessageKey, ErrorCode errorCode, Object... params) {
 		super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
 	}

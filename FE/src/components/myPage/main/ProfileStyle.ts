@@ -1,3 +1,4 @@
+import { Shadow } from 'react-native-shadow-2';
 import styled from 'styled-components/native';
 import {
   bg_light,
@@ -7,27 +8,18 @@ import {
 } from '../../../constants/colors';
 
 const Wrapper = styled.View`
+  position: relative;
   flex: 4;
-  width: 100%;
   background: ${bg_main};
-  justify-content: start;
-  padding-top: 15px;
 `;
 
-const ProfileView = styled.View`
-  position: relative;
-  flex: 1;
-  width: 100%;
-  flex-direction: row;
-  background: ${bg_light};
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
-  align-items: center;
-  padding-top: 8px;
+const StyledShadow = styled(Shadow)`
+  align-self: stretch;
 `;
 
 const DragBar = styled.View`
   position: absolute;
+  z-index: 1;
   top: 8px;
   left: 35%;
   width: 30%;
@@ -35,12 +27,24 @@ const DragBar = styled.View`
   border-radius: 5px;
 `;
 
+const ProfileBox = styled.View`
+  background: ${bg_light};
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+`;
+
+const ProfileView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 15px;
+`;
+
 const ProfileImageView = styled.View`
-  width: 25%;
+  height: 100%;
   aspect-ratio: 1/1;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 1px;
 `;
 
 const ProfileImage = styled.Image`
@@ -50,16 +54,18 @@ const ProfileImage = styled.Image`
 `;
 
 const UserInfoView = styled.View`
-  width: 75%;
+  flex: 1;
+  margin-left: 10px;
 `;
 
 const Nickname = styled.Text`
   color: ${font_dark};
   font-weight: 600;
+  font-size: 18px;
 `;
 
 const Username = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 const Description = styled.Text`
@@ -71,10 +77,13 @@ export {
   Description,
   DragBar,
   Nickname,
+  ProfileBox,
   ProfileImage,
   ProfileImageView,
   ProfileView,
+  StyledShadow,
   UserInfoView,
   Username,
-  Wrapper,
+  Wrapper
 };
+

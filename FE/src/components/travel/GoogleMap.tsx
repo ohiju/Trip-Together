@@ -1,33 +1,42 @@
-// Import React
-import React from 'react';
-// Import required components
+import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-// Import Map and Marker
 import MapView, {Marker} from 'react-native-maps';
 
-const GoogleMap = () => {
+const GoogleMap = ({trip}: any) => {
+  const [region, setRegion] = useState({
+    latitude: parseFloat(trip.start_latitude),
+    longitude: parseFloat(trip.start_longitude),
+    latitudeDelta: 0.222,
+    longitudeDelta: 0.121,
+  });
+
+  useEffect(() => {
+    setRegion({
+      latitude: parseFloat(trip.start_latitude),
+      longitude: parseFloat(trip.start_longitude),
+      latitudeDelta: 0.222,
+      longitudeDelta: 0.121,
+    });
+  }, [trip]);
+
   return (
-    <MapView
-      style={styles.mapStyle}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-      customMapStyle={mapStyle}>
-      <Marker
-        draggable
-        coordinate={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-        }}
-        title={'Test Marker'}
-        description={'This is a description of the marker'}
-      />
+    <MapView style={styles.mapStyle} region={region} customMapStyle={mapStyle}>
+      {trip.places.map((place: any, index: number) => {
+        return (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: parseFloat(place.latitude),
+              longitude: parseFloat(place.longitude),
+            }}
+            title={place.name}
+          />
+        );
+      })}
     </MapView>
   );
 };
+
 export default GoogleMap;
 
 const mapStyle = [

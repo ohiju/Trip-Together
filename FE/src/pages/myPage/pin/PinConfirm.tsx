@@ -1,17 +1,12 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
   TextInputChangeEventData,
-  ToastAndroid,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import usePostPin, {PostPinData} from '../../../apis/member/usePostPin';
 import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
@@ -25,12 +20,10 @@ import {BottomButton} from '../../../constants/AppButton';
 import usePinConfirmation from '../../../hooks/usePinConfirm';
 import {MyPageStackParams} from '../../../interfaces/router/myPage/MyPageStackParams';
 import {useAppDispatch} from '../../../store/hooks';
-import {setPin} from '../../../store/slices/user';
 import {Input, InputView, MessageView, Wrapper} from './PinRegistStyle';
 
 const PinConfirm = () => {
   const dispatch = useAppDispatch();
-
   // 유효성 검사
   const [confirm, setConfirm] = useState('');
   const [isOk, setIsOk] = useState<boolean>(false);
@@ -51,13 +44,14 @@ const PinConfirm = () => {
     }
   };
 
-  // 다음 페이지 이동
-  const navigation = useNavigation<NavigationProp<MyPageStackParams>>();
+  // 라우팅
+  const postPin = usePostPin();
   const registPin = () => {
-    // API 로직으로 변경할 예정
-    navigation.navigate('MyMain');
-    dispatch(setPin(true));
-    ToastAndroid.show('핀 번호가 등록되었습니다.', ToastAndroid.SHORT);
+    const data: PostPinData = {
+      pin_num: pin,
+      pin_num_check: confirm,
+    };
+    postPin(data);
   };
   const handleRegist = () => {
     Alert.alert('핀 번호를 등록하시겠습니까?', '', [

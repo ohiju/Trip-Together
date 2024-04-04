@@ -8,6 +8,7 @@ interface menu {
   icon: React.JSX.Element;
   text: string;
   navigation: any;
+  props?: any;
 }
 
 const svgOptions = {
@@ -22,11 +23,19 @@ const menus: menu[] = [
       <WithLocalSvg
         width={svgOptions.size}
         height={svgOptions.size}
-        asset={iconPath.wallet}
+        asset={iconPath.pin}
       />
     ),
-    text: '내 지갑 관리',
-    navigation: '',
+    text: '핀 번호 수정',
+    navigation: 'PinManage',
+    props: {
+      pinData: {
+        pre_pin_num: '',
+        new_pin_num: '',
+        new_pin_num_check: '',
+      },
+      api: 'pinPatch',
+    },
   },
   {
     id: 1,
@@ -34,11 +43,11 @@ const menus: menu[] = [
       <WithLocalSvg
         width={svgOptions.size}
         height={svgOptions.size}
-        asset={iconPath.card}
+        asset={iconPath.wallet}
       />
     ),
-    text: '내 카드 관리',
-    navigation: '',
+    text: '내 지갑 관리',
+    navigation: 'WalletManage',
   },
   {
     id: 2,
@@ -50,7 +59,7 @@ const menus: menu[] = [
       />
     ),
     text: '연동 계좌 관리',
-    navigation: '',
+    navigation: 'SyncManage',
   },
 ];
 

@@ -11,14 +11,14 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    restart: unless-stopped
+    restart: no
 
   dev_redis_container:
     container_name: dev_redis_container
     image: redis:6.2.6-alpine
     ports:
       - ${DEV_REDIS_BINDING_PORT}:6379
-    restart: unless-stopped
+    restart: no
 
   dev_spring_container:
     container_name: dev_spring_container
@@ -36,6 +36,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: dev
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     restart: always
 
   sonarqube_container:

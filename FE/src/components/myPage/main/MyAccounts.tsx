@@ -6,14 +6,14 @@ import {Accounts, Wrapper} from './MyAccountsStyle';
 
 const MyAccounts = () => {
   const tripAccounts = useAppSelector(
-    (state: RootState) => state.user.userInfo.trip_accounts,
+    (state: RootState) => state.account.trip_accounts,
   );
 
   return (
     <Wrapper showsVerticalScrollIndicator={false}>
       <Accounts>
         {tripAccounts.map(account => (
-          <MyAccount key={account.id} myAccount={account} />
+          <MyAccount key={account.nation} myAccount={account} />
         ))}
       </Accounts>
     </Wrapper>

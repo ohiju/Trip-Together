@@ -8,7 +8,7 @@ const Menus = () => {
   return (
     <Wrapper>
       <AdView>
-        <Ad source={imagePath.adh01} resizeMode="contain" />
+        <Ad source={imagePath.adh01} resizeMode="cover" />
       </AdView>
       <MenuBox>
         {menus.map(menu => (

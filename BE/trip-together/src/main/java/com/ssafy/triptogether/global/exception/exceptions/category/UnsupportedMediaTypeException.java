@@ -9,6 +9,7 @@ import com.ssafy.triptogether.global.exception.response.ErrorCode;
  */
 public class UnsupportedMediaTypeException extends TripRuntimeException {
 	protected static String MESSAGE_KEY = "error.UnsupportedMediaTypeException";
+
 	public UnsupportedMediaTypeException(String detailMessageKey, ErrorCode errorCode, Object... params) {
 		super(MESSAGE_KEY + "." + detailMessageKey, errorCode, params);
 	}

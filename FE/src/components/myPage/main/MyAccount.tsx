@@ -21,7 +21,10 @@ const MyAccount = ({myAccount}: MyAccountProps) => {
   return (
     <Wrapper>
       <CountryView>
-        <Flag source={imagePath[nation]} resizeMode="contain" />
+        <Flag
+          source={imagePath[`${nation.toLowerCase()}round`]}
+          resizeMode="cover"
+        />
         <Country>{nation_kr}</Country>
       </CountryView>
       <BalanceView>

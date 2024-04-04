@@ -1,23 +1,34 @@
 import styled from 'styled-components/native';
-import {bg_lightgray, bg_light, font_light} from '../../constants/colors';
+import DismissKeyboardView from '../../components/common/DismissKeyboardView';
+import {bg_light, bg_lightgray} from '../../constants/colors';
 
-const Wrapper = styled.View`
+const Wrapper = styled(DismissKeyboardView)`
   flex: 1;
   background-color: ${bg_light};
-  width: 100%;
-  height: 100%;
-  justify-content: space-between;
-  align-items: center;
+`;
+
+const TitleContainer = styled.View`
+  padding: 0 15px;
+  margin-top: 30px;
 `;
 
 const TitleInput = styled.TextInput`
-  background-color: ${bg_lightgray};
-  width: 80%;
-  padding: 1px 15px;
-  height: 40px;
-  margin-top: 200px;
-  border-radius: 20px;
-  color: ${font_light};
+  padding: 20px 0;
+  margin: 0 10px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${bg_lightgray};
+  font-size: 22px;
+  text-align: center;
 `;
 
-export {Wrapper, TitleInput};
+const TitleLength = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: 15px;
+`;
+
+const TitleLengthText = styled.Text`
+  font-size: 12px;
+`;
+
+export {TitleContainer, TitleInput, TitleLength, TitleLengthText, Wrapper};

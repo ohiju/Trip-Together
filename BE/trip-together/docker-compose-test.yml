@@ -20,3 +20,31 @@ services:
     ports:
       - ${TEST_TRIP_REDIS_BINDING_PORT}:6379
     restart: unless-stopped
+
+  test_trip_dev_mongodb_container:
+    container_name: test_trip_mongodb_container
+    image: mongo
+    ports:
+      - ${TEST_TRIP_MONGODB_BINDING_PORT}:27017
+    volumes:
+      - ${TEST_TRIP_MONGODB_DATA_PATH}:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${TEST_TRIP_MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${TEST_TRIP_MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${TEST_TRIP_MONGODB_PASSWORD}
+    restart: unless-stopped
+
+  test_trip_rabbitmq_container:
+    container_name: test_trip_rabbitmq_container
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "61613:61613"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}

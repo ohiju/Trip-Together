@@ -4,12 +4,14 @@ import MyPageTabBarIcon from '../components/myPage/TabBarIcon';
 import MypageTabBarLabel from '../components/myPage/TabBarLabel';
 import TravelIcon from '../components/travel/TabBarIcon';
 import TravelLabel from '../components/travel/TabBarLabel';
+import FlashMobIcon from '../components/flashMob/FlashMobIcon';
+import FlashMobLabel from '../components/flashMob/FlashMobLabel';
 import {TabParams} from '../interfaces/router/TabParams';
-import FlashMob from '../pages/FlashMob';
 import {RootState} from '../store';
 import {useAppSelector} from '../store/hooks';
 import MyPageNavigator from './MyPageStack';
-import TravelStack from './TravelStack';
+import TravelStack from './TripNavigator';
+import FlashMobStack from './FlashMobStack';
 
 const Tab = createBottomTabNavigator<TabParams>();
 
@@ -28,7 +30,14 @@ const TabNavigator = () => {
           tabBarLabel: TravelLabel,
         }}
       />
-      <Tab.Screen name="flashMob" component={FlashMob} options={{}} />
+      <Tab.Screen
+        name="flashMob"
+        component={FlashMobStack}
+        options={{
+          tabBarIcon: FlashMobIcon,
+          tabBarLabel: FlashMobLabel,
+        }}
+      />
       <Tab.Screen
         name="MyPage"
         component={MyPageNavigator}

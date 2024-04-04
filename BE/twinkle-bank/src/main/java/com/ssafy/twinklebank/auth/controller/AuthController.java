@@ -9,55 +9,76 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.twinklebank.auth.data.request.CodeRequest;
 import com.ssafy.twinklebank.auth.data.request.TokenRequest;
+import com.ssafy.twinklebank.auth.data.response.CodeResponse;
 import com.ssafy.twinklebank.auth.data.response.TokenResponse;
+import com.ssafy.twinklebank.auth.provider.CookieProvider;
 import com.ssafy.twinklebank.auth.service.AuthServiceImpl;
 import com.ssafy.twinklebank.global.data.response.ApiResponse;
+import com.ssafy.twinklebank.global.data.response.StatusCode;
 
 import java.util.Map;
-
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/member/v1/oauth")
+@RequestMapping(value = "/member/v1/oauth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 	private final AuthServiceImpl authService;
+	private final CookieProvider cookieProvider;
+
+	@PostMapping("/authorize")
+	public ResponseEntity<ApiResponse<CodeResponse>> getCode(@RequestBody @Valid CodeRequest request) {
+		Map<String, String> codeAndRedirectUrlMap = authService.getCode(request);
+		String code = codeAndRedirectUrlMap.get("code");
+		String redirectUrl = codeAndRedirectUrlMap.get("redirectUrl");
+		log.info("redirect url : " + redirectUrl + "?code=" + code);
+
+		CodeResponse response = CodeResponse.builder().code(code).build();
+		return ApiResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.SUCCESS_CREATE_CODE, response);
+		// httpServletResponse.sendRedirect(redirectUrl + "?code=" + code);
+	}
 
 	@PostMapping("/token")
-	public ResponseEntity<ApiResponse<TokenResponse>> getToken(@RequestBody TokenRequest request) {
+	public ResponseEntity<ApiResponse<TokenResponse>> getToken(
+		@Valid @RequestParam(value = "code") String code,
+		@Valid @RequestParam(value = "client_id") String clientId,
+		@Valid @RequestParam(value = "redirect_url") String redirectUrl,
+		@RequestBody @Valid TokenRequest request) {
 
-		Map<String, String> tokenMap = authService.getToken(request);
+		Map<String, String> tokenMap = authService.getToken(code, clientId, redirectUrl, request);
 		String accessToken = tokenMap.get("access");
 		String refreshToken = tokenMap.get("refresh");
 
 		// refresh token은 헤더에 쿠키에 넣어준다
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-			.maxAge(7 * 24 * 60 * 60)
-			.path("/") // 쿠키 헤더를 전송하기 위해 요청되는 url내에서 반드시 존재해야하는 url 경로
-			.secure(true) // https를 통해서만 쿠키를 전송
-			.sameSite("None") // 서로 다른 도메인간(cross-site)의 모든 쿠키 전송 가능하도록 설정
-			.httpOnly(true) // cross-site 스크립팅 공격을 방지하기위한 옵션 (클라이언트에서 js로 접근불가)
-			.build();
+		ResponseCookie cookie = cookieProvider.createCookie(refreshToken);
 
 		// 쿠키를 담을 헤더 생성
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+		HttpHeaders headers = cookieProvider.addCookieHttpHeaders(cookie);
 
 		// ApiResponse 객체 생성
-		ApiResponse<TokenResponse> apiResponse = ApiResponse.<TokenResponse>builder()
-			.status(SUCCESS_GENERATE_TOKEN.getStatus())
-			.message(SUCCESS_GENERATE_TOKEN.getMessage())
-			.data(new TokenResponse(accessToken))
-			.build();
+		ApiResponse<TokenResponse> apiResponse = getApiResponse(accessToken);
 
 		// ResponseEntity에 헤더와 함께 ApiResponse 객체를 담아 반환
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.headers(headers)
 			.body(apiResponse);
+	}
+
+	private static ApiResponse<TokenResponse> getApiResponse(String accessToken) {
+		return ApiResponse.<TokenResponse>builder()
+			.status(SUCCESS_GENERATE_TOKEN.getStatus())
+			.message(SUCCESS_GENERATE_TOKEN.getMessage())
+			.data(new TokenResponse(accessToken))
+			.build();
 	}
 
 }

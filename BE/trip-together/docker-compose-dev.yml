@@ -11,14 +11,14 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    restart: unless-stopped
+    restart: no
 
   dev_redis_container:
     container_name: dev_redis_container
     image: redis:6.2.6-alpine
     ports:
       - ${DEV_REDIS_BINDING_PORT}:6379
-    restart: unless-stopped
+    restart: no
 
   dev_spring_container:
     container_name: dev_spring_container
@@ -36,11 +36,53 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: dev
+      EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      MONGO_INITDB_DATABASE: ${DEV_TRIP_MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${DEV_TRIP_MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DEV_TRIP_MONGODB_PASSWORD}
+      DEV_TRIP_MONGODB_BINDING_PORT: ${DEV_TRIP_MONGODB_BINDING_PORT}
+      TWINKLE_CLIENT_ID: ${TWINKLE_CLIENT_ID}
+      TWINKLE_REDIRECT_URL: ${TWINKLE_REDIRECT_URL}
+      TWINKLE_SECRET_KEY: ${TWINKLE_SECRET_KEY}
+      TWINKLE_BANK_URL: ${TWINKLE_BANK_URL}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     restart: always
 
-  sonarqube_container:
-    container_name: sonarqube_container
+  sonarqube:
+    container_name: sonarqube
     image: sonarqube:lts-community
     ports:
       - ${SONARQUBE_BINDING_PORT}:9000
+    restart: on-failure
+
+  dev_trip_dev_mongodb_container:
+    container_name: dev_trip_mongodb_container
+    image: mongo
+    ports:
+      - ${DEV_TRIP_MONGODB_BINDING_PORT}:27017
+    volumes:
+      - ${DEV_TRIP_MONGODB_DATA_PATH}:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${DEV_TRIP_MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${DEV_TRIP_MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DEV_TRIP_MONGODB_PASSWORD}
+      DEV_TRIP_MONGODB_BINDING_PORT: ${DEV_TRIP_MONGODB_BINDING_PORT}
+    restart: no
+
+  test_trip_rabbitmq_container:
+    container_name: test_trip_rabbitmq_container
+    image: rabbitmq:3-management-alpine
+#    volumes:
+#      - ${DEV_TRIP_RABBITMQ_ETC_PATH}:/etc/rabbitmq/
+#      - ${DEV_TRIP_RABBITMQ_DATA_PATH}:/var/lib/rabbitmq/
+#      - ${DEV_TRIP_RABBITMQ_LOGS_PATH}:/var/log/rabbitmq/
+    ports:
+      - ${DEV_TRIP_RABBITMQ_PORT}:5672
+      - ${DEV_TRIP_WEBSOCKET_PORT}:15672
+      - ${DEV_TRIP_STOMP_PORT}:61613
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     restart: on-failure

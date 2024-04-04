@@ -1,8 +1,16 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: j10a309.p.ssafy.io
       port: 6379
+    mongodb:
+      uri: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@j10a309.p.ssafy.io:${DEV_TRIP_MONGODB_BINDING_PORT}/?authSource=admin
+      database: ${MONGO_INITDB_DATABASE}
+  rabbitmq:
+    host: j10a309.p.ssafy.io
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${SPRING_DATASOURCE_URL}
@@ -10,7 +18,18 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
-  mvc:
-    servlet:
-      path: /api
+      ddl-auto: update
+#  mvc:
+#    servlet:
+#      path: /api
+
+EXCHANGE_RATE_API_KEY: ${EXCHANGE_RATE_API_KEY}
+jwt:
+  secret: ${JWT_SECRET_KEY}
+rabbitmq:
+  queue:
+    name: chat.queue
+  exchange:
+    name: chat.exchange
+  routing:
+    key: room.

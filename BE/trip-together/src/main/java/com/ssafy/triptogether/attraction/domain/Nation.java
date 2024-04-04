@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum Nation {
-    FRANCE("프랑스"),
-    UK("영국"),
-    SPAIN("스페인");
+	프랑스("EUR"),
+	영국("GBP"),
+	스페인("EUR");
 
-    private final String message;
+	private final String message;
 
-    Nation(String message) {
-        this.message = message;
-    }
+	Nation(String message) {
+		this.message = message;
+	}
 }

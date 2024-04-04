@@ -1,16 +1,9 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {
-  Alert,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from 'react-native';
+import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg/css';
+import useOneVerify, {OneVerifyData} from '../../../apis/account/useOneVerify';
+import {PostSyncAccountData} from '../../../apis/account/usePostSyncAccount';
 import {iconPath} from '../../../assets/icons/iconPath';
 import AppButton from '../../../components/common/AppButton';
 import {
@@ -24,8 +17,6 @@ import {
 import {BottomButton} from '../../../constants/AppButton';
 import {font_danger, font_lightgray} from '../../../constants/colors';
 import {SyncStackParams} from '../../../interfaces/router/myPage/SyncStackParams';
-import {useAppDispatch} from '../../../store/hooks';
-import {pushSyncAccount} from '../../../store/slices/user';
 import {
   AgainBtn,
   AgainBtnView,
@@ -38,48 +29,28 @@ import {
 } from './SyncConfirmStyle';
 
 const SyncConfirm = () => {
-  const dummySender = '춤추는 고릴라';
-  const dispatch = useAppDispatch();
+  const oneVerify = useOneVerify();
 
   // 입력 관리
-  const [sender, setSendr] = useState('');
+  const [code, setCode] = useState('');
   const handleSender = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = e.nativeEvent.text;
-    setSendr(value);
+    setCode(e.nativeEvent.text);
   };
 
-  // 라우팅
-  const route = useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>();
-  const navigation = useNavigation<NavigationProp<SyncStackParams>>();
-  const registAccount = (is_main: 0 | 1) => {
-    const account = {
-      uuid: route.params.selected.account_uuid,
-      account_num: route.params.selected.account_num,
-      name: route.params.selected.name,
-      is_main,
+  // API
+  const {selected} =
+    useRoute<RouteProp<SyncStackParams, 'SyncConfirm'>>().params;
+  const pressConfirm = () => {
+    const data: OneVerifyData = {
+      account_uuid: selected.account_uuid,
+      code,
     };
-    dispatch(pushSyncAccount(account));
-    navigation.navigate('SyncComplete');
-  };
-  const confirmSender = () => {
-    // 1원 인증 검증 API
-    if (sender === dummySender) {
-      let is_main: 0 | 1 = 0;
-      Alert.alert('계좌 인증 성공!', '이 계좌를 주 계좌로 등록하시겠습니까?', [
-        {
-          text: '예',
-          onPress: () => {
-            is_main = 1;
-          },
-        },
-        {
-          text: '아니오',
-        },
-      ]);
-      registAccount(is_main);
-    } else {
-      Alert.alert('송금자를 다시 확인해주세요');
-    }
+    const pinData: PostSyncAccountData = {
+      pin_num: '',
+      is_main: 0,
+      account_uuid: selected.account_uuid,
+    };
+    oneVerify(data, pinData);
   };
 
   return (
@@ -96,7 +67,7 @@ const SyncConfirm = () => {
         <InputView>
           <WithLocalSvg width={24} height={24} asset={iconPath.coin} />
           <Input
-            value={sender}
+            value={code}
             onChange={handleSender}
             placeholder="송금자 이름을 입력하세요"
           />
@@ -125,8 +96,8 @@ const SyncConfirm = () => {
       <AppButton
         style={BottomButton}
         text="확인"
-        disabled={sender.trim() === ''}
-        onPress={confirmSender}
+        disabled={code.trim() === ''}
+        onPress={pressConfirm}
       />
     </Wrapper>
   );
