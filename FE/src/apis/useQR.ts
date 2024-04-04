@@ -19,7 +19,7 @@ const useQR = () => {
   const qrPayConfig = async (data: QRdata) => {
     const {access_token} = await getToken();
     const axiosConfig: RawAxiosRequestConfig = {
-      url: `${TRIP_API_URL}/api/account/v1/trip-accounts/pay`,
+      url: `${TRIP_API_URL}/api/account/v1/trip-account/trip-accounts/pay`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${access_token}`,
