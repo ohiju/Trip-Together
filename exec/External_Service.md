@@ -1,9 +1,21 @@
-# 외부 API
+# 외부 Source
 
 1. [환율 조회 API 주소](https://www.koreaexim.go.kr/ir/HPHKIR020M01?apino=2&viewtype=C&searchselect=&searchword=)
 
    ```
    https://www.koreaexim.go.kr/ir/HPHKIR020M01?apino=2&viewtype=C&searchselect=&searchword=
+   ```
+
+2. [QR 생성 사이트](https://qrfy.com/login)
+
+   - 타입 선택(Text) 후 다음과 같은 JSON 형식으로 결제 QR 생성
+     ```
+     {"attraction_business_num": "40", "quantity": 195.00}
+     ```
+   - 앱 다운로드 URL 은 타입 선택(Website) 후 URL 입력하여 QR 생성
+
+   ```
+   https://qrfy.com/login
    ```
 
 # 소셜 로그인
