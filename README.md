@@ -227,14 +227,11 @@ Trip-Together에서 환전시 사용할 은행계좌를 연동하기 위해 사�
 
 ![3.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/6b52a1be-ff5d-46d1-9e5f-6708ae945b24/8499ff08-2287-47e4-8f19-a083b517bafc/3.png)
 
-## ✈ ERD
+## ✈ 명세서
 
-**Trip-Together**
-
-![DataBase-trip.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/6b52a1be-ff5d-46d1-9e5f-6708ae945b24/74e75224-d99d-4ba7-a7eb-6690c6614e53/DataBase-trip.png)
-
-**Twinkle-Bank**
-
-![DataBase-bank.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/6b52a1be-ff5d-46d1-9e5f-6708ae945b24/90761117-6e0e-45f0-934b-fb2620e4e9d6/DataBase-bank.png)
+**ERD**
+![ERD](https://sirlyun.notion.site/ERD-7cc5192cbbff4b85ae90bff77a04d2e1?pvs=4)
+![API 명세](https://sirlyun.notion.site/API-8d1507bd65f44d11989b13f0ec63a99e?pvs=4)
+![기능 명세](https://sirlyun.notion.site/5cd9e9f950294200bc715531a975f60f?pvs=4)
 
 ## ✈ 팀원 소개
