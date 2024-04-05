@@ -173,9 +173,15 @@
 
 **📍Back-End**
 
+Spring / Spring Security / JPA / Querydsl / JUnit / MySQL / MongoDB / Redis
+
 **📍Front-End**
 
+
+
 **📍Infra**
+
+Nginx / Jenkins / Docker / EC2 / S3
 
 ## ✈ 서비스 아키텍쳐
 
@@ -193,3 +199,22 @@
 [바로가기](https://sirlyun.notion.site/5cd9e9f950294200bc715531a975f60f?pvs=4)
 
 ## ✈ 팀원 소개
+
+<table>
+ <tr>
+    <td align="center"><a href="https://github.com/sirlyun"><img src="https://avatars.githubusercontent.com/sirlyun" width="130px;" alt=""></a></td>
+    <td align="center"><a href="https://github.com/seomiii"><img src="https://avatars.githubusercontent.com/seomiii" width="130px;" alt=""></a></td>
+    <td align="center"><a href="https://github.com/hgene0929"><img src="https://avatars.githubusercontent.com/hgene0929" width="130px;" alt=""></a></td>
+    <td align="center"><a href="https://github.com/ohiju"><img src="https://avatars.githubusercontent.com/ohiju" width="130px;" alt=""></a></td>
+    <td align="center"><a href="https://github.com/KTaeGyu"><img src="https://avatars.githubusercontent.com/KTaeGyu" width="130px;" alt=""></a></td>
+  <td align="center"><a href="https://github.com/madcom96"><img src="https://avatars.githubusercontent.com/madcom96" width="130px;" alt=""></a>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/sirlyun"><b>sirlyun</b></a></td>
+    <td align="center"><a href="https://github.com/seomiii"><b>samgakjisam</b></a></td>
+    <td align="center"><a href="https://github.com/hgene0929"><b>amsan2</b></a></td>
+    <td align="center"><a href="https://github.com/ohiju"><b>MyeongJinHan12</b></a></td>
+    <td align="center"><a href="https://github.com/KTaeGyu"><b>awayjsh</b></a></td>
+    <td align="center"><a href="https://github.com/madcom96"><b>calendar2</b></a></td>
+  </tr>
+</table>
