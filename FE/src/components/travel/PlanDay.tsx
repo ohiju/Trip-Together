@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {Animated, Dimensions, Easing, Platform, StyleSheet} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  Platform,
+  StyleSheet,
+  LogBox,
+} from 'react-native';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {imagePath} from '../../assets/images/imagePath';
 import getCurrency from '../../hooks/getCurrency';
@@ -79,6 +86,10 @@ function Row(props: any) {
     }),
     [],
   );
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+  }, []);
 
   useEffect(() => {
     Animated.timing(activeAnim.current, {
