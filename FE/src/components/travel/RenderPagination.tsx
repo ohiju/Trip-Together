@@ -1,7 +1,8 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React, {Dispatch, SetStateAction, useEffect} from 'react';
 import {
   FlatList,
   GestureResponderEvent,
+  LogBox,
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -46,6 +47,10 @@ const RenderPagination = ({
   handleFinishPress,
 }: PaginationProps) => {
   const pages = Array.from({length: total}, (_, i) => i + 1);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Node of type rule not supported as an inline style']);
+  }, []);
 
   return (
     <PaginationStyle>
