@@ -1,7 +1,7 @@
 ## ✈ 개요
 
-- 은행에서 출시한 백패커들을 위한 여행 슈퍼앱
-- 간편 동행 모집(번개 모임)과 은행 API를 통한 환전, 결제, 정산 기능이 핵심
+Trip-Together는 은행에서 출시한 백패커들을 위한 여행 애플리케이션으로,<br>
+간편 동행 모집(번개 모임)과 은행 API를 통한 환전, 결제, 정산 기능을 갖춘 슈퍼 애플리케이션입니다.
 
 ## ✈ 주요 기능
 
@@ -99,11 +99,11 @@
   <td align="center"><a href="https://github.com/madcom96"><img src="https://avatars.githubusercontent.com/madcom96" width="130px;" alt=""></a>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/sirlyun"><b>윤설</b></a></td>
-    <td align="center"><a href="https://github.com/seomiii"><b>김미서</b></a></td>
-    <td align="center"><a href="https://github.com/hgene0929"><b>이현진</b></a></td>
-    <td align="center"><a href="https://github.com/ohiju"><b>오희주</b></a></td>
-    <td align="center"><a href="https://github.com/KTaeGyu"><b>김태규</b></a></td>
-    <td align="center"><a href="https://github.com/madcom96"><b>황진하</b></a></td>
+    <td align="center"><a href="https://github.com/sirlyun"><b>윤설</b></a><br>TECH-LEAD<br>BACK-END</td>
+    <td align="center"><a href="https://github.com/seomiii"><b>김미서</b></a><br>TECH-LEAD<br>BACK-END</td>
+    <td align="center"><a href="https://github.com/hgene0929"><b>이현진</b></a><br>BACK-END<br>INFRA</td>
+    <td align="center"><a href="https://github.com/ohiju"><b>오희주</b></a><br>PRESENTER<br>FRONT-END</td>
+    <td align="center"><a href="https://github.com/KTaeGyu"><b>김태규</b></a><br>LEAD<br>FRONT-END</td>
+    <td align="center"><a href="https://github.com/madcom96"><b>황진하</b></a><br>BACK-END<br>INFRA</td>
   </tr>
 </table>
