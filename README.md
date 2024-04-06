@@ -173,7 +173,7 @@
 
 **📍Back-End**
 
-Spring / Spring Security / JPA / Querydsl / JUnit / MySQL / MongoDB / Redis
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1712385795936?alt=media&token=b9cb05cc-ced4-43b8-a26e-79f0f2cfb5af)](https://github.com/msdio/stackticon)
 
 **📍Front-End**
 
@@ -181,7 +181,7 @@ Spring / Spring Security / JPA / Querydsl / JUnit / MySQL / MongoDB / Redis
 
 **📍Infra**
 
-Nginx / Jenkins / Docker / EC2 / S3
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1712385940812?alt=media&token=4da3534d-67cc-43ea-bbe9-ca02f5eb2d92)](https://github.com/msdio/stackticon)
 
 ## ✈ 서비스 아키텍쳐
 
