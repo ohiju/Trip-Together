@@ -123,7 +123,7 @@ Trip-Together는 은행에서 출시한 백패커들을 위한 여행 애플리�
     <td align="center"><a href="https://github.com/sirlyun"><b>윤설</b></a><br>BACK-END</td>
     <td align="center"><a href="https://github.com/seomiii"><b>김미서</b></a><br>BACK-END</td>
     <td align="center"><a href="https://github.com/hgene0929"><b>이현진</b></a><br>BACK-END<br>INFRA</td>
-    <td align="center"><a href="https://github.com/ohiju"><b>오희주</b></a><br>PRESENTER<br>FRONT-END</td>
+    <td align="center"><a href="https://github.com/ohiju"><b>오희주</b></a><br>FRONT-END</td>
     <td align="center"><a href="https://github.com/KTaeGyu"><b>김태규</b></a><br>LEAD<br>FRONT-END</td>
     <td align="center"><a href="https://github.com/madcom96"><b>황진하</b></a><br>BACK-END<br>INFRA</td>
   </tr>
