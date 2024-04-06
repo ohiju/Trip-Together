@@ -66,7 +66,7 @@
 
 **📍Front-End**
 
-
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1712386604438?alt=media&token=14b54829-0949-49db-95f7-797a056cbb8b)](https://github.com/msdio/stackticon)
 
 **📍Infra**
 
@@ -99,11 +99,11 @@
   <td align="center"><a href="https://github.com/madcom96"><img src="https://avatars.githubusercontent.com/madcom96" width="130px;" alt=""></a>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/sirlyun"><b>sirlyun</b></a></td>
-    <td align="center"><a href="https://github.com/seomiii"><b>samgakjisam</b></a></td>
-    <td align="center"><a href="https://github.com/hgene0929"><b>amsan2</b></a></td>
-    <td align="center"><a href="https://github.com/ohiju"><b>MyeongJinHan12</b></a></td>
-    <td align="center"><a href="https://github.com/KTaeGyu"><b>awayjsh</b></a></td>
-    <td align="center"><a href="https://github.com/madcom96"><b>calendar2</b></a></td>
+    <td align="center"><a href="https://github.com/sirlyun"><b>윤설</b></a></td>
+    <td align="center"><a href="https://github.com/seomiii"><b>김미서</b></a></td>
+    <td align="center"><a href="https://github.com/hgene0929"><b>이현진</b></a></td>
+    <td align="center"><a href="https://github.com/ohiju"><b>오희주</b></a></td>
+    <td align="center"><a href="https://github.com/KTaeGyu"><b>김태규</b></a></td>
+    <td align="center"><a href="https://github.com/madcom96"><b>황진하</b></a></td>
   </tr>
 </table>
