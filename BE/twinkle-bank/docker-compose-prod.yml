@@ -32,7 +32,7 @@ services:
       - prod_mysql_container
       - prod_redis_container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://j10a309a.p.ssafy.io:${PROD_MYSQL_BINDING_PORT}/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_URL: jdbc:mysql://${SERVER_URL}:${PROD_MYSQL_BINDING_PORT}/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod

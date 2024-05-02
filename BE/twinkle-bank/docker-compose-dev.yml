@@ -32,7 +32,7 @@ services:
       - dev_mysql_container
       - dev_redis_container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://j10a309a.p.ssafy.io:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_URL: jdbc:mysql://${SERVER_URL}:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_HOST}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SPRING_PROFILES_ACTIVE: dev
