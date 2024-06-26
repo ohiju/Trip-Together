@@ -112,10 +112,10 @@ Trip-Together는 은행에서 출시한 백패커들을 위한 여행 애플리�
 
 <table>
  <tr>
+	<td align="center"><a href="https://github.com/ohiju"><img src="https://avatars.githubusercontent.com/ohiju" width="130px;" alt=""></a></td>
     <td align="center"><a href="https://github.com/sirlyun"><img src="https://avatars.githubusercontent.com/sirlyun" width="130px;" alt=""></a></td>
     <td align="center"><a href="https://github.com/seomiii"><img src="https://avatars.githubusercontent.com/seomiii" width="130px;" alt=""></a></td>
     <td align="center"><a href="https://github.com/hgene0929"><img src="https://avatars.githubusercontent.com/hgene0929" width="130px;" alt=""></a></td>
-    <td align="center"><a href="https://github.com/ohiju"><img src="https://avatars.githubusercontent.com/ohiju" width="130px;" alt=""></a></td>
     <td align="center"><a href="https://github.com/KTaeGyu"><img src="https://avatars.githubusercontent.com/KTaeGyu" width="130px;" alt=""></a></td>
   <td align="center"><a href="https://github.com/madcom96"><img src="https://avatars.githubusercontent.com/madcom96" width="130px;" alt=""></a>
   </tr>
